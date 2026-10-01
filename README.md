@@ -1,83 +1,68 @@
-# Avly
+# 🚗 Avly
 
-# Avly
+AI 기반 블랙박스 사고 분석 서비스
 
-## 개발 환경
+---
+
+# 🛠 Tech Stack
+
+- React + Vite
+- FastAPI
+- Docker
+- Docker Compose
+
+---
+
+# 📦 개발 환경
+
+필수 프로그램
 
 - WSL2
+- Ubuntu
 - Docker Desktop
 - VS Code
 - Git
 
----
+Docker Desktop 설정
 
-## 1. 최초 설정
-
-### 1) WSL 설치
-
-Ubuntu 설치 후 실행
-
-### 2) Docker Desktop 설치
-
+```
 Settings
-
-Resources
-
-WSL Integration
+→ Resources
+→ WSL Integration
 
 ☑ Enable integration
-
-☑ Ubuntu 체크
+☑ Ubuntu
 
 Apply & Restart
-
----
-
-## 2. 프로젝트 받기
-
-```bash
-git clone https://github.com/xxxxx/Avly.git
-
-cd Avly
-
-git checkout develop
 ```
 
 ---
 
-## 3. 실행
+# 🚀 프로젝트 실행
+
+### 저장소 Clone
+
+```bash
+git clone https://github.com/jungin9607-hash/Avly.git
+
+cd Avly
+```
+
+### develop 브랜치 이동
+
+```bash
+git checkout develop
+```
+
+### Docker 실행
 
 ```bash
 docker compose up --build
 ```
 
-실행 후
+(최초 1회만 build)
 
-Frontend
-
-http://localhost:5173
-
-Backend
-
-http://localhost:8000/docs
-
----
-
-## 4. 종료
-
-```bash
-Ctrl + C
-```
-
-또는
-
-```bash
-docker compose down
-```
-
----
-
-## 5. 다시 실행
+이후에는
 
 ```bash
 docker compose up
@@ -85,47 +70,31 @@ docker compose up
 
 ---
 
-## 6. 작업 시작
+# 접속
 
-develop 최신화
+Frontend
 
-```bash
-git checkout develop
-
-git pull origin develop
+```
+http://localhost:5173
 ```
 
-브랜치 생성
+Backend
 
-```bash
-git checkout -b feature/기능명
 ```
-
-예)
-
-```bash
-git checkout -b feature/login
+http://localhost:8000/docs
 ```
 
 ---
 
-## 7. 작업 완료
+# 종료
 
 ```bash
-git add .
-
-git commit -m "feat: 로그인 구현"
-
-git push origin feature/login
+docker compose down
 ```
-
-GitHub에서 Pull Request 생성
-
-feature/login → develop
 
 ---
 
-## 프로젝트 구조
+# 📁 프로젝트 구조
 
 ```
 Avly
@@ -135,3 +104,7 @@ Avly
 ├── docker-compose.yml
 └── README.md
 ```
+
+---
+
+협업 방법은 **CONTRIBUTING.md**를 참고하세요.
