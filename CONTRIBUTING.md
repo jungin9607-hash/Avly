@@ -47,12 +47,15 @@ git pull origin develop
 
 ---
 
-## 3. 본인 브랜치 생성
+## 3. 본인 브랜치 생성 (생성 했을 경우 확인만)
 
 예시
 
 ```bash
 git checkout -b feature/login
+```
+```bash
+git branch
 ```
 
 ---
@@ -71,7 +74,7 @@ docker compose up
 
 ---
 
-## 6. Commit
+## 6. Commit ✨✨✨
 
 ```bash
 git add .
@@ -81,11 +84,16 @@ git commit -m "feat: 로그인 구현"
 
 ---
 
-## 7. Push
+## 7. Push 
 
 ```bash
 git push -u origin feature/login
 ```
+#### 이 명령어는 한번 치면 다음부터는 git push 만 쳐도 됩니다.
+```bash
+git push origin 브랜치명
+```
+### 이 명령어는 똑같이 다 적어야 합니다.
 
 ---
 
