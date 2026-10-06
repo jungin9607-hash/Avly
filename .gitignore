@@ -18,3 +18,8 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+# Python venv
+.venv/
+
+# Backend uploads (개발용 로컬 파일)
+backend/uploads/
