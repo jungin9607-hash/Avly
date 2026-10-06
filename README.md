@@ -137,3 +137,9 @@ docker compose down
 브랜치 생성 및 Git 규칙은
 
 👉 CONTRIBUTING.md 참고
+---
+
+# 문서
+
+- 백엔드 실행·구조: [backend/README.md](backend/README.md)
+- API 명세 (프론트 연동): [docs/api.md](docs/api.md)
