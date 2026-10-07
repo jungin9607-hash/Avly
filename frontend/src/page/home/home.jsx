@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./home.css";
 
 function Home() {
+  const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const analysisTimerRef = useRef(null);
 
@@ -244,7 +246,7 @@ function Home() {
       <header className="home-header">
         <div className="header-inner">
           <div className="header-left">
-            <a className="brand" href="#">
+            <Link className="brand" to="/">
               <img
                 className="brand-logo"
                 src="https://lh3.googleusercontent.com/aida/AEtjO1WmxxhaY118czpIAPP1dWqPRkqg9lI_4b37P_Ih2NexVXTvNcZZxbt3VRAa4QUY4puYIjPE5kC18qK2wzxRM_L-cEi8JjEqxJN98d73zx_VjyqdGr-oh3pQIMUL3zVOnRmKiT3PWkOKjHxEbkhkb6EaFZ-U0KxrvrXwaorCjR4k8-JJEdw1n7NfGUZzgF7msnwNL0wA3XA--mgmt3KNQ_3tXbFIXSn_R84u-zeR93UrRJ0sqYGoJspHcWdb2Iyq1mYe8jyxImhIKTo"
@@ -265,47 +267,47 @@ function Home() {
                   AI 교통사고 과실 분석
                 </span>
               </div>
-            </a>
+            </Link>
 
             <nav className="navigation" aria-label="메인 메뉴">
-              <a
+              <Link
                 className="nav-item nav-active"
-                href="#"
+                to="/home"
               >
                 홈
-              </a>
+              </Link>
 
-              <a
+              <Link
                 className="nav-item"
-                href="#"
+                to="/report"
               >
                 분석 결과
-              </a>
+              </Link>
 
               <div className="nav-item-group">
-                <a
+                <Link
                   className="nav-item nav-trigger"
-                  href="#"
+                  to="/home"
                 >
                   사고 분석
-                </a>
+                </Link>
 
                 <div className="mega-menu" aria-label="사고 분석 메뉴">
-                  <a href="#" className="mega-menu-item">
+                  <Link to="/home" className="mega-menu-item">
                     사고 순간 타임라인
-                  </a>
-                  <a href="#" className="mega-menu-item">
+                  </Link>
+                  <Link to="/report" className="mega-menu-item">
                     유사 판례 분석
-                  </a>
+                  </Link>
                 </div>
               </div>
 
-              <a
+              <Link
                 className="nav-item"
-                href="#"
+                to="/home"
               >
                 사고 예방
-              </a>
+              </Link>
             </nav>
           </div>
 
@@ -328,34 +330,39 @@ function Home() {
           <div className="mobile-menu-overlay" onClick={() => setMobileMenuOpen(false)}>
             <aside className="mobile-menu-panel" role="menu" aria-label="모바일 메뉴" onClick={(event) => event.stopPropagation()}>
               <div className="mobile-menu-header">
-                <a href="#" className="mobile-menu-brand">
+                <Link to="/" className="mobile-menu-brand">
                   <img className="brand-logo" src="https://lh3.googleusercontent.com/aida/AEtjO1WmxxhaY118czpIAPP1dWqPRkqg9lI_4b37P_Ih2NexVXTvNcZZxbt3VRAa4QUY4puYIjPE5kC18qK2wzxRM_L-cEi8JjEqxJN98d73zx_VjyqdGr-oh3pQIMUL3zVOnRmKiT3PWkOKjHxEbkhkb6EaFZ-U0KxrvrXwaorCjR4k8-JJEdw1n7NfGUZzgF7msnwNL0wA3XA--mgmt3KNQ_3tXbFIXSn_R84u-zeR93UrRJ0sqYGoJspHcWdb2Iyq1mYe8jyxImhIKTo" alt="" />
                   <span><strong>Avly</strong> <small>교통사고 AI 분석</small></span>
-                </a>
+                </Link>
                 <button type="button" className="mobile-menu-close" aria-label="메뉴 닫기" onClick={() => setMobileMenuOpen(false)}>
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
               <nav className="mobile-menu-list">
-                <a href="#" className="mobile-menu-item active" onClick={() => setMobileMenuOpen(false)}>
+                <Link to="/home" className="mobile-menu-item active" onClick={() => setMobileMenuOpen(false)}>
                   <span className="material-symbols-outlined">home</span><span>홈</span>
                   <small className="mobile-menu-current">현재 화면</small>
-                </a>
-                <a href="#" className="mobile-menu-item" onClick={() => setMobileMenuOpen(false)}>
+                </Link>
+                <Link to="/report" className="mobile-menu-item" onClick={() => setMobileMenuOpen(false)}>
                   <span className="material-symbols-outlined">analytics</span><span>분석 결과</span>
-                </a>
-                <button type="button" className="mobile-menu-item mobile-menu-analysis" aria-expanded={mobileAnalysisOpen} onClick={() => setMobileAnalysisOpen((open) => !open)}>
-                  <span className="material-symbols-outlined">error_outline</span><span>사고 분석</span><span className="material-symbols-outlined mobile-menu-chevron">expand_more</span>
-                </button>
+                </Link>
+                <div className="mobile-menu-analysis-row">
+                  <Link to="/home" className="mobile-menu-item mobile-menu-analysis" onClick={() => setMobileMenuOpen(false)}>
+                    <span className="material-symbols-outlined">error_outline</span><span>사고 분석</span>
+                  </Link>
+                  <button type="button" className="mobile-menu-expand" aria-label="사고 분석 하위 메뉴" aria-expanded={mobileAnalysisOpen} onClick={() => setMobileAnalysisOpen((open) => !open)}>
+                    <span className="material-symbols-outlined">expand_more</span>
+                  </button>
+                </div>
                 {mobileAnalysisOpen && (
                   <div className="mobile-submenu">
-                    <a href="#" onClick={() => setMobileMenuOpen(false)}><span>사고 순간 타임라인</span><small>보기 &gt;</small></a>
-                    <a href="#" onClick={() => setMobileMenuOpen(false)}><span>유사 판례 분석</span><small>보기 &gt;</small></a>
+                    <Link to="/home" onClick={() => setMobileMenuOpen(false)}><span>사고 순간 타임라인</span><small>보기 &gt;</small></Link>
+                    <Link to="/report" onClick={() => setMobileMenuOpen(false)}><span>유사 판례 분석</span><small>보기 &gt;</small></Link>
                   </div>
                 )}
-                <a href="#" className="mobile-menu-item" onClick={() => setMobileMenuOpen(false)}>
+                <Link to="/home" className="mobile-menu-item" onClick={() => setMobileMenuOpen(false)}>
                   <span className="material-symbols-outlined">verified_user</span><span>사고 예방</span>
-                </a>
+                </Link>
               </nav>
             </aside>
           </div>
@@ -1380,6 +1387,10 @@ function Home() {
                     <button
                       type="button"
                       className="modal-primary-button"
+                      onClick={() => {
+                        setModalOpen(false);
+                        navigate("/report");
+                      }}
                     >
                       사고 상황이 일치합니다
 
