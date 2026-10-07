@@ -32,25 +32,21 @@ cd ~/Avly
 
 ---
 
-## 2. develop 최신화
+## 2. 본인 브랜치 확인
 
 ```bash
-git checkout develop
-git pull origin develop
+git branch
 ```
 
 ---
 
-## 3. 본인 브랜치 생성
+## 3. develop pull
 
-```bash
-git checkout -b feature/login
-```
 
 브랜치 확인
 
 ```bash
-git branch
+git pull origin develop
 ```
 
 ---
