@@ -1,19 +1,30 @@
-# React + Vite
+# AVLY Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 and Vite frontend for the AVLY traffic-accident analysis service.
 
-Currently, two official plugins are available:
+## Screens
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| Route | Screen | Main content |
+| --- | --- | --- |
+| `/` | Intro | Service introduction and entry point to analysis |
+| `/home` | Home | Video upload, analysis questionnaire, progress, result summary, and reanalysis flow |
+| `/report` | Report | Fault-ratio summary, supporting evidence, and report sharing/download actions |
 
-## React Compiler
+## Navigation
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- The intro, home, and report screens use the same navigation order: 홈, 분석 결과, 사고 분석, 사고 예방.
+- Desktop navigation uses a hover/focus submenu for 사고 분석.
+- On narrow screens, navigation switches to a right-side full-height drawer with a dimmed backdrop. 사고 분석 can be opened with its separate expand control.
+- Navigation uses React Router and keeps transitions inside the app. The current report page marks 분석 결과 as active.
+- The home result-confirmation button, “사고 상황이 일치합니다,” closes the analysis modal and navigates to `/report`.
+- 사고 순간 타임라인 and 사고 예방 do not have separate routes yet; they currently link to `/home`. 유사 판례 분석 links to `/report`.
+- The report’s “산정 근거 확인” button and its associated modal were removed.
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+## Development
 
-## Expanding the ESLint configuration
+```bash
+npm run dev
+npm run build
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The frontend can also be run with the repository's Docker Compose setup. The production build was verified with `docker compose exec frontend sh -lc "npm run build"`.
