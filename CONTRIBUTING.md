@@ -72,6 +72,38 @@ npm install
 
 > Docker 환경에서는 host의 node_modules를 직접 마운트하지 않는 것이 안전합니다.
 
+### 패키지가 추가·변경되었을 때 (중요)
+
+WSL에서 `npm install`을 해도 **Docker 컨테이너 안에는 설치되지 않습니다.**
+컨테이너는 `/app/node_modules` 익명 볼륨을 따로 쓰고, 이 볼륨은 `docker compose up --build`로 컨테이너를 다시 만들어도 그대로 남습니다.
+
+`package.json`이 바뀌었다면 (내가 패키지를 추가했거나, `git pull`로 다른 팀원의 변경을 받았을 때) 아래 둘 다 실행합니다.
+
+```bash
+# 1) WSL: VS Code import 인식용
+cd ~/Avly/frontend
+npm install
+
+# 2) 컨테이너: 실제 실행용
+cd ~/Avly
+docker compose exec frontend npm install
+docker compose restart frontend
+```
+
+컨테이너가 실행 중이 아니거나 위 방법으로 해결되지 않으면 볼륨을 새로 만들며 다시 빌드합니다.
+
+```bash
+docker compose up --build -V
+```
+
+> `-V`(`--renew-anon-volumes`)는 기존 `node_modules` 볼륨을 버리고 새로 만듭니다.
+
+백엔드는 `requirements.txt`가 바뀌면 이미지를 다시 빌드합니다.
+
+```bash
+docker compose up --build
+```
+
 ---
 
 ## 5. 개발
@@ -184,6 +216,17 @@ services:
 ```
 
 > `/app/node_modules`는 Docker 내부 전용 익명 볼륨으로 관리합니다.
+
+### `Failed to resolve import "패키지명"` 오류
+
+`package.json`과 WSL의 `node_modules`에는 패키지가 있는데 브라우저(Vite)에서 이 오류가 나면, **컨테이너 안에만 패키지가 없는 상태**입니다.
+
+```bash
+docker compose exec frontend npm install
+docker compose restart frontend
+```
+
+자세한 내용은 위의 [패키지가 추가·변경되었을 때](#패키지가-추가변경되었을-때-중요)를 참고합니다.
 
 ---
 
