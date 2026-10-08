@@ -9,22 +9,34 @@ React 19 and Vite frontend for the AVLY traffic-accident analysis service.
 | `/` | Intro | Service introduction and entry point to analysis |
 | `/home` | Home | Video upload, analysis questionnaire, progress, result summary, and reanalysis flow |
 | `/report` | Report | Fault-ratio summary, supporting evidence, and report sharing/download actions |
+| `/time` | Time | Accident-moment timeline |
+| `/law` | Law | Similar precedent analysis |
 
 ## Navigation
 
-- The intro, home, and report screens use the same navigation order: 홈, 분석 결과, 사고 분석, 사고 예방.
-- Desktop navigation uses a hover/focus submenu for 사고 분석.
-- On narrow screens, navigation switches to a right-side full-height drawer with a dimmed backdrop. 사고 분석 can be opened with its separate expand control.
-- Navigation uses React Router and keeps transitions inside the app. The current report page marks 분석 결과 as active.
-- The home result-confirmation button, “사고 상황이 일치합니다,” closes the analysis modal and navigates to `/report`.
-- 사고 순간 타임라인 and 사고 예방 do not have separate routes yet; they currently link to `/home`. 유사 판례 분석 links to `/report`.
-- The report’s “산정 근거 확인” button and its associated modal were removed.
+- All five screens provide shared navigation for Home, Report, Accident Analysis, and Accident Prevention.
+- Accident Analysis is a non-navigating menu trigger. Its submenu links to `/time` (timeline) and `/law` (similar precedents).
+- Desktop layouts show the navigation links; narrow layouts use a hamburger button and a right-side drawer.
+- Navigation uses React Router. Confirming the recognized accident situation on Home closes the modal and navigates to `/report`.
+
+## Implemented UI (2026-10-08)
+
+- Refined the Intro hero, mascot artwork, feature cards, and responsive layout.
+- Added and aligned the consent, analysis-progress, follow-up-question, and situation-result stages in the Home analysis modal. A follow-up analysis stage is also shown after answers or a reanalysis request.
+- Centered the recognized accident type in the Home result card, kept its label at the left, and removed the confidence badge.
+- Added a breadcrumb to the Law page, matching the Time page's `Accident Analysis > Similar Precedent Analysis` layout.
+- Fixed invalid JSX in the Home consent modal and preserved the analysis progress flow.
+
+### Analysis flow status
+
+The Home modal currently uses a simulated analysis flow: consent → progress → follow-up questions → reanalysis progress → situation result. It does not yet receive video-analysis results from an AI API, so deciding whether the video is sufficient and conditionally asking follow-up questions remains pending AI integration.
 
 ## Development
 
 ```bash
 npm run dev
 npm run build
+npm run lint
 ```
 
-The frontend can also be run with the repository's Docker Compose setup. The production build was verified with `docker compose exec frontend sh -lc "npm run build"`.
+Run these commands from the `frontend` directory. The frontend can also be run with the repository's Docker Compose setup.

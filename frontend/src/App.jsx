@@ -1,7 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Intro from "./page/intro/intro";
 import Home from "./page/home/home";
 import Report from "./page/report/report";
+import Law from "./page/law/law";
+import Time from "./page/time/time";
 
 function App() {
   return (
@@ -15,6 +17,12 @@ function App() {
 
         {/* 분석 리포트 */}
         <Route path="/report" element={<Report />} />
+
+        {/* 사고 분석 */}
+        <Route path="/time" element={<Time />} />
+        <Route path="/law" element={<Law />} />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import avlyBrand from "../../assets/avly-brand.png";
+import avlyMascot from "../../assets/avly-mascot.png";
 import "./home.css";
 
 function Home() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const analysisTimerRef = useRef(null);
+  const analysisNextStageRef = useRef("questionnaire");
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileAnalysisOpen, setMobileAnalysisOpen] = useState(true);
@@ -123,11 +126,9 @@ function Home() {
   =============================== */
 
   useEffect(() => {
-    if (stage !== "analyzing") {
+    if (stage !== "analyzing" && stage !== "reanalyzing") {
       return;
     }
-
-    setProgress(15);
 
     if (analysisTimerRef.current) {
       clearInterval(analysisTimerRef.current);
@@ -147,7 +148,7 @@ function Home() {
         clearInterval(analysisTimerRef.current);
 
         setTimeout(() => {
-          setStage("resultSummary");
+          setStage(analysisNextStageRef.current);
         }, 900);
       }
     }, 1000);
@@ -159,6 +160,12 @@ function Home() {
     };
   }, [stage]);
 
+  const startAnalysis = (nextStage = "questionnaire", reanalysis = false) => {
+    setProgress(15);
+    analysisNextStageRef.current = nextStage;
+    setStage(reanalysis ? "reanalyzing" : "analyzing");
+  };
+
   const fastForward = () => {
     if (analysisTimerRef.current) {
       clearInterval(analysisTimerRef.current);
@@ -167,7 +174,7 @@ function Home() {
     setProgress(100);
 
     setTimeout(() => {
-      setStage("resultSummary");
+      setStage(analysisNextStageRef.current);
     }, 300);
   };
 
@@ -179,7 +186,6 @@ function Home() {
     consent: {
       icon: "policy",
       title: "블랙박스 영상 AI 분석 동의",
-      subtitle: "필수 수집 및 안전 연구 활용 동의 절차",
       step: 1,
     },
 
@@ -190,19 +196,26 @@ function Home() {
       step: null,
     },
 
-    questionnaire: {
-      icon: "help_center",
-      title: "정확한 과실 분석을 위한 AI 추가 질문",
-      subtitle: "운전자 현장 인지 정황 입력",
-      step: 2,
-    },
-
-    analyzing: {
+      analyzing: {
       icon: "memory",
       title: "에블리 AI가 영상을 정밀 분석하고 있습니다",
       subtitle: "컴퓨터 비전 텔레메트리 추출 중",
+      step: 2,
+    },
+
+      reanalyzing: {
+        icon: "memory",
+        title: "질문 내용을 반영해 재분석 중입니다",
+        subtitle: "답변을 반영하여 사고 상황을 다시 분석하고 있습니다",
+        step: 2,
+      },
+
+    questionnaire: {
+      icon: "help_center",
+      title: "정확한 과실 분석을 위한 AI 추가 질문",
       step: 3,
     },
+
 
     unsupported: {
       icon: "car_crash",
@@ -214,7 +227,6 @@ function Home() {
     resultSummary: {
       icon: "fact_check",
       title: "AI가 판독한 사고 상황 제시",
-      subtitle: "최종 과실 및 상황 일치 여부 확인",
       step: 4,
     },
 
@@ -248,9 +260,9 @@ function Home() {
           <div className="header-left">
             <Link className="brand" to="/">
               <img
-                className="brand-logo"
-                src="https://lh3.googleusercontent.com/aida/AEtjO1WmxxhaY118czpIAPP1dWqPRkqg9lI_4b37P_Ih2NexVXTvNcZZxbt3VRAa4QUY4puYIjPE5kC18qK2wzxRM_L-cEi8JjEqxJN98d73zx_VjyqdGr-oh3pQIMUL3zVOnRmKiT3PWkOKjHxEbkhkb6EaFZ-U0KxrvrXwaorCjR4k8-JJEdw1n7NfGUZzgF7msnwNL0wA3XA--mgmt3KNQ_3tXbFIXSn_R84u-zeR93UrRJ0sqYGoJspHcWdb2Iyq1mYe8jyxImhIKTo"
-                alt="Avly"
+                className="brand-logo brand-header-logo"
+                src={avlyBrand}
+                alt="에블리 캐릭터와 로고"
               />
 
               <div className="brand-text">
@@ -285,18 +297,19 @@ function Home() {
               </Link>
 
               <div className="nav-item-group">
-                <Link
+                <button
+                  type="button"
                   className="nav-item nav-trigger"
-                  to="/home"
+                  aria-haspopup="true"
                 >
                   사고 분석
-                </Link>
+                </button>
 
                 <div className="mega-menu" aria-label="사고 분석 메뉴">
-                  <Link to="/home" className="mega-menu-item">
+                  <Link to="/time" className="mega-menu-item">
                     사고 순간 타임라인
                   </Link>
-                  <Link to="/report" className="mega-menu-item">
+                  <Link to="/law" className="mega-menu-item">
                     유사 판례 분석
                   </Link>
                 </div>
@@ -331,7 +344,7 @@ function Home() {
             <aside className="mobile-menu-panel" role="menu" aria-label="모바일 메뉴" onClick={(event) => event.stopPropagation()}>
               <div className="mobile-menu-header">
                 <Link to="/" className="mobile-menu-brand">
-                  <img className="brand-logo" src="https://lh3.googleusercontent.com/aida/AEtjO1WmxxhaY118czpIAPP1dWqPRkqg9lI_4b37P_Ih2NexVXTvNcZZxbt3VRAa4QUY4puYIjPE5kC18qK2wzxRM_L-cEi8JjEqxJN98d73zx_VjyqdGr-oh3pQIMUL3zVOnRmKiT3PWkOKjHxEbkhkb6EaFZ-U0KxrvrXwaorCjR4k8-JJEdw1n7NfGUZzgF7msnwNL0wA3XA--mgmt3KNQ_3tXbFIXSn_R84u-zeR93UrRJ0sqYGoJspHcWdb2Iyq1mYe8jyxImhIKTo" alt="" />
+                  <img className="brand-logo" src={avlyMascot} alt="" />
                   <span><strong>Avly</strong> <small>교통사고 AI 분석</small></span>
                 </Link>
                 <button type="button" className="mobile-menu-close" aria-label="메뉴 닫기" onClick={() => setMobileMenuOpen(false)}>
@@ -347,17 +360,14 @@ function Home() {
                   <span className="material-symbols-outlined">analytics</span><span>분석 결과</span>
                 </Link>
                 <div className="mobile-menu-analysis-row">
-                  <Link to="/home" className="mobile-menu-item mobile-menu-analysis" onClick={() => setMobileMenuOpen(false)}>
-                    <span className="material-symbols-outlined">error_outline</span><span>사고 분석</span>
-                  </Link>
-                  <button type="button" className="mobile-menu-expand" aria-label="사고 분석 하위 메뉴" aria-expanded={mobileAnalysisOpen} onClick={() => setMobileAnalysisOpen((open) => !open)}>
-                    <span className="material-symbols-outlined">expand_more</span>
+                  <button type="button" className="mobile-menu-item mobile-menu-analysis" aria-expanded={mobileAnalysisOpen} aria-controls="home-analysis-submenu" onClick={() => setMobileAnalysisOpen((open) => !open)}>
+                    <span className="material-symbols-outlined">error_outline</span><span>사고 분석</span><span className="material-symbols-outlined">expand_more</span>
                   </button>
                 </div>
                 {mobileAnalysisOpen && (
-                  <div className="mobile-submenu">
-                    <Link to="/home" onClick={() => setMobileMenuOpen(false)}><span>사고 순간 타임라인</span><small>보기 &gt;</small></Link>
-                    <Link to="/report" onClick={() => setMobileMenuOpen(false)}><span>유사 판례 분석</span><small>보기 &gt;</small></Link>
+                  <div className="mobile-submenu" id="home-analysis-submenu">
+                    <Link to="/time" onClick={() => setMobileMenuOpen(false)}><span>사고 순간 타임라인</span><small>보기 &gt;</small></Link>
+                    <Link to="/law" onClick={() => setMobileMenuOpen(false)}><span>유사 판례 분석</span><small>보기 &gt;</small></Link>
                   </div>
                 )}
                 <Link to="/home" className="mobile-menu-item" onClick={() => setMobileMenuOpen(false)}>
@@ -385,7 +395,7 @@ function Home() {
             </span>
 
             <strong>
-              블랙박스 영상 AI 분석
+              블랙박스 영상 업로드
             </strong>
           </div>
 
@@ -411,10 +421,6 @@ function Home() {
                     </span>
                   </div>
 
-                  <h2>
-                    블랙박스 동영상 파일을 이곳에
-                    끌어다 놓으세요
-                  </h2>
 
                   <p>
                     MP4, MOV, AVI 포맷 지원 ·
@@ -670,12 +676,6 @@ function Home() {
 
             <div className="modal-header">
               <div className="modal-header-info">
-                <div className="modal-header-icon">
-                  <span className="material-symbols-outlined">
-                    {currentModal.icon}
-                  </span>
-                </div>
-
                 <div>
                   <strong>
                     {currentModal.title}
@@ -718,21 +718,11 @@ function Home() {
               {stage === "consent" && (
                 <div className="modal-stage">
                   <div>
-                    <span className="modal-label blue-label">
-                      <span className="material-symbols-outlined">
-                        shield
-                      </span>
-
-                      개인정보 보호 및 분석 동의
-                    </span>
-
                     <h3>
                       블랙박스 영상 수집 동의
                     </h3>
 
                     <p className="modal-description">
-                      정확한 사고 분석을 위해
-                      블랙박스 영상을 AI가 분석합니다.
                       아래 항목을 확인해 주세요.
                     </p>
                   </div>
@@ -820,11 +810,7 @@ function Home() {
                   <button
                     type="button"
                     className="modal-primary-button"
-                    onClick={() =>
-                      setStage(
-                        "questionnaire"
-                      )
-                    }
+                    onClick={() => startAnalysis("questionnaire")}
                   >
                     {allAgree
                       ? "동의하고 영상 분석 시작하기"
@@ -947,20 +933,12 @@ function Home() {
                 "questionnaire" && (
                 <div className="modal-stage">
                   <div>
-                    <span className="modal-label blue-label">
-                      현장 정황 교차 검증
-                    </span>
 
                     <h3>
-                      정확한 과실 분석을 위한
+                      정확한 분석을 위한
                       추가 질문
                     </h3>
 
-                    <p className="modal-description">
-                      영상에서 정확하게
-                      확인하기 어려운 정보를
-                      선택해 주세요.
-                    </p>
                   </div>
 
                   <QuestionCard
@@ -1092,12 +1070,9 @@ function Home() {
                   <button
                     type="button"
                     className="modal-primary-button"
-                    onClick={() =>
-                      setStage("analyzing")
-                    }
+                    onClick={() => startAnalysis("resultSummary", true)}
                   >
-                    답변 제출하고 AI 영상
-                    정밀 분석 시작하기
+                    답변 제출하고 재분석 하기
                   </button>
                 </div>
               )}
@@ -1106,23 +1081,25 @@ function Home() {
                   3. 분석 중
               ====================================== */}
 
-              {stage === "analyzing" && (
+              {(stage === "analyzing" || stage === "reanalyzing") && (
                 <div className="modal-stage">
                   <div className="analysis-heading">
                     <span className="analyzing-badge">
-                      AI 비전 심층 추론 엔진
-                      가동 중
+                      {stage === "reanalyzing"
+                        ? "답변 반영 AI 재분석 중"
+                        : "AI 비전 심층 추론 엔진 가동 중"}
                     </span>
 
                     <h3>
-                      에블리 AI가 영상을
-                      정밀 분석하고 있습니다
+                      {stage === "reanalyzing"
+                        ? "답변 내용을 반영해 사고 상황을 재분석하고 있습니다"
+                        : "에블리 AI가 영상을 정밀 분석하고 있습니다"}
                     </h3>
 
                     <p className="modal-description">
-                      차량 객체와 차선,
-                      움직임 및 충돌 시점을
-                      분석하고 있습니다.
+                      {stage === "reanalyzing"
+                        ? "선택하신 답변을 영상 분석 및 과실 판단에 반영하고 있습니다."
+                        : "차량 객체와 차선, 움직임 및 충돌 시점을 분석하고 있습니다."}
                     </p>
                   </div>
 
@@ -1261,14 +1238,7 @@ function Home() {
                 "resultSummary" && (
                 <div className="modal-stage">
                   <div>
-                    <span className="modal-label green-label">
-                      <span className="material-symbols-outlined">
-                        verified
-                      </span>
-
-                      인공지능 사고 모델링
-                      완료
-                    </span>
+                    
 
                     <h3 className="result-main-title">
                       AI가 판독한 사고 상황
@@ -1287,15 +1257,11 @@ function Home() {
                         <span className="result-type">
                           판정 사고 유형
                         </span>
-
-                        <h4>
-                          차선 변경 중 접촉 사고
-                        </h4>
                       </div>
 
-                      <span className="confidence">
-                        신뢰도 98.4%
-                      </span>
+                      <h4>
+                        차선 변경 중 접촉 사고
+                      </h4>
                     </div>
 
                     <div>
@@ -1484,17 +1450,13 @@ function Home() {
                     <button
                       type="button"
                       className="modal-primary-button"
-                      onClick={() =>
-                        setStage(
-                          "analyzing"
-                        )
-                      }
+                      onClick={() => startAnalysis("resultSummary", true)}
                     >
                       <span className="material-symbols-outlined">
                         auto_fix_high
                       </span>
 
-                      재분석 실행
+                      재분석
                     </button>
                   </div>
                 </div>
@@ -1557,8 +1519,8 @@ function StepIndicator({ current }) {
               {
                 [
                   "동의",
+                  "분석",
                   "질문",
-                  "분석중",
                   "상황 결과",
                 ][index]
               }

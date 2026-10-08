@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import avlyBrand from "../../assets/avly-brand.png";
+import avlyMascot from "../../assets/avly-mascot.png";
 import "./report.css";
 
 function Report() {
@@ -38,8 +40,8 @@ function Report() {
             <Link className="report-brand-link" to="/">
               <img
                 className="report-brand-logo"
-                src="https://lh3.googleusercontent.com/aida/AEtjO1WmxxhaY118czpIAPP1dWqPRkqg9lI_4b37P_Ih2NexVXTvNcZZxbt3VRAa4QUY4puYIjPE5kC18qK2wzxRM_L-cEi8JjEqxJN98d73zx_VjyqdGr-oh3pQIMUL3zVOnRmKiT3PWkOKjHxEbkhkb6EaFZ-U0KxrvrXwaorCjR4k8-JJEdw1n7NfGUZzgF7msnwNL0wA3XA--mgmt3KNQ_3tXbFIXSn_R84u-zeR93UrRJ0sqYGoJspHcWdb2Iyq1mYe8jyxImhIKTo"
-                alt="Avly"
+                src={avlyBrand}
+                alt="에블리 캐릭터와 로고"
               />
               <span className="report-brand-name">Avly</span>
               <span className="report-brand-korean">에블리</span>
@@ -51,10 +53,10 @@ function Report() {
               <Link className="report-nav-item" to="/home">홈</Link>
               <Link className="report-nav-item active" to="/report">분석 결과</Link>
               <div className="report-nav-group">
-                <Link className="report-nav-item" to="/home">사고 분석</Link>
+                <button type="button" className="report-nav-item" aria-haspopup="true">사고 분석</button>
                 <div className="report-mega-menu" aria-label="사고 분석 메뉴">
-                  <Link to="/home">사고 순간 타임라인</Link>
-                  <Link to="/report">유사 판례 분석</Link>
+                  <Link to="/time">사고 순간 타임라인</Link>
+                  <Link to="/law">유사 판례 분석</Link>
                 </div>
               </div>
               <Link className="report-nav-item" to="/home">사고 예방</Link>
@@ -81,7 +83,7 @@ function Report() {
             <aside className="mobile-menu-panel" role="menu" aria-label="모바일 메뉴" onClick={(event) => event.stopPropagation()}>
               <div className="mobile-menu-header">
                 <Link to="/" className="mobile-menu-brand">
-                  <img className="report-drawer-logo" src="https://lh3.googleusercontent.com/aida/AEtjO1WmxxhaY118czpIAPP1dWqPRkqg9lI_4b37P_Ih2NexVXTvNcZZxbt3VRAa4QUY4puYIjPE5kC18qK2wzxRM_L-cEi8JjEqxJN98d73zx_VjyqdGr-oh3pQIMUL3zVOnRmKiT3PWkOKjHxEbkhkb6EaFZ-U0KxrvrXwaorCjR4k8-JJEdw1n7NfGUZzgF7msnwNL0wA3XA--mgmt3KNQ_3tXbFIXSn_R84u-zeR93UrRJ0sqYGoJspHcWdb2Iyq1mYe8jyxImhIKTo" alt="" />
+                  <img className="report-drawer-logo" src={avlyMascot} alt="" />
                   <span><strong>Avly</strong> <small>교통사고 AI 분석</small></span>
                 </Link>
                 <button type="button" className="mobile-menu-close" aria-label="메뉴 닫기" onClick={() => setMobileMenuOpen(false)}>
@@ -97,17 +99,14 @@ function Report() {
                   <small className="mobile-menu-current">현재 화면</small>
                 </Link>
                 <div className="mobile-menu-analysis-row">
-                  <Link to="/home" className="mobile-menu-item mobile-menu-analysis" onClick={() => setMobileMenuOpen(false)}>
-                    <span className="material-symbols-outlined">error_outline</span><span>사고 분석</span>
-                  </Link>
-                  <button type="button" className="mobile-menu-expand" aria-label="사고 분석 하위 메뉴" aria-expanded={mobileAnalysisOpen} onClick={() => setMobileAnalysisOpen((open) => !open)}>
-                    <span className="material-symbols-outlined">expand_more</span>
+                  <button type="button" className="mobile-menu-item mobile-menu-analysis" aria-expanded={mobileAnalysisOpen} aria-controls="report-analysis-submenu" onClick={() => setMobileAnalysisOpen((open) => !open)}>
+                    <span className="material-symbols-outlined">error_outline</span><span>사고 분석</span><span className="material-symbols-outlined">expand_more</span>
                   </button>
                 </div>
                 {mobileAnalysisOpen && (
-                  <div className="mobile-submenu">
-                    <Link to="/home" onClick={() => setMobileMenuOpen(false)}><span>사고 순간 타임라인</span><small>보기 &gt;</small></Link>
-                    <Link to="/report" onClick={() => setMobileMenuOpen(false)}><span>유사 판례 분석</span><small>보기 &gt;</small></Link>
+                  <div className="mobile-submenu" id="report-analysis-submenu">
+                    <Link to="/time" onClick={() => setMobileMenuOpen(false)}><span>사고 순간 타임라인</span><small>보기 &gt;</small></Link>
+                    <Link to="/law" onClick={() => setMobileMenuOpen(false)}><span>유사 판례 분석</span><small>보기 &gt;</small></Link>
                   </div>
                 )}
                 <Link to="/home" className="mobile-menu-item" onClick={() => setMobileMenuOpen(false)}>

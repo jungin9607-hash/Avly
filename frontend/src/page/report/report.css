@@ -76,11 +76,11 @@ button {
 }
 
 .report-brand-logo {
-  width: 32px;
-  height: 32px;
+  width: 60px;
+  height: 60px;
   display: block;
-  border-radius: 50%;
-  object-fit: cover;
+  border-radius: 8px;
+  object-fit: contain;
 }
 
 .report-brand-name {
@@ -120,6 +120,14 @@ button {
   color: #45464d;
   font-size: 14px;
   transition: 0.2s;
+}
+
+button.report-nav-item {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .report-nav-item:hover {
