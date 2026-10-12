@@ -1,37 +1,39 @@
-# AVLY Frontend
+# AVLY 프론트엔드
 
-React 19 and Vite frontend for the AVLY traffic-accident analysis service.
+AVLY 교통사고 분석 서비스의 React 19 + Vite 프론트엔드입니다.
 
-## Screens
+> 폴더 구조와 수정 위치 안내: [docs/frontend-structure.md](../docs/frontend-structure.md)
 
-| Route | Screen | Main content |
+## 화면
+
+| 경로 | 화면 | 주요 내용 |
 | --- | --- | --- |
-| `/` | Intro | Service introduction and entry point to analysis |
-| `/home` | Home | Video upload, analysis questionnaire, progress, result summary, and reanalysis flow |
-| `/report` | Report | Fault-ratio summary, supporting evidence, and report sharing/download actions |
-| `/time` | Time | Accident-moment timeline |
-| `/law` | Law | Similar precedent analysis |
+| `/` | 인트로 | 서비스 소개 및 분석 시작 진입점 |
+| `/home` | 홈 | 영상 업로드, 추가 질문, 분석 진행, 결과 요약, 재분석 흐름 |
+| `/report` | 분석 결과 | 과실비율 요약, 근거 증거, 리포트 공유/다운로드 |
+| `/time` | 타임라인 | 사고 순간 타임라인 |
+| `/law` | 유사 판례 | 유사 판례 분석 |
 
-## Navigation
+## 네비게이션
 
-- All five screens provide shared navigation for Home, Report, Accident Analysis, and Accident Prevention.
-- Accident Analysis is a non-navigating menu trigger. Its submenu links to `/time` (timeline) and `/law` (similar precedents).
-- Desktop layouts show the navigation links; narrow layouts use a hamburger button and a right-side drawer.
-- Navigation uses React Router. Confirming the recognized accident situation on Home closes the modal and navigates to `/report`.
+- 5개 화면 모두 홈, 분석 결과, 사고 분석, 사고 예방 메뉴를 공통으로 제공합니다. (`components/layout/Header.jsx`)
+- "사고 분석"은 이동하지 않는 메뉴 트리거이며, 하위 메뉴로 `/time`(타임라인)과 `/law`(유사 판례)에 연결됩니다.
+- 데스크톱은 메뉴 링크를 보여주고, 좁은 화면은 햄버거 버튼과 오른쪽 드로어를 사용합니다.
+- React Router를 사용합니다. 홈에서 AI가 판독한 사고 상황을 "일치합니다"로 확인하면 모달이 닫히고 `/report`로 이동합니다.
 
-## Implemented UI (2026-10-08)
+## 구현 현황 (2026-10-08)
 
-- Refined the Intro hero, mascot artwork, feature cards, and responsive layout.
-- Added and aligned the consent, analysis-progress, follow-up-question, and situation-result stages in the Home analysis modal. A follow-up analysis stage is also shown after answers or a reanalysis request.
-- Centered the recognized accident type in the Home result card, kept its label at the left, and removed the confidence badge.
-- Added a breadcrumb to the Law page, matching the Time page's `Accident Analysis > Similar Precedent Analysis` layout.
-- Fixed invalid JSX in the Home consent modal and preserved the analysis progress flow.
+- 인트로 히어로, 마스코트 이미지, 기능 카드, 반응형 레이아웃을 다듬었습니다.
+- 홈 분석 모달에 동의, 분석 진행, 추가 질문, 상황 결과 단계를 추가하고 정렬했습니다. 답변 제출 또는 재분석 요청 후에는 재분석 진행 단계도 표시됩니다.
+- 홈 결과 카드에서 판독된 사고 유형을 가운데 정렬하고 라벨은 왼쪽에 두었으며, 신뢰도 배지는 제거했습니다.
+- 유사 판례 화면에 브레드크럼을 추가해 타임라인 화면의 `사고 분석 > 유사 판례 분석` 형태와 맞췄습니다.
+- 홈 동의 모달의 잘못된 JSX를 수정하고 분석 진행 흐름을 유지했습니다.
 
-### Analysis flow status
+### 분석 흐름 현황
 
-The Home modal currently uses a simulated analysis flow: consent → progress → follow-up questions → reanalysis progress → situation result. It does not yet receive video-analysis results from an AI API, so deciding whether the video is sufficient and conditionally asking follow-up questions remains pending AI integration.
+홈 모달은 현재 시뮬레이션 흐름(동의 → 진행 → 추가 질문 → 재분석 진행 → 상황 결과)으로 동작합니다. 아직 AI API에서 영상 분석 결과를 받지 않으므로, 영상이 충분한지 판단하고 조건에 따라 추가 질문을 보여주는 기능은 AI 연동 이후로 남아 있습니다.
 
-## Development
+## 개발
 
 ```bash
 npm run dev
@@ -39,4 +41,4 @@ npm run build
 npm run lint
 ```
 
-Run these commands from the `frontend` directory. The frontend can also be run with the repository's Docker Compose setup.
+위 명령은 `frontend` 디렉터리에서 실행합니다. 저장소의 Docker Compose 설정으로도 실행할 수 있습니다.
