@@ -1,0 +1,538 @@
+/* 업로드(홈) 화면
+ * 위: 보라 직조 사진 띠(글 + 작은 업로드 상자 / 가이드 타일 3개)
+ * 아래: 흰 바탕(파일 목록 → 안내문) */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
+.uh {
+  --ink: #f4f5fb;
+  --ink-2: #c6cde3;
+  --muted: #9aa3c0;
+  --line: rgba(255, 255, 255, 0.1);
+  --surface: rgba(255, 255, 255, 0.06);
+  --blue: #4c56ec;
+  --peri: #aab4ff;
+  --amber: #f2b544;
+  --green: #5fd39a;
+  position: relative;
+  min-height: 100vh;
+  /* #root의 고정 폭(1126px)을 벗어나 화면 전체를 사용 */
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  text-align: left;
+  color: var(--ink);
+  background: #fff;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  overflow: hidden;
+}
+
+/* 주요 부분: 화면 끝까지 꽉 찬 #8C4D8C 직조 사진 띠.
+ * 사진은 좌우 반전해 무늬(짙은 면·사선)가 가이드 타일이 없는 왼쪽에 오도록 함.
+ * 무늬가 보이도록 덮개는 옅게, 글이 있는 왼쪽만 살짝 더 어둡게 */
+.uh-hero {
+  position: relative;
+  padding: 128px 40px 72px;
+  background:
+    linear-gradient(90deg, rgba(30, 10, 36, 0.36) 0%, rgba(30, 10, 36, 0.12) 50%, rgba(30, 10, 36, 0.25) 100%),
+    linear-gradient(180deg, rgba(20, 8, 30, 0.3) 0%, transparent 25%, transparent 80%, rgba(20, 8, 30, 0.25) 100%),
+    var(--hero-photo) center / cover no-repeat,
+    #8c4d8c;
+}
+.uh-hero > .uh-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+/* 보라 사진 위 글자색: 파란 기가 도는 회색 대신 흰색·연한 라벤더 */
+.uh-hero {
+  --ink: #fff;
+  --ink-2: #f3e7f5;
+  --muted: #eedff2;
+  --peri: #f6cdf9;
+  --shade: rgba(40, 8, 48, 0.55);
+}
+/* 사진 아래 흰 바탕: 어두운 글자 + 사진과 같은 자주색 포인트 */
+.uh-main {
+  --ink: #111318;
+  --ink-2: #3b3f4a;
+  --muted: #6b7180;
+  --line: #e6e7ec;
+  --surface: #f4eef5;
+  --peri: #8c4d8c;
+  --amber: #b7791f;
+  --green: #12a150;
+  color: var(--ink);
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 40px 64px;
+}
+/* index.css의 전역 h1·h2 색/폰트가 덮어쓰지 않도록 */
+.uh h1,
+.uh h2,
+.uh h3,
+.uh h4 {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* ---------- 왼쪽: 글 + 작은 업로드 상자 / 오른쪽: 가이드 ---------- */
+.uh-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+}
+.uh-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.uh-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 22px;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-shadow: 0 1px 8px var(--shade);
+}
+.uh-steps li {
+  counter-increment: step;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.uh-steps li::before {
+  content: counter(step);
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 700;
+}
+.uh-steps li + li::after {
+  order: -1;
+  content: "";
+  width: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  margin-right: 2px;
+}
+.uh-steps li.on {
+  color: var(--ink);
+  font-weight: 700;
+}
+.uh-steps li.on::before {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #1a1306;
+  text-shadow: none;
+}
+.uh-intro h1 {
+  margin: 0 0 18px;
+  color: #fff;
+  font-size: clamp(38px, 4.4vw, 60px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.1;
+  text-shadow: 0 2px 18px var(--shade);
+}
+.uh-lead {
+  margin: 0 0 32px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--muted);
+  word-break: keep-all;
+  text-shadow: 0 1px 10px var(--shade);
+}
+.uh-lead strong {
+  color: var(--ink);
+}
+
+/* 작은 업로드 상자: 버튼보다 크게, 끌어다 놓을 수 있을 만큼만 */
+.uh-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 520px;
+  padding: 26px 24px;
+  text-align: center;
+  color: var(--ink);
+  background: rgba(38, 12, 46, 0.62);
+  border: 1.5px dashed rgba(255, 230, 255, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 6px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.uh-drop.is-over {
+  background: rgba(70, 24, 82, 0.75);
+  border-color: #fff;
+}
+/* 보라 위에서는 흰 버튼 + 짙은 자주 글자가 가장 또렷함 */
+.uh-drop .uh-btn-solid {
+  background: #fff;
+  border-color: #fff;
+  color: #4a1a52;
+}
+.uh-drop .uh-btn-solid:hover {
+  background: #f6eaf8;
+  border-color: #f6eaf8;
+}
+.uh-drop-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--peri);
+  transition: transform 0.2s ease;
+}
+.uh-drop.is-over .uh-drop-icon {
+  transform: translateY(-4px);
+}
+.uh-drop h2 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+.uh-error {
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: #ffd0c8;
+}
+
+.uh-tag {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.uh-guides {
+  display: flex;
+  flex-direction: column;
+}
+.uh-guides-title {
+  margin: 0 0 12px;
+  color: #fff;
+  text-shadow: 0 1px 8px var(--shade);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.uh-tiles {
+  flex: 1;
+  display: grid;
+  grid-auto-rows: 1fr;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.uh-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 22px;
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(5, 0, 15, 0.35);
+}
+/* 다음 타일을 가리키는 아래쪽 꼭지 (타일과 같은 색) */
+.uh-tile:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 30px;
+  bottom: -11px;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 11px solid var(--tile-bg);
+}
+.uh-tag b {
+  font-weight: 800;
+}
+.uh-tag-of {
+  opacity: 0.55;
+}
+.uh-tile h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.uh-tile-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+/* STEP 01 → 03: 짙은 자주 → 자주 → 밝은 라벤더로 밝아지며 흐름을 보여줌 */
+.uh-tile-1 {
+  --tile-bg: #261030;
+  background: var(--tile-bg);
+  color: var(--ink);
+}
+.uh-tile-2 {
+  --tile-bg: #43184d;
+  background: var(--tile-bg);
+  color: var(--ink);
+}
+.uh-tile-1 .uh-tag,
+.uh-tile-2 .uh-tag {
+  color: var(--peri);
+}
+.uh-tile-1 .uh-tile-body,
+.uh-tile-2 .uh-tile-body {
+  color: var(--ink-2);
+}
+.uh-tile-3 {
+  --tile-bg: #f7eff8;
+  background: var(--tile-bg);
+  color: #2a0f30;
+}
+.uh-tile-3 .uh-tag {
+  color: #8c4d8c;
+}
+.uh-tile-3 .uh-tile-body {
+  color: #4a2f50;
+}
+
+/* ---------- 버튼 ---------- */
+.uh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 4px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.uh-btn-solid {
+  padding: 13px 22px;
+  font-size: 15px;
+  background: var(--blue);
+  color: #fff;
+  border: 1px solid var(--blue);
+}
+.uh-btn-solid:hover {
+  background: #5d67f5;
+  border-color: #5d67f5;
+}
+.uh-btn-line {
+  padding: 10px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+.uh-btn-line:hover:not(:disabled) {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+.uh-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ---------- 파일 목록 ---------- */
+.uh-list {
+  margin-top: 48px;
+}
+.uh-list-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--ink);
+}
+.uh-list-head h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+.uh-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.uh-empty {
+  margin: 0;
+  padding: 28px 0;
+  font-size: 15px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+.uh-files {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.uh-file {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.uh-file-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--peri);
+}
+.uh-file-info {
+  flex: 1;
+  min-width: 0;
+}
+.uh-file-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.uh-file-name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.uh-file-name em {
+  flex: none;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--peri);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+}
+.uh-file-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.uh-file-meta i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+.uh-ready {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--green);
+  font-weight: 600;
+}
+.uh-reading {
+  color: var(--peri);
+}
+.uh-warn {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--amber);
+}
+.uh-file-actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.uh-remove {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.uh-remove:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+/* ---------- 안내문 ---------- */
+.uh-notice {
+  display: flex;
+  gap: 10px;
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+.uh-notice svg {
+  flex: none;
+  margin-top: 2px;
+}
+.uh-notice p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  word-break: keep-all;
+}
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 960px) {
+  .uh-grid {
+    grid-template-columns: 1fr;
+  }
+  .uh-grid {
+    gap: 40px;
+  }
+  .uh-drop {
+    max-width: none;
+  }
+}
+@media (max-width: 640px) {
+  .uh-hero {
+    padding: 104px 20px 56px;
+  }
+  .uh-main {
+    padding: 40px 20px 56px;
+  }
+  .uh-file {
+    flex-wrap: wrap;
+  }
+  .uh-file-actions {
+    width: 100%;
+  }
+  .uh-file-actions .uh-btn {
+    flex: 1;
+  }
+}

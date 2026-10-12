@@ -1,0 +1,82 @@
+.ln {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 88px;
+  padding: 26px 28px;
+  border-radius: 6px;
+  background: #faf8fb;
+  border-top: 2px solid #8c4d8c;
+  font-family: inherit;
+  text-align: left;
+}
+.ln > svg {
+  flex: none;
+  align-self: flex-start;
+  color: #8c4d8c;
+}
+.ln h3 {
+  margin: 0 0 6px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  color: #111318;
+}
+.ln p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #6b7180;
+  word-break: keep-all;
+}
+.ln-btn {
+  flex: none;
+  padding: 10px 16px;
+  border: 1px solid #111318;
+  border-radius: 4px;
+  background: #fff;
+  color: #111318;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.ln-btn:hover {
+  background: #111318;
+  color: #fff;
+}
+
+/* 어두운 배경 화면용 */
+.ln-dark {
+  background: rgba(255, 255, 255, 0.04);
+  border-top-color: #f6cdf9;
+}
+.ln-dark > svg {
+  color: #f6cdf9;
+}
+.ln-dark h3 {
+  font-size: 17px;
+  color: #f7f5f8;
+}
+.ln-dark p {
+  font-size: 14px;
+  color: #cbc4d0;
+}
+.ln-dark .ln-btn {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #f4f1f6;
+}
+.ln-dark .ln-btn:hover {
+  background: #f4f1f6;
+  border-color: #f4f1f6;
+  color: #0e0c12;
+}
+
+@media (max-width: 900px) {
+  .ln {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

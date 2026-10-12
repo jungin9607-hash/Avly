@@ -1,0 +1,714 @@
+/* 분석 결과 화면: 홈과 같은 톤
+ * 맨 위 보라 직조 사진 띠(최종 비율) → 흰 바탕(조정 단계 · 주행 데이터 · 증거 · 고지) */
+.ar {
+  --ink: #111318;
+  --ink-2: #3b3f4a;
+  --muted: #6b7180;
+  --line: #ebe6ee;
+  --plum: #8c4d8c;
+  --plum-deep: #4a1a52;
+  --plum-soft: #f7eff8;
+  --plum-mid: #ead8ee;
+  --mine: #c58fc8; /* 내 과실 */
+  --other: #4a1a52; /* 상대 과실 */
+  --green: #12a150;
+  --red: #c2413b;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  min-height: 100vh;
+  text-align: left;
+  color: var(--ink);
+  background: #fff;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+.ar h1,
+.ar h2,
+.ar h3 {
+  font-family: inherit;
+  color: inherit;
+}
+.ar-wrap,
+.ar-main {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+/* ---------- 맨 위: 최종 비율 ---------- */
+.ar-hero {
+  padding: 120px 40px 64px;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgba(30, 10, 36, 0.62) 0%, rgba(30, 10, 36, 0.35) 100%),
+    linear-gradient(180deg, rgba(20, 8, 30, 0.3), transparent 30%, transparent 80%, rgba(20, 8, 30, 0.3)),
+    var(--hero-photo) center / cover no-repeat,
+    var(--plum);
+}
+.ar-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #f3e7f5;
+}
+.ar-code b {
+  margin-left: 6px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+.ar-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: #fff;
+}
+.ar-hero h1 {
+  margin: 0 0 28px;
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  text-shadow: 0 2px 14px rgba(40, 8, 48, 0.45);
+}
+.ar-score {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+.ar-side {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ar-other {
+  align-items: flex-end;
+  text-align: right;
+}
+.ar-who {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.ar-who i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.ar-mine .ar-who i {
+  background: var(--mine);
+}
+.ar-other .ar-who i {
+  background: #fff;
+  box-shadow: inset 0 0 0 3px var(--other);
+}
+.ar-side strong {
+  font-size: clamp(56px, 8vw, 96px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 20px rgba(40, 8, 48, 0.4);
+}
+.ar-side small {
+  margin-left: 2px;
+  font-size: 0.45em;
+  font-weight: 700;
+}
+.ar-bar {
+  display: flex;
+  gap: 3px;
+  height: 30px;
+  padding: 3px;
+  border-radius: 4px;
+  background: rgba(20, 6, 26, 0.45);
+}
+.ar-bar span {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 800;
+  transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ar-bar-mine {
+  background: var(--mine);
+  color: #2a0f30;
+}
+.ar-bar-other {
+  background: var(--other);
+  color: #fff;
+}
+.ar-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #f3e7f5;
+}
+.ar-note b {
+  color: #fff;
+  font-weight: 800;
+}
+
+/* ---------- 본문 공통 ---------- */
+.ar-main {
+  padding: 72px 40px 80px;
+}
+.ar-section + .ar-section,
+.ar-telemetry + .ar-section {
+  margin-top: 88px;
+}
+.ar-sec-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--ink);
+}
+.ar-sec-head h2 {
+  margin: 0;
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.ar-sec-head span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* ---------- 왜 20:80인가: 고정 게이지 + 스크롤 단계 ---------- */
+.ar-scrolly {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
+  gap: 48px;
+  align-items: start;
+}
+.ar-gauge {
+  position: sticky;
+  top: 96px;
+  padding: 28px;
+  border-radius: 6px;
+  background: var(--plum-soft);
+  border: 1px solid var(--plum-mid);
+}
+.ar-gauge-step {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--plum);
+  letter-spacing: 0.04em;
+}
+.ar-gauge-step b {
+  font-weight: 800;
+}
+.ar-gauge-ratio {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 18px;
+  font-size: clamp(48px, 6vw, 72px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--other);
+}
+.ar-gauge-ratio em {
+  font-style: normal;
+  font-weight: 500;
+  color: #b9a4be;
+}
+.ar-gauge-mine {
+  color: var(--plum);
+}
+.ar-gauge-bar {
+  height: 12px;
+  border-radius: 2px;
+  background: var(--other);
+  overflow: hidden;
+}
+.ar-gauge-bar span {
+  display: block;
+  height: 100%;
+  background: var(--mine);
+  border-right: 2px solid #fff;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ar-gauge-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.ar-gauge-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ar-gauge-legend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+}
+.ar-gauge-legend .mine {
+  background: var(--mine);
+}
+.ar-gauge-legend .other {
+  background: var(--other);
+}
+.ar-gauge-caption {
+  margin: 22px 0 14px;
+  padding-top: 16px;
+  border-top: 1px solid var(--plum-mid);
+  font-size: 16px;
+  font-weight: 700;
+}
+.ar-gauge-dots {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ar-gauge-dots li {
+  flex: 1;
+  height: 3px;
+  border-radius: 1px;
+  background: var(--plum-mid);
+  transition: background-color 0.3s ease;
+}
+.ar-gauge-dots li.on {
+  background: var(--plum);
+}
+
+.ar-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* 단계마다 높이를 넉넉히 주어 스크롤하며 하나씩 읽히도록 */
+.ar-step {
+  display: flex;
+  gap: 18px;
+  min-height: 46vh;
+  padding: 28px 0;
+  opacity: 0.35;
+  transition: opacity 0.4s ease;
+}
+.ar-step + .ar-step {
+  border-top: 1px solid var(--line);
+}
+.ar-step:last-child {
+  min-height: auto;
+  padding-bottom: 0;
+}
+.ar-step.is-active,
+.ar-step.is-done {
+  opacity: 1;
+}
+.ar-step-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: 1.5px solid var(--plum-mid);
+  color: var(--plum);
+  font-size: 15px;
+  font-weight: 800;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.ar-step.is-active .ar-step-num {
+  background: var(--plum-deep);
+  border-color: var(--plum-deep);
+  color: #fff;
+}
+.ar-step-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 3px 0 10px;
+}
+.ar-step h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+.ar-step-tag {
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: var(--plum-soft);
+  color: var(--plum-deep);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.ar-step p {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  word-break: keep-all;
+}
+
+/* ---------- 주행 데이터 ---------- */
+.ar-telemetry {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 88px;
+}
+.ar-stat {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 6px;
+  background: #fbf8fc;
+  border: 1px solid var(--line);
+}
+.ar-stat-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  background: var(--plum-soft);
+  color: var(--plum);
+}
+.ar-stat-label {
+  margin: 0 0 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.ar-stat-value {
+  margin: 0 0 4px;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.ar-stat-value small {
+  margin-left: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.ar-stat-note {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ar-stat-note.ok {
+  color: var(--green);
+}
+.ar-stat-note.warn {
+  color: var(--red);
+}
+
+/* ---------- 핵심 증거 ---------- */
+.ar-evidence {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.ar-ev {
+  padding: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.ar-ev-wide {
+  grid-column: 1 / -1;
+}
+.ar-ev-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 10px;
+}
+.ar-ev h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.ar-ev h3 svg {
+  color: var(--green);
+}
+.ar-ev-tag {
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: #e8f6ee;
+  color: #0d7a3d;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.ar-ev-tag.warn {
+  background: #fbeceb;
+  color: var(--red);
+}
+.ar-ev p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  word-break: keep-all;
+}
+.ar-ev .ar-ev-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--plum-deep);
+}
+
+/* 프레임 3장: 위에서 아래로 훑는 판독선 + 방향지시등 자리 표시 */
+.ar-frames {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+.ar-frame {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #3b3e4a, #1c1d24);
+}
+.ar-car {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.ar-frame-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: rgba(246, 205, 249, 0.85);
+  box-shadow: 0 0 12px rgba(246, 205, 249, 0.8);
+  animation: ar-scan 2.6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.35s);
+}
+@keyframes ar-scan {
+  0%,
+  100% {
+    top: 0;
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  50% {
+    top: calc(100% - 2px);
+  }
+}
+.ar-frame-box {
+  position: absolute;
+  left: 22%;
+  top: 34%;
+  width: 14%;
+  height: 16%;
+  border: 1.5px dashed #f6cdf9;
+  border-radius: 2px;
+}
+.ar-frame figcaption {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* 아래에서 떠오르는 등장 */
+.ar-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ar-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- 버튼 ---------- */
+.ar-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+.ar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.ar-btn-solid {
+  background: var(--plum-deep);
+  border: 1px solid var(--plum-deep);
+  color: #fff;
+}
+.ar-btn-solid:hover {
+  background: #5e2468;
+  border-color: #5e2468;
+}
+.ar-btn-line {
+  background: #fff;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+}
+.ar-btn-line:hover {
+  background: var(--ink);
+  color: #fff;
+}
+
+.ar-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 60;
+  margin: 0;
+  padding: 12px 18px;
+  border-radius: 4px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.ar-toast.is-on {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 900px) {
+  .ar-scrolly {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  /* 좁은 화면: 게이지가 메뉴 아래에 붙어 따라옴 */
+  .ar-gauge {
+    top: 64px;
+    z-index: 5;
+    padding: 14px 18px;
+    box-shadow: 0 8px 20px rgba(40, 8, 48, 0.08);
+  }
+  .ar-gauge-ratio {
+    margin-bottom: 10px;
+    font-size: 40px;
+  }
+  .ar-gauge-legend,
+  .ar-gauge-dots {
+    display: none;
+  }
+  .ar-gauge-caption {
+    margin: 10px 0 0;
+    padding-top: 10px;
+    font-size: 14px;
+  }
+  .ar-step {
+    min-height: 36vh;
+  }
+  .ar-telemetry,
+  .ar-evidence {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .ar-hero {
+    padding: 100px 20px 48px;
+  }
+  .ar-main {
+    padding: 48px 20px 64px;
+  }
+  .ar-frames {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .ar-actions {
+    flex-direction: column;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ar-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .ar-frame-scan {
+    display: none;
+  }
+  .ar-bar span,
+  .ar-gauge-bar span {
+    transition: none;
+  }
+}
+@media print {
+  .tn,
+  .ar-actions,
+  .ar-toast {
+    display: none;
+  }
+  .ar-reveal,
+  .ar-step {
+    opacity: 1;
+    transform: none;
+  }
+}
