@@ -1,0 +1,705 @@
+/* 타임라인 화면: 다른 화면과 달리 처음부터 끝까지 한 가지 어두운 배경
+ * 왼쪽(제목 · 비율 · 지금 시점 · 넘기기) / 오른쪽(가로로 흐르는 카드 + 시간축) */
+.tl {
+  --bg: #0e0c12;
+  --panel: #17141c;
+  --text: #f7f5f8;
+  --muted: #cbc4d0; /* 어두운 배경에서도 충분히 읽히는 밝기 */
+  --line: rgba(255, 255, 255, 0.16);
+  --accent: #f6cdf9; /* 라벤더: 결정적 시점 · 강조 */
+  --impact: #ff8a7a; /* 충돌 */
+  --signal: #ffd23f; /* 타임라인 영역 전용 강조색: 중앙선·경고 테이프 같은 노랑 */
+  --plum: #8c4d8c;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  min-height: 100vh;
+  text-align: left;
+  color: var(--text);
+  background: var(--bg);
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+.tl h1,
+.tl h2 {
+  font-family: inherit;
+  color: inherit;
+}
+.tl-mono {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 무대: 화면 한 장에 고정 ---------- */
+.tl-stage {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.6fr) minmax(0, 1.75fr);
+  gap: 40px;
+  align-items: center;
+  /* 화면 한 장에 모두 들어오도록: 메뉴(64px) 바로 아래부터 화면 끝까지 */
+  height: 100vh;
+  height: 100svh;
+  padding: 76px 0 16px 56px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 왼쪽: 자주빛 번짐 + 뒤에 깔린 큰 단계 숫자 */
+.tl-side {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.tl-side::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  left: -180px;
+  top: -160px;
+  width: 640px;
+  height: 640px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(140, 77, 140, 0.42), rgba(140, 77, 140, 0.12) 55%, transparent);
+  pointer-events: none;
+}
+.tl-bignum {
+  position: absolute;
+  z-index: -1;
+  right: -8px;
+  top: -24px;
+  font-size: clamp(140px, 15vw, 220px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(246, 205, 249, 0.22);
+  pointer-events: none;
+  animation: tl-bignum 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.tl-bignum.key {
+  -webkit-text-stroke-color: rgba(246, 205, 249, 0.4);
+}
+.tl-bignum.impact {
+  -webkit-text-stroke-color: rgba(255, 138, 122, 0.4);
+}
+@keyframes tl-bignum {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+.tl-h1-accent {
+  color: var(--accent);
+}
+
+.tl-kicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.tl-side h1 {
+  margin: 0 0 28px;
+  font-size: clamp(40px, 4.6vw, 64px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+/* 지금 보고 있는 시점: 바뀔 때마다 살짝 떠오름 */
+.tl-now {
+  --now: #c48fc4;
+  width: min(100%, 360px);
+  box-sizing: border-box;
+  padding: 16px 18px 14px;
+  border-radius: 4px;
+  border-left: 4px solid var(--now);
+  background: linear-gradient(90deg, rgba(140, 77, 140, 0.32), rgba(140, 77, 140, 0.1));
+  animation: tl-now 0.45s ease both;
+}
+.tl-now.key {
+  --now: var(--accent);
+  background: linear-gradient(90deg, rgba(246, 205, 249, 0.22), rgba(246, 205, 249, 0.06));
+}
+.tl-now.impact {
+  --now: var(--impact);
+  background: linear-gradient(90deg, rgba(255, 138, 122, 0.24), rgba(255, 138, 122, 0.06));
+}
+.tl-now-dots {
+  display: flex;
+  gap: 4px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.tl-now-dots li {
+  flex: 1;
+  height: 3px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.tl-now-dots li.on {
+  background: var(--now);
+}
+@keyframes tl-now {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.tl-now-step {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--now);
+}
+.tl-now-label {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.tl-now-text {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.tl-counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 20px;
+}
+.tl-counter span {
+  margin-right: 10px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.tl-counter b {
+  color: var(--text);
+}
+.tl-counter button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+.tl-counter button:hover:not(:disabled) {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+.tl-counter button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.tl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 0 4px;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tl-link:hover {
+  color: #fff;
+}
+
+/* 오른쪽: 따로 떨어진 패널 + 왼쪽 노란 띠로 시선을 모음 */
+.tl-right {
+  position: relative;
+  min-width: 0;
+  padding: 18px 0 16px 32px;
+  border-radius: 8px 0 0 8px;
+  background:
+    radial-gradient(ellipse 55% 55% at 32% 48%, rgba(255, 210, 63, 0.13), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 36px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 36px),
+    #1c1922;
+  border: 1px solid rgba(255, 210, 63, 0.35);
+  border-right: 0;
+  border-left: 5px solid var(--signal);
+  box-shadow: -20px 0 60px rgba(255, 210, 63, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+.tl-right-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 0 56px 10px 0;
+}
+.tl-timecode {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--signal);
+  text-shadow: 0 0 18px rgba(255, 210, 63, 0.35);
+  animation: tl-now 0.35s ease both;
+}
+.tl-timecode.key {
+  color: var(--accent);
+  text-shadow: 0 0 18px rgba(246, 205, 249, 0.35);
+}
+.tl-timecode.impact {
+  color: var(--impact);
+  text-shadow: 0 0 18px rgba(255, 138, 122, 0.4);
+}
+.tl-right-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--signal);
+}
+.tl-right-label i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff3b30;
+  animation: tl-rec 1.2s steps(2, start) infinite;
+}
+@keyframes tl-rec {
+  to {
+    visibility: hidden;
+  }
+}
+.tl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 56px 6px 0;
+}
+.tl-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.tl-chip:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: var(--text);
+}
+.tl-chip i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.tl-chip.key i {
+  background: var(--accent);
+}
+.tl-chip.impact i {
+  background: var(--impact);
+}
+.tl-chip.is-on {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: #1a1404;
+}
+.tl-chip.is-on i {
+  background: #1a1404;
+}
+.tl-count {
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* 카드 줄: 오른쪽 끝은 화면 밖으로 이어짐.
+ * 안쪽 여백을 두어 첫 카드의 왼쪽 끝과 지금 카드의 노란 테두리·빛이 잘리지 않게 함 */
+.tl-viewport {
+  overflow: hidden;
+  margin: -20px 0 -20px -20px;
+}
+.tl-track {
+  display: flex;
+  gap: 28px;
+  margin: 0;
+  padding: 20px 56px 20px 20px;
+  list-style: none;
+  will-change: transform;
+}
+.tl-card {
+  flex: none;
+  width: clamp(260px, min(37vw, calc((100svh - 460px) * 4 / 3)), 580px);
+  opacity: 0.55;
+  transform: scale(0.95);
+  transform-origin: 50% 40%;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.tl-card.is-active {
+  opacity: 1;
+  transform: none;
+}
+/* 결정적·충돌 카드의 자체 테두리보다 우선 */
+.tl-track .tl-card.is-active .tl-frame {
+  outline: 4px solid var(--signal);
+  outline-offset: -4px;
+  box-shadow: 0 0 0 7px rgba(255, 210, 63, 0.18), 0 22px 70px rgba(255, 210, 63, 0.25);
+}
+.tl-track .tl-card.is-active .tl-hud {
+  background: var(--signal);
+  color: #1a1404;
+}
+.tl-frame {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #22232b;
+  outline: 1px solid var(--line);
+  outline-offset: -1px;
+  transition: box-shadow 0.5s ease;
+}
+/* 블랙박스 화면 느낌: 왼쪽 위 REC */
+.tl-rec {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 7px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+.tl-rec::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff3b30;
+  animation: tl-rec 1.2s steps(2, start) infinite;
+}
+.tl-card.key .tl-frame {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.tl-card.impact .tl-frame {
+  outline: 2px solid var(--impact);
+  outline-offset: -2px;
+}
+.tl-scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scale(1.06);
+  transition: transform 0.8s ease;
+}
+.tl-card.is-active .tl-scene {
+  transform: none;
+}
+.tl-hud {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 3px 7px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+.tl-badge {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: #fff;
+  color: #111318;
+  font-size: 13px;
+  font-weight: 700;
+}
+.tl-card.key .tl-badge {
+  background: var(--accent);
+  color: #2a0f30;
+}
+.tl-card.impact .tl-badge {
+  background: var(--impact);
+  color: #2a0a08;
+}
+
+.tl-card-body {
+  padding-top: 12px;
+  text-align: center;
+}
+.tl-when {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.tl-tag {
+  color: var(--text);
+}
+.tl-card.key .tl-tag {
+  color: var(--accent);
+}
+.tl-card.impact .tl-tag {
+  color: var(--impact);
+}
+.tl-card.is-active h2 {
+  color: #fff;
+}
+.tl-card h2 {
+  margin: 0 0 8px;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+.tl-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 0 3px;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tl-play:hover {
+  color: var(--accent);
+}
+
+/* 장면 속 작은 움직임 */
+.tl-arrow {
+  stroke-dasharray: 6 5;
+  animation: tl-dash 1.2s linear infinite;
+}
+@keyframes tl-dash {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+.tl-ring {
+  transform-origin: 122px 160px;
+  animation: tl-ring 1.6s ease-out infinite;
+}
+@keyframes tl-ring {
+  from {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* 시간축: 실제 시각 비율, 지나온 구간이 채워짐 */
+.tl-axis {
+  position: relative;
+  height: 44px;
+  margin: 10px 64px 0 6px;
+}
+.tl-axis-line,
+.tl-axis-fill {
+  position: absolute;
+  left: 0;
+  top: 7px;
+  height: 4px;
+  border-radius: 2px;
+}
+.tl-axis-line {
+  right: 0;
+  background: var(--line);
+}
+.tl-axis-fill {
+  background: var(--signal);
+  box-shadow: 0 0 10px rgba(255, 210, 63, 0.5);
+  transition: width 0.5s ease;
+}
+.tl-axis-dot {
+  position: absolute;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  padding: 0;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  background: var(--bg);
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+.tl-axis-dot:hover {
+  transform: scale(1.2);
+}
+.tl-axis-dot.is-past {
+  border-color: var(--signal);
+  background: var(--signal);
+}
+.tl-axis-dot.key.is-past {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.tl-axis-dot.impact.is-past {
+  border-color: var(--impact);
+  background: var(--impact);
+  animation: tl-pulse 1.8s ease-out infinite;
+}
+@keyframes tl-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 138, 122, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(255, 138, 122, 0);
+  }
+}
+.tl-axis-dot em {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12.5px;
+  font-style: normal;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--muted);
+}
+.tl-axis-dot.is-first em {
+  left: 0;
+  transform: none;
+}
+.tl-axis-dot.is-last em {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.tl-bottom {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 40px 80px;
+}
+.tl-bottom .ln {
+  margin-top: 40px;
+}
+
+/* ---------- 좁은 화면 · 움직임 줄이기: 고정 없이 손으로 옆으로 넘기기 ---------- */
+@media (max-width: 900px) {
+  .tl-stage {
+    height: auto;
+  }
+  .tl-right {
+    padding: 22px 0 18px 18px;
+  }
+  .tl-right-head {
+    margin-right: 20px;
+  }
+  .tl-timecode {
+    font-size: 20px;
+  }
+  .tl-stage {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    min-height: auto;
+    padding: 96px 0 40px 20px;
+  }
+  .tl-side {
+    padding-right: 20px;
+  }
+  .tl-counter {
+    margin: 24px 0 18px;
+  }
+  .tl-chips {
+    margin-right: 20px;
+  }
+  .tl-card {
+    width: min(78vw, 420px);
+  }
+  .tl-axis {
+    margin-right: 28px;
+  }
+  .tl-bottom {
+    padding: 0 20px 64px;
+  }
+}
+@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  .tl-track {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 20px;
+    scrollbar-width: none;
+  }
+  .tl-track::-webkit-scrollbar {
+    display: none;
+  }
+  .tl-card {
+    scroll-snap-align: start;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tl-bignum,
+  .tl-timecode,
+  .tl-right-label i,
+  .tl-rec::before,
+  .tl-now,
+  .tl-arrow,
+  .tl-ring,
+  .tl-axis-dot.impact.is-past {
+    animation: none;
+  }
+  .tl-card,
+  .tl-scene,
+  .tl-axis-fill {
+    transition: none;
+  }
+}

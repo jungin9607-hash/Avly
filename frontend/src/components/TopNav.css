@@ -1,0 +1,96 @@
+/* ---------- 상단 메뉴 ----------
+ * 평소: 투명 배경 + 흰 글자 / 마우스를 올리면: 흰 배경 + 검정 글자 */
+.tn {
+  --nav-fg: #fff;
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+  padding: 0 40px;
+  color: var(--nav-fg);
+  background: linear-gradient(180deg, rgba(8, 13, 31, 0.6), rgba(8, 13, 31, 0));
+  transition: color 0.25s ease;
+}
+.tn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(10, 16, 32, 0.08);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.tn:hover,
+.tn:focus-within {
+  --nav-fg: #0a1020;
+}
+.tn:hover::before,
+.tn:focus-within::before {
+  opacity: 1;
+}
+.tn-logo {
+  font-size: 20px;
+  font-weight: 800;
+}
+.tn-logo small {
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.tn-menu {
+  display: flex;
+  gap: 40px;
+}
+.tn-menu a {
+  color: var(--nav-fg);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+.tn-menu a:hover,
+.tn-menu a.active {
+  border-color: currentColor;
+}
+
+/* 흰 배경 화면용: 처음부터 흰 바탕 + 검정 글자 */
+.tn-light {
+  --nav-fg: #111318;
+  background: #fff;
+  border-bottom: 1px solid #ececf0;
+}
+.tn-dark {
+  background: rgba(8, 13, 31, 0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.tn-logo {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .tn {
+    padding: 0 20px;
+  }
+  .tn-menu {
+    gap: 20px;
+  }
+  .tn-menu a {
+    font-size: 14px;
+  }
+}
+@media (max-width: 600px) {
+  .tn {
+    gap: 16px;
+  }
+  .tn-menu {
+    gap: 14px;
+  }
+}
