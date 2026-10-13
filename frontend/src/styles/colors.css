@@ -1,0 +1,24 @@
+:root {
+  /* Brand */
+  --color-plum: #8c4d8c;
+  --color-plum-deep: #4a1a52;
+  --color-plum-soft: #f7eff8;
+  --color-plum-muted: #ead8ee;
+  --color-lavender: #f6cdf9;
+
+  /* Text */
+  --color-ink: #111318;
+  --color-ink-secondary: #3b3f4a;
+  --color-muted: #6b7180;
+  --color-text-on-dark: #fff;
+
+  /* Surfaces and borders */
+  --color-white: #fff;
+  --color-surface: #f4eef5;
+  --color-border: #e6e7ec;
+
+  /* Status */
+  --color-success: #12a150;
+  --color-warning: #b7791f;
+  --color-error: #c2413b;
+}

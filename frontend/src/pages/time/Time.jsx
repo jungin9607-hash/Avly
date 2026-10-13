@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import TopNav from "../../components/common/TopNav";
 import LegalNotice from "../../components/common/LegalNotice";
 import "./Time.css";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const START = 7.45;
 const END = 11.9;
@@ -67,92 +62,49 @@ const two = (n) => String(n).padStart(2, "0");
 
 export default function Time() {
   const navigate = useNavigate();
-  const root = useRef(null);
-  const trackRef = useRef(null);
-  const triggerRef = useRef(null); // 가로 이동이 걸린 경우의 ScrollTrigger
+  const videoRef = useRef(null);
+  const inputRef = useRef(null);
   const [active, setActive] = useState(0);
+  const [videoUrl, setVideoUrl] = useState("");
+  const [videoName, setVideoName] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      // 넓은 화면 + 움직임 허용: 세로 스크롤 → 카드가 한 장씩 가로로 넘어감
-      // 리듬: [01 보여주기] → 이동 → [02 보여주기] → 이동 → [03] → 이동 → [04 오래 보여주기]
-      mm.add("(min-width: 901px) and (prefers-reduced-motion: no-preference)", () => {
-        const track = trackRef.current;
-        const cards = Array.from(track.children);
-        // i번째 카드를 첫 번째 카드 자리(왼쪽)로 가져오는 이동량
-        const xFor = (i) => () => -(cards[i].offsetLeft - cards[0].offsetLeft);
-
-        // 시간 단위(아래 숫자들)를 스크롤 길이로 바꾸는 비율: 클수록 전체가 느리고 길어짐
-        const UNIT = () => window.innerHeight * 0.75;
-        const SHOW = 1; // 한 장면을 멈춰서 보여주는 길이
-        const MOVE = 1; // 다음 장면으로 넘어가는 길이
-        const LAST_SHOW = 1.6; // 마지막 장면은 더 오래
-
-        const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
-        const moveStarts = [];
-        tl.addLabel("m0", SHOW / 2).to({}, { duration: SHOW });
-        for (let i = 1; i <= LAST; i++) {
-          moveStarts.push(tl.duration());
-          tl.to(track, { x: xFor(i), duration: MOVE });
-          const show = i === LAST ? LAST_SHOW : SHOW;
-          tl.addLabel(`m${i}`, tl.duration() + show / 2).to({}, { duration: show });
-        }
-
-        const st = ScrollTrigger.create({
-          animation: tl,
-          trigger: ".tl-stage",
-          start: "top top",
-          end: () => `+=${tl.duration() * UNIT()}`,
-          pin: true,
-          scrub: 1,
-          // 스크롤을 멈추면 가장 가까운 장면에 맞춰 멈춤
-          snap: { snapTo: "labels", duration: { min: 0.3, max: 0.8 }, delay: 0.15, ease: "power1.inOut" },
-          invalidateOnRefresh: true,
-          // 이동이 절반을 넘으면 다음 장면이 '지금'
-          onUpdate: (self) => {
-            const t = self.progress * tl.duration();
-            setActive(moveStarts.filter((s0) => t >= s0 + MOVE / 2).length);
-          },
-        });
-        triggerRef.current = st;
-        return () => {
-          triggerRef.current = null;
-        };
-      });
-    },
-    { scope: root }
-  );
-
-  // 좁은 화면 · 움직임 줄이기: 카드 줄을 직접 옆으로 밀면 현재 시점 갱신
-  const onTrackScroll = () => {
-    if (triggerRef.current) return;
-    const track = trackRef.current;
-    const max = track.scrollWidth - track.clientWidth;
-    setActive(max > 0 ? Math.round((track.scrollLeft / max) * LAST) : 0);
-  };
-
   const goTo = (i) => {
     const idx = Math.max(0, Math.min(LAST, i));
-    const st = triggerRef.current;
-    if (st) {
-      const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      window.scrollTo({ top: st.labelToScroll(`m${idx}`), behavior: smooth ? "smooth" : "auto" });
-    } else {
-      const card = trackRef.current.children[idx];
-      const pad = parseFloat(getComputedStyle(trackRef.current).paddingLeft) || 0;
-      trackRef.current.scrollTo({ left: card.offsetLeft - trackRef.current.offsetLeft - pad, behavior: "smooth" });
+    setActive(idx);
+    const video = videoRef.current;
+    if (video && video.readyState >= HTMLMediaElement.HAVE_METADATA && Number.isFinite(video.duration)) {
+      video.currentTime = Math.min(MOMENTS[idx].time, Math.max(0, video.duration - 0.05));
+    }
+  };
+
+  const loadVideo = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setVideoUrl(URL.createObjectURL(file));
+    setVideoName(file.name);
+    event.target.value = "";
+  };
+
+  useEffect(() => {
+    if (!videoUrl) return undefined;
+    return () => URL.revokeObjectURL(videoUrl);
+  }, [videoUrl]);
+
+  const syncVideoToMoment = () => {
+    const video = videoRef.current;
+    if (video && Number.isFinite(video.duration)) {
+      video.currentTime = Math.min(MOMENTS[active].time, Math.max(0, video.duration - 0.05));
     }
   };
 
   const m = MOMENTS[active];
 
   return (
-    <div className="tl" ref={root}>
+    <div className="tl">
       <TopNav active="타임라인" theme="dark" />
 
       <section className="tl-stage">
@@ -210,10 +162,6 @@ export default function Time() {
               <i aria-hidden="true" />
               BLACKBOX TIMELINE
             </p>
-            {/* 지금 보고 있는 장면의 시각: 장면이 바뀌면 같이 바뀜 */}
-            <p className={`tl-timecode tl-mono ${m.tone || ""}`} key={m.id}>
-              {stamp(m.time)}
-            </p>
           </div>
           <div className="tl-chips" role="tablist" aria-label="핵심 시점">
             <button type="button" role="tab" aria-selected={false} className="tl-chip" onClick={() => goTo(0)}>
@@ -234,33 +182,48 @@ export default function Time() {
             ))}
           </div>
 
-          <div className="tl-viewport">
-            <ol className="tl-track" ref={trackRef} onScroll={onTrackScroll}>
-              {MOMENTS.map((mo, i) => (
-                <li key={mo.id} className={`tl-card ${mo.tone || ""} ${active === i ? "is-active" : ""}`}>
-                  <figure className="tl-frame">
-                    <Scene id={mo.id} />
-                    <span className="tl-rec">REC</span>
-                    <figcaption className="tl-hud tl-mono">
-                      T: {stamp(mo.time)} · {mo.hud}
-                    </figcaption>
-                    <span className="tl-badge">{mo.badge}</span>
-                  </figure>
-                  <div className="tl-card-body">
-                    <p className="tl-when">
-                      {mo.label} <span className="tl-mono">[{stamp(mo.time)}]</span>
-                      <span className="tl-tag">{mo.tag}</span>
-                    </p>
-                    <h2>{mo.title}</h2>
-                    {/* TODO: 해당 시점 영상 재생과 연결 */}
-                    <button type="button" className="tl-play">
-                      <IconPlay />
-                      영상보기
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ol>
+          <div className={`tl-player ${m.tone || ""}`}>
+            {videoUrl ? (
+              <video
+                ref={videoRef}
+                className="tl-video"
+                src={videoUrl}
+                controls
+                onLoadedMetadata={syncVideoToMoment}
+                aria-label={`${m.label} 블랙박스 영상`}
+              />
+            ) : (
+              <>
+                <Scene id={m.id} />
+                <div className="tl-player-prompt">
+                  <p>선택한 시점의 영상</p>
+                  <button type="button" className="tl-upload" onClick={() => inputRef.current?.click()}>
+                    블랙박스 영상 선택
+                  </button>
+                </div>
+              </>
+            )}
+            <input
+              ref={inputRef}
+              className="tl-file-input"
+              type="file"
+              accept="video/mp4,video/quicktime,video/x-msvideo,.mp4,.mov,.avi"
+              onChange={loadVideo}
+              aria-label="블랙박스 영상 파일 선택"
+            />
+            <span className="tl-rec">REC</span>
+            <figcaption className="tl-hud tl-mono">
+              T: {stamp(m.time)} · {m.hud}
+            </figcaption>
+            <span className="tl-badge">{m.badge}</span>
+          </div>
+          {videoName && <p className="tl-video-name">{videoName}</p>}
+          <div className="tl-selected-moment">
+            <p className="tl-when">
+              <span className="tl-mono">[{stamp(m.time)}]</span>
+              <span className="tl-tag">{m.tag}</span>
+            </p>
+            <h2>{m.title}</h2>
           </div>
 
           {/* 실제 시각 비율대로 놓인 시간축: 지나온 구간이 채워짐 */}
@@ -279,6 +242,7 @@ export default function Time() {
                 onClick={() => goTo(i)}
               >
                 <em className="tl-mono">{stamp(mo.time)}</em>
+                <small>{mo.label}</small>
               </button>
             ))}
           </div>
@@ -404,11 +368,5 @@ const IconChart = () => (
   <Svg>
     <rect x="3" y="3" width="18" height="18" rx="2" />
     <path d="M8 16v-4M12 16V8M16 16v-6" />
-  </Svg>
-);
-const IconPlay = () => (
-  <Svg>
-    <circle cx="12" cy="12" r="9" />
-    <path d="m10 8.5 5 3.5-5 3.5z" fill="currentColor" />
   </Svg>
 );

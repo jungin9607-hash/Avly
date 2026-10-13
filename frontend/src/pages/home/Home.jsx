@@ -7,7 +7,7 @@ import purpleWeave from "../../assets/purple-weave.jpg";
 import "./Home.css";
 
 const ACCEPT_EXT = ["mp4", "mov", "avi"];
-const MAX_MB = 500;
+const MAX_MB = 50;
 
 const GUIDES = [
   {
@@ -262,7 +262,7 @@ export default function Home() {
                         <span className="uh-reading">확인 중…</span>
                       )}
                     </p>
-                    {f.tooLarge && <p className="uh-warn">권장 용량(500MB)보다 커서 분석이 오래 걸릴 수 있어요.</p>}
+                    {f.tooLarge && <p className="uh-warn">권장 용량({MAX_MB}MB)보다 커서 분석이 오래 걸릴 수 있어요.</p>}
                   </div>
                   <div className="uh-file-actions">
                     {/* 시연 파일은 동의 팝업부터 띄움. 일반 파일 버튼은 TODO: 분석 단계와 연결 */}
