@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
 import "./TopNav.css";
 
-// 아직 화면이 없는 메뉴는 "#"로 둠
 const MENU = [
   { label: "홈", to: "/upload-test" },
   { label: "분석 결과", to: "/analysis-test" },
   { label: "타임라인", to: "/timeline-test" },
-  { label: "유사 판례", to: "#" },
+  { label: "유사 판례", to: "/law" },
 ];
 
 /* 상단 메뉴: 왼쪽 로고 · 오른쪽 메뉴
@@ -19,17 +18,11 @@ export default function TopNav({ active, theme }) {
         Avly <small>에블리</small>
       </Link>
       <nav className="tn-menu">
-        {MENU.map((m) =>
-          m.to === "#" ? (
-            <a key={m.label} href="#" className={m.label === active ? "active" : ""}>
-              {m.label}
-            </a>
-          ) : (
-            <Link key={m.label} to={m.to} className={m.label === active ? "active" : ""}>
-              {m.label}
-            </Link>
-          )
-        )}
+        {MENU.map((m) => (
+          <Link key={m.label} to={m.to} className={m.label === active ? "active" : ""}>
+            {m.label}
+          </Link>
+        ))}
       </nav>
     </header>
   );

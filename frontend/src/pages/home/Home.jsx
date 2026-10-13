@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TopNav from "./TopNav";
-import ConsentModal from "./ConsentModal";
-import QuestionModal from "./QuestionModal";
-import purpleWeave from "../assets/purple-weave.jpg";
-import "./UploadHome.css";
+import TopNav from "../../components/common/TopNav";
+import ConsentModal from "../../components/home/ConsentModal";
+import QuestionModal from "../../components/home/QuestionModal";
+import purpleWeave from "../../assets/purple-weave.jpg";
+import "./Home.css";
 
 const ACCEPT_EXT = ["mp4", "mov", "avi"];
 const MAX_MB = 500;
@@ -61,7 +61,7 @@ function readVideoMeta(file) {
   });
 }
 
-export default function UploadHome() {
+export default function Home() {
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const [files, setFiles] = useState([DEMO_FILE]);
