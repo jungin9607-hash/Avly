@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import TopNav from "./TopNav";
-import LegalNotice from "./LegalNotice";
-import purpleWeave from "../assets/purple-weave.jpg";
-import "./AnalysisResult.css";
+import TopNav from "../../components/common/TopNav";
+import LegalNotice from "../../components/common/LegalNotice";
+import purpleWeave from "../../assets/purple-weave.jpg";
+import "./Report.css";
 
 // 과실 조정 단계: 스크롤하면 왼쪽 비율 게이지가 단계별로 바뀜
 const STEPS = [
@@ -34,7 +34,7 @@ const TELEMETRY = [
 
 const FRAMES = ["00:23.8", "00:24.1", "00:24.5"];
 
-export default function AnalysisResult() {
+export default function Report() {
   const [ready, setReady] = useState(false); // 처음 열릴 때 막대가 채워지는 연출
   const [stage, setStage] = useState(0);
   const [toast, setToast] = useState("");

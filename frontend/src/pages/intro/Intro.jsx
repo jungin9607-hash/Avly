@@ -3,8 +3,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useNavigate } from "react-router-dom";
-import TopNav from "./TopNav";
-import "./ScrollIntro.css";
+import TopNav from "../../components/common/TopNav";
+import "./Intro.css";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -159,7 +159,7 @@ function makeStars() {
   }));
 }
 
-export default function ScrollIntro() {
+export default function Intro() {
   const root = useRef(null);
   const navigate = useNavigate();
   const dashesRef = useRef(null);

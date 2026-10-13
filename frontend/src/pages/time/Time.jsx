@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import TopNav from "./TopNav";
-import LegalNotice from "./LegalNotice";
-import "./Timeline.css";
+import TopNav from "../../components/common/TopNav";
+import LegalNotice from "../../components/common/LegalNotice";
+import "./Time.css";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -65,7 +65,7 @@ const stamp = (t) => `00:${t.toFixed(2).padStart(5, "0")}`;
 const pos = (t) => ((t - START) / (END - START)) * 100;
 const two = (n) => String(n).padStart(2, "0");
 
-export default function Timeline() {
+export default function Time() {
   const navigate = useNavigate();
   const root = useRef(null);
   const trackRef = useRef(null);
