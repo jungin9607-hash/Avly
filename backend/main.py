@@ -4,8 +4,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from app import db
 from app.config import settings
-from app.errors import register_error_handlers
+from app.errors import AppError, register_error_handlers
 from app.routers import accidents, analyses
 
 logging.basicConfig(level=logging.INFO)
@@ -42,3 +43,14 @@ def root():
 @app.get("/health", tags=["health"])
 def health():
     return {"status": "ok"}
+
+
+@app.get("/health/db", tags=["health"])
+def health_db():
+    """Supabase PostgreSQL 연결 확인. 읽기 전용 쿼리만 실행한다."""
+    try:
+        return {"status": "ok", **db.check_connection()}
+    except Exception as exc:
+        # 연결 문자열(비밀번호 포함)이 응답이나 로그에 남지 않도록 예외 종류만 기록한다.
+        logging.getLogger(__name__).error("DB 연결 확인 실패: %s", type(exc).__name__)
+        raise AppError(503, "DATABASE_UNAVAILABLE", "데이터베이스에 연결할 수 없습니다.") from None

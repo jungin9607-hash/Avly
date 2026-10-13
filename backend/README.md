@@ -109,3 +109,9 @@ backend/
 | 유사 판례 | 테스트용 가상 판례 3건 (`analyzer.search_similar_cases`) | pgvector RAG |
 | 분석 작업 실행 | 서버 프로세스 내 백그라운드 작업 | 필요 시 작업 큐 (Celery/RQ 등) |
 | PDF 리포트 | 501 반환 | PDF 생성 |
+
+## Supabase(PostgreSQL) 연결 확인
+
+1. `backend/.env.example`을 `backend/.env`로 복사하고 `DATABASE_URL`의 `<비밀번호>`를 팀 공유 채널에서 받은 값으로 바꿉니다. (`.env`는 Git에 올리지 않습니다.)
+2. 서버를 실행한 뒤 `GET /health/db`가 `{"status":"ok", ...}`를 반환하면 연결된 것입니다. (읽기 전용 쿼리만 실행합니다.)
+3. 현재 API의 데이터 저장은 여전히 메모리 저장소(`repository.py`)입니다. DB 연결은 확인용이며, 저장소 교체는 별도 작업입니다.

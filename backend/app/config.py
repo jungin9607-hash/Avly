@@ -31,6 +31,7 @@ class Settings:
     max_upload_size_mb: int
     allowed_video_extensions: list[str]
     mock_analysis_delay_seconds: float
+    database_url: str | None
 
     @property
     def max_upload_size_bytes(self) -> int:
@@ -54,6 +55,7 @@ def load_settings() -> Settings:
             for ext in _split(os.getenv("ALLOWED_VIDEO_EXTENSIONS", ".mp4,.mov,.avi,.mkv,.webm"))
         ],
         mock_analysis_delay_seconds=float(os.getenv("MOCK_ANALYSIS_DELAY_SECONDS", "3")),
+        database_url=os.getenv("DATABASE_URL") or None,
     )
 
 
