@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import TopNav from "../../components/common/TopNav";
-import LegalNotice from "../../components/common/LegalNotice";
+import TimelineNotice from "./TimelineNotice";
+import TimelineAxis from "./TimelineAxis";
 import "./Time.css";
-
-const START = 7.45;
-const END = 11.9;
 
 // tone: 결정적 시점(key) · 충돌(impact)은 색으로 구분
 const MOMENTS = [
@@ -57,11 +54,9 @@ const MOMENTS = [
 
 const LAST = MOMENTS.length - 1;
 const stamp = (t) => `00:${t.toFixed(2).padStart(5, "0")}`;
-const pos = (t) => ((t - START) / (END - START)) * 100;
 const two = (n) => String(n).padStart(2, "0");
 
 export default function Time() {
-  const navigate = useNavigate();
   const videoRef = useRef(null);
   const inputRef = useRef(null);
   const [active, setActive] = useState(0);
@@ -115,10 +110,6 @@ export default function Time() {
             {two(active + 1)}
           </span>
 
-          <p className="tl-kicker">
-            <IconBranch />
-            4단계 핵심 판단 타임라인 요약
-          </p>
           <h1>
             사고 순간
             <br />
@@ -138,9 +129,6 @@ export default function Time() {
           </div>
 
           <div className="tl-counter">
-            <span className="tl-mono">
-              <b>{two(active + 1)}</b> — {two(MOMENTS.length)}
-            </span>
             <button type="button" aria-label="이전 시점" onClick={() => goTo(active - 1)} disabled={active === 0}>
               ←
             </button>
@@ -149,39 +137,10 @@ export default function Time() {
             </button>
           </div>
 
-          <button type="button" className="tl-link" onClick={() => navigate("/analysis-test")}>
-            <IconChart />
-            과실 산정 근거 요약
-          </button>
         </div>
 
-        {/* 오른쪽: 시점 바로가기 · 가로로 흐르는 카드 · 시간축 */}
+        {/* 오른쪽: 영상 화면 · 시간축 */}
         <div className="tl-right">
-          <div className="tl-right-head">
-            <p className="tl-right-label">
-              <i aria-hidden="true" />
-              BLACKBOX TIMELINE
-            </p>
-          </div>
-          <div className="tl-chips" role="tablist" aria-label="핵심 시점">
-            <button type="button" role="tab" aria-selected={false} className="tl-chip" onClick={() => goTo(0)}>
-              전체 핵심 시점 <span className="tl-count">{MOMENTS.length}</span>
-            </button>
-            {MOMENTS.map((mo, i) => (
-              <button
-                key={mo.id}
-                type="button"
-                role="tab"
-                aria-selected={active === i}
-                className={`tl-chip ${mo.tone || ""} ${active === i ? "is-on" : ""}`}
-                onClick={() => goTo(i)}
-              >
-                <i aria-hidden="true" />
-                {mo.chipLabel || mo.label}
-              </button>
-            ))}
-          </div>
-
           <div className={`tl-player ${m.tone || ""}`}>
             {videoUrl ? (
               <video
@@ -227,31 +186,10 @@ export default function Time() {
           </div>
 
           {/* 실제 시각 비율대로 놓인 시간축: 지나온 구간이 채워짐 */}
-          <div className="tl-axis">
-            <span className="tl-axis-line" />
-            <span className="tl-axis-fill" style={{ width: `${pos(m.time)}%` }} />
-            {MOMENTS.map((mo, i) => (
-              <button
-                key={mo.id}
-                type="button"
-                aria-label={`${mo.label} ${stamp(mo.time)}`}
-                className={`tl-axis-dot ${mo.tone || ""} ${i <= active ? "is-past" : ""} ${i === 0 ? "is-first" : ""} ${
-                  i === LAST ? "is-last" : ""
-                }`}
-                style={{ left: `${pos(mo.time)}%` }}
-                onClick={() => goTo(i)}
-              >
-                <em className="tl-mono">{stamp(mo.time)}</em>
-                <small>{mo.label}</small>
-              </button>
-            ))}
-          </div>
+          <TimelineAxis moments={MOMENTS} active={active} onSelect={goTo} />
         </div>
+        <TimelineNotice />
       </section>
-
-      <div className="tl-bottom">
-        <LegalNotice tone="dark" />
-      </div>
     </div>
   );
 }
@@ -282,7 +220,7 @@ function Car({ x, y, s, rotate = 0, brake = false }) {
 
 function Scene({ id }) {
   return (
-    <svg className="tl-scene" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <svg className="tl-scene" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
       <defs>
         <linearGradient id={`sky-${id}`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#15161f" />
@@ -342,31 +280,3 @@ function Scene({ id }) {
     </svg>
   );
 }
-
-/* ---------- 아이콘 ---------- */
-const Svg = ({ children, size = 16 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.9"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    {children}
-  </svg>
-);
-const IconBranch = () => (
-  <Svg>
-    <path d="M12 21v-7M12 14 6 4M12 14l6-10" />
-  </Svg>
-);
-const IconChart = () => (
-  <Svg>
-    <rect x="3" y="3" width="18" height="18" rx="2" />
-    <path d="M8 16v-4M12 16V8M16 16v-6" />
-  </Svg>
-);
