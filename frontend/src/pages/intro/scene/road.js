@@ -36,7 +36,7 @@ const RAIL_X = [-8.2, 8.2];
 const RAIL_POST_PERIOD = 4;
 const REFLECTOR_PERIOD = 16; // TRACK과 RAIL_POST_PERIOD의 배수 관계 유지
 const RAIL_POST_MAX_Z = 220;
-const LAMP_MAX_Z = 480; // 멀리까지 그려서 다리를 따라 가로등이 이어져 보이게
+const LAMP_MAX_Z = 760; // 지평선 가까이까지 그려서 다리를 따라 불빛이 줄지어 이어져 보이게
 
 // 양쪽으로 끝없이 이어지는 가드레일: 어두운 금속 판 + 위 가장자리 반사광 + 가운데 홈
 const railStrip = (h1, h2) =>
@@ -45,34 +45,74 @@ export const RAIL_BODY = railStrip(0.6, 0.78);
 export const RAIL_GROOVE = railStrip(0.68, 0.7);
 export const RAIL_EDGE = railStrip(0.78, 0.8);
 
-// 가로등: [바닥에 떨어진 빛, 기둥 + 도로 쪽 팔 + 은은한 주황 불빛]
+// 다리 위 가로등: 양쪽 난간 위에 같은 간격으로 마주 보고 선 높은 기둥
+//   위로 갈수록 가늘어지는 기둥 → 도로 쪽으로 휘어진 팔 → 납작한 등갓 → 아래로 퍼지는 빛 기둥
+//   멀리 있는 등은 기둥 없이 불빛 점만 그려, 지평선까지 빛의 줄이 이어져 다리 길이가 느껴지게
+const LAMP_PERIOD = 40; // 등 간격(m). TRACK의 약수라 반복 경계에서도 간격이 일정
+const LAMP_X = 9.0; // 다리 바깥 난간(9.15) 바로 안쪽
+const LAMP_H = 9.5; // 기둥 높이
+const LAMP_REACH = 2.4; // 팔이 도로 쪽으로 뻗는 길이
+const LAMP_DETAIL_Z = 260; // 이보다 먼 등은 불빛 점만
+
+// 가로등 하나: [바닥에 떨어진 빛, 빛 기둥 + 기둥 + 팔 + 등갓 + 불빛]
 function drawLamp(o, z) {
-  const x = o.side * o.x;
-  const armX = o.side * (o.x - 1.8);
-  const [ax1, ay1] = project(x, z, o.h);
-  const [ax2, ay2] = project(armX, z, o.h - 0.1);
-  const [gx, gy] = project(armX, z, o.h - 0.25);
-  // 바닥 빛은 등 바로 아래보다 조금 도로 안쪽에 중심을 둬서 차로를 넓게 비춤
-  const [px, py] = project(o.side * (o.x - 3.2), z);
-  const glow = (FOCAL * 3.9) / z;
+  const x = o.side * LAMP_X;
+  const headX = o.side * (LAMP_X - LAMP_REACH); // 등갓 가운데
+  const headH = LAMP_H + 0.35;
+  const fade = n(Math.max(0.4, 1 - (z - 20) / 520));
+  const [gx, gy] = project(headX, z, headH - 0.12);
+
+  // 먼 등: 불빛 점만 (지평선까지 이어지는 빛의 줄)
+  if (z > LAMP_DETAIL_Z) {
+    const r = Math.max((FOCAL * 2.4) / z, 1.6);
+    return ["", `<circle cx="${n(gx)}" cy="${n(gy)}" r="${n(r)}" fill="url(#si-lamp-warm)" opacity="${fade}"/>`];
+  }
+
+  // 바닥 빛: 등갓 바로 아래 차로를 넓게 비춤
+  const [px, py] = project(headX - o.side * 0.6, z);
   const pool = (FOCAL * 7.5) / z;
-  const fade = n(Math.max(0.45, 1 - (z - 20) / 400));
+
+  // 기둥: 아래는 굵고 위로 갈수록 가늘게 (0.26m → 0.12m)
+  const [b1x, b1y] = project(x - 0.13, z, 0);
+  const [b2x] = project(x + 0.13, z, 0);
+  const [t1x, t1y] = project(x - 0.06, z, LAMP_H);
+  const [t2x] = project(x + 0.06, z, LAMP_H);
+  const pole = pathOf([[b1x, b1y], [Math.max(b2x, b1x + 0.6), b1y], [Math.max(t2x, t1x + 0.4), t1y], [t1x, t1y]]);
+
+  // 팔: 기둥 끝에서 살짝 솟았다가 도로 쪽으로 휘어 내려와 등갓에 닿음
+  const [ax, ay] = project(x, z, LAMP_H);
+  const [cx, cy] = project(x - o.side * 0.5, z, LAMP_H + 0.75);
+  const [ex, ey] = project(headX + o.side * 0.45, z, headH);
+  const armW = n(Math.max((FOCAL * 0.11) / z, 0.6));
+
+  // 등갓: 도로와 나란한 납작한 판(길이 1.1m, 두께 0.2m) + 아래쪽 밝은 발광면
+  const head = box(headX, 1.1, z, headH - 0.2, headH);
+  const lens = box(headX, 0.9, z, headH - 0.24, headH - 0.17);
+
+  // 빛 기둥: 등갓에서 도로까지 아래로 넓게 퍼지는 은은한 사다리꼴
+  const cone = pathOf([
+    project(headX - 0.45, z, headH - 0.22),
+    project(headX + 0.45, z, headH - 0.22),
+    project(headX + 2.6, z, 0),
+    project(headX - 2.6, z, 0),
+  ]);
+
   return [
     `<ellipse cx="${n(px)}" cy="${n(py)}" rx="${n(pool)}" ry="${n((pool * CAM_H) / z + 1)}" fill="url(#si-pool-warm)" opacity="${fade}"/>`,
-    `<path d="${box(x, 0.18, z, 0, o.h)}" fill="#161c34"/>` +
-    `<line x1="${n(ax1)}" y1="${n(ay1)}" x2="${n(ax2)}" y2="${n(ay2)}" stroke="#161c34" stroke-width="${n(Math.max((FOCAL * 0.12) / z, 0.6))}"/>` +
-    `<circle cx="${n(gx)}" cy="${n(gy)}" r="${n(glow)}" fill="url(#si-lamp-warm)" opacity="${fade}"/>`,
+    `<path d="${cone}" fill="url(#si-lamp-cone)" opacity="${fade}"/>` +
+      `<path d="${pole}" fill="#1a2240"/>` +
+      `<path d="M${n(ax)},${n(ay)}Q${n(cx)},${n(cy)} ${n(ex)},${n(ey)}" fill="none" stroke="#1a2240" stroke-width="${armW}" stroke-linecap="round"/>` +
+      `<path d="${head}" fill="#26304f"/>` +
+      `<path d="${lens}" fill="#fff2d6" opacity="${fade}"/>` +
+      `<circle cx="${n(gx)}" cy="${n(gy)}" r="${n((FOCAL * 3.4) / z)}" fill="url(#si-lamp-warm)" opacity="${fade}"/>`,
   ];
 }
 
-// 가로등은 몇 개만, 양쪽 따로 넉넉한 간격으로
+// 다리 위 가로등: 양쪽이 같은 자리에서 마주 보도록 일정한 간격으로
 function makeLamps() {
-  const rand = (a, b) => a + Math.random() * (b - a);
   const lamps = [];
-  for (const side of [-1, 1]) {
-    for (let z = rand(10, 60); z < TRACK - 40; z += rand(70, 130)) {
-      lamps.push({ side, z, x: rand(8.6, 8.85), h: rand(8.5, 9.2) }); // 가드레일과 다리 난간 사이
-    }
+  for (let z = 30; z < TRACK; z += LAMP_PERIOD) {
+    for (const side of [-1, 1]) lamps.push({ side, z, x: LAMP_X });
   }
   return lamps;
 }
