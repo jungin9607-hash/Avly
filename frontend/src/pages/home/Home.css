@@ -4,6 +4,12 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 
 .uh {
+  --uh-font-small: 14px;
+  --uh-font-caption: 15px;
+  --uh-font-body: 16px;
+  --uh-font-description: 17px;
+  --uh-font-label: 18px;
+  --uh-font-lead: 20px;
   --ink: #f4f5fb;
   --ink-2: #c6cde3;
   --muted: #9aa3c0;
@@ -68,9 +74,10 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 56px 40px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 80px 40px 16px 56px;
 }
 /* index.css의 전역 h1·h2 색/폰트가 덮어쓰지 않도록 */
 .uh h1,
@@ -102,7 +109,7 @@
   padding: 0;
   list-style: none;
   counter-reset: step;
-  font-size: 14px;
+  font-size: var(--uh-font-body);
   font-weight: 500;
   color: var(--muted);
   text-shadow: 0 1px 8px var(--shade);
@@ -117,11 +124,11 @@
   content: counter(step);
   display: grid;
   place-items: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 3px;
   border: 1px solid rgba(255, 255, 255, 0.6);
-  font-size: 12px;
+  font-size: var(--uh-font-small);
   font-weight: 700;
 }
 .uh-steps li + li::after {
@@ -144,7 +151,7 @@
 .uh-intro h1 {
   margin: 0 0 18px;
   color: #fff;
-  font-size: clamp(38px, 4.4vw, 60px);
+  font-size: clamp(42px, 4.6vw, 64px);
   font-weight: 800;
   letter-spacing: -0.045em;
   line-height: 1.1;
@@ -152,7 +159,7 @@
 }
 .uh-lead {
   margin: 0 0 32px;
-  font-size: 18px;
+  font-size: var(--uh-font-lead);
   font-weight: 500;
   line-height: 1.6;
   color: var(--muted);
@@ -214,20 +221,20 @@
 }
 .uh-drop h2 {
   margin: 0 0 16px;
-  font-size: 16px;
+  font-size: var(--uh-font-label);
   font-weight: 700;
   letter-spacing: -0.02em;
   word-break: keep-all;
 }
 .uh-error {
   margin: 14px 0 0;
-  font-size: 14px;
+  font-size: var(--uh-font-body);
   color: #ffd0c8;
 }
 
 .uh-tag {
   margin: 0 0 10px;
-  font-size: 13px;
+  font-size: var(--uh-font-caption);
   font-weight: 600;
 }
 
@@ -239,7 +246,7 @@
   margin: 0 0 12px;
   color: #fff;
   text-shadow: 0 1px 8px var(--shade);
-  font-size: 15px;
+  font-size: var(--uh-font-description);
   font-weight: 700;
   letter-spacing: -0.01em;
 }
@@ -281,14 +288,14 @@
 }
 .uh-tile h3 {
   margin: 0 0 6px;
-  font-size: 17px;
+  font-size: var(--uh-font-lead);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 .uh-tile-body {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.65;
+  font-size: var(--uh-font-body);
+  line-height: 1.7;
   word-break: keep-all;
 }
 /* STEP 01 → 03: 짙은 자주 → 자주 → 밝은 라벤더로 밝아지며 흐름을 보여줌 */
@@ -336,7 +343,7 @@
 }
 .uh-btn-solid {
   padding: 13px 22px;
-  font-size: 15px;
+  font-size: var(--uh-font-description);
   background: var(--blue);
   color: #fff;
   border: 1px solid var(--blue);
@@ -347,7 +354,7 @@
 }
 .uh-btn-line {
   padding: 10px 16px;
-  font-size: 14px;
+  font-size: var(--uh-font-body);
   white-space: nowrap;
   background: transparent;
   color: var(--ink);
@@ -369,7 +376,7 @@
   gap: 10px;
   margin-top: auto;
   padding-top: 20px;
-  padding-bottom: 24px;
+  padding-bottom: 0;
   border-top: 1px solid var(--line);
   color: var(--muted);
 }
@@ -379,12 +386,17 @@
 }
 .uh-notice p {
   margin: 0;
-  font-size: 13.5px;
+  font-size: var(--uh-font-caption);
   line-height: 1.75;
   word-break: keep-all;
 }
 
 /* ---------- 반응형 ---------- */
+@media (max-width: 900px) {
+  .uh-main {
+    padding-inline: 20px;
+  }
+}
 @media (max-width: 960px) {
   .uh-grid {
     grid-template-columns: 1fr;
@@ -401,6 +413,6 @@
     padding: 104px 20px 56px;
   }
   .uh-main {
-    padding: 40px 20px 16px;
+    padding: 64px 20px 16px;
   }
 }
