@@ -84,6 +84,7 @@ export function drawSeaGlows(litLamps) {
 }
 
 // 먼 해안 도시 불빛: 지평선 양옆에만(가운데 문구 쪽은 비움), 바다에 짧게 비침
+// + 그 앞을 화면 끝에서 끝까지 가로지르는 먼 바다 위 다리(farBridge)
 export function makeSkyline() {
   const rand = (a, b) => a + Math.random() * (b - a);
   const warm = ["#ffd9a0", "#ffc27a", "#f2e6d0", "#dfe6ff"];
@@ -113,5 +114,28 @@ export function makeSkyline() {
     }
     beacons.push({ x: c + rand(-w / 8, w / 8), y: 30 - (14 + rand(0.5, 2)), delay: rand(0, 2.4) });
   }
-  return { lights, reflections, glows, beacons };
+
+  // 지평선을 가로지르는 먼 바다 위 다리: 화면 끝에서 끝까지 끊김 없이 이어짐
+  //   상판(가는 선) + 일정한 간격의 가로등 불빛 줄 + 교각 + 양쪽 주탑과 부채꼴 케이블(사장교)
+  const DECK_Y = 28.4; // 지평선(30) 바로 위
+  const deckLamps = [];
+  for (let x = 4; x < 1440; x += 9) {
+    const color = Math.random() < 0.85 ? "#ffd59a" : "#f2e6d0";
+    deckLamps.push({ x: x + rand(-0.6, 0.6), color, o: rand(0.6, 0.95) });
+    if (Math.random() < 0.3) reflections.push({ x, len: rand(2, 6), color, o: 0.35 });
+  }
+  const piers = [];
+  for (let x = 14; x < 1440; x += 28) piers.push(x); // 교각 간격을 좁혀 다리를 든든히 받치는 느낌
+  const pylons = [rand(250, 330), rand(1110, 1190)].map((x) => {
+    const top = DECK_Y - rand(11, 13);
+    const cables = [];
+    for (let i = 1; i <= 6; i++) {
+      for (const d of [-1, 1]) cables.push({ x2: x + d * i * 11, y1: top + i * 0.9 });
+    }
+    beacons.push({ x, y: top - 0.6, delay: rand(0, 2.4) });
+    return { x, top, cables };
+  });
+  const farBridge = { deckY: DECK_Y, deckLamps, piers, pylons };
+
+  return { lights, reflections, glows, beacons, farBridge };
 }
