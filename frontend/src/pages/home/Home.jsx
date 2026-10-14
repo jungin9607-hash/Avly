@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import TopNav from "../../components/common/TopNav";
 import ConsentModal from "../../components/home/ConsentModal";
 import QuestionModal from "../../components/home/QuestionModal";
+import AnalysisProgressModal from "../../components/home/AnalysisProgressModal";
+import SituationConfirmModal from "../../components/home/SituationConfirmModal";
 import purpleWeave from "../../assets/purple-weave.jpg";
 import "./Home.css";
 
@@ -24,52 +26,17 @@ const GUIDES = [
   },
 ];
 
-const DEMO_FILE = {
-  id: "demo",
-  name: "블랙박스_시연용_차선사고.mp4",
-  size: 38.5 * 1024 * 1024,
-  duration: 24,
-  quality: "FHD 60fps",
-  status: "ready",
-  demo: true,
-};
-
-const formatSize = (bytes) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
-const formatTime = (sec) => {
-  const s = Math.round(sec);
-  return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
-};
-const qualityOf = (h) => (h >= 2160 ? "4K" : h >= 1440 ? "QHD" : h >= 1080 ? "FHD" : h >= 720 ? "HD" : `${h}p`);
-
-// 브라우저에서 영상 길이·해상도만 읽어 옴 (업로드 전)
-function readVideoMeta(file) {
-  return new Promise((resolve) => {
-    const url = URL.createObjectURL(file);
-    const video = document.createElement("video");
-    video.preload = "metadata";
-    const done = (meta) => {
-      URL.revokeObjectURL(url);
-      resolve(meta);
-    };
-    video.onloadedmetadata = () =>
-      done({
-        duration: Number.isFinite(video.duration) ? video.duration : null,
-        quality: video.videoHeight ? qualityOf(video.videoHeight) : null,
-      });
-    video.onerror = () => done({ duration: null, quality: null });
-    video.src = url;
-  });
-}
+const DEMO_FILE_NAME = "블랙박스_시연용_차선사고.mp4";
 
 export default function Home() {
   const inputRef = useRef(null);
   const navigate = useNavigate();
-  const [files, setFiles] = useState([DEMO_FILE]);
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState("");
   const [pending, setPending] = useState([]); // 동의 팝업을 기다리는 선택된 영상
   const [demoConsent, setDemoConsent] = useState(false); // 시연 파일로 동의 팝업을 연 경우
-  const [consent, setConsent] = useState(null); // 동의 단계를 마치면 채워지고, 그때 질문 팝업이 열림
+  const [popupStep, setPopupStep] = useState("consent");
+  const [answers, setAnswers] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -89,45 +56,22 @@ export default function Home() {
     if (valid.length) setPending(valid);
   };
 
-  // 2단계 질문 팝업에서 "답변 제출하고…" → 목록에 등록 (동의 여부와 관계없이 진행)
-  const submitAnswers = (answers) => {
-    const survey = { consent, answers };
-    if (demoConsent) {
-      setFiles((prev) => prev.map((f) => (f.demo ? { ...f, ...survey } : f)));
-      closeConsent();
-      // TODO: 실제 분석 결과(동의·답변 반영)를 넘겨주기. 지금은 시연용 결과 화면으로 이동
-      navigate("/analysis-test");
-      return;
-    }
-    for (const file of pending) {
-      const id = `${file.name}-${file.size}-${file.lastModified}`;
-      const entry = {
-        id,
-        name: file.name,
-        size: file.size,
-        status: "reading",
-        tooLarge: file.size > MAX_MB * 1024 * 1024,
-        ...survey,
-      };
-      setFiles((prev) => (prev.some((f) => f.id === id) ? prev : [...prev, entry]));
-      readVideoMeta(file).then((meta) =>
-        setFiles((prev) => prev.map((f) => (f.id === id ? { ...f, ...meta, status: "ready" } : f)))
-      );
-    }
+  // 동의와 질문 응답 후 시연용 결과 화면으로 이동
+  const submitAnswers = (nextAnswers) => {
+    setAnswers(nextAnswers);
+    setPopupStep("analyzing");
+  };
+
+  const finishAnalysis = () => {
     closeConsent();
-    // TODO: 실제 분석 결과(동의·답변 반영)를 넘겨주기. 지금은 시연용 결과 화면으로 이동
     navigate("/analysis-test");
   };
 
   const closeConsent = () => {
     setPending([]);
     setDemoConsent(false);
-    setConsent(null);
-  };
-
-  const simulateUnsupported = () => {
-    closeConsent();
-    setError(unsupportedMessage("시연용_지원하지_않는_파일.wmv"));
+    setPopupStep("consent");
+    setAnswers(null);
   };
 
   const pickAnother = () => {
@@ -144,9 +88,6 @@ export default function Home() {
   const onDragLeave = (e) => {
     if (!e.currentTarget.contains(e.relatedTarget)) setDragging(false);
   };
-
-  const removeFile = (id) => setFiles((prev) => prev.filter((f) => f.id !== id));
-  const readyCount = files.filter((f) => f.status === "ready").length;
 
   return (
     <div className="uh">
@@ -201,6 +142,14 @@ export default function Home() {
                 </p>
               )}
             </section>
+            <button
+              type="button"
+              className="uh-btn uh-btn-line uh-demo-trigger"
+              onClick={() => setDemoConsent(true)}
+            >
+              <IconBolt />
+              단계별 분석 팝업 시연
+            </button>
           </div>
 
           {/* 오른쪽: 영상 가이드 타일 3개 */}
@@ -212,7 +161,6 @@ export default function Home() {
                 <li key={g.title} className={`uh-tile uh-tile-${i + 1}`}>
                   <p className="uh-tag">
                     STEP <b>{String(i + 1).padStart(2, "0")}</b>
-                    <span className="uh-tag-of"> / {String(GUIDES.length).padStart(2, "0")}</span>
                   </p>
                   <h3>{g.title}</h3>
                   <p className="uh-tile-body">{g.body}</p>
@@ -224,69 +172,6 @@ export default function Home() {
       </section>
 
       <main className="uh-main">
-        {/* 파일 목록 */}
-        <section className="uh-list">
-          <div className="uh-list-head">
-            <h3>
-              <IconFilm />
-              등록된 시연 파일 목록
-            </h3>
-            <span className="uh-count">{readyCount}개 준비됨</span>
-          </div>
-
-          {files.length === 0 ? (
-            <p className="uh-empty">아직 등록된 영상이 없어요.</p>
-          ) : (
-            <ul className="uh-files">
-              {files.map((f) => (
-                <li key={f.id} className="uh-file">
-                  <div className="uh-file-icon">
-                    <IconVideo />
-                  </div>
-                  <div className="uh-file-info">
-                    <p className="uh-file-name">
-                      <span>{f.name}</span>
-                      {f.quality && <em>{f.quality}</em>}
-                    </p>
-                    <p className="uh-file-meta">
-                      {formatSize(f.size)}
-                      <i />
-                      재생시간 {f.duration != null ? formatTime(f.duration) : "--:--"}
-                      <i />
-                      {f.status === "ready" ? (
-                        <span className="uh-ready">
-                          <IconCheck />
-                          준비 완료
-                        </span>
-                      ) : (
-                        <span className="uh-reading">확인 중…</span>
-                      )}
-                    </p>
-                    {f.tooLarge && <p className="uh-warn">권장 용량({MAX_MB}MB)보다 커서 분석이 오래 걸릴 수 있어요.</p>}
-                  </div>
-                  <div className="uh-file-actions">
-                    {/* 시연 파일은 동의 팝업부터 띄움. 일반 파일 버튼은 TODO: 분석 단계와 연결 */}
-                    <button
-                      type="button"
-                      className="uh-btn uh-btn-line"
-                      disabled={f.status !== "ready"}
-                      onClick={f.demo ? () => setDemoConsent(true) : undefined}
-                    >
-                      <IconBolt />
-                      {f.demo ? "단계별 분석 팝업 시연" : "AI 분석 시작"}
-                    </button>
-                    {!f.demo && (
-                      <button type="button" className="uh-remove" aria-label={`${f.name} 삭제`} onClick={() => removeFile(f.id)}>
-                        ×
-                      </button>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
         <footer className="uh-notice">
           <IconShield />
           <p>
@@ -296,17 +181,40 @@ export default function Home() {
         </footer>
       </main>
 
-      {/* 영상 선택 → 1단계 수집 동의 → 2단계 확인 질문 */}
+      {/* 영상 선택 → 수집 동의 → 추가 질문 → 분석 중 → 사고 상황 확인 */}
       {(pending.length > 0 || demoConsent) &&
-        (consent ? (
-          <QuestionModal onSubmit={submitAnswers} onClose={closeConsent} />
-        ) : (
+        (popupStep === "consent" ? (
           <ConsentModal
-            fileNames={demoConsent ? [DEMO_FILE.name] : pending.map((f) => f.name)}
-            onStart={setConsent}
+            fileNames={demoConsent ? [DEMO_FILE_NAME] : pending.map((f) => f.name)}
+            onStart={() => setPopupStep("preparing")}
             onClose={closeConsent}
-            onSimulateUnsupported={simulateUnsupported}
             onPickAnother={pickAnother}
+          />
+        ) : popupStep === "questions" ? (
+          <QuestionModal
+            initialAnswers={answers}
+            onSubmit={submitAnswers}
+            onClose={closeConsent}
+          />
+        ) : popupStep === "preparing" ? (
+          <AnalysisProgressModal
+            step={2}
+            description="업로드한 영상의 장면과 재생 상태를 확인하고 있어요."
+            onComplete={() => setPopupStep("questions")}
+            onClose={closeConsent}
+          />
+        ) : popupStep === "analyzing" ? (
+          <AnalysisProgressModal
+            step={4}
+            description="사고 장면과 차량 움직임을 분석하고 있어요."
+            onComplete={() => setPopupStep("confirm")}
+            onClose={closeConsent}
+          />
+        ) : (
+          <SituationConfirmModal
+            onConfirm={finishAnalysis}
+            onBack={() => setPopupStep("questions")}
+            onClose={closeConsent}
           />
         ))}
     </div>
@@ -339,25 +247,6 @@ const IconPlus = () => (
   <Svg size={18}>
     <circle cx="12" cy="12" r="9" />
     <path d="M12 8v8M8 12h8" />
-  </Svg>
-);
-const IconFilm = () => (
-  <Svg size={18}>
-    <rect x="3" y="7" width="18" height="13" rx="2" />
-    <path d="m3 7 3-4 3 4M9 7l3-4 3 4M15 7l3-4 3 4" />
-  </Svg>
-);
-const IconVideo = () => (
-  <Svg>
-    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
-    <path d="M14 3v5h5" />
-    <path d="m10 11 4 2.5-4 2.5z" />
-  </Svg>
-);
-const IconCheck = () => (
-  <Svg size={14}>
-    <circle cx="12" cy="12" r="9" />
-    <path d="m8.5 12 2.5 2.5 4.5-5" />
   </Svg>
 );
 const IconBolt = () => (

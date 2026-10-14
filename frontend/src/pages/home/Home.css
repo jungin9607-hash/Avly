@@ -15,6 +15,9 @@
   --green: #5fd39a;
   position: relative;
   min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
   /* #root의 고정 폭(1126px)을 벗어나 화면 전체를 사용 */
   width: 100vw;
   margin-inline: calc(50% - 50vw);
@@ -62,9 +65,12 @@
   --green: #12a150;
   color: var(--ink);
   position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 56px 40px 64px;
+  padding: 56px 40px 16px;
 }
 /* index.css의 전역 h1·h2 색/폰트가 덮어쓰지 않도록 */
 .uh h1,
@@ -187,6 +193,9 @@
 .uh-drop .uh-btn-solid:hover {
   background: #f6eaf8;
   border-color: #f6eaf8;
+}
+.uh-demo-trigger {
+  margin-top: 12px;
 }
 .uh-drop-icon {
   display: grid;
@@ -354,145 +363,13 @@
   cursor: default;
 }
 
-/* ---------- 파일 목록 ---------- */
-.uh-list {
-  margin-top: 48px;
-}
-.uh-list-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 14px;
-  border-bottom: 2px solid var(--ink);
-}
-.uh-list-head h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-}
-.uh-count {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--muted);
-}
-.uh-empty {
-  margin: 0;
-  padding: 28px 0;
-  font-size: 15px;
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-}
-.uh-files {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.uh-file {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px 4px;
-  border-bottom: 1px solid var(--line);
-}
-.uh-file-icon {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 4px;
-  background: var(--surface);
-  color: var(--peri);
-}
-.uh-file-info {
-  flex: 1;
-  min-width: 0;
-}
-.uh-file-name {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 6px;
-  font-size: 16px;
-  font-weight: 600;
-}
-.uh-file-name span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.uh-file-name em {
-  flex: none;
-  padding: 2px 7px;
-  border-radius: 3px;
-  background: var(--surface);
-  color: var(--peri);
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 700;
-}
-.uh-file-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  font-size: 14px;
-  color: var(--muted);
-}
-.uh-file-meta i {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.6;
-}
-.uh-ready {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--green);
-  font-weight: 600;
-}
-.uh-reading {
-  color: var(--peri);
-}
-.uh-warn {
-  margin: 6px 0 0;
-  font-size: 13px;
-  color: var(--amber);
-}
-.uh-file-actions {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.uh-remove {
-  width: 32px;
-  height: 32px;
-  border: 0;
-  border-radius: 3px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-}
-.uh-remove:hover {
-  background: var(--surface);
-  color: var(--ink);
-}
-
 /* ---------- 안내문 ---------- */
 .uh-notice {
   display: flex;
   gap: 10px;
-  margin-top: 48px;
+  margin-top: auto;
   padding-top: 20px;
+  padding-bottom: 24px;
   border-top: 1px solid var(--line);
   color: var(--muted);
 }
@@ -524,15 +401,6 @@
     padding: 104px 20px 56px;
   }
   .uh-main {
-    padding: 40px 20px 56px;
-  }
-  .uh-file {
-    flex-wrap: wrap;
-  }
-  .uh-file-actions {
-    width: 100%;
-  }
-  .uh-file-actions .uh-btn {
-    flex: 1;
+    padding: 40px 20px 16px;
   }
 }
