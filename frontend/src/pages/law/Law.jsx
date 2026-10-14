@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import TopNav from "../../components/common/TopNav";
 import LegalNotice from "../../components/common/LegalNotice";
-import purpleWeave from "../../assets/purple-weave.jpg";
 import "./Law.css";
 
 const CASES = [
@@ -54,37 +53,37 @@ function RoadEvidence() {
     >
       <defs>
         <linearGradient id="law-road-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#dbe8f4" />
-          <stop offset="1" stopColor="#f4f7fb" />
+          <stop offset="0" stopColor="#17130f" />
+          <stop offset="1" stopColor="#2e2620" />
         </linearGradient>
         <linearGradient id="law-road-surface" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#414958" />
-          <stop offset="1" stopColor="#252b37" />
+          <stop offset="0" stopColor="#2a241f" />
+          <stop offset="1" stopColor="#14110e" />
         </linearGradient>
       </defs>
       <rect width="480" height="180" fill="url(#law-road-sky)" />
       <path d="M0 72h480v108H0z" fill="url(#law-road-surface)" />
-      <path d="m0 180 154-108h172L480 180" fill="#343b49" />
-      <path d="m0 180 170-108M480 180 310 72" stroke="#eef3f8" strokeWidth="4" />
+      <path d="m0 180 154-108h172L480 180" fill="#221c17" />
+      <path d="m0 180 170-108M480 180 310 72" stroke="#b8a48c" strokeWidth="4" />
       <path d="m236 180 2-25m2-19 2-22m2-18 2-24" stroke="#fff" strokeWidth="4" strokeDasharray="13 12" />
-      <path d="M87 154c87-17 139-34 207-66" fill="none" stroke="#1c9b72" strokeWidth="4" strokeDasharray="7 5" />
+      <path d="M87 154c87-17 139-34 207-66" fill="none" stroke="#d8a86c" strokeWidth="4" strokeDasharray="7 5" />
       <path d="M87 154c87-17 139-34 207-66" fill="none" stroke="#fff" strokeWidth="1.5" />
       <g transform="translate(286 84) rotate(-12)">
-        <rect x="-27" y="-18" width="54" height="35" rx="8" fill="#e8edf4" stroke="#243044" strokeWidth="3" />
-        <path d="m-17-14 5-9h24l6 9" fill="#8ca0b9" stroke="#243044" strokeWidth="2" />
+        <rect x="-27" y="-18" width="54" height="35" rx="8" fill="#d9cbb8" stroke="#17130f" strokeWidth="3" />
+        <path d="m-17-14 5-9h24l6 9" fill="#9a8a78" stroke="#17130f" strokeWidth="2" />
         <circle cx="-17" cy="13" r="5" fill="#171d28" />
         <circle cx="17" cy="13" r="5" fill="#171d28" />
       </g>
       <g transform="translate(153 135)">
-        <rect x="-31" y="-19" width="62" height="39" rx="9" fill="#2863cb" stroke="#fff" strokeWidth="3" />
-        <path d="m-19-15 6-10h26l7 10" fill="#90b3f2" stroke="#fff" strokeWidth="2" />
+        <rect x="-31" y="-19" width="62" height="39" rx="9" fill="#a8744a" stroke="#f1e3cf" strokeWidth="3" />
+        <path d="m-19-15 6-10h26l7 10" fill="#e2c39c" stroke="#fff" strokeWidth="2" />
         <circle cx="-19" cy="15" r="5" fill="#171d28" />
         <circle cx="19" cy="15" r="5" fill="#171d28" />
       </g>
-      <rect x="310" y="21" width="142" height="28" rx="5" fill="#fff" fillOpacity=".94" />
-      <circle cx="325" cy="35" r="4" fill="#20a879" />
-      <text x="337" y="40" fill="#253248" fontSize="13" fontWeight="700">차선 변경 경로 분석</text>
-      <rect x="15" y="15" width="82" height="25" rx="4" fill="#172235" fillOpacity=".78" />
+      <rect x="310" y="21" width="142" height="28" rx="14" fill="#fff" fillOpacity=".1" stroke="#d8a86c" strokeOpacity=".4" />
+      <circle cx="325" cy="35" r="4" fill="#d8a86c" />
+      <text x="337" y="40" fill="#f3e9dc" fontSize="13" fontWeight="700">차선 변경 경로 분석</text>
+      <rect x="15" y="15" width="82" height="25" rx="12.5" fill="#0f0c0a" fillOpacity=".6" stroke="#fff" strokeOpacity=".15" />
       <circle cx="28" cy="27" r="4" fill="#e65353" />
       <text x="38" y="31" fill="#fff" fontSize="11" fontWeight="700">AI FRAME</text>
     </svg>
@@ -105,21 +104,33 @@ export default function Law() {
 
   return (
     <div className="law-page">
-      <TopNav active="유사 판례" theme="dark" />
+      {/* 메뉴 바는 intro와 같은 기본 스타일 (색은 Law.css에서 intro 밤하늘 위 모습과 같게) */}
+      <TopNav active="유사 판례" />
 
-      <header className="law-hero" style={{ "--hero-photo": `url(${purpleWeave})` }}>
+      {/* 배경 워터마크: 아주 옅은 "Avly" 글자와 은은한 물방울 같은 원 */}
+      <div className="law-watermark" aria-hidden="true">
+        <span className="law-wordmark">Avly</span>
+        <span className="law-bubble" />
+      </div>
+
+      <header className="law-hero">
         <div className="law-hero-inner">
           <div className="law-heading">
-            <div>
-              <p className="law-eyebrow">AI CASE MATCHING</p>
-              <h1>유사 판례 분석</h1>
-              <p className="law-hero-description">
-                내 사고와 유사한 판례를 비교해 과실 판단의 참고 근거를 확인하세요.
-              </p>
-            </div>
-            <span className="law-result-count">
-              <i /> 가장 유사한 판례 3건
-            </span>
+            {/* 가운데 정렬 + 검색 아이콘 + 핵심 단어 강조 */}
+            <h1>
+              <span className="law-title-icon" aria-hidden="true">
+                {/* 돋보기 + 렌즈 반사광 + 오른쪽 위 작은 반짝이(AI로 찾아줌) */}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round">
+                  <circle cx="10.5" cy="11.5" r="6" strokeWidth="2.2" />
+                  <path d="M7.8 9.6a3.4 3.4 0 0 1 2.3-1.6" strokeWidth="1.6" opacity="0.75" />
+                  <path d="m15 16 4.6 4.6" strokeWidth="2.6" />
+                  <path d="M19.5 1.5v4M17.5 3.5h4" strokeWidth="1.5" />
+                </svg>
+              </span>
+              <span>
+                나의 사고와 <em className="law-title-key">유사한 판례</em> 검색
+              </span>
+            </h1>
           </div>
         </div>
       </header>
@@ -130,51 +141,77 @@ export default function Law() {
             {CASES.map((item, index) => {
               const isSelected = item.id === selectedId;
               const isExpanded = item.id === detailsId;
+              const [caseKind, caseType] = item.category.split(" · ");
+              const [mine, other] = item.ratio.split(":").map((v) => v.trim());
+              const inputId = `law-case-${item.id}`;
               return (
                 <article
                   key={item.id}
                   className={`law-case${isSelected ? " is-selected" : ""}`}
+                  // 카드 아무 곳이나 누르면 선택 (선택된 판례는 카드 색으로 구분)
+                  onClick={() => selectCase(item.id)}
                 >
-                  <div className="law-case-top">
-                    <label className="law-case-select">
+                  {/* 왼쪽 정보 · 가운데 숫자 열 · 오른쪽 상세 보기 */}
+                  <div className="law-case-main">
+                    <div className="law-case-info">
+                      <div className="law-tags">
+                        <span className="law-case-number">{index + 1}</span>
+                        <span className="law-tag law-tag-warm">{caseKind}</span>
+                        <span className="law-tag">{caseType}</span>
+                        {isSelected && <span className="law-tag law-tag-solid">선택된 판례</span>}
+                      </div>
+                      {/* 화면에는 안 보이는 선택 버튼: 키보드(Tab·방향키)로도 고를 수 있게 */}
                       <input
+                        id={inputId}
+                        className="law-sr-only"
                         type="radio"
                         name="similar-case"
                         value={item.id}
                         checked={isSelected}
                         onChange={() => selectCase(item.id)}
                       />
-                      <span className="law-case-number">{index + 1}</span>
-                      <span className="law-court">
+                      <label className="law-court" htmlFor={inputId}>
                         <strong>{item.court}</strong>
                         <small>{item.date} 판결</small>
-                        <em>{item.category}</em>
-                      </span>
-                    </label>
-                    <span className="law-similarity">
-                      <span aria-hidden="true">⌕</span> 유사도 {item.similarity}
-                    </span>
+                      </label>
+                    </div>
+
+                    <dl className="law-stats">
+                      <div>
+                        <dt>유사도</dt>
+                        <dd className="law-stat-sim">{item.similarity}</dd>
+                      </div>
+                      <div>
+                        <dt>기준 과실</dt>
+                        <dd>
+                          <span className="law-stat-mine">{mine}</span>
+                          <span className="law-stat-sep"> : </span>
+                          <span className="law-stat-other">{other}</span>
+                        </dd>
+                      </div>
+                    </dl>
+
+                    <div className="law-case-actions">
+                      <button
+                        type="button"
+                        className="law-detail-button"
+                        aria-expanded={isExpanded}
+                        onClick={(e) => {
+                          e.stopPropagation(); // 펼치기만 하고 선택은 바꾸지 않음
+                          setDetailsId(isExpanded ? null : item.id);
+                        }}
+                      >
+                        {isExpanded ? "접기" : "상세 보기"}
+                        <span aria-hidden="true">{isExpanded ? "−" : "↗"}</span>
+                      </button>
+                    </div>
                   </div>
 
+                  {/* 카드 폭 전체의 연회색 띠: 사고 상황 */}
                   <p className="law-case-summary">
                     <span aria-hidden="true">↗</span>
                     <span>사고 상황: {item.summary}</span>
                   </p>
-
-                  <div className="law-case-bottom">
-                    <span className={isSelected ? "law-selected-label" : ""}>
-                      {isSelected ? "선택된 판례" : "선택 가능"}
-                    </span>
-                    <span>기준 과실 {item.ratio}</span>
-                    <button
-                      type="button"
-                      aria-expanded={isExpanded}
-                      onClick={() => setDetailsId(isExpanded ? null : item.id)}
-                    >
-                      {isExpanded ? "접기" : "상세 보기"}
-                      <span aria-hidden="true">{isExpanded ? "−" : "↗"}</span>
-                    </button>
-                  </div>
 
                   {isExpanded && (
                     <div className="law-case-details">
