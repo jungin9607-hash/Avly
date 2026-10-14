@@ -1,6 +1,13 @@
 /* 타임라인 화면: 다른 화면과 달리 처음부터 끝까지 한 가지 어두운 배경
- * 왼쪽(제목 · 비율 · 지금 시점 · 넘기기) / 오른쪽(가로로 흐르는 카드 + 시간축) */
+ * 왼쪽(제목 · 지금 시점 · 넘기기) / 오른쪽(영상 · 설명 · 시간축) */
 .tl {
+  --tl-font-small: 14px;
+  --tl-font-caption: 15px;
+  --tl-font-body: 16px;
+  --tl-font-label: 18px;
+  --tl-font-lead: 20px;
+  --tl-font-subtitle: 21px;
+  --tl-font-display: 26px;
   --bg: #0e0c12;
   --panel: #17141c;
   --text: #f7f5f8;
@@ -9,6 +16,7 @@
   --accent: #f6cdf9; /* 라벤더: 결정적 시점 · 강조 */
   --impact: #ff8a7a; /* 충돌 */
   --signal: #ffd23f; /* 타임라인 영역 전용 강조색: 중앙선·경고 테이프 같은 노랑 */
+  --tl-impact-dot-rgb: 255, 59, 48; /* 시간축의 충돌 시점 동그라미 */
   --plum: #8c4d8c;
   width: 100vw;
   margin-inline: calc(50% - 50vw);
@@ -33,10 +41,11 @@
 .tl-stage {
   display: grid;
   grid-template-columns: minmax(260px, 0.6fr) minmax(0, 1.75fr);
-  gap: 40px;
+  grid-template-rows: 1fr auto;
+  gap: 16px 40px;
   align-items: center;
-  min-height: calc(100svh - 64px);
-  padding: 96px 0 40px 56px;
+  min-height: 100svh;
+  padding: 88px 0 16px 56px;
   box-sizing: border-box;
 }
 
@@ -90,18 +99,9 @@
   color: var(--accent);
 }
 
-.tl-kicker {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 18px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--muted);
-}
 .tl-side h1 {
   margin: 0 0 28px;
-  font-size: clamp(40px, 4.6vw, 64px);
+  font-size: clamp(44px, 4.8vw, 68px);
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.045em;
@@ -149,20 +149,20 @@
 }
 .tl-now-step {
   margin: 0 0 8px;
-  font-size: 14px;
+  font-size: var(--tl-font-body);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--now);
 }
 .tl-now-label {
   margin: 0 0 8px;
-  font-size: 24px;
+  font-size: var(--tl-font-display);
   font-weight: 800;
   letter-spacing: -0.03em;
 }
 .tl-now-text {
   margin: 0;
-  font-size: 16.5px;
+  font-size: var(--tl-font-label);
   font-weight: 500;
   line-height: 1.5;
   color: var(--muted);
@@ -174,14 +174,6 @@
   gap: 8px;
   margin: 24px 0 20px;
 }
-.tl-counter span {
-  margin-right: 10px;
-  font-size: 15px;
-  color: var(--muted);
-}
-.tl-counter b {
-  color: var(--text);
-}
 .tl-counter button {
   display: grid;
   place-items: center;
@@ -191,7 +183,7 @@
   border-radius: 50%;
   background: transparent;
   color: var(--text);
-  font-size: 16px;
+  font-size: var(--tl-font-label);
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
 }
@@ -204,29 +196,18 @@
   opacity: 0.3;
   cursor: default;
 }
-.tl-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 0 4px;
-  border: 0;
-  border-bottom: 1px solid currentColor;
-  background: none;
-  color: var(--accent);
-  font: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.tl-link:hover {
-  color: #fff;
-}
-
 /* 오른쪽: 따로 떨어진 패널 + 왼쪽 노란 띠로 시선을 모음 */
 .tl-right {
+  /* 패널 너비를 채우고, 영상 높이만 제한해 설명·시간축의 공간을 남긴다. */
+  --tl-media-width: calc(100% - 70px);
   position: relative;
   min-width: 0;
-  padding: 18px 0 16px 32px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 16px 32px;
   border-radius: 8px 0 0 8px;
   background:
     radial-gradient(ellipse 55% 55% at 32% 48%, rgba(255, 210, 63, 0.13), transparent 70%),
@@ -238,99 +219,21 @@
   border-left: 5px solid var(--signal);
   box-shadow: -20px 0 60px rgba(255, 210, 63, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
-.tl-right-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin: 0 56px 10px 0;
-}
-.tl-right-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: var(--signal);
-}
-.tl-right-label i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ff3b30;
-  animation: tl-rec 1.2s steps(2, start) infinite;
-}
 @keyframes tl-rec {
   to {
     visibility: hidden;
   }
 }
-.tl-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0 56px 6px 0;
-}
-.tl-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 13px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-.tl-chip:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-  color: var(--text);
-}
-.tl-chip i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--muted);
-}
-.tl-chip.key i {
-  background: var(--accent);
-}
-.tl-chip.impact i {
-  background: var(--impact);
-}
-.tl-chip.is-on {
-  background: var(--signal);
-  border-color: var(--signal);
-  color: #1a1404;
-}
-.tl-chip.is-on i {
-  background: #1a1404;
-}
-.tl-count {
-  display: grid;
-  place-items: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.12);
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--text);
-}
-
 /* 단일 영상 플레이어: 시점을 선택하면 영상 위치와 설명이 함께 바뀜 */
 .tl-player {
   position: relative;
-  width: min(100%, 820px);
+  box-sizing: border-box;
+  /* 영상만 패널 전체 너비를 사용하고 설명·시간축은 기존 여백을 유지한다. */
+  width: calc(100% + 32px);
   aspect-ratio: 16 / 9;
-  margin: 0;
+  max-height: max(160px, calc(100svh - 480px));
+  flex-shrink: 0;
+  margin: 0 0 0 -32px;
   overflow: hidden;
   border-radius: 4px;
   background: #08080b;
@@ -354,7 +257,6 @@
   object-fit: contain;
 }
 .tl-player > .tl-scene {
-  object-fit: cover;
   opacity: 0.85;
 }
 .tl-player-prompt {
@@ -371,7 +273,7 @@
 .tl-player-prompt p {
   margin: 0;
   color: #fff;
-  font-size: 18px;
+  font-size: var(--tl-font-lead);
   font-weight: 700;
   text-shadow: 0 2px 12px #000;
 }
@@ -382,7 +284,7 @@
   background: var(--signal);
   color: #1a1404;
   font: inherit;
-  font-size: 14px;
+  font-size: var(--tl-font-body);
   font-weight: 800;
   cursor: pointer;
 }
@@ -403,7 +305,7 @@
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
-  font-size: 11px;
+  font-size: var(--tl-font-small);
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -423,7 +325,7 @@
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.72);
   color: #fff;
-  font-size: 13px;
+  font-size: var(--tl-font-caption);
   font-weight: 700;
 }
 .tl-badge {
@@ -434,8 +336,11 @@
   border-radius: 2px;
   background: #fff;
   color: #111318;
-  font-size: 13px;
+  font-size: var(--tl-font-caption);
   font-weight: 700;
+  max-width: calc(100% - 100px);
+  box-sizing: border-box;
+  white-space: normal;
 }
 .tl-player.key .tl-badge {
   background: var(--accent);
@@ -447,14 +352,19 @@
 }
 
 .tl-video-name {
-  width: min(100%, 820px);
+  width: var(--tl-media-width);
   margin: 8px 0 0;
+  box-sizing: border-box;
   color: var(--muted);
-  font-size: 13px;
-  overflow-wrap: anywhere;
+  font-size: var(--tl-font-caption);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .tl-selected-moment {
-  width: min(100%, 820px);
+  width: var(--tl-media-width);
+  margin: 0;
+  box-sizing: border-box;
   padding-top: 14px;
   text-align: center;
 }
@@ -465,7 +375,7 @@
   align-items: center;
   gap: 4px 8px;
   margin: 0 0 6px;
-  font-size: 14px;
+  font-size: var(--tl-font-body);
   font-weight: 700;
   color: var(--muted);
 }
@@ -481,7 +391,7 @@
 .tl-selected-moment h2 {
   margin: 0;
   color: #fff;
-  font-size: 19px;
+  font-size: var(--tl-font-subtitle);
   font-weight: 700;
   line-height: 1.5;
   letter-spacing: -0.02em;
@@ -516,8 +426,9 @@
 /* 시간축: 실제 시각 비율, 지나온 구간이 채워짐 */
 .tl-axis {
   position: relative;
-  height: 66px;
-  margin: 10px 64px 0 6px;
+  width: var(--tl-media-width);
+  height: 84px;
+  margin: 10px 0 0;
 }
 .tl-axis-line,
 .tl-axis-fill {
@@ -532,9 +443,10 @@
   background: var(--line);
 }
 .tl-axis-fill {
-  background: var(--signal);
-  box-shadow: 0 0 10px rgba(255, 210, 63, 0.5);
-  transition: width 0.5s ease;
+  right: 0;
+  /* 전체 시간축의 그라데이션을 선택 위치까지 드러내어 시점별 색상을 유지한다. */
+  background: linear-gradient(90deg in srgb, var(--signal), rgb(var(--tl-impact-dot-rgb)));
+  transition: clip-path 0.5s ease;
 }
 .tl-axis-dot {
   position: absolute;
@@ -553,24 +465,18 @@
   transform: scale(1.2);
 }
 .tl-axis-dot.is-past {
-  border-color: var(--signal);
-  background: var(--signal);
-}
-.tl-axis-dot.key.is-past {
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--tl-dot-color);
+  background: var(--tl-dot-color);
 }
 .tl-axis-dot.impact.is-past {
-  border-color: var(--impact);
-  background: var(--impact);
   animation: tl-pulse 1.8s ease-out infinite;
 }
 @keyframes tl-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(255, 138, 122, 0.6);
+    box-shadow: 0 0 0 0 rgba(var(--tl-impact-dot-rgb), 0.6);
   }
   100% {
-    box-shadow: 0 0 0 12px rgba(255, 138, 122, 0);
+    box-shadow: 0 0 0 12px rgba(var(--tl-impact-dot-rgb), 0);
   }
 }
 .tl-axis-dot em {
@@ -578,7 +484,7 @@
   top: 24px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 12.5px;
+  font-size: var(--tl-font-small);
   font-style: normal;
   font-weight: 700;
   white-space: nowrap;
@@ -586,14 +492,38 @@
 }
 .tl-axis-dot small {
   position: absolute;
-  top: 43px;
+  top: 48px;
   left: 50%;
   transform: translateX(-50%);
   color: var(--text);
-  font-size: 11px;
+  font-size: var(--tl-font-small);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.4;
   white-space: nowrap;
+}
+/* 좁은 시간축에서도 긴 시점 이름은 두 줄 안에서 읽히도록 한다. */
+@media (max-width: 600px) {
+  .tl-axis-dot em {
+    font-size: clamp(12px, 2.6vw, 14px);
+  }
+  .tl-axis-dot small {
+    width: max-content;
+    max-width: 64px;
+    white-space: normal;
+    text-align: center;
+    font-size: clamp(12px, 2.6vw, 14px);
+  }
+  .tl-axis-dot.is-first small {
+    text-align: left;
+  }
+  .tl-axis-dot.is-last small {
+    text-align: right;
+  }
+  .tl-hud {
+    max-width: calc(100% - 20px);
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+  }
 }
 .tl-axis-dot.is-first em {
   left: 0;
@@ -614,54 +544,72 @@
   transform: none;
 }
 
-.tl-bottom {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 40px 80px;
+.tl-notice {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  margin-right: 40px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: var(--tl-font-small);
+  line-height: 1.6;
 }
-.tl-bottom .ln {
-  margin-top: 40px;
+.tl-notice svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.tl-notice p {
+  margin: 0;
+  overflow-wrap: anywhere;
 }
 
 /* ---------- 좁은 화면 ---------- */
 @media (max-width: 900px) {
+  .tl {
+    /* 장식용 배경 번짐이 화면 바깥의 가로 스크롤을 만들지 않게 한다. */
+    overflow-x: clip;
+  }
   .tl-stage {
     height: auto;
   }
   .tl-right {
-    padding: 22px 0 18px 18px;
+    --tl-media-width: calc(100% - 34px);
+    width: 100%;
+    padding: 0 0 18px 18px;
+    border-right: 1px solid rgba(255, 210, 63, 0.35);
+    border-radius: 8px;
   }
-  .tl-right-head {
-    margin-right: 20px;
+  .tl-player {
+    width: calc(100% + 18px);
+    margin-left: -18px;
+    max-height: none;
   }
   .tl-stage {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
     gap: 28px;
     min-height: auto;
-    padding: 96px 0 40px 20px;
+    padding: 96px 20px 40px;
   }
   .tl-side {
-    padding-right: 20px;
+    min-width: 0;
+    padding-right: 0;
+  }
+  .tl-now {
+    display: none;
   }
   .tl-counter {
     margin: 24px 0 18px;
   }
-  .tl-chips {
-    margin-right: 20px;
-  }
-  .tl-player,
-  .tl-video-name,
-  .tl-selected-moment { width: calc(100% - 18px); }
-  .tl-axis {
-    margin-right: 28px;
-  }
-  .tl-bottom {
-    padding: 0 20px 64px;
+  .tl-notice {
+    margin-right: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .tl-bignum,
-  .tl-right-label i,
   .tl-rec::before,
   .tl-now,
   .tl-arrow,
