@@ -201,52 +201,47 @@
   opacity: 0.3;
   cursor: default;
 }
-/* 오른쪽: 따로 떨어진 패널 + 왼쪽 노란 띠로 시선을 모음 */
+/* 오른쪽: 독립된 블랙박스 영상 카드와 분석·타임라인 카드 */
 .tl-right {
-  /* 패널 너비를 채우고, 영상 높이만 제한해 설명·시간축의 공간을 남긴다. */
-  --tl-media-width: calc(100% - 70px);
   position: relative;
   min-width: 0;
-  width: 100%;
+  width: min(calc(100% - 64px), 960px);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0 0 16px 32px;
-  border-radius: 8px 0 0 8px;
-  background:
-    radial-gradient(ellipse 55% 55% at 32% 48%, rgba(var(--color-time-signal-rgb), 0.13), transparent 70%),
-    repeating-linear-gradient(0deg, var(--color-white-a035) 0 1px, transparent 1px 36px),
-    repeating-linear-gradient(90deg, var(--color-white-a035) 0 1px, transparent 1px 36px),
-    var(--panel);
-  border: 1px solid rgba(var(--color-time-signal-rgb), 0.35);
-  border-right: 0;
-  border-left: 5px solid var(--tl-selected-color, var(--signal));
-  transition: border-left-color 0.3s ease;
-  box-shadow: -20px 0 60px rgba(var(--color-time-signal-rgb), 0.08), inset 0 0 0 1px var(--color-white-a03);
+  align-items: stretch;
+  justify-self: center;
+  gap: 18px;
+  padding: 0;
 }
 @keyframes tl-rec {
   to {
     visibility: hidden;
   }
 }
-/* 단일 영상 플레이어: 시점을 선택하면 영상 위치와 설명이 함께 바뀜 */
+/* 영상만 담는 독립 카드 */
+.tl-video-panel {
+  overflow: hidden;
+  border: 1px solid rgba(var(--tl-blue-rgb), 0.3);
+  border-radius: 8px;
+  background: var(--color-time-video-frame);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.32);
+}
+/* 단일 영상 플레이어: 시점을 선택하면 영상 위치가 함께 바뀜 */
 .tl-player {
   position: relative;
   box-sizing: border-box;
-  /* 영상만 패널 전체 너비를 사용하고 설명·시간축은 기존 여백을 유지한다. */
-  width: calc(100% + 32px);
+  width: 100%;
   aspect-ratio: 16 / 9;
   max-height: max(160px, calc(100svh - 480px));
   flex-shrink: 0;
-  margin: 0 0 0 -32px;
+  margin: 0;
   overflow: hidden;
+  border: 10px solid var(--color-time-video-frame);
+  border-bottom-width: 12px;
   border-radius: 4px;
-  background: var(--bg);
-  outline: 2px solid var(--tl-selected-color, var(--signal));
-  outline-offset: -2px;
-  transition: outline-color 0.3s ease;
-  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.32);
+  background: var(--color-time-video-frame);
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.72);
 }
 .tl-video,
 .tl-player > .tl-scene {
@@ -328,8 +323,9 @@
   font-weight: 700;
 }
 .tl-video-name {
-  width: var(--tl-media-width);
-  margin: 8px 0 0;
+  width: 100%;
+  margin: 0;
+  padding: 9px 12px 10px;
   box-sizing: border-box;
   color: var(--muted);
   font-size: var(--tl-font-caption);
@@ -337,11 +333,17 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.tl-analysis {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2px 30px 0;
+}
 .tl-selected-moment {
-  width: var(--tl-media-width);
+  width: 100%;
   margin: 0;
   box-sizing: border-box;
-  padding-top: 14px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid var(--line);
   text-align: center;
 }
 .tl-when {
@@ -357,12 +359,6 @@
 }
 .tl-tag {
   color: var(--text);
-}
-.tl-player.key ~ .tl-selected-moment .tl-tag {
-  color: var(--accent);
-}
-.tl-player.impact ~ .tl-selected-moment .tl-tag {
-  color: var(--impact);
 }
 .tl-selected-moment h2 {
   margin: 0;
@@ -402,9 +398,9 @@
 /* 시간축: 실제 시각 비율, 지나온 구간이 채워짐 */
 .tl-axis {
   position: relative;
-  width: var(--tl-media-width);
+  width: 100%;
   height: 84px;
-  margin: 10px 0 0;
+  margin: 18px 0 0;
 }
 .tl-axis-line,
 .tl-axis-fill {
@@ -552,16 +548,17 @@
     height: auto;
   }
   .tl-right {
-    --tl-media-width: calc(100% - 34px);
     width: 100%;
-    padding: 0 0 18px 18px;
-    border-right: 1px solid rgba(var(--color-time-signal-rgb), 0.35);
-    border-radius: 8px;
+    max-width: none;
+    gap: 14px;
   }
   .tl-player {
-    width: calc(100% + 18px);
-    margin-left: -18px;
+    width: 100%;
+    margin-left: 0;
     max-height: none;
+  }
+  .tl-analysis {
+    padding: 2px 18px 0;
   }
   .tl-stage {
     grid-template-columns: 1fr;
@@ -593,7 +590,6 @@
   .tl-axis-dot.impact.is-past {
     animation: none;
   }
-  .tl-right,
   .tl-player,
   .tl-axis-fill {
     transition: none;

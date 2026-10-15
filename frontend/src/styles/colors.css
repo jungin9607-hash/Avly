@@ -207,6 +207,7 @@
    * 영상 패널, 타임라인 선, 안전 구간과 충돌 시점에 사용
    * ================================================================ */
   --color-time-panel: var(--color-navy-775);
+  --color-time-video-frame: #03050b;
   --color-time-accent: var(--color-blue-soft);
   --color-time-bg-bottom: var(--color-navy-800);
   --color-time-scene-sky: var(--color-navy-700);
