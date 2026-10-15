@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import TopNav from "../../components/common/TopNav";
 import TimelineNotice from "./TimelineNotice";
 import TimelineAxis from "./TimelineAxis";
-import { getTimelineColor, getTimelinePosition } from "./timelineColors";
 import "./Time.css";
 
 // tone: 결정적 시점(key) · 충돌(impact)은 색으로 구분
@@ -137,52 +136,56 @@ export default function Time() {
         </div>
 
         {/* 오른쪽: 영상 화면 · 시간축 */}
-        <div className="tl-right" style={{ "--tl-selected-color": getTimelineColor(getTimelinePosition(MOMENTS, m.time)) }}>
-          <div className={`tl-player ${m.tone || ""}`}>
-            {videoUrl ? (
-              <video
-                ref={videoRef}
-                className="tl-video"
-                src={videoUrl}
-                controls
-                onLoadedMetadata={syncVideoToMoment}
-                aria-label={`${m.label} 블랙박스 영상`}
+        <div className="tl-right">
+          <div className="tl-video-panel">
+            <div className={`tl-player ${m.tone || ""}`}>
+              {videoUrl ? (
+                <video
+                  ref={videoRef}
+                  className="tl-video"
+                  src={videoUrl}
+                  controls
+                  onLoadedMetadata={syncVideoToMoment}
+                  aria-label={`${m.label} 블랙박스 영상`}
+                />
+              ) : (
+                <>
+                  <Scene id={m.id} />
+                  <div className="tl-player-prompt">
+                    <p>선택한 시점의 영상</p>
+                    <button type="button" className="tl-upload" onClick={() => inputRef.current?.click()}>
+                      블랙박스 영상 선택
+                    </button>
+                  </div>
+                </>
+              )}
+              <input
+                ref={inputRef}
+                className="tl-file-input"
+                type="file"
+                accept="video/mp4,video/quicktime,video/x-msvideo,.mp4,.mov,.avi"
+                onChange={loadVideo}
+                aria-label="블랙박스 영상 파일 선택"
               />
-            ) : (
-              <>
-                <Scene id={m.id} />
-                <div className="tl-player-prompt">
-                  <p>선택한 시점의 영상</p>
-                  <button type="button" className="tl-upload" onClick={() => inputRef.current?.click()}>
-                    블랙박스 영상 선택
-                  </button>
-                </div>
-              </>
-            )}
-            <input
-              ref={inputRef}
-              className="tl-file-input"
-              type="file"
-              accept="video/mp4,video/quicktime,video/x-msvideo,.mp4,.mov,.avi"
-              onChange={loadVideo}
-              aria-label="블랙박스 영상 파일 선택"
-            />
-            <span className="tl-rec">REC</span>
-            <figcaption className="tl-hud tl-mono">
-              T: {stamp(m.time)} · {m.hud}
-            </figcaption>
+              <span className="tl-rec">REC</span>
+              <figcaption className="tl-hud tl-mono">
+                T: {stamp(m.time)} · {m.hud}
+              </figcaption>
+            </div>
+            {videoName && <p className="tl-video-name">{videoName}</p>}
           </div>
-          {videoName && <p className="tl-video-name">{videoName}</p>}
-          <div className="tl-selected-moment">
-            <p className="tl-when">
-              <span className="tl-mono">[{stamp(m.time)}]</span>
-              <span className="tl-tag">{m.tag}</span>
-            </p>
-            <h2>{m.title}</h2>
-          </div>
+          <div className="tl-analysis">
+            <div className="tl-selected-moment">
+              <p className="tl-when">
+                <span className="tl-mono">[{stamp(m.time)}]</span>
+                <span className="tl-tag">{m.tag}</span>
+              </p>
+              <h2>{m.title}</h2>
+            </div>
 
-          {/* 실제 시각 비율대로 놓인 시간축: 지나온 구간이 채워짐 */}
-          <TimelineAxis moments={MOMENTS} active={active} onSelect={goTo} />
+            {/* 실제 시각 비율대로 놓인 시간축: 지나온 구간이 채워짐 */}
+            <TimelineAxis moments={MOMENTS} active={active} onSelect={goTo} />
+          </div>
         </div>
         <TimelineNotice />
       </section>
