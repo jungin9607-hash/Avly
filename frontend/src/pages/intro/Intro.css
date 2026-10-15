@@ -3,17 +3,13 @@
 
 .si {
   /* 밤 도로: "유사 판례" 화면과 같은 딥 네이비 → 네이비 블루 (보랏빛 대신 푸른 밤) */
-  --night: #080c1a;
-  --sky-top: #070b18;
-  --sky-mid: #0f1832;
-  --sky-horizon: #1f2d58;
-  --text: #f1f4fb;
-  --muted: #a3abc2;
-  --line: rgba(255, 255, 255, 0.1);
-  --plum: #c48fc4;
-  --blue: #8b9bd9;
-  --orange: #d99a6c;
-  --yellow: #e2b25a;
+  --night: var(--color-navy-950);
+  --sky-top: var(--color-intro-sky-top);
+  --sky-mid: var(--color-intro-sky-middle);
+  --sky-horizon: var(--color-intro-sky-horizon);
+  --text: var(--color-text-intro);
+  --muted: var(--color-text-intro-muted);
+  --line: var(--color-white-a10);
   background: var(--night);
   color: var(--text);
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
@@ -48,20 +44,18 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-/* 주 버튼: "유사 판례" 화면의 "내 사고와 비교하기"와 같은 로열 블루 */
-.si-btn-accent {
-  background: #2f55c8;
-  color: #fff;
-}
+/* 블랙박스 영상 분석으로 이동하는 주 버튼 */
+.si-btn-accent,
 .si-btn-accent:hover {
-  background: #2346ad;
+  background: var(--color-primary);
+  color: var(--color-text-on-dark);
 }
 .si-btn-dark {
-  background: #111216;
-  color: #fff;
+  background: var(--color-intro-button-dark);
+  color: var(--color-white);
 }
 .si-btn-dark:hover {
-  background: #2a2b31;
+  background: var(--color-intro-button-dark-hover);
 }
 .si-btn-arrow {
   font-size: 20px;
@@ -87,7 +81,7 @@
   width: min(1400px, 140vw);
   height: 420px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(closest-side, rgba(128, 148, 223, 0.16), rgba(74, 123, 224, 0.05) 55%, transparent);
+  background: radial-gradient(closest-side, var(--color-intro-sky-glow), var(--color-intro-sky-glow-soft) 55%, transparent);
   pointer-events: none;
 }
 /* ---------- 별 ---------- */
@@ -99,7 +93,7 @@
 .si-star {
   position: absolute;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-white);
 }
 .si-twinkle {
   animation: si-twinkle ease-in-out infinite alternate;
@@ -143,11 +137,11 @@
 }
 .si-hero h1 {
   margin: 0;
-  color: #fff;
+  color: var(--color-white);
   /* 뒤로 지나가는 전조등에도 읽히도록 옅은 그림자 */
   text-shadow:
-    0 2px 24px rgba(6, 10, 24, 0.65),
-    0 0 48px rgba(6, 10, 24, 0.45);
+    0 2px 24px var(--color-intro-vehicle-shadow),
+    0 0 48px var(--color-intro-vehicle-shadow-soft);
   /* 노트북 화면에서도 부담스럽지 않게: 화면 폭(5.4vw)과 높이(10vh) 중 작은 쪽 기준, 최대 88px */
   font-size: clamp(40px, min(5.4vw, 10vh), 88px);
   font-weight: 800;
@@ -166,7 +160,7 @@
   align-items: center;
   gap: 10px;
   margin: 0;
-  color: rgba(241, 244, 251, 0.75);
+  color: var(--color-intro-text-translucent);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -279,10 +273,10 @@
   height: 17vh;
   background: linear-gradient(
     180deg,
-    rgba(6, 10, 22, 0) 0%,
-    rgba(6, 10, 22, 0.55) 40%,
-    rgba(6, 10, 22, 0.9) 75%,
-    #060a16 100%
+    var(--color-intro-road-clear) 0%,
+    var(--color-intro-road-middle) 40%,
+    var(--color-intro-road-dark) 75%,
+    var(--color-intro-road) 100%
   );
   pointer-events: none;
 }
@@ -290,7 +284,7 @@
 .si-fade {
   position: absolute;
   inset: -60% 0 0 0;
-  background: linear-gradient(180deg, rgba(8, 12, 26, 0) 0%, var(--night) 35%);
+  background: linear-gradient(180deg, var(--color-intro-section-clear) 0%, var(--night) 35%);
   pointer-events: none;
 }
 
@@ -298,16 +292,16 @@
 /* 도로 화면이 아래부터 어두워지며 끝나는 밤 색(--night)에서 그대로 이어지는 배경 위에 흰 카드.
    아래로 갈수록 밤바다 같은 깊은 남색. 맨 아래까지 스크롤하면 이 섹션만 화면을 꽉 채움 */
 .si-features {
-  --accent: #2f55c8; /* 포인트: "유사 판례" 화면의 비교 버튼과 같은 로열 블루 */
-  --ink: #1f1f23;
-  --ink-muted: #5c5d66;
+  --accent: var(--color-blue-royal); /* 포인트: "유사 판례" 화면의 비교 버튼과 같은 로열 블루 */
+  --ink: var(--color-intro-card-ink);
+  --ink-muted: var(--color-intro-card-muted);
   box-sizing: border-box;
   min-height: 100vh;
   display: flex;
   align-items: center;
   /* 위 여백 = 고정된 상단 메뉴(TopNav, 64px) + 36px. 메뉴 아래 보이는 영역의 가운데에 오게 */
   padding: 100px 24px 36px;
-  background: linear-gradient(180deg, var(--night) 0%, #121b3a 100%);
+  background: linear-gradient(180deg, var(--night) 0%, var(--color-navy-800) 100%);
   color: var(--text);
 }
 .si-features-inner {
@@ -346,7 +340,7 @@
   flex-direction: column;
   align-items: center;
   padding: 26px 16px 28px;
-  background: #fff;
+  background: var(--color-card-surface);
   color: var(--ink);
   border-radius: 6px;
   text-align: center;
@@ -360,7 +354,7 @@
   justify-content: center;
   margin-bottom: 22px;
   padding: 16px;
-  background: #f2f2f4;
+  background: var(--color-intro-card-surface);
   border-radius: 8px;
 }
 /* 카드 소제목: 그림 영역 위 */
@@ -375,7 +369,7 @@
 .si-card-desc {
   margin: 0;
   align-self: stretch;
-  color: #3f4350;
+  color: var(--color-intro-card-text);
   font-size: 16px;
   font-weight: 500;
   letter-spacing: -0.02em;
@@ -403,9 +397,9 @@
   width: 100%;
   max-width: 232px;
   padding: 14px 18px;
-  background: #fff;
+  background: var(--color-card-surface);
   border-radius: 10px;
-  box-shadow: 0 6px 16px rgba(31, 31, 35, 0.1);
+  box-shadow: 0 6px 16px var(--color-intro-card-line);
   text-align: left;
 }
 
@@ -417,7 +411,7 @@
 }
 .si-ratio-label,
 .si-ratio-source {
-  color: #8f9097;
+  color: var(--color-intro-card-dim);
   font-size: 13px;
 }
 .si-ratio-value {
@@ -433,10 +427,10 @@
 }
 .si-ratio-bar span {
   border-radius: 2px;
-  background: #5b7be0;
+  background: var(--color-intro-card-blue);
 }
 .si-ratio-bar span + span {
-  background: #f08a4b;
+  background: var(--color-intro-card-orange);
 }
 
 /* 그림 3: 판례 문서 + 체크 목록 */
@@ -450,13 +444,13 @@
   padding: 2px 8px;
   background: var(--accent);
   border-radius: 999px;
-  color: #fff;
+  color: var(--color-white);
   font-size: 13px;
   font-weight: 700;
 }
 .si-doc-line {
   height: 6px;
-  background: #e4e4e8;
+  background: var(--color-intro-card-border);
   border-radius: 3px;
 }
 .si-doc-line.short {
@@ -483,7 +477,7 @@
   transform: translateY(-50%);
   border-radius: 50%;
   background: var(--accent);
-  color: #fff;
+  color: var(--color-white);
   font-size: 11px;
   line-height: 18px;
   text-align: center;
@@ -500,23 +494,23 @@
   display: flex;
   gap: 8px;
 }
-/* 기능 소개 끝의 주 버튼: 더 크고 굵게 + 로열 블루 빛 그림자, 몇 초마다 은은한 빛 고리가 퍼져 시선을 끎 */
+/* 기능 소개 끝의 주 버튼: 마우스를 올렸을 때만 빛 고리가 퍼짐 */
 .si-cta-bar .si-btn-accent {
   min-height: 74px;
   padding: 0 44px;
   border-radius: 16px;
   font-size: 22px;
   font-weight: 800;
-  box-shadow: 0 14px 34px rgba(47, 85, 200, 0.45);
-  animation: si-cta-glow 2.8s ease-out 1s infinite;
+  box-shadow: 0 14px 34px var(--color-cta-shadow);
   transition:
     background-color 0.2s ease,
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
 .si-cta-bar .si-btn-accent:hover {
+  animation: si-cta-glow 2.8s ease-out infinite;
   transform: translateY(-2px);
-  box-shadow: 0 18px 40px rgba(47, 85, 200, 0.55);
+  box-shadow: 0 18px 40px var(--color-cta-shadow-hover);
 }
 .si-cta-bar .si-btn-arrow {
   font-size: 26px;
@@ -524,18 +518,19 @@
 @keyframes si-cta-glow {
   0% {
     box-shadow:
-      0 14px 34px rgba(47, 85, 200, 0.45),
-      0 0 0 0 rgba(111, 155, 255, 0.55);
+      0 14px 34px var(--color-cta-shadow),
+      0 0 0 0 var(--color-cta-glow);
   }
   45%,
   100% {
     box-shadow:
-      0 14px 34px rgba(47, 85, 200, 0.45),
-      0 0 0 18px rgba(111, 155, 255, 0);
+      0 14px 34px var(--color-cta-shadow),
+      0 0 0 18px var(--color-cta-glow-clear);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .si-cta-bar .si-btn-accent {
+  .si-cta-bar .si-btn-accent,
+  .si-cta-bar .si-btn-accent:hover {
     animation: none;
   }
 }
@@ -553,4 +548,12 @@
     padding: 0 28px;
     font-size: 18px;
   }
+}
+
+/* report와 같이 페이지 배경이 이어지는 상단 메뉴 */
+.si .tn {
+  background: transparent;
+  border-bottom: 0;
+  backdrop-filter: blur(12px);
+  text-shadow: 0 1px 4px var(--color-nav-text-shadow);
 }
