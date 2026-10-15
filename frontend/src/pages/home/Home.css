@@ -4,25 +4,25 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 
 .uh {
-  --uh-bg-top: #080c1a;
-  --uh-bg-middle: #121b3a;
-  --uh-bg-bottom: #1d2c55;
+  --uh-bg-top: var(--color-navy-950);
+  --uh-bg-middle: var(--color-navy-800);
+  --uh-bg-bottom: var(--color-navy-700);
   --uh-font-small: 14px;
   --uh-font-caption: 15px;
   --uh-font-body: 16px;
   --uh-font-description: 17px;
   --uh-font-label: 18px;
   --uh-font-lead: 20px;
-  --uh-light-surface: #dfe0e2;
-  --ink: #f4f5fb;
-  --ink-2: #c6cde3;
-  --muted: #bac8e3;
-  --line: rgba(255, 255, 255, 0.1);
-  --surface: rgba(255, 255, 255, 0.06);
-  --blue: #4c56ec;
-  --peri: #aab4ff;
-  --amber: #f2b544;
-  --green: #5fd39a;
+  --uh-light-surface: var(--color-card-surface);
+  --ink: var(--color-home-text);
+  --ink-2: var(--color-home-text-secondary);
+  --muted: var(--color-text-on-dark-muted);
+  --line: var(--color-white-a10);
+  --surface: var(--color-white-a06);
+  --blue: var(--color-home-blue);
+  --peri: var(--color-home-periwinkle);
+  --amber: var(--color-home-amber);
+  --green: var(--color-home-green);
   position: relative;
   min-height: 100vh;
   min-height: 100svh;
@@ -34,11 +34,19 @@
   text-align: left;
   color: var(--ink);
   background:
-    radial-gradient(55% 460px at 85% 80px, rgba(74, 123, 224, 0.22), transparent 70%),
-    linear-gradient(180deg, var(--uh-bg-top) 0%, #0c1328 30%, var(--uh-bg-middle) 70%, var(--uh-bg-bottom) 100%);
+    radial-gradient(55% 460px at 85% 80px, var(--color-page-glow), transparent 70%),
+    linear-gradient(180deg, var(--uh-bg-top) 0%, var(--color-navy-900) 30%, var(--uh-bg-middle) 70%, var(--uh-bg-bottom) 100%);
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   overflow: hidden;
+}
+
+/* report와 같이 페이지 배경이 이어지는 상단 메뉴 */
+.uh .tn {
+  background: transparent;
+  border-bottom: 0;
+  backdrop-filter: blur(12px);
+  text-shadow: 0 1px 4px var(--color-nav-text-shadow);
 }
 
 /* 배경은 화면 전체에 한 번 적용하여 상단·하단 경계 없이 이어진다. */
@@ -59,7 +67,7 @@
   z-index: 0;
   left: 0;
   bottom: calc(100% + 12px);
-  color: rgba(255, 255, 255, 0.04);
+  color: var(--color-white-a04);
   font-size: clamp(160px, 22vw, 300px);
   font-weight: 800;
   letter-spacing: -0.06em;
@@ -69,17 +77,17 @@
 }
 /* 네이비 배경 위의 제목과 설명 */
 .uh-hero {
-  --ink: #fff;
-  --ink-2: #dee6f8;
-  --muted: #bac8e3;
-  --peri: #9bbcff;
-  --shade: rgba(3, 6, 18, 0.55);
+  --ink: var(--color-text-on-dark);
+  --ink-2: var(--color-text-on-dark-soft);
+  --muted: var(--color-text-on-dark-muted);
+  --peri: var(--color-blue-soft);
+  --shade: var(--color-home-title-shadow);
 }
 /* 하단 안내도 동일한 배경 위에서 읽히도록 밝은 글자·옅은 구분선을 사용 */
 .uh-main {
-  --ink: #fff;
-  --ink-2: #dee6f8;
-  --line: rgba(222, 230, 248, 0.2);
+  --ink: var(--color-text-on-dark);
+  --ink-2: var(--color-text-on-dark-soft);
+  --line: var(--color-on-dark-line);
   color: var(--ink);
   position: relative;
   z-index: 1;
@@ -139,7 +147,7 @@
   width: 26px;
   height: 26px;
   border-radius: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--color-white-a60);
   font-size: var(--uh-font-small);
   font-weight: 700;
 }
@@ -147,7 +155,7 @@
   order: -1;
   content: "";
   width: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-top: 1px solid var(--color-white-a50);
   margin-right: 2px;
 }
 .uh-steps li.on {
@@ -157,12 +165,12 @@
 .uh-steps li.on::before {
   background: var(--amber);
   border-color: var(--amber);
-  color: #1a1306;
+  color: var(--color-home-amber-ink);
   text-shadow: none;
 }
 .uh-intro h1 {
   margin: 0 0 18px;
-  color: #fff;
+  color: var(--color-white);
   font-size: clamp(42px, 4.6vw, 64px);
   font-weight: 800;
   letter-spacing: -0.045em;
@@ -184,12 +192,12 @@
 
 /* 작은 업로드 상자: 버튼보다 크게, 끌어다 놓을 수 있을 만큼만 */
 .uh-drop {
-  --uh-upload-surface: rgba(20, 29, 56, 0.72);
-  --uh-upload-surface-hover: rgba(29, 44, 85, 0.85);
-  --uh-upload-border: rgba(74, 123, 224, 0.65);
-  --uh-upload-accent: #2f5bb8;
-  --uh-upload-icon: #9bbcff;
-  --uh-upload-button-hover: #e6eefc;
+  --uh-upload-surface: var(--color-home-upload-bg);
+  --uh-upload-surface-hover: var(--color-home-upload-hover);
+  --uh-upload-border: var(--color-home-upload-border);
+  --uh-upload-accent: var(--color-blue-strong);
+  --uh-upload-icon: var(--color-blue-soft);
+  --uh-upload-button-hover: var(--uh-light-surface);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -229,8 +237,8 @@
   height: 44px;
   margin-bottom: 12px;
   border-radius: 4px;
-  background: rgba(74, 123, 224, 0.14);
-  border: 1px solid rgba(74, 123, 224, 0.35);
+  background: var(--color-home-upload-glow);
+  border: 1px solid var(--color-home-upload-glow-strong);
   color: var(--uh-upload-icon);
   transition: transform 0.2s ease;
 }
@@ -247,7 +255,7 @@
 .uh-error {
   margin: 14px 0 0;
   font-size: var(--uh-font-body);
-  color: #ffd0c8;
+  color: var(--color-home-danger-soft);
 }
 
 .uh-tag {
@@ -262,7 +270,7 @@
 }
 .uh-guides-title {
   margin: 0 0 12px;
-  color: #fff;
+  color: var(--color-white);
   text-shadow: 0 1px 8px var(--shade);
   font-size: var(--uh-font-description);
   font-weight: 700;
@@ -283,7 +291,7 @@
   flex-direction: column;
   padding: 16px 22px;
   border-radius: 6px;
-  box-shadow: 0 10px 30px rgba(5, 0, 15, 0.35);
+  box-shadow: 0 10px 30px var(--color-home-demo-shadow);
 }
 /* 다음 타일을 가리키는 아래쪽 꼭지 (타일과 같은 색) */
 .uh-tile:not(:last-child)::after {
@@ -318,18 +326,18 @@
 }
 /* STEP 01 → 03: 딥 네이비 → 네이비 → 밝은 블루로 이어지는 흐름 */
 .uh-tile-1 {
-  --tile-bg: rgba(20, 29, 56, 0.65);
+  --tile-bg: var(--color-home-guide-one);
   background: var(--tile-bg);
   color: var(--ink);
 }
 .uh-tile-2 {
-  --tile-bg: rgba(29, 44, 85, 0.65);
+  --tile-bg: var(--color-home-guide-two);
   background: var(--tile-bg);
   color: var(--ink);
 }
 .uh-tile-1 .uh-tag,
 .uh-tile-2 .uh-tag {
-  color: #9bbcff;
+  color: var(--color-blue-soft);
 }
 .uh-tile-1 .uh-tile-body,
 .uh-tile-2 .uh-tile-body {
@@ -338,13 +346,13 @@
 .uh-tile-3 {
   --tile-bg: var(--uh-light-surface);
   background: var(--tile-bg);
-  color: #161d33;
+  color: var(--color-navy-750);
 }
 .uh-tile-3 .uh-tag {
-  color: #2f5bb8;
+  color: var(--color-blue-strong);
 }
 .uh-tile-3 .uh-tile-body {
-  color: #586079;
+  color: var(--color-text-law);
 }
 
 /* ---------- 버튼 ---------- */
@@ -363,12 +371,12 @@
   padding: 13px 22px;
   font-size: var(--uh-font-description);
   background: var(--blue);
-  color: #fff;
+  color: var(--color-white);
   border: 1px solid var(--blue);
 }
 .uh-btn-solid:hover {
-  background: #5d67f5;
-  border-color: #5d67f5;
+  background: var(--color-home-demo-blue);
+  border-color: var(--color-home-demo-blue);
 }
 .uh-btn-line {
   padding: 10px 16px;
@@ -379,9 +387,9 @@
   border: 1px solid var(--ink);
 }
 .uh-btn-line:hover:not(:disabled) {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: #fff;
+  background: var(--uh-light-surface);
+  border-color: var(--uh-light-surface);
+  color: var(--color-white);
 }
 .uh-btn:disabled {
   opacity: 0.4;
@@ -434,4 +442,15 @@
   .uh-main {
     padding: 64px 20px 16px;
   }
+}
+
+/* 홈에서 열리는 팝업의 흰 표면에만 적용 */
+.uh .md,
+.uh .md-check,
+.uh .md-radio,
+.uh .md-btn-ghost {
+  background: var(--uh-light-surface);
+}
+.uh input:checked + .md-radio {
+  box-shadow: inset 0 0 0 4px var(--uh-light-surface), inset 0 0 0 10px var(--md-primary);
 }

@@ -22,5 +22,5 @@ export const MY_ACCIDENT = {
 
 export const STICKY_BAR = {
   button: "내 사고와 비교하기",
-  emptyLabel: "비교할 판례를 선택해 주세요", // 판례를 고르기 전(비활성) 버튼 글자
+  emptyLabel: "비교할 판례를 선택해 주세요", // 판례를 고르기 전 버튼 문구
 };

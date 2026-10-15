@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import TopNav from "../../components/common/TopNav";
+import useNavigationBackdrop from "../../components/common/useNavigationBackdrop";
 import LegalNotice from "../../components/common/LegalNotice";
 import PageHeader from "./components/PageHeader";
 import CaseList, { GuideCard } from "./components/CaseList";
@@ -12,6 +13,8 @@ import { SECTION, SUMMARY, GUIDE, MY_ACCIDENT, STICKY_BAR } from "./lawContent";
 import "./Law.css";
 
 export default function Law() {
+  const pageRef = useRef(null);
+  useNavigationBackdrop(pageRef, ".law-band");
   // 처음 들어오면 선택된 판례 없음 → 카드를 눌러야 "비슷한 점" 박스가 나타남
   const [selectedId, setSelectedId] = useState(null);
   const [compareOpen, setCompareOpen] = useState(false);
@@ -29,7 +32,7 @@ export default function Law() {
   const summary = selectedCase && <SummaryCard content={SUMMARY} caseItem={selectedCase} />;
 
   return (
-    <div className="law-page">
+    <div className="law-page" ref={pageRef}>
       {/* 메뉴 바는 intro와 같은 기본 스타일 (색은 Law.css에서 intro 밤하늘 위 모습과 같게) */}
       <TopNav active="유사 판례" />
 

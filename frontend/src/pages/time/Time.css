@@ -8,19 +8,19 @@
   --tl-font-lead: 20px;
   --tl-font-subtitle: 21px;
   --tl-font-display: 26px;
-  --bg: #080c1a;
-  --panel: #141d38;
-  --text: #fff;
-  --muted: #bac8e3;
-  --line: rgba(255, 255, 255, 0.16);
-  --accent: #9bbcff; /* 밝은 블루: 결정적 시점 · 강조 */
-  --tl-blue-rgb: 74, 123, 224;
-  --tl-accent-rgb: 155, 188, 255;
-  --tl-bg-bottom: #121b3a;
-  --tl-scene-sky-bottom: #1d2c55;
-  --impact: #ff8a7a; /* 충돌 */
-  --signal: #ffd23f; /* 타임라인 영역 전용 강조색: 중앙선·경고 테이프 같은 노랑 */
-  --tl-impact-dot-rgb: 255, 59, 48; /* 시간축의 충돌 시점 동그라미 */
+  --bg: var(--color-navy-950);
+  --panel: var(--color-time-panel);
+  --text: var(--color-text-on-dark);
+  --muted: var(--color-text-on-dark-muted);
+  --line: var(--color-white-a16);
+  --accent: var(--color-time-accent); /* 밝은 블루: 결정적 시점 · 강조 */
+  --tl-blue-rgb: var(--color-blue-rgb);
+  --tl-accent-rgb: var(--color-blue-soft-rgb);
+  --tl-bg-bottom: var(--color-time-bg-bottom);
+  --tl-scene-sky-bottom: var(--color-time-scene-sky);
+  --impact: var(--color-time-impact); /* 충돌 */
+  --signal: var(--color-time-signal); /* 타임라인 영역 전용 강조색: 중앙선·경고 테이프 같은 노랑 */
+  --tl-impact-dot-rgb: var(--color-time-impact-dot-rgb); /* 시간축의 충돌 시점 동그라미 */
   width: 100vw;
   margin-inline: calc(50% - 50vw);
   min-height: 100vh;
@@ -28,7 +28,7 @@
   color: var(--text);
   background:
     radial-gradient(55% 460px at 85% 80px, rgba(var(--tl-blue-rgb), 0.22), transparent 70%),
-    linear-gradient(180deg, var(--bg) 0, #0c1328 260px, #0f1832 520px, var(--tl-bg-bottom) 100%);
+    linear-gradient(180deg, var(--bg) 0, var(--color-navy-900) 260px, var(--color-navy-850) 520px, var(--tl-bg-bottom) 100%);
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
 }
@@ -128,7 +128,7 @@
 }
 .tl-now.impact {
   --now: var(--impact);
-  background: linear-gradient(90deg, rgba(255, 138, 122, 0.24), rgba(255, 138, 122, 0.06));
+  background: linear-gradient(90deg, rgba(var(--color-time-impact-rgb), 0.24), rgba(var(--color-time-impact-rgb), 0.06));
 }
 .tl-now-dots {
   display: flex;
@@ -141,7 +141,7 @@
   flex: 1;
   height: 3px;
   border-radius: 1px;
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--color-white-a18);
 }
 .tl-now-dots li.on {
   background: var(--now);
@@ -193,8 +193,8 @@
   transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
 }
 .tl-counter button:hover:not(:disabled) {
-  background: var(--text);
-  border-color: var(--text);
+  background: var(--color-card-surface);
+  border-color: var(--color-card-surface);
   color: var(--bg);
 }
 .tl-counter button:disabled {
@@ -215,15 +215,15 @@
   padding: 0 0 16px 32px;
   border-radius: 8px 0 0 8px;
   background:
-    radial-gradient(ellipse 55% 55% at 32% 48%, rgba(255, 210, 63, 0.13), transparent 70%),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 36px),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 36px),
+    radial-gradient(ellipse 55% 55% at 32% 48%, rgba(var(--color-time-signal-rgb), 0.13), transparent 70%),
+    repeating-linear-gradient(0deg, var(--color-white-a035) 0 1px, transparent 1px 36px),
+    repeating-linear-gradient(90deg, var(--color-white-a035) 0 1px, transparent 1px 36px),
     var(--panel);
-  border: 1px solid rgba(255, 210, 63, 0.35);
+  border: 1px solid rgba(var(--color-time-signal-rgb), 0.35);
   border-right: 0;
   border-left: 5px solid var(--tl-selected-color, var(--signal));
   transition: border-left-color 0.3s ease;
-  box-shadow: -20px 0 60px rgba(255, 210, 63, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  box-shadow: -20px 0 60px rgba(var(--color-time-signal-rgb), 0.08), inset 0 0 0 1px var(--color-white-a03);
 }
 @keyframes tl-rec {
   to {
@@ -271,10 +271,10 @@
 }
 .tl-player-prompt p {
   margin: 0;
-  color: #fff;
+  color: var(--color-white);
   font-size: var(--tl-font-lead);
   font-weight: 700;
-  text-shadow: 0 2px 12px #000;
+  text-shadow: 0 2px 12px var(--color-black);
 }
 .tl-upload {
   padding: 10px 16px;
@@ -303,7 +303,7 @@
   padding: 3px 7px;
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  color: var(--color-white);
   font-size: var(--tl-font-small);
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -313,7 +313,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #ff3b30;
+  background: var(--color-time-impact-dot);
   animation: tl-rec 1.2s steps(2, start) infinite;
 }
 .tl-hud {
@@ -323,7 +323,7 @@
   padding: 3px 7px;
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.72);
-  color: #fff;
+  color: var(--color-white);
   font-size: var(--tl-font-caption);
   font-weight: 700;
 }
@@ -366,7 +366,7 @@
 }
 .tl-selected-moment h2 {
   margin: 0;
-  color: #fff;
+  color: var(--color-white);
   font-size: var(--tl-font-subtitle);
   font-weight: 700;
   line-height: 1.5;
@@ -555,7 +555,7 @@
     --tl-media-width: calc(100% - 34px);
     width: 100%;
     padding: 0 0 18px 18px;
-    border-right: 1px solid rgba(255, 210, 63, 0.35);
+    border-right: 1px solid rgba(var(--color-time-signal-rgb), 0.35);
     border-radius: 8px;
   }
   .tl-player {
@@ -598,4 +598,12 @@
   .tl-axis-fill {
     transition: none;
   }
+}
+
+/* report와 같이 페이지 배경이 이어지는 상단 메뉴 */
+.tl .tn {
+  background: transparent;
+  border-bottom: 0;
+  backdrop-filter: blur(12px);
+  text-shadow: 0 1px 4px var(--color-nav-text-shadow);
 }

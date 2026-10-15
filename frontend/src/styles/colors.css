@@ -1,24 +1,213 @@
 :root {
-  /* Brand */
-  --color-plum: #8c4d8c;
-  --color-plum-deep: #4a1a52;
-  --color-plum-soft: #f7eff8;
-  --color-plum-muted: #ead8ee;
-  --color-lavender: #f6cdf9;
+  /* ================================================================
+   * 공통 브랜드 색상
+   * 주요 CTA, 선택 상태, 링크 및 분석 결과의 핵심 강조에 사용
+   * ================================================================ */
+  --color-primary: #2027ff;
+  --color-blue: #4a7be0;
+  --color-blue-strong: #2f5bb8;
+  --color-blue-royal: #2f55c8;
+  --color-blue-royal-strong: #2346ad;
+  --color-blue-soft: #9bbcff;
+  --color-blue-pale: #8fb0f5;
+  --color-blue-rgb: 74, 123, 224;
+  --color-blue-soft-rgb: 155, 188, 255;
 
-  /* Text */
+  /* ================================================================
+   * 공통 네이비 배경
+   * Home · Intro · Law · Report · Time의 페이지 배경과 패널에 사용
+   * ================================================================ */
+  --color-night-950: #070b18;
+  --color-navy-950: #080c1a;
+  --color-navy-900: #0c1328;
+  --color-navy-850: #0f1832;
+  --color-navy-800: #121b3a;
+  --color-navy-775: #141d38;
+  --color-navy-750: #161d33;
+  --color-navy-725: #172347;
+  --color-navy-700: #1d2c55;
+  --color-navy-650: #1f2d58;
+  --color-navy-600: #2a4381;
+  --color-navy-rgb: 29, 44, 85;
+
+  /* ================================================================
+   * 공통 글자 색상
+   * 밝은 카드 위 본문과 네이비 배경 위 제목·설명에 사용
+   * ================================================================ */
   --color-ink: #111318;
   --color-ink-secondary: #3b3f4a;
   --color-muted: #6b7180;
   --color-text-on-dark: #fff;
+  --color-text-on-dark-soft: #dee6f8;
+  --color-text-on-dark-muted: #bac8e3;
+  --color-text-intro: #f1f4fb;
+  --color-text-intro-muted: #a3abc2;
+  --color-text-law: #586079;
+  --color-text-law-dim: #8a92a6;
 
-  /* Surfaces and borders */
+  /* ================================================================
+   * 공통 표면과 테두리
+   * 카드, 팝업, 입력 선택 영역 및 구분선에 사용
+   * ================================================================ */
+  --color-card-surface: #efeff0;
   --color-white: #fff;
-  --color-surface: #f4eef5;
-  --color-border: #e6e7ec;
+  --color-black: #000;
+  --color-border-blue-gray: #d9dfe9;
+  --color-surface-blue-soft: #e8edff;
+  --color-surface-blue-mid: #cbd7f2;
+  --color-surface-gray-hover: #e3e7ee;
+  --color-border-blue-hover: #9bacd0;
+  --color-border-control: #aab4c8;
+  --color-border-button: #b8c1d1;
 
-  /* Status */
-  --color-success: #12a150;
-  --color-warning: #b7791f;
+  /* ================================================================
+   * 상태 색상
+   * 성공·경고·오류, Time 타임라인의 접근/충돌 시점에 사용
+   * ================================================================ */
   --color-error: #c2413b;
+  --color-time-signal: #ffd23f;
+  --color-time-signal-rgb: 255, 210, 63;
+  --color-time-impact: #ff8a7a;
+  --color-time-impact-rgb: 255, 138, 122;
+  --color-time-impact-dot: #ff3b30;
+  --color-time-impact-dot-rgb: 255, 59, 48;
+
+  /* ================================================================
+   * 공통 반투명 색상
+   * 네이비 화면의 글자, 선, 워터마크, 그림자에 사용
+   * ================================================================ */
+  --color-white-a04: rgba(255, 255, 255, 0.04);
+  --color-white-a03: rgba(255, 255, 255, 0.03);
+  --color-white-a035: rgba(255, 255, 255, 0.035);
+  --color-white-a06: rgba(255, 255, 255, 0.06);
+  --color-white-a08: rgba(255, 255, 255, 0.08);
+  --color-white-a10: rgba(255, 255, 255, 0.1);
+  --color-white-a14: rgba(255, 255, 255, 0.14);
+  --color-white-a16: rgba(255, 255, 255, 0.16);
+  --color-white-a18: rgba(255, 255, 255, 0.18);
+  --color-white-a22: rgba(255, 255, 255, 0.22);
+  --color-white-a50: rgba(255, 255, 255, 0.5);
+  --color-white-a60: rgba(255, 255, 255, 0.6);
+  --color-white-a85: rgba(255, 255, 255, 0.85);
+  --color-white-a92: rgba(255, 255, 255, 0.92);
+  --color-on-dark-muted: rgba(222, 230, 248, 0.72);
+  --color-on-dark-line: rgba(222, 230, 248, 0.2);
+  --color-nav-text-shadow: rgba(3, 6, 18, 0.8);
+  --color-nav-gradient-start: rgba(8, 13, 31, 0.6);
+  --color-nav-gradient-end: rgba(8, 13, 31, 0);
+  --color-nav-dark: rgba(8, 13, 31, 0.82);
+  --color-nav-border: rgba(255, 255, 255, 0.08);
+  --color-nav-light-border: #ececf0;
+  --color-page-glow: rgba(74, 123, 224, 0.22);
+
+  /* ================================================================
+   * Home
+   * 업로드 영역, 영상 가이드 카드, 홈 팝업에 사용
+   * ================================================================ */
+  --color-home-text: #f4f5fb;
+  --color-home-text-secondary: #c6cde3;
+  --color-home-blue: #4c56ec;
+  --color-home-periwinkle: #aab4ff;
+  --color-home-amber: #f2b544;
+  --color-home-green: #5fd39a;
+  --color-home-popup-overlay: rgba(8, 12, 26, 0.72);
+  --color-home-popup-shadow: rgba(3, 8, 24, 0.48);
+  --color-home-title-shadow: rgba(3, 6, 18, 0.55);
+  --color-home-amber-ink: #1a1306;
+  --color-home-upload-bg: rgba(20, 29, 56, 0.72);
+  --color-home-upload-hover: rgba(29, 44, 85, 0.85);
+  --color-home-upload-border: rgba(74, 123, 224, 0.65);
+  --color-home-upload-glow: rgba(74, 123, 224, 0.14);
+  --color-home-upload-glow-strong: rgba(74, 123, 224, 0.35);
+  --color-home-danger-soft: #ffd0c8;
+  --color-home-demo-shadow: rgba(5, 0, 15, 0.35);
+  --color-home-guide-one: rgba(20, 29, 56, 0.65);
+  --color-home-guide-two: rgba(29, 44, 85, 0.65);
+  --color-home-demo-blue: #5d67f5;
+  --color-home-popup-button-shadow: rgba(32, 39, 255, 0.25);
+
+  /* ================================================================
+   * Intro
+   * 첫 화면의 밤하늘, 도로 장면, 차량 포인트에 사용
+   * ================================================================ */
+  --color-intro-sky-top: var(--color-night-950);
+  --color-intro-sky-middle: var(--color-navy-850);
+  --color-intro-sky-horizon: var(--color-navy-650);
+  --color-intro-button-dark: #111216;
+  --color-intro-button-dark-hover: #2a2b31;
+  --color-intro-sky-glow: rgba(128, 148, 223, 0.16);
+  --color-intro-sky-glow-soft: rgba(74, 123, 224, 0.05);
+  --color-intro-vehicle-shadow: rgba(6, 10, 24, 0.65);
+  --color-intro-vehicle-shadow-soft: rgba(6, 10, 24, 0.45);
+  --color-intro-text-translucent: rgba(241, 244, 251, 0.75);
+  --color-intro-road-clear: rgba(6, 10, 22, 0);
+  --color-intro-road-middle: rgba(6, 10, 22, 0.55);
+  --color-intro-road-dark: rgba(6, 10, 22, 0.9);
+  --color-intro-road: #060a16;
+  --color-intro-section-clear: rgba(8, 12, 26, 0);
+  --color-intro-card-ink: #1f1f23;
+  --color-intro-card-muted: #5c5d66;
+  --color-intro-card-surface: #f2f2f4;
+  --color-intro-card-text: #3f4350;
+  --color-intro-card-line: rgba(31, 31, 35, 0.1);
+  --color-intro-card-dim: #8f9097;
+  --color-intro-card-blue: #5b7be0;
+  --color-intro-card-orange: #f08a4b;
+  --color-intro-card-border: #e4e4e8;
+
+  /* Intro · Law의 큰 CTA 그림자와 마우스 오버 빛 고리 */
+  --color-cta-shadow: rgba(47, 85, 200, 0.45);
+  --color-cta-shadow-hover: rgba(47, 85, 200, 0.55);
+  --color-cta-glow: rgba(111, 155, 255, 0.55);
+  --color-cta-glow-clear: rgba(111, 155, 255, 0);
+
+  /* ================================================================
+   * Law
+   * 판례 카드, 유사도 표시, 내 차·상대 차량 구분에 사용
+   * ================================================================ */
+  --color-law-ink: var(--color-navy-750);
+  --color-law-blue: var(--color-blue);
+  --color-law-blue-strong: var(--color-blue-strong);
+  --color-law-navy-deep: var(--color-navy-775);
+  --color-law-navy: var(--color-navy-700);
+  --color-law-navy-soft: var(--color-navy-600);
+  --color-law-royal: var(--color-blue-royal);
+  --color-law-royal-strong: var(--color-blue-royal-strong);
+  --color-law-card-blue: #2f4fae;
+  --color-law-card-surface: #eff1f6;
+  --color-law-card-line: #e4e8f0;
+  --color-law-card-muted: #c9d3e6;
+  --color-law-card-text: #2a3147;
+  --color-law-modal-text: #3d455c;
+  --color-law-panel-rgb: 20, 29, 56;
+
+  /* ================================================================
+   * Report
+   * 과실 비율, 조정 요인, 증거의 성공·위험 상태에 사용
+   * ================================================================ */
+  --color-report-line: #ebe6ee;
+  --color-report-danger: var(--color-error);
+  --color-report-blue: #3f55c4;
+  --color-report-blue-rgb: 63, 85, 196;
+  --color-report-blue-soft: #eef2fc;
+  --color-report-blue-pale: var(--color-blue-pale);
+  --color-report-blue-pale-rgb: 143, 176, 245;
+  --color-report-card-dark: var(--color-navy-750);
+  --color-report-card-text: var(--color-text-law);
+  --color-report-muted: #8e8f95;
+  --color-report-inactive: #afb0b5;
+  --color-report-inactive-rgb: 175, 176, 181;
+  --color-report-border: #d6d8de;
+  --color-report-success-dark: #0d7a3d;
+  --color-report-success-soft: #e8f6ee;
+  --color-report-danger-soft: #fbeceb;
+
+  /* ================================================================
+   * Time
+   * 영상 패널, 타임라인 선, 안전 구간과 충돌 시점에 사용
+   * ================================================================ */
+  --color-time-panel: var(--color-navy-775);
+  --color-time-accent: var(--color-blue-soft);
+  --color-time-bg-bottom: var(--color-navy-800);
+  --color-time-scene-sky: var(--color-navy-700);
 }
