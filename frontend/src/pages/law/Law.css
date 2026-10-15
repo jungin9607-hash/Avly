@@ -344,12 +344,12 @@
 }
 .law-case-metrics dt {
   color: var(--law-text-dim);
-  font-size: 11.5px;
+  font-size: 14px;
 }
 /* 유사도·기준 과실 숫자는 같은 크기로 맞춤 */
 .law-case-metrics dd {
   margin: 0;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
@@ -801,16 +801,16 @@
 .law-sticky .law-sticky-button {
   pointer-events: auto;
 }
-/* 판례를 고르면 버튼이 선택 전 크기에서 크게 튀어 오르며 커졌다가 자리 잡음 */
+/* 판례를 고르면 버튼이 선택 전 크기에서 살짝 튀어 오르며 커졌다가 자리 잡음 */
 @keyframes law-button-grow {
   0% {
-    transform: scale(0.72);
+    transform: scale(0.86);
   }
   55% {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
   78% {
-    transform: scale(0.97);
+    transform: scale(0.99);
   }
   100% {
     transform: scale(1);
@@ -845,13 +845,13 @@
 /* 켜진 바의 비교 버튼: 가장 강한 강조 (더 크고 굵게 + 진한 그림자 + 선택 순간에만 두 번 빛나고
    화살표가 오른쪽으로 세 번 살짝 움직여 "여기를 누르세요" 신호, 그 뒤엔 가만히) */
 .law-sticky.is-active .law-sticky-button {
-  min-width: 360px;
-  min-height: 82px;
-  padding: 0 38px;
-  font-size: 22px;
+  min-width: 330px;
+  min-height: 74px;
+  padding: 0 32px;
+  font-size: 20px;
   font-weight: 800;
-  gap: 12px;
-  border-radius: 20px;
+  gap: 10px;
+  border-radius: 18px;
   box-shadow: 0 16px 36px rgba(47, 85, 200, 0.5);
   animation:
     law-button-grow 0.7s cubic-bezier(0.22, 1, 0.36, 1),
@@ -912,7 +912,7 @@
   animation: law-modal-fade 0.18s ease;
 }
 .law-modal {
-  width: min(760px, 100%);
+  width: min(860px, 100%); /* 글자를 키운 만큼 폭도 넓게 */
   max-height: calc(100vh - 48px);
   overflow-y: auto;
   box-sizing: border-box;
@@ -959,14 +959,14 @@
 .law-modal-kicker {
   margin: 0 0 6px;
   color: var(--law-blue-strong);
-  font-size: 11px;
+  font-size: 13.5px;
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 .law-modal-header h2 {
   margin: 0;
   color: var(--law-ink);
-  font-size: clamp(17px, 2.2vw, 21px);
+  font-size: clamp(20px, 2.6vw, 26px);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.35;
@@ -979,15 +979,15 @@
 .law-modal-close {
   flex: none;
   display: grid;
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   place-items: center;
   padding: 0;
   border: 0;
   border-radius: 50%;
   background: #eff1f6;
   color: var(--law-text);
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
 }
 .law-modal-close:hover {
@@ -1018,18 +1018,18 @@
   gap: 8px;
   margin: 0 0 12px;
   color: var(--tone);
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 700;
 }
 .law-modal-col h3 > span {
   display: grid;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   place-items: center;
   border-radius: 50%;
   background: var(--tone);
   color: #fff;
-  font-size: 11px;
+  font-size: 13px;
 }
 .law-modal-col ul {
   display: grid;
@@ -1047,14 +1047,14 @@
 }
 .law-modal-col li > strong {
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   color: var(--law-ink);
-  font-size: 12.5px;
+  font-size: 15.5px;
 }
 .law-modal-col li p {
   margin: 0;
   color: #3d455c;
-  font-size: 12px;
+  font-size: 14.5px;
   line-height: 1.65;
 }
 .law-modal-col li p strong {
@@ -1074,12 +1074,12 @@
 .law-modal-report-icon {
   display: grid;
   flex: none;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   place-items: center;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.14);
-  font-size: 15px;
+  font-size: 18px;
 }
 .law-modal-report-text {
   display: grid;
@@ -1088,25 +1088,25 @@
   min-width: 0;
 }
 .law-modal-report-text strong {
-  font-size: 13.5px;
+  font-size: 16.5px;
 }
 .law-modal-report-text small {
   color: #c4cee6;
-  font-size: 11px;
+  font-size: 13.5px;
 }
 .law-modal-download {
   display: inline-flex;
   flex: none;
   align-items: center;
   gap: 6px;
-  min-height: 36px;
-  padding: 0 16px;
+  min-height: 42px;
+  padding: 0 20px;
   border: 0;
   border-radius: 999px;
   background: #fff;
   color: var(--law-navy);
   font: inherit;
-  font-size: 12.5px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -1120,15 +1120,15 @@
   margin-top: 18px;
 }
 .law-modal-confirm {
-  min-width: 100px;
-  min-height: 42px;
-  padding: 0 22px;
+  min-width: 112px;
+  min-height: 48px;
+  padding: 0 26px;
   border: 0;
   border-radius: 999px;
   background: var(--law-navy-deep);
   color: #fff;
   font: inherit;
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -1319,10 +1319,10 @@
     font-size: 17px;
   }
   .law-sticky.is-active .law-sticky-button {
-    min-width: min(340px, 100%);
-    min-height: 74px;
-    padding: 0 24px;
-    font-size: 19px;
+    min-width: min(310px, 100%);
+    min-height: 68px;
+    padding: 0 20px;
+    font-size: 18px;
   }
 }
 
