@@ -1,9 +1,9 @@
+import { getTimelineColor, getTimelinePosition } from "./timelineColors";
+
 const stamp = (time) => `00:${time.toFixed(2).padStart(5, "0")}`;
 
 export default function TimelineAxis({ moments, active, onSelect }) {
-  const start = moments[0].time;
-  const end = moments[moments.length - 1].time;
-  const position = (time) => (end === start ? 0 : ((time - start) / (end - start)) * 100);
+  const position = (time) => getTimelinePosition(moments, time);
   const progress = position(moments[active].time);
 
   return (
@@ -23,7 +23,7 @@ export default function TimelineAxis({ moments, active, onSelect }) {
             } ${index === moments.length - 1 ? "is-last" : ""}`}
             style={{
               left: `${offset}%`,
-              "--tl-dot-color": `color-mix(in srgb, var(--signal) ${100 - offset}%, rgb(var(--tl-impact-dot-rgb)))`,
+              "--tl-dot-color": getTimelineColor(offset),
             }}
             onClick={() => onSelect(index)}
           >

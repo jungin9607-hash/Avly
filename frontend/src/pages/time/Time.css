@@ -1,4 +1,4 @@
-/* 타임라인 화면: 다른 화면과 달리 처음부터 끝까지 한 가지 어두운 배경
+/* 타임라인 화면: law와 같은 네이비·블루 색감
  * 왼쪽(제목 · 지금 시점 · 넘기기) / 오른쪽(영상 · 설명 · 시간축) */
 .tl {
   --tl-font-small: 14px;
@@ -8,22 +8,27 @@
   --tl-font-lead: 20px;
   --tl-font-subtitle: 21px;
   --tl-font-display: 26px;
-  --bg: #0e0c12;
-  --panel: #17141c;
-  --text: #f7f5f8;
-  --muted: #cbc4d0; /* 어두운 배경에서도 충분히 읽히는 밝기 */
+  --bg: #080c1a;
+  --panel: #141d38;
+  --text: #fff;
+  --muted: #bac8e3;
   --line: rgba(255, 255, 255, 0.16);
-  --accent: #f6cdf9; /* 라벤더: 결정적 시점 · 강조 */
+  --accent: #9bbcff; /* 밝은 블루: 결정적 시점 · 강조 */
+  --tl-blue-rgb: 74, 123, 224;
+  --tl-accent-rgb: 155, 188, 255;
+  --tl-bg-bottom: #121b3a;
+  --tl-scene-sky-bottom: #1d2c55;
   --impact: #ff8a7a; /* 충돌 */
   --signal: #ffd23f; /* 타임라인 영역 전용 강조색: 중앙선·경고 테이프 같은 노랑 */
   --tl-impact-dot-rgb: 255, 59, 48; /* 시간축의 충돌 시점 동그라미 */
-  --plum: #8c4d8c;
   width: 100vw;
   margin-inline: calc(50% - 50vw);
   min-height: 100vh;
   text-align: left;
   color: var(--text);
-  background: var(--bg);
+  background:
+    radial-gradient(55% 460px at 85% 80px, rgba(var(--tl-blue-rgb), 0.22), transparent 70%),
+    linear-gradient(180deg, var(--bg) 0, #0c1328 260px, #0f1832 520px, var(--tl-bg-bottom) 100%);
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
 }
@@ -42,14 +47,14 @@
   display: grid;
   grid-template-columns: minmax(260px, 0.6fr) minmax(0, 1.75fr);
   grid-template-rows: 1fr auto;
-  gap: 16px 40px;
+  gap: 16px 80px;
   align-items: center;
   min-height: 100svh;
   padding: 88px 0 16px 56px;
   box-sizing: border-box;
 }
 
-/* 왼쪽: 자주빛 번짐 + 뒤에 깔린 큰 단계 숫자 */
+/* 왼쪽: 블루 빛 번짐 + 뒤에 깔린 큰 단계 숫자 */
 .tl-side {
   position: relative;
   z-index: 0;
@@ -66,7 +71,7 @@
   width: 640px;
   height: 640px;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(140, 77, 140, 0.42), rgba(140, 77, 140, 0.12) 55%, transparent);
+  background: radial-gradient(closest-side, rgba(var(--tl-blue-rgb), 0.32), rgba(var(--tl-blue-rgb), 0.1) 55%, transparent);
   pointer-events: none;
 }
 .tl-bignum {
@@ -79,15 +84,15 @@
   line-height: 1;
   letter-spacing: -0.06em;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(246, 205, 249, 0.22);
+  -webkit-text-stroke: 1.5px rgba(var(--tl-accent-rgb), 0.22);
   pointer-events: none;
   animation: tl-bignum 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .tl-bignum.key {
-  -webkit-text-stroke-color: rgba(246, 205, 249, 0.4);
+  -webkit-text-stroke-color: rgba(var(--tl-accent-rgb), 0.4);
 }
 .tl-bignum.impact {
-  -webkit-text-stroke-color: rgba(255, 138, 122, 0.4);
+  -webkit-text-stroke-color: rgba(var(--tl-accent-rgb), 0.22);
 }
 @keyframes tl-bignum {
   from {
@@ -108,18 +113,18 @@
 }
 /* 지금 보고 있는 시점: 바뀔 때마다 살짝 떠오름 */
 .tl-now {
-  --now: #c48fc4;
+  --now: var(--accent);
   width: min(100%, 360px);
   box-sizing: border-box;
   padding: 16px 18px 14px;
   border-radius: 4px;
   border-left: 4px solid var(--now);
-  background: linear-gradient(90deg, rgba(140, 77, 140, 0.32), rgba(140, 77, 140, 0.1));
+  background: linear-gradient(90deg, rgba(var(--tl-blue-rgb), 0.32), rgba(var(--tl-blue-rgb), 0.1));
   animation: tl-now 0.45s ease both;
 }
 .tl-now.key {
   --now: var(--accent);
-  background: linear-gradient(90deg, rgba(246, 205, 249, 0.22), rgba(246, 205, 249, 0.06));
+  background: linear-gradient(90deg, rgba(var(--tl-accent-rgb), 0.22), rgba(var(--tl-accent-rgb), 0.06));
 }
 .tl-now.impact {
   --now: var(--impact);
@@ -213,10 +218,11 @@
     radial-gradient(ellipse 55% 55% at 32% 48%, rgba(255, 210, 63, 0.13), transparent 70%),
     repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 36px),
     repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 36px),
-    #1c1922;
+    var(--panel);
   border: 1px solid rgba(255, 210, 63, 0.35);
   border-right: 0;
-  border-left: 5px solid var(--signal);
+  border-left: 5px solid var(--tl-selected-color, var(--signal));
+  transition: border-left-color 0.3s ease;
   box-shadow: -20px 0 60px rgba(255, 210, 63, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 @keyframes tl-rec {
@@ -236,18 +242,11 @@
   margin: 0 0 0 -32px;
   overflow: hidden;
   border-radius: 4px;
-  background: #08080b;
-  outline: 1px solid var(--line);
-  outline-offset: -1px;
+  background: var(--bg);
+  outline: 2px solid var(--tl-selected-color, var(--signal));
+  outline-offset: -2px;
+  transition: outline-color 0.3s ease;
   box-shadow: 0 18px 55px rgba(0, 0, 0, 0.32);
-}
-.tl-player.key {
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
-}
-.tl-player.impact {
-  outline: 2px solid var(--impact);
-  outline-offset: -2px;
 }
 .tl-video,
 .tl-player > .tl-scene {
@@ -267,7 +266,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: rgba(8, 8, 11, 0.28);
+  background: rgba(8, 12, 26, 0.28);
   text-align: center;
 }
 .tl-player-prompt p {
@@ -328,29 +327,6 @@
   font-size: var(--tl-font-caption);
   font-weight: 700;
 }
-.tl-badge {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  padding: 3px 8px;
-  border-radius: 2px;
-  background: #fff;
-  color: #111318;
-  font-size: var(--tl-font-caption);
-  font-weight: 700;
-  max-width: calc(100% - 100px);
-  box-sizing: border-box;
-  white-space: normal;
-}
-.tl-player.key .tl-badge {
-  background: var(--accent);
-  color: #2a0f30;
-}
-.tl-player.impact .tl-badge {
-  background: var(--impact);
-  color: #2a0a08;
-}
-
 .tl-video-name {
   width: var(--tl-media-width);
   margin: 8px 0 0;
@@ -617,6 +593,8 @@
   .tl-axis-dot.impact.is-past {
     animation: none;
   }
+  .tl-right,
+  .tl-player,
   .tl-axis-fill {
     transition: none;
   }
