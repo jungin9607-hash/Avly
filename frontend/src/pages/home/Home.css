@@ -1,18 +1,22 @@
 /* 업로드(홈) 화면
- * 위: 보라 직조 사진 띠(글 + 작은 업로드 상자 / 가이드 타일 3개)
- * 아래: 흰 바탕(파일 목록 → 안내문) */
+ * 위: 네이비 배경과 브랜드 글자(글 + 업로드 상자 / 가이드 타일 3개)
+ * 아래: 같은 네이비 그라데이션 위의 안내문 */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 
 .uh {
+  --uh-bg-top: #080c1a;
+  --uh-bg-middle: #121b3a;
+  --uh-bg-bottom: #1d2c55;
   --uh-font-small: 14px;
   --uh-font-caption: 15px;
   --uh-font-body: 16px;
   --uh-font-description: 17px;
   --uh-font-label: 18px;
   --uh-font-lead: 20px;
+  --uh-light-surface: #dfe0e2;
   --ink: #f4f5fb;
   --ink-2: #c6cde3;
-  --muted: #9aa3c0;
+  --muted: #bac8e3;
   --line: rgba(255, 255, 255, 0.1);
   --surface: rgba(255, 255, 255, 0.06);
   --blue: #4c56ec;
@@ -29,48 +33,56 @@
   margin-inline: calc(50% - 50vw);
   text-align: left;
   color: var(--ink);
-  background: #fff;
+  background:
+    radial-gradient(55% 460px at 85% 80px, rgba(74, 123, 224, 0.22), transparent 70%),
+    linear-gradient(180deg, var(--uh-bg-top) 0%, #0c1328 30%, var(--uh-bg-middle) 70%, var(--uh-bg-bottom) 100%);
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   overflow: hidden;
 }
 
-/* 주요 부분: 화면 끝까지 꽉 찬 #8C4D8C 직조 사진 띠.
- * 사진은 좌우 반전해 무늬(짙은 면·사선)가 가이드 타일이 없는 왼쪽에 오도록 함.
- * 무늬가 보이도록 덮개는 옅게, 글이 있는 왼쪽만 살짝 더 어둡게 */
+/* 배경은 화면 전체에 한 번 적용하여 상단·하단 경계 없이 이어진다. */
 .uh-hero {
   position: relative;
+  isolation: isolate;
+  overflow: clip;
   padding: 128px 40px 72px;
-  background:
-    linear-gradient(90deg, rgba(30, 10, 36, 0.36) 0%, rgba(30, 10, 36, 0.12) 50%, rgba(30, 10, 36, 0.25) 100%),
-    linear-gradient(180deg, rgba(20, 8, 30, 0.3) 0%, transparent 25%, transparent 80%, rgba(20, 8, 30, 0.25) 100%),
-    var(--hero-photo) center / cover no-repeat,
-    #8c4d8c;
 }
 .uh-hero > .uh-grid {
+  position: relative;
+  z-index: 1;
   max-width: 1200px;
   margin: 0 auto;
 }
-/* 보라 사진 위 글자색: 파란 기가 도는 회색 대신 흰색·연한 라벤더 */
+.uh-wordmark {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  bottom: calc(100% + 12px);
+  color: rgba(255, 255, 255, 0.04);
+  font-size: clamp(160px, 22vw, 300px);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+/* 네이비 배경 위의 제목과 설명 */
 .uh-hero {
   --ink: #fff;
-  --ink-2: #f3e7f5;
-  --muted: #eedff2;
-  --peri: #f6cdf9;
-  --shade: rgba(40, 8, 48, 0.55);
+  --ink-2: #dee6f8;
+  --muted: #bac8e3;
+  --peri: #9bbcff;
+  --shade: rgba(3, 6, 18, 0.55);
 }
-/* 사진 아래 흰 바탕: 어두운 글자 + 사진과 같은 자주색 포인트 */
+/* 하단 안내도 동일한 배경 위에서 읽히도록 밝은 글자·옅은 구분선을 사용 */
 .uh-main {
-  --ink: #111318;
-  --ink-2: #3b3f4a;
-  --muted: #6b7180;
-  --line: #e6e7ec;
-  --surface: #f4eef5;
-  --peri: #8c4d8c;
-  --amber: #b7791f;
-  --green: #12a150;
+  --ink: #fff;
+  --ink-2: #dee6f8;
+  --line: rgba(222, 230, 248, 0.2);
   color: var(--ink);
   position: relative;
+  z-index: 1;
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -172,6 +184,12 @@
 
 /* 작은 업로드 상자: 버튼보다 크게, 끌어다 놓을 수 있을 만큼만 */
 .uh-drop {
+  --uh-upload-surface: rgba(20, 29, 56, 0.72);
+  --uh-upload-surface-hover: rgba(29, 44, 85, 0.85);
+  --uh-upload-border: rgba(74, 123, 224, 0.65);
+  --uh-upload-accent: #2f5bb8;
+  --uh-upload-icon: #9bbcff;
+  --uh-upload-button-hover: #e6eefc;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -181,25 +199,25 @@
   padding: 26px 24px;
   text-align: center;
   color: var(--ink);
-  background: rgba(38, 12, 46, 0.62);
-  border: 1.5px dashed rgba(255, 230, 255, 0.6);
+  background: var(--uh-upload-surface);
+  border: 1.5px dashed var(--uh-upload-border);
   backdrop-filter: blur(8px);
   border-radius: 6px;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 .uh-drop.is-over {
-  background: rgba(70, 24, 82, 0.75);
-  border-color: #fff;
+  background: var(--uh-upload-surface-hover);
+  border-color: var(--uh-upload-icon);
 }
-/* 보라 위에서는 흰 버튼 + 짙은 자주 글자가 가장 또렷함 */
+/* 네이비 배경 위의 흰 버튼과 블루 글자 */
 .uh-drop .uh-btn-solid {
-  background: #fff;
-  border-color: #fff;
-  color: #4a1a52;
+  background: var(--uh-light-surface);
+  border-color: var(--uh-light-surface);
+  color: var(--uh-upload-accent);
 }
 .uh-drop .uh-btn-solid:hover {
-  background: #f6eaf8;
-  border-color: #f6eaf8;
+  background: var(--uh-upload-button-hover);
+  border-color: var(--uh-upload-button-hover);
 }
 .uh-demo-trigger {
   margin-top: 12px;
@@ -211,9 +229,9 @@
   height: 44px;
   margin-bottom: 12px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: var(--peri);
+  background: rgba(74, 123, 224, 0.14);
+  border: 1px solid rgba(74, 123, 224, 0.35);
+  color: var(--uh-upload-icon);
   transition: transform 0.2s ease;
 }
 .uh-drop.is-over .uh-drop-icon {
@@ -298,35 +316,35 @@
   line-height: 1.7;
   word-break: keep-all;
 }
-/* STEP 01 → 03: 짙은 자주 → 자주 → 밝은 라벤더로 밝아지며 흐름을 보여줌 */
+/* STEP 01 → 03: 딥 네이비 → 네이비 → 밝은 블루로 이어지는 흐름 */
 .uh-tile-1 {
-  --tile-bg: #261030;
+  --tile-bg: rgba(20, 29, 56, 0.65);
   background: var(--tile-bg);
   color: var(--ink);
 }
 .uh-tile-2 {
-  --tile-bg: #43184d;
+  --tile-bg: rgba(29, 44, 85, 0.65);
   background: var(--tile-bg);
   color: var(--ink);
 }
 .uh-tile-1 .uh-tag,
 .uh-tile-2 .uh-tag {
-  color: var(--peri);
+  color: #9bbcff;
 }
 .uh-tile-1 .uh-tile-body,
 .uh-tile-2 .uh-tile-body {
   color: var(--ink-2);
 }
 .uh-tile-3 {
-  --tile-bg: #f7eff8;
+  --tile-bg: var(--uh-light-surface);
   background: var(--tile-bg);
-  color: #2a0f30;
+  color: #161d33;
 }
 .uh-tile-3 .uh-tag {
-  color: #8c4d8c;
+  color: #2f5bb8;
 }
 .uh-tile-3 .uh-tile-body {
-  color: #4a2f50;
+  color: #586079;
 }
 
 /* ---------- 버튼 ---------- */
@@ -372,6 +390,7 @@
 
 /* ---------- 안내문 ---------- */
 .uh-notice {
+  position: relative;
   display: flex;
   gap: 10px;
   margin-top: auto;

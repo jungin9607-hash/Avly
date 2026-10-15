@@ -5,7 +5,7 @@ import ConsentModal from "../../components/home/ConsentModal";
 import QuestionModal from "../../components/home/QuestionModal";
 import AnalysisProgressModal from "../../components/home/AnalysisProgressModal";
 import SituationConfirmModal from "../../components/home/SituationConfirmModal";
-import purpleWeave from "../../assets/purple-weave.jpg";
+import HomeWordmark from "./HomeWordmark";
 import "./Home.css";
 
 const ACCEPT_EXT = ["mp4", "mov", "avi"];
@@ -93,8 +93,8 @@ export default function Home() {
     <div className="uh">
       <TopNav active="홈" theme="dark" />
 
-      {/* 주요 부분: #8C4D8C 직조 질감 사진 배경 위에 업로드와 가이드 */}
-      <section className="uh-hero" style={{ "--hero-photo": `url(${purpleWeave})` }}>
+      {/* 주요 부분: 네이비 배경과 옅은 브랜드 글자 위에 업로드와 가이드 */}
+      <section className="uh-hero">
         <div className="uh-grid">
           {/* 왼쪽: 글(단계 · 제목 · 형식 안내)과 그 아래 작은 업로드 상자 */}
           <div className="uh-intro">
@@ -173,6 +173,7 @@ export default function Home() {
 
       <main className="uh-main">
         <footer className="uh-notice">
+          <HomeWordmark />
           <IconShield />
           <p>
             에블리는 대한민국 손해보험협회 과실비율 분쟁심의위원회 기본 인정기준과 법원 확정 판결 데이터셋에 기초하여
