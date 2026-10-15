@@ -1,7 +1,6 @@
 // 유사 판례 화면의 문구 (판례 데이터는 lawCases.js)
 
 export const SECTION = {
-  chip: "AI 판례 매칭",
   title: "나의 사고와 유사한 판례",
   desc: "유사도가 높은 순서예요. 유사 판례를 선택하여 내 사고와 비교해보세요.",
 };
