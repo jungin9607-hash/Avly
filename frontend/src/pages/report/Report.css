@@ -6,24 +6,17 @@
   --ar-font-label: 18px;
   --ar-font-lead: 20px;
   --ar-font-heading: 22px;
-  --ink: #111318;
-  --ink-2: #3b3f4a;
-  --muted: #6b7180;
-  --line: #ebe6ee;
-  --plum: #8c4d8c;
-  --plum-deep: #4a1a52;
-  --plum-soft: #f7eff8;
-  --plum-mid: #ead8ee;
-  --mine: #c58fc8; /* 내 과실 */
-  --other: #4a1a52; /* 상대 과실 */
-  --green: #12a150;
-  --red: #c2413b;
+  --ink: var(--color-ink);
+  --ink-2: var(--color-ink-secondary);
+  --muted: var(--color-muted);
+  --line: var(--color-report-line);
+  --red: var(--color-report-danger);
   /* 배경: 유사 판례 화면과 같은 진한 남색 → 네이비 그라데이션 */
-  --ar-bg-top: #080c1a; /* 맨 위: 메뉴 바(#07070d)와 이어지는 아주 진한 남색 */
-  --ar-bg-bottom: #1d2c55; /* 맨 아래: 네이비 */
-  --ar-on-dark: #ffffff; /* 진한 배경 위 제목 */
-  --ar-on-dark-text: rgba(222, 230, 248, 0.72); /* 진한 배경 위 설명 글씨 */
-  --ar-on-dark-line: rgba(255, 255, 255, 0.16);
+  --ar-bg-top: var(--color-navy-950); /* 투명한 메뉴 뒤까지 이어지는 아주 진한 남색 */
+  --ar-bg-bottom: var(--color-navy-700); /* 맨 아래: 네이비 */
+  --ar-on-dark: var(--color-text-on-dark); /* 진한 배경 위 제목 */
+  --ar-on-dark-text: var(--color-on-dark-muted); /* 진한 배경 위 설명 글씨 */
+  --ar-on-dark-line: var(--color-white-a16);
   position: relative;
   width: 100vw;
   margin-inline: calc(50% - 50vw);
@@ -36,31 +29,23 @@
   color: var(--ink);
   /* local: 넓은 화면에서 .ar 자체가 스크롤되므로 배경이 내용과 함께 길게 이어지도록 */
   background:
-    radial-gradient(55% 460px at 85% 80px, rgba(74, 123, 224, 0.22), transparent 70%) local,
-    linear-gradient(180deg, var(--ar-bg-top) 0, #0c1328 260px, #0f1832 520px, #121b3a 60%, #172347 80%, var(--ar-bg-bottom) 100%) local,
+    radial-gradient(55% 460px at 85% 80px, var(--color-page-glow), transparent 70%) local,
+    linear-gradient(180deg, var(--ar-bg-top) 0, var(--color-navy-900) 260px, var(--color-navy-850) 520px, var(--color-navy-800) 60%, var(--color-navy-725) 80%, var(--ar-bg-bottom) 100%) local,
     var(--ar-bg-bottom);
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
 }
 
-/* 메뉴 바(64px, 화면 고정) 바로 아래 경계의 아주 옅은 가는 선 (유사 판례와 같음) */
-.ar::before {
-  content: "";
-  position: fixed;
-  z-index: 48;
-  top: 64px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(79, 90, 46, 0.22) 20%, rgba(79, 90, 46, 0.22) 80%, transparent);
-  pointer-events: none;
-}
-
-/* 상단 메뉴 바: 유사 판례와 같은 기본 메뉴 + intro 밤하늘 색 바탕 */
+/* 스크롤 중에도 밝은 카드가 비치지 않는 네이비 상단 메뉴 */
 .ar .tn {
-  background:
-    linear-gradient(180deg, rgba(8, 13, 31, 0.6), rgba(8, 13, 31, 0)),
-    #07070d;
+  /* report 안쪽 스크롤바를 제외하고, 패딩까지 포함한 너비를 사용한다. */
+  right: auto;
+  width: min(100%, var(--ar-viewport-width, 100%));
+  box-sizing: border-box;
+  background: var(--ar-bg-top);
+  border-bottom: 0;
+  backdrop-filter: none;
+  text-shadow: 0 1px 4px var(--color-nav-text-shadow);
 }
 
 /* 오른쪽 위 아주 옅은 "Avly" 글자 */
@@ -68,7 +53,7 @@
   position: absolute;
   right: -24px;
   top: 120px;
-  color: rgba(255, 255, 255, 0.04);
+  color: var(--color-white-a04);
   font-size: clamp(160px, 22vw, 300px);
   font-weight: 800;
   letter-spacing: -0.06em;
@@ -124,9 +109,9 @@
 }
 .ar-report-keywords li {
   padding: 4px 12px;
-  border: 1px solid rgba(143, 176, 245, 0.4);
+  border: 1px solid rgba(var(--color-report-blue-pale-rgb), 0.4);
   border-radius: 999px;
-  background: rgba(143, 176, 245, 0.14);
+  background: rgba(var(--color-report-blue-pale-rgb), 0.14);
   color: #c9d8fb;
   font-size: var(--ar-font-small);
   font-weight: 700;
@@ -147,9 +132,9 @@
 .ar-factor-summary {
   padding: 24px 28px 26px;
   border-radius: 20px;
-  background: #fff;
+  background: var(--color-card-surface);
   box-shadow: 0 12px 32px rgba(3, 6, 18, 0.35), 0 1px 3px rgba(3, 6, 18, 0.2);
-  color: #161d33;
+  color: var(--color-report-card-dark);
 }
 .ar-factor-kicker {
   display: flex;
@@ -157,7 +142,7 @@
   gap: 10px;
   min-height: 28px; /* "산정 중" ↔ "최종 과실 비율 + 산정 완료" 문구가 바뀌어도 높이가 흔들리지 않게 */
   margin: 0 0 4px;
-  color: #586079;
+  color: var(--color-report-card-text);
   font-size: var(--ar-font-body);
   font-weight: 700;
 }
@@ -184,8 +169,8 @@
   font-weight: 600;
   transform: translateY(-0.06em); /* 콜론을 숫자 가운데 높이에 맞춤 */
 }
-.ar-factor-mine { color: #3f55c4; } /* 내 과실: 막대와 같은 파란색 */
-.ar-factor-other { color: #8e8f95; } /* 상대 과실: 막대 회색보다 한 단계 진하게 (흰 바탕에서 읽히도록) */
+.ar-factor-mine { color: var(--color-report-blue); } /* 내 과실: 막대와 같은 파란색 */
+.ar-factor-other { color: var(--color-report-muted); } /* 상대 과실: 막대 회색보다 한 단계 진하게 (흰 바탕에서 읽히도록) */
 /* 오른쪽 범례: ● 내 과실 20%  ● 상대 과실 80% */
 .ar-factor-legend {
   display: flex;
@@ -218,15 +203,15 @@
   margin-top: 18px;
   overflow: hidden;
   border-radius: 999px;
-  background: #afb0b5; /* 상대 과실: 회색 */
+  background: var(--color-report-inactive); /* 상대 과실: 회색 */
 }
 .ar-factor-bar span {
   min-width: 0;
 }
 .ar-factor-bar span:first-child {
   flex: none;
-  background: #3f55c4; /* 내 과실: 파란색 */
-  border-right: 2px solid #fff;
+  background: var(--color-report-blue); /* 내 과실: 파란색 */
+  border-right: 2px solid var(--color-white);
   transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1); /* 산정 완료 순간 차오름 */
 }
 
@@ -240,7 +225,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #3f55c4;
+  background: var(--color-report-blue);
   animation: ar-dot 0.9s ease-in-out infinite;
 }
 .ar-factor-dots i:nth-child(2) {
@@ -290,11 +275,11 @@
 @keyframes ar-ratio-pop {
   0% {
     transform: scale(1.12);
-    text-shadow: 0 0 24px rgba(63, 85, 196, 0.55);
+    text-shadow: 0 0 24px rgba(var(--color-report-blue-rgb), 0.55);
   }
   100% {
     transform: scale(1);
-    text-shadow: 0 0 0 rgba(63, 85, 196, 0);
+    text-shadow: 0 0 0 rgba(var(--color-report-blue-rgb), 0);
   }
 }
 .ar-factor-big {
@@ -307,8 +292,8 @@
   gap: 4px;
   padding: 3px 10px 3px 8px;
   border-radius: 999px;
-  background: #eef2fc;
-  color: #3f55c4;
+  background: var(--color-report-blue-soft);
+  color: var(--color-report-blue);
   font-size: var(--ar-font-small);
   font-weight: 800;
   animation: ar-done-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.15s backwards;
@@ -336,9 +321,9 @@
 .ar-panel {
   margin-top: 48px;
   padding: 28px 32px 32px;
-  border: 1px solid rgba(143, 176, 245, 0.4);
+  border: 1px solid rgba(var(--color-report-blue-pale-rgb), 0.4);
   border-radius: 0; /* 네모난 모서리 */
-  background: linear-gradient(180deg, rgba(143, 176, 245, 0.28), rgba(143, 176, 245, 0.18));
+  background: linear-gradient(180deg, rgba(var(--color-report-blue-pale-rgb), 0.28), rgba(var(--color-report-blue-pale-rgb), 0.18));
   box-shadow: 0 20px 48px rgba(3, 6, 18, 0.3);
 }
 .ar-panel .ar-icon-head {
@@ -360,9 +345,9 @@
   height: 52px;
   place-items: center;
   border-radius: 12px;
-  background: #3f55c4;
-  box-shadow: 0 0 0 6px rgba(63, 85, 196, 0.18), 0 8px 20px rgba(63, 85, 196, 0.35);
-  color: #fff;
+  background: var(--color-report-blue);
+  box-shadow: 0 0 0 6px rgba(var(--color-report-blue-rgb), 0.18), 0 8px 20px rgba(var(--color-report-blue-rgb), 0.35);
+  color: var(--color-white);
 }
 .ar-icon-head-icon svg {
   width: 28px;
@@ -401,9 +386,9 @@
   box-sizing: border-box;
   padding: 16px 18px 18px;
   border-radius: 8px;
-  background: #fff;
+  background: var(--color-card-surface);
   box-shadow: 0 12px 32px rgba(3, 6, 18, 0.35), 0 1px 3px rgba(3, 6, 18, 0.2);
-  color: #161d33;
+  color: var(--color-report-card-dark);
   transform: translateY(var(--ar-step-y, 0));
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -415,7 +400,7 @@
   top: 30px;
   width: 14px;
   height: 14px;
-  background: #fff;
+  background: var(--color-card-surface);
   transform: rotate(45deg);
 }
 .ar-step-label {
@@ -424,7 +409,7 @@
   justify-content: space-between;
   gap: 8px;
   margin: 0 0 6px;
-  color: #586079;
+  color: var(--color-report-card-text);
   font-size: var(--ar-font-small);
   font-weight: 700;
 }
@@ -432,8 +417,8 @@
 .ar-step-change {
   padding: 2px 8px;
   border-radius: 999px;
-  background: #eef2fc;
-  color: #3f55c4;
+  background: var(--color-report-blue-soft);
+  color: var(--color-report-blue);
   font-weight: 800;
   animation: ar-step-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -460,12 +445,12 @@
   margin-top: 12px;
   overflow: hidden;
   border-radius: 999px;
-  background: #afb0b5;
+  background: var(--color-report-inactive);
 }
 .ar-step-bar span:first-child {
   flex: none;
-  background: #3f55c4;
-  border-right: 2px solid #fff;
+  background: var(--color-report-blue);
+  border-right: 2px solid var(--color-white);
   transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1); /* 단계가 바뀌면 미끄러지듯 */
 }
 .ar-step-bar span:last-child {
@@ -482,7 +467,7 @@
   padding: 0;
   overflow: hidden;
   border-radius: 12px;
-  background: #fff;
+  background: var(--color-card-surface);
   box-shadow: 0 12px 32px rgba(3, 6, 18, 0.35), 0 1px 3px rgba(3, 6, 18, 0.2);
   list-style: none;
 }
@@ -493,8 +478,8 @@
   gap: 20px;
   padding: 24px 26px;
   box-sizing: border-box;
-  background: #fff;
-  color: #161d33;
+  background: var(--color-card-surface);
+  color: var(--color-report-card-dark);
 }
 .ar-factor-card + .ar-factor-card {
   border-top: 1px solid #e9edf4;
@@ -514,7 +499,7 @@
   height: 16px;
   border-right: 1px solid #e9edf4;
   border-bottom: 1px solid #e9edf4;
-  background: #fff;
+  background: var(--color-card-surface);
   transform: translateX(-50%) rotate(45deg);
   transition: background-color 0.35s ease;
 }
@@ -527,7 +512,7 @@
 }
 .ar-factor-card.is-active {
   background: #f5f7fd;
-  box-shadow: inset 4px 0 0 #3f55c4;
+  box-shadow: inset 4px 0 0 var(--color-report-blue);
 }
 .ar-factor-card.is-upcoming {
   opacity: 0.4;
@@ -539,16 +524,16 @@
   flex: 0 0 52px;
   height: 52px;
   border-radius: 50%;
-  background: #3f55c4;
-  box-shadow: 0 0 0 6px rgba(63, 85, 196, 0.12);
-  color: #fff;
+  background: var(--color-report-blue);
+  box-shadow: 0 0 0 6px rgba(var(--color-report-blue-rgb), 0.12);
+  color: var(--color-white);
   font-size: 20px;
   font-weight: 800;
   transition: background-color 0.35s ease, box-shadow 0.35s ease;
 }
 .ar-factor-card.is-upcoming .ar-factor-number {
-  background: #afb0b5;
-  box-shadow: 0 0 0 6px rgba(175, 176, 181, 0.16);
+  background: var(--color-report-inactive);
+  box-shadow: 0 0 0 6px rgba(var(--color-report-inactive-rgb), 0.16);
 }
 .ar-factor-body {
   flex: 1;
@@ -573,18 +558,18 @@
 .ar-factor-tag {
   flex: none;
   padding: 6px 14px;
-  border: 1px solid rgba(63, 85, 196, 0.45);
+  border: 1px solid rgba(var(--color-report-blue-rgb), 0.45);
   border-radius: 8px;
-  background: #eef2fc;
-  color: #3f55c4;
+  background: var(--color-report-blue-soft);
+  color: var(--color-report-blue);
   font-size: var(--ar-font-body);
   font-weight: 800;
   white-space: nowrap;
 }
 .ar-factor-tag.is-base {
-  border-color: #d6d8de;
+  border-color: var(--color-report-border);
   background: #f4f5f7;
-  color: #8e8f95;
+  color: var(--color-report-muted);
   font-weight: 700;
 }
 .ar-factor-body p {
@@ -608,7 +593,7 @@
   padding: 0;
   border: 0;
   background: none;
-  color: #3f55c4;
+  color: var(--color-report-blue);
   font: inherit;
   font-size: var(--ar-font-body);
   font-weight: 800;
@@ -619,7 +604,7 @@
   outline: none;
 }
 .ar-more:focus-visible {
-  outline: 2px solid #3f55c4;
+  outline: 2px solid var(--color-report-blue);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -663,7 +648,7 @@
 .ar-factor-legal li {
   padding: 12px 14px;
   border-radius: 8px;
-  background: #eef2fc;
+  background: var(--color-report-blue-soft);
 }
 .ar-factor-legal strong {
   display: block;
@@ -679,7 +664,7 @@
   margin-top: 12px;
   padding: 12px 14px;
   border-radius: 8px;
-  background: #eef2fc;
+  background: var(--color-report-blue-soft);
   color: var(--ink-2);
   font-size: var(--ar-font-body);
   line-height: 1.7;
@@ -705,9 +690,9 @@
   padding: 22px 24px;
   border: 1px solid #e4e8f0;
   border-radius: 12px;
-  background: #fff;
+  background: var(--color-card-surface);
   box-shadow: 0 12px 32px rgba(3, 6, 18, 0.35), 0 1px 3px rgba(3, 6, 18, 0.2);
-  color: #161d33;
+  color: var(--color-report-card-dark);
 }
 /* 위: 번호 원 · 제목 ……… 태그 */
 /* 오른쪽 칸 맨 위: 제목 ……… 태그 (바로 아래 설명) */
@@ -731,15 +716,15 @@
   padding: 6px 12px;
   border: 1px solid rgba(13, 122, 61, 0.45);
   border-radius: 8px;
-  background: #e8f6ee;
-  color: #0d7a3d;
+  background: var(--color-report-success-soft);
+  color: var(--color-report-success-dark);
   font-size: var(--ar-font-small);
   font-weight: 800;
   white-space: nowrap;
 }
 .ar-ev-tag.warn {
   border-color: rgba(194, 65, 59, 0.45);
-  background: #fbeceb;
+  background: var(--color-report-danger-soft);
   color: var(--red);
 }
 /* 아래: 왼쪽 블랙박스 장면 | 오른쪽 설명 */
@@ -772,7 +757,7 @@
 .ar-ev-foot svg {
   flex: none;
   margin-top: 3px;
-  color: #3f55c4;
+  color: var(--color-report-blue);
 }
 .ar-ev:has(.ar-ev-tag.warn) .ar-ev-foot svg {
   color: var(--red);
@@ -799,8 +784,8 @@
   right: 0;
   top: 0;
   height: 2px;
-  background: rgba(143, 176, 245, 0.85);
-  box-shadow: 0 0 12px rgba(143, 176, 245, 0.8);
+  background: rgba(var(--color-report-blue-pale-rgb), 0.85);
+  box-shadow: 0 0 12px rgba(var(--color-report-blue-pale-rgb), 0.8);
   animation: ar-scan 2.6s ease-in-out infinite;
   animation-delay: calc(var(--i) * 0.35s);
 }
@@ -834,7 +819,7 @@
   padding: 3px 7px;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.75);
-  color: #fff;
+  color: var(--color-white);
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: var(--ar-font-small);
   font-weight: 700;
@@ -861,9 +846,9 @@
 .ar-actions-card {
   padding: 22px;
   border-radius: 12px;
-  background: #fff;
+  background: var(--color-card-surface);
   box-shadow: 0 12px 32px rgba(3, 6, 18, 0.35), 0 1px 3px rgba(3, 6, 18, 0.2);
-  color: #161d33;
+  color: var(--color-report-card-dark);
 }
 .ar-actions-card h3 {
   margin: 0 0 6px;
@@ -895,24 +880,21 @@
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
-/* PDF 다운로드: 내 과실 막대와 같은 파랑 */
-.ar-btn-solid {
-  background: #3f55c4;
-  border: 1px solid #3f55c4;
-  color: #fff;
-}
+/* PDF 다운로드 버튼 */
+.ar-btn-solid,
 .ar-btn-solid:hover {
-  background: #3346a8;
-  border-color: #3346a8;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-white);
 }
 .ar-btn-line {
-  background: #fff;
-  border: 1px solid #d6d8de;
+  background: var(--color-card-surface);
+  border: 1px solid var(--color-report-border);
   color: var(--ink);
 }
 .ar-btn-line:hover {
-  border-color: #3f55c4;
-  color: #3f55c4;
+  border-color: var(--color-report-blue);
+  color: var(--color-report-blue);
 }
 /* 이 판단과 비슷한 판례 보기: 저울 아이콘 · 제목/설명 · 화살표, 반투명 밝은 상자 */
 .ar-law-link {
@@ -920,16 +902,16 @@
   align-items: center;
   gap: 14px;
   padding: 18px 20px;
-  border: 1px solid rgba(143, 176, 245, 0.35);
+  border: 1px solid rgba(var(--color-report-blue-pale-rgb), 0.35);
   border-radius: 12px;
-  background: rgba(143, 176, 245, 0.1);
+  background: rgba(var(--color-report-blue-pale-rgb), 0.1);
   color: var(--ar-on-dark);
   text-decoration: none;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 .ar-law-link:hover {
-  border-color: rgba(143, 176, 245, 0.7);
-  background: rgba(143, 176, 245, 0.18);
+  border-color: rgba(var(--color-report-blue-pale-rgb), 0.7);
+  background: rgba(var(--color-report-blue-pale-rgb), 0.18);
 }
 .ar-law-link-icon {
   display: grid;
@@ -938,8 +920,8 @@
   height: 44px;
   place-items: center;
   border-radius: 10px;
-  background: rgba(143, 176, 245, 0.16);
-  color: #8fb0f5;
+  background: rgba(var(--color-report-blue-pale-rgb), 0.16);
+  color: var(--color-report-blue-pale);
 }
 .ar-law-link-text {
   display: grid;
@@ -958,7 +940,7 @@
 }
 .ar-law-link > svg {
   flex: none;
-  color: #8fb0f5;
+  color: var(--color-report-blue-pale);
   transition: transform 0.18s ease;
 }
 .ar-law-link:hover > svg {
@@ -974,7 +956,7 @@
   padding: 12px 18px;
   border-radius: 4px;
   background: var(--ink);
-  color: #fff;
+  color: var(--color-white);
   font-size: var(--ar-font-body);
   font-weight: 600;
   opacity: 0;
@@ -994,7 +976,7 @@
   gap: 10px;
   margin: 0 40px 16px 56px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--color-white-a10);
   color: rgba(222, 230, 248, 0.58);
 }
 .ar-notice svg {
@@ -1256,7 +1238,7 @@
     --ar-on-dark: var(--ink);
     --ar-on-dark-text: var(--muted);
     --ar-on-dark-line: var(--ink);
-    background: #fff;
+    background: var(--color-white);
   }
   .ar-notice {
     border-top-color: var(--line);
@@ -1280,4 +1262,9 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* 화면별 밝은 메뉴 표면도 카드 색상과 통일 */
+.ar .tn::before {
+  background: var(--color-card-surface);
 }

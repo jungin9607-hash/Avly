@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TopNav from "../../components/common/TopNav";
+import useNavigationBackdrop from "../../components/common/useNavigationBackdrop";
 import ReportNotice from "./ReportNotice";
 import AdjustmentSteps from "./AdjustmentSteps";
 import ReportHeader from "./ReportHeader";
@@ -20,6 +21,7 @@ import "./Report.css";
 export default function Report() {
   const [toast, setToast] = useState("");
   const reportRef = useRef(null);
+  useNavigationBackdrop(reportRef);
   const resultRef = useRef(null);
   const { step: activeStep, pinned } = useScrollStep(resultRef, STEPS.length);
 
