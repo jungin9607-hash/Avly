@@ -39,7 +39,7 @@ export default function CaseList({ cases, selectedId, onToggle, selectedExtra, r
 
 // 판례 카드 1개: 한 줄에 법원 이름 + 핵심 수치 2개 + "상세 보기" 버튼
 // 카드 아무 곳이나 누르면 선택, 선택된 카드를 한 번 더 누르면 해제 (on/off)
-// "상세 보기" 버튼은 선택한 카드에만 나타나고(자리는 늘 비워 둬 숫자가 밀리지 않음), 누르면 펼치기만
+// "상세 보기" 버튼은 선택한 카드에만 나타나고(선택 전엔 자리도 접힘), 누르면 펼치기만
 function CaseCard({ item, index, selected, expanded, onToggle, onToggleDetails }) {
   const [mine, other] = item.ratio.split(":").map((v) => v.trim());
   const inputId = `law-case-${item.id}`;
@@ -92,20 +92,23 @@ function CaseCard({ item, index, selected, expanded, onToggle, onToggleDetails }
           </div>
         </dl>
 
-        <button
-          type="button"
-          className={`law-detail-button${selected ? "" : " is-hidden"}`}
-          aria-expanded={expanded}
-          onClick={(e) => {
-            e.stopPropagation(); // 펼치기만 하고 선택은 바꾸지 않음
-            onToggleDetails();
-          }}
-        >
-          {expanded ? "접기" : "상세 보기"}
-          <svg viewBox="0 0 16 16" aria-hidden="true">
-            <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
+        {/* 선택 전에는 폭 0으로 접혀 빈칸이 남지 않고, 선택하면 폭이 열리며 버튼이 나타남 */}
+        <div className="law-detail-slot">
+          <button
+            type="button"
+            className={`law-detail-button${selected ? "" : " is-hidden"}`}
+            aria-expanded={expanded}
+            onClick={(e) => {
+              e.stopPropagation(); // 펼치기만 하고 선택은 바꾸지 않음
+              onToggleDetails();
+            }}
+          >
+            {expanded ? "접기" : "상세 보기"}
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <CaseDetails item={item} open={expanded} />

@@ -36,9 +36,7 @@ export default function SummaryAside({ listRef, selectedId, children }) {
 export function SummaryCard({ content, caseItem }) {
   return (
     <section className="law-summary-card" aria-label={content.title}>
-      <p className="law-summary-kicker">
-        <span aria-hidden="true">◈</span> {content.title}
-      </p>
+      <p className="law-summary-kicker">{content.title}</p>
 
       {/* 어느 판례인지는 바로 옆 선택한 카드로 알 수 있어 법원 이름은 생략.
           key가 바뀌면 다시 그려지며 살짝 반짝여 갱신된 걸 알려 줌 */}
