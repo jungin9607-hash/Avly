@@ -1,7 +1,7 @@
 /* ---------- 상단 메뉴 ----------
- * 평소: 투명 배경 + 흰 글자 / 마우스를 올리면: 흰 배경 + 검정 글자 */
+ * 호버·포커스 시에도 각 화면의 기본 배경색과 글자색을 유지 */
 .tn {
-  --nav-fg: #fff;
+  --nav-fg: var(--color-text-on-dark);
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 50;
@@ -11,26 +11,7 @@
   height: 64px;
   padding: 0 40px;
   color: var(--nav-fg);
-  background: linear-gradient(180deg, rgba(8, 13, 31, 0.6), rgba(8, 13, 31, 0));
-  transition: color 0.25s ease;
-}
-.tn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: #fff;
-  box-shadow: 0 1px 0 rgba(10, 16, 32, 0.08);
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-.tn:hover,
-.tn:focus-within {
-  --nav-fg: #0a1020;
-}
-.tn:hover::before,
-.tn:focus-within::before {
-  opacity: 1;
+  background: linear-gradient(180deg, var(--color-nav-gradient-start), var(--color-nav-gradient-end));
 }
 .tn-logo {
   font-size: 20px;
@@ -52,7 +33,7 @@
   text-decoration: none;
   padding: 6px 0;
   border-bottom: 2px solid transparent;
-  transition: color 0.25s ease, border-color 0.25s ease;
+  transition: border-color 0.25s ease;
 }
 .tn-menu a:hover,
 .tn-menu a.active {
@@ -61,14 +42,14 @@
 
 /* 흰 배경 화면용: 처음부터 흰 바탕 + 검정 글자 */
 .tn-light {
-  --nav-fg: #111318;
-  background: #fff;
-  border-bottom: 1px solid #ececf0;
+  --nav-fg: var(--color-ink);
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-nav-light-border);
 }
 .tn-dark {
-  background: rgba(8, 13, 31, 0.82);
+  background: var(--color-nav-dark);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--color-nav-border);
 }
 .tn-logo {
   color: inherit;
