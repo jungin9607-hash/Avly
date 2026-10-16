@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import TopNav from "../../components/common/TopNav";
 import useNavigationBackdrop from "../../components/common/useNavigationBackdrop";
-import LegalNotice from "../../components/common/LegalNotice";
+import CaseBasisNotice from "../../components/common/CaseBasisNotice";
 import PageHeader from "./components/PageHeader";
 import CaseList, { GuideCard } from "./components/CaseList";
 import SummaryAside, { SummaryCard } from "./components/SummaryAside";
@@ -71,10 +70,7 @@ export default function Law() {
 
         <section className="law-band law-band-sand">
           <div className="law-band-inner">
-            <LegalNotice />
-            <div className="law-back-link">
-              <Link to="/analysis-test">분석 결과로 돌아가기</Link>
-            </div>
+            <CaseBasisNotice />
           </div>
         </section>
       </main>
