@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import FinalRatio from "./FinalRatio";
 import StepRatio from "./StepRatio";
 import FactorCard from "./FactorCard";
-import SectionHeader, { ChecklistIcon } from "./SectionHeader";
+import SectionHeader from "./SectionHeader";
 
 // 위: 최종 과실 비율(고정) / 아래: 왼쪽 움직이는 작은 비율 박스 + 오른쪽 가감요소 목록
 export default function AdjustmentSteps({ steps, header, activeIndex = steps.length - 1 }) {
@@ -29,10 +29,10 @@ export default function AdjustmentSteps({ steps, header, activeIndex = steps.len
   return (
     <div className="ar-factor-overview">
       <FinalRatio mine={finalMine} other={finalOther} />
-      {/* 가감요소 구간: 영상 증거 구간과 확실히 나뉘도록 큰 박스로 감쌈 */}
-      <div className="ar-panel ar-factor-panel">
+      {/* 가감요소 구간: 상자 없이 제목 → 기본 기준 카드 | 조정 요인 카드 */}
+      <div className="ar-factor-panel">
         <SectionHeader
-          icon={<ChecklistIcon />}
+          kicker={header?.kicker}
           title={`왜 ${finalMine}:${finalOther}으로 분석됐나요?`}
           desc={header?.desc}
         />

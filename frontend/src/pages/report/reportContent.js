@@ -6,8 +6,10 @@ export const REPORT_HEADER = {
 };
 
 // 영상으로 확인한 증거: 쉬운 말 제목·설명 + 펼쳐 보는 분석 방법
-// frame = 왼쪽 블랙박스 장면 (time = 영상 시각, mark = 방향지시등 자리 표시), foot.icon = "target" | "gavel"
+// frame = 장면 사진 (src = 사진 파일, 없으면 임시 그림 / mark = 방향지시등 자리 표시), foot.icon = "target" | "gavel"
+//   사진은 report/images/ 에 넣고 import 해서 src에 연결
 export const EVIDENCE_HEADER = {
+  kicker: "영상 증거", // 제목 위 작은 블루 머리말
   title: "영상으로 확인한 증거",
   desc: "블랙박스 영상에서 직접 확인한 장면이에요.",
 };
@@ -17,14 +19,14 @@ export const EVIDENCE = [
     title: "상대 차량 깜빡이 꺼짐",
     tag: "꺼져 있음 99.8%",
     body: "끼어들기 직전 영상 3장면을 확인했더니 상대 차량의 깜빡이가 꺼져 있었습니다.",
-    frame: { time: "00:23.8", mark: true },
+    frame: { mark: true },
     method: "진입 전 3개 연속 프레임(초당 30fps)의 픽셀 밝기 변화를 추적한 결과, 방향지시등이 켜지지 않은 상태가 99.8% 확률로 확인되었습니다.",
   },
   {
     title: "속도 준수 · 직진 유지",
     tag: "46km/h 준수",
     body: "나는 제한속도보다 느리게, 차선 가운데를 곧게 달리고 있었습니다.",
-    frame: { time: "00:24.1" },
+    frame: {},
     method: "GPS 센서 데이터와 도로 차선 간격을 분석한 결과, 내 차량은 제한속도(50km/h) 이하인 46km/h로 2차로 중심선 정중앙을 유지하고 있었습니다.",
   },
   {
@@ -32,8 +34,7 @@ export const EVIDENCE = [
     tag: "0.72초",
     warn: true,
     body: "상대가 너무 갑자기 들어와서, 운전자가 반응할 수 있는 시간보다 먼저 부딪혔습니다.",
-    frame: { time: "00:24.5" },
-    foot: { icon: "gavel", text: "비슷한 대법원 판례(2018다293282)와 같은 상황이에요" },
+    frame: {},
     method: "충돌까지 남은 시간(TTC)이 0.72초로, 운전자의 평균 제동 인지 반응 시간(0.7초~1.0초)보다 짧아 충돌을 피할 기회가 물리적으로 없었습니다.",
   },
 ];
@@ -41,18 +42,17 @@ export const EVIDENCE = [
 // 증거 오른쪽 패널: 리포트 저장·공유 + 유사 판례로 이동
 export const REPORT_ACTIONS = {
   title: "분석 결과 활용하기",
-  desc: "결과를 저장하거나 보험사·상대방과 공유해 보세요.",
   pdf: "PDF 다운로드",
   share: "공유하기",
-  law: {
-    label: "이 판단과 비슷한 판례 보기",
-    desc: "비슷한 사고에서 법원이 내린 판결을 확인해요.",
-    to: "/law",
+  timeline: {
+    label: "사고 타임라인\n바로가기", // \n 자리에서 줄바꿈
+    to: "/timeline-test",
   },
 };
 
 // "왜 20:80으로 분석됐나요?" 제목 영역
 export const FACTOR_HEADER = {
+  kicker: "판단 근거", // 제목 위 작은 블루 머리말
   desc: "세 가지만 기억하세요. 어려운 법적 근거는 눌러서 볼 수 있어요.",
 };
 

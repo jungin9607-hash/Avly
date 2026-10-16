@@ -3,12 +3,13 @@ import { IconGavel, IconTarget } from "./icons";
 
 const FOOT_ICONS = { target: IconTarget, gavel: IconGavel };
 
-// 영상 증거 카드: 왼쪽 블랙박스 장면 | 오른쪽 (제목 ……… 태그) → 설명 · 근거 한 줄 · 분석 방법 보기
-export default function EvidenceCard({ item, index }) {
+// 증거 카드: 위 장면 사진 | 아래 (제목 ……… 태그) → 설명 · 근거 한 줄 · 분석 방법 보기
+// (좁은 화면에서는 왼쪽 사진 | 오른쪽 글)
+export default function EvidenceCard({ item }) {
   const FootIcon = item.foot && FOOT_ICONS[item.foot.icon];
   return (
     <div className="ar-ev-row">
-      {item.frame && <EvidenceFrame frame={item.frame} index={index} />}
+      {item.frame && <EvidenceFrame frame={item.frame} alt={item.title} />}
       <div className="ar-ev-text">
         <div className="ar-ev-head">
           <h3>{item.title}</h3>
@@ -31,14 +32,13 @@ export default function EvidenceCard({ item, index }) {
   );
 }
 
-// 블랙박스 장면 한 장: 위에서 아래로 훑는 판독선 + (방향지시등 자리 표시) + 영상 시각
-function EvidenceFrame({ frame, index }) {
+// 장면 사진 한 장 (+ 방향지시등 자리 표시)
+// frame.src가 있으면 그 사진을, 없으면 사진이 준비될 때까지 앞차 뒷모습 그림을 보여 줌
+function EvidenceFrame({ frame, alt }) {
   return (
-    <figure className="ar-frame" style={{ "--i": index }}>
-      <CarRear />
-      <span className="ar-frame-scan" aria-hidden="true" />
+    <figure className="ar-frame">
+      {frame.src ? <img src={frame.src} alt={alt} /> : <CarRear />}
       {frame.mark && <span className="ar-frame-box" aria-hidden="true" />}
-      <figcaption>{frame.time}</figcaption>
     </figure>
   );
 }

@@ -5,8 +5,8 @@ import ReportNotice from "./ReportNotice";
 import AdjustmentSteps from "./AdjustmentSteps";
 import ReportHeader from "./ReportHeader";
 import EvidenceCard from "./EvidenceCard";
-import ReportActions from "./ReportActions";
-import SectionHeader, { ShieldSearchIcon } from "./SectionHeader";
+import ReportActions, { TimelineLink } from "./ReportActions";
+import SectionHeader from "./SectionHeader";
 import {
   REPORT_HEADER,
   FACTOR_HEADER,
@@ -63,9 +63,6 @@ export default function Report() {
       {/* 메뉴 바는 유사 판례와 같은 기본 스타일 (색은 Report.css에서 맞춤) */}
       <TopNav active="분석 결과" />
 
-      {/* 배경 워터마크: 아주 옅은 "Avly" 글자 */}
-      <span className="ar-wordmark" aria-hidden="true">Avly</span>
-
       <main className="ar-main">
         {/* 최종 과실 비율과 전체 조정 요인을 함께 표시 */}
         {/* 넓은 화면: 안쪽(pin)이 화면에 고정된 채 아래 track 길이만큼 스크롤하면
@@ -82,22 +79,24 @@ export default function Report() {
           <div className="ar-result-track" aria-hidden="true" />
         </section>
 
-        {/* 영상 증거: 왼쪽 세로 카드 목록 | 오른쪽 저장·공유·유사 판례 패널 */}
+        {/* 영상 증거: 제목 줄(왼쪽 제목 | 오른쪽 타임라인 링크) → 증거 카드 3장(전체 폭)
+            → 맨 아래 오른쪽 분석 결과 활용하기(PDF · 공유) */}
         <section className="ar-section ar-report-page ar-evidence-page">
-          {/* 영상 증거 구간: 가감요소 구간과 확실히 나뉘도록 큰 박스로 감쌈 */}
-          <div className="ar-panel ar-evidence-layout">
-            <div className="ar-evidence-col">
-              <SectionHeader icon={<ShieldSearchIcon />} title={EVIDENCE_HEADER.title} desc={EVIDENCE_HEADER.desc} />
-              <div className="ar-evidence">
-                {EVIDENCE.map((item, i) => (
-                  <Reveal key={item.title} className="ar-ev" delay={i * 80}>
-                    {() => <EvidenceCard item={item} index={i} />}
-                  </Reveal>
-                ))}
-              </div>
+          <div className="ar-evidence-layout">
+            <div className="ar-evidence-head">
+              <SectionHeader kicker={EVIDENCE_HEADER.kicker} title={EVIDENCE_HEADER.title} desc={EVIDENCE_HEADER.desc} />
+              <TimelineLink content={REPORT_ACTIONS.timeline} />
             </div>
-            <ReportActions content={REPORT_ACTIONS} onShare={share} />
+            <div className="ar-evidence">
+              {EVIDENCE.map((item, i) => (
+                <Reveal key={item.title} className="ar-ev" delay={i * 80}>
+                  {() => <EvidenceCard item={item} />}
+                </Reveal>
+              ))}
+            </div>
           </div>
+          {/* 카드 정렬과 별개로 증거 화면 맨 아래 · 화면 오른쪽 끝 (법적 고지 바로 위) */}
+          <ReportActions content={REPORT_ACTIONS} onShare={share} />
           <ReportNotice />
         </section>
 
