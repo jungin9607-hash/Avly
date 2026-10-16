@@ -41,11 +41,6 @@ export const IconShare = () => (
   </Svg>
 );
 // 저울 (판례)
-export const IconScale = () => (
-  <Svg size={22}>
-    <path d="M12 4v16M7 20h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z" />
-  </Svg>
-);
 export const IconArrowRight = () => (
   <Svg size={18}>
     <path d="M5 12h14M13 6l6 6-6 6" />

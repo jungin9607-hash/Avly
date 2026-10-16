@@ -48,19 +48,6 @@
   text-shadow: 0 1px 4px var(--color-nav-text-shadow);
 }
 
-/* 오른쪽 위 아주 옅은 "Avly" 글자 */
-.ar-wordmark {
-  position: absolute;
-  right: -24px;
-  top: 120px;
-  color: var(--color-white-a04);
-  font-size: clamp(160px, 22vw, 300px);
-  font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
-}
 .ar h1,
 .ar h2,
 .ar h3 {
@@ -316,47 +303,23 @@
 .ar-factor-bar span:last-child {
   flex: 1;
 }
-/* 구간 박스: 가감요소 구간과 영상 증거 구간을 각각 감싸 확실히 나눔
-   (어두운 배경보다 한 단계 밝은 남색 면 + 옅은 블루 테두리) */
-.ar-panel {
-  margin-top: 48px;
-  padding: 28px 32px 32px;
-  border: 1px solid rgba(var(--color-report-blue-pale-rgb), 0.4);
-  border-radius: 0; /* 네모난 모서리 */
-  background: linear-gradient(180deg, rgba(var(--color-report-blue-pale-rgb), 0.28), rgba(var(--color-report-blue-pale-rgb), 0.18));
-  box-shadow: 0 20px 48px rgba(3, 6, 18, 0.3);
+/* 가감요소 구간: 상자 없이 배경 위에 바로
+   위 결과 카드와 72px 간격, 그 가운데 옅은 가로 구분선으로 구간을 나눔 */
+.ar-factor-panel {
+  margin-top: 36px;
+  padding-top: 36px;
+  border-top: 1px solid var(--color-white-a10);
 }
-.ar-panel .ar-icon-head {
+.ar-factor-panel .ar-icon-head {
   margin-top: 0;
 }
-/* 구간 제목(SectionHeader): 왼쪽 진한 파란 아이콘 상자 + 큰 제목 + 한 줄 안내
+/* 구간 제목(SectionHeader): 아이콘 없이 큰 제목 + 한 줄 안내
    (어두운 배경에서도 흰 카드에 밀리지 않도록 크고 또렷하게) */
 .ar-icon-head {
   display: flex;
   align-items: center;
   gap: 16px;
   margin: 56px 0 18px;
-}
-/* 아이콘 상자: 과실 막대·번호 원과 같은 파랑으로 채우고 은은한 빛 */
-.ar-icon-head-icon {
-  display: grid;
-  flex: none;
-  width: 52px;
-  height: 52px;
-  place-items: center;
-  border-radius: 12px;
-  background: var(--color-report-blue);
-  box-shadow: 0 0 0 6px rgba(var(--color-report-blue-rgb), 0.18), 0 8px 20px rgba(var(--color-report-blue-rgb), 0.35);
-  color: var(--color-white);
-}
-.ar-icon-head-icon svg {
-  width: 28px;
-  height: 28px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 .ar-icon-head h2 {
   margin: 0;
@@ -370,6 +333,14 @@
   margin: 4px 0 0;
   color: var(--ar-on-dark-text);
   font-size: var(--ar-font-body);
+}
+/* 제목 위 작은 블루 머리말: 새 구간이 시작됨을 알림 ("판단 근거", "영상 증거") */
+.ar-icon-head .ar-section-kicker {
+  margin: 0 0 6px;
+  color: var(--color-blue-pale);
+  font-size: var(--ar-font-small);
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 /* ---------- 가감요소: 왼쪽 움직이는 작은 비율 박스 + 오른쪽 목록 ---------- */
 .ar-factor-steps {
@@ -670,20 +641,62 @@
   line-height: 1.7;
 }
 
-/* ---------- 영상 증거: 왼쪽 세로 카드 목록 | 오른쪽 저장·공유·유사 판례 패널 ---------- */
+/* ---------- 증거: 제목 줄(제목 | 타임라인 링크) → 카드(전체 폭) → 맨 아래 오른쪽 PDF·공유 ---------- */
 .ar-evidence-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
-  margin-top: 0; /* 증거 화면 맨 위라 구간 박스 위 여백 없음 */
 }
-.ar-evidence-col .ar-icon-head {
-  margin-top: 0;
+/* 제목 줄: 왼쪽 제목 ……… 오른쪽 끝 타임라인 링크 (좁으면 링크가 아래 줄로) */
+.ar-evidence-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+}
+.ar-evidence-head .ar-icon-head {
+  margin: 0;
+}
+.ar-evidence-head .ar-timeline-link {
+  align-self: flex-end; /* 제목 줄 아래쪽 끝에 맞춰 카드 쪽으로 붙임 */
+  width: min(260px, 100%);
+  box-sizing: border-box;
 }
 .ar-evidence {
   display: grid;
   gap: 14px;
+  min-width: 0;
+}
+/* 넓은 화면: 증거 구간만 본문(1120px)보다 넓게(화면 양옆 40px 여백, 최대 1440px),
+   카드 3장을 가로 한 줄로 · 카드 안은 위 사진 / 아래 글 */
+@media (min-width: 1100px) {
+  .ar-evidence-layout {
+    --ar-ev-wide: min(1440px, calc(var(--ar-viewport-width, 100vw) - 80px));
+    width: var(--ar-ev-wide);
+    margin-left: calc((100% - var(--ar-ev-wide)) / 2);
+  }
+  .ar-evidence {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start; /* 카드마다 자기 내용 높이만: "분석 방법 보기"를 펼친 카드만 길어짐 */
+    gap: 16px;
+  }
+  /* 아래쪽 기본 규칙(왼쪽 사진 200px | 글)보다 우선하도록 .ar-evidence를 붙임 */
+  .ar-evidence .ar-ev {
+    padding: 20px;
+  }
+  .ar-evidence .ar-ev-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  /* 좁은 카드: 제목과 태그가 한 줄에 안 들어가면 태그가 아래 줄로 */
+  .ar-evidence .ar-ev-head {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+  .ar-evidence .ar-ev h3 {
+    flex: 1 1 auto;
+  }
 }
 /* 카드 한 장: 조정 요인 카드와 같은 흰 바탕 + 둥근 모서리 + 그림자 */
 .ar-ev {
@@ -763,45 +776,31 @@
   color: var(--red);
 }
 
-/* 블랙박스 장면: 위에서 아래로 훑는 판독선 + 방향지시등 자리 표시 + 영상 시각 */
+/* 장면 사진: 움직임·영상 시각 없이 정지된 사진 한 장 (+ 방향지시등 자리 표시)
+   가장자리를 살짝 어둡게 해 사진처럼 보이게 함 */
 .ar-frame {
   position: relative;
   margin: 0;
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 10px;
   background: linear-gradient(180deg, #3b3e4a, #1c1d24);
 }
-.ar-car {
+.ar-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+}
+.ar-car,
+.ar-frame img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-}
-.ar-frame-scan {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 2px;
-  background: rgba(var(--color-report-blue-pale-rgb), 0.85);
-  box-shadow: 0 0 12px rgba(var(--color-report-blue-pale-rgb), 0.8);
-  animation: ar-scan 2.6s ease-in-out infinite;
-  animation-delay: calc(var(--i) * 0.35s);
-}
-@keyframes ar-scan {
-  0%,
-  100% {
-    top: 0;
-    opacity: 0;
-  }
-  10%,
-  90% {
-    opacity: 1;
-  }
-  50% {
-    top: calc(100% - 2px);
-  }
+  object-fit: cover;
 }
 .ar-frame-box {
   position: absolute;
@@ -811,18 +810,6 @@
   height: 16%;
   border: 1.5px dashed #f2a19c;
   border-radius: 2px;
-}
-.ar-frame figcaption {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  padding: 3px 7px;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.75);
-  color: var(--color-white);
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: var(--ar-font-small);
-  font-weight: 700;
 }
 
 /* 아래에서 떠오르는 등장 */
@@ -835,115 +822,110 @@
 }
 
 /* ---------- 오른쪽 패널: 스크롤해도 메뉴 바 아래에 붙어 따라옴 ---------- */
+/* 증거 카드 아래 맨 오른쪽: "분석 결과 활용하기" → PDF 다운로드 · 공유하기 (상자 없이) */
+/* 좁은 화면: 카드 아래 오른쪽 / 넓은 화면: 증거 화면 맨 아래 · 화면 오른쪽 끝 (아래 901px 이상 규칙) */
 .ar-actions-panel {
-  position: sticky;
-  top: 88px;
   display: grid;
-  gap: 14px;
-  /* 왼쪽 제목(아이콘 상자 + 두 줄 글씨) 아래 카드 줄과 위치를 맞춤 */
-  margin-top: 86px;
+  gap: 4px; /* "분석 결과 활용하기"와 PDF 줄을 바짝 붙임 */
+  width: min(300px, 100%);
+  margin: 24px 0 0 auto;
+  color: var(--color-text-on-dark);
 }
-.ar-actions-card {
-  padding: 22px;
-  border-radius: 12px;
-  background: var(--color-card-surface);
-  box-shadow: 0 12px 32px rgba(3, 6, 18, 0.35), 0 1px 3px rgba(3, 6, 18, 0.2);
-  color: var(--color-report-card-dark);
-}
-.ar-actions-card h3 {
-  margin: 0 0 6px;
-  font-size: var(--ar-font-label);
+.ar-actions-panel h3 {
+  margin: 0;
+  font-size: var(--ar-font-body);
   font-weight: 800;
 }
-.ar-actions-card p {
-  margin: 0;
-  color: var(--muted);
-  font-size: var(--ar-font-body);
-  line-height: 1.6;
-  word-break: keep-all;
-}
+/* PDF 다운로드는 남는 폭을 모두(길게), 공유하기는 글자만큼(짧게) */
 .ar-actions {
   display: grid;
-  gap: 10px;
-  margin-top: 18px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
 }
-.ar-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 20px;
-  border-radius: 10px;
-  font: inherit;
-  font-size: var(--ar-font-description);
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-/* PDF 다운로드 버튼 */
-.ar-btn-solid,
-.ar-btn-solid:hover {
-  background: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  color: var(--color-white);
-}
-.ar-btn-line {
-  background: var(--color-card-surface);
-  border: 1px solid var(--color-report-border);
-  color: var(--ink);
-}
-.ar-btn-line:hover {
-  border-color: var(--color-report-blue);
-  color: var(--color-report-blue);
-}
-/* 이 판단과 비슷한 판례 보기: 저울 아이콘 · 제목/설명 · 화살표, 반투명 밝은 상자 */
-.ar-law-link {
+/* 버튼 상자 없이: 흰 글씨 + 오른쪽 선 아이콘 + 아래 흰 밑줄 */
+.ar-text-action {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 18px 20px;
-  border: 1px solid rgba(var(--color-report-blue-pale-rgb), 0.35);
-  border-radius: 12px;
-  background: rgba(var(--color-report-blue-pale-rgb), 0.1);
-  color: var(--ar-on-dark);
-  text-decoration: none;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 2px 10px;
+  border: 0;
+  border-bottom: 1.5px solid var(--color-white-a85);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-text-on-dark);
+  font: inherit;
+  font-size: var(--ar-font-body);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
 }
-.ar-law-link:hover {
-  border-color: rgba(var(--color-report-blue-pale-rgb), 0.7);
-  background: rgba(var(--color-report-blue-pale-rgb), 0.18);
-}
-.ar-law-link-icon {
-  display: grid;
+.ar-text-action svg {
   flex: none;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  border-radius: 10px;
-  background: rgba(var(--color-report-blue-pale-rgb), 0.16);
-  color: var(--color-report-blue-pale);
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
 }
-.ar-law-link-text {
+.ar-text-action:hover {
+  border-bottom-color: var(--color-white);
+}
+.ar-text-action:hover svg {
+  transform: translateY(2px);
+}
+.ar-text-action:focus-visible {
+  outline: 2px solid var(--color-white-a60);
+  outline-offset: 4px;
+}
+
+/* 다음 단계(사고 타임라인)로 넘어가는 중요한 링크: 꽉 찬 블루 면 + 빛나는 그림자로 패널에서 가장 눈에 띄게 */
+.ar-timeline-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 14px 14px 18px;
+  border: 1px solid var(--color-white-a18);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--color-blue-royal) 0%, var(--color-primary) 100%);
+  box-shadow: 0 14px 34px rgba(47, 85, 200, 0.45);
+  color: var(--color-white);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.ar-timeline-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(47, 85, 200, 0.6);
+}
+.ar-timeline-link:focus-visible {
+  outline: 3px solid var(--color-white-a60);
+  outline-offset: 3px;
+}
+.ar-timeline-link-text {
   display: grid;
   flex: 1;
   gap: 3px;
   min-width: 0;
 }
-.ar-law-link-text strong {
-  font-size: var(--ar-font-body);
+.ar-timeline-link-text strong {
+  font-size: var(--ar-font-description);
   font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  white-space: pre-line; /* 문구의 \n 자리에서 줄바꿈 ("사고 타임라인" / "바로가기") */
 }
-.ar-law-link-text small {
-  color: var(--ar-on-dark-text);
-  font-size: var(--ar-font-small);
-  line-height: 1.5;
-}
-.ar-law-link > svg {
+/* 오른쪽 화살표: 흰 원 안에 넣어 "누르면 이동"이 한눈에 보이게 */
+.ar-timeline-link > svg {
   flex: none;
-  color: var(--color-report-blue-pale);
+  box-sizing: content-box;
+  width: 16px;
+  height: 16px;
+  padding: 6px;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-primary);
   transition: transform 0.18s ease;
 }
-.ar-law-link:hover > svg {
+.ar-timeline-link:hover > svg {
   transform: translateX(3px);
 }
 
@@ -1051,6 +1033,15 @@
   .ar-evidence-layout {
     margin-bottom: 28px;
   }
+  /* 분석 결과 활용하기: 카드와 떨어져 증거 화면 맨 아래(법적 고지 바로 위),
+     오른쪽 끝은 카드가 아니라 화면 오른쪽 40px 안쪽(법적 고지 구분선 끝)에 맞춤 */
+  .ar-evidence-page > .ar-actions-panel {
+    flex-shrink: 0;
+    margin: auto calc((100% - var(--ar-viewport-width, 100vw)) / 2 + 40px) 16px auto;
+  }
+  .ar-evidence-page > .ar-actions-panel + .ar-notice {
+    margin-top: 0;
+  }
 }
 .ar-evidence-page > .ar-notice {
   /* 증거 카드 너비와 별개로 report 화면의 전체 너비에 맞춘다. */
@@ -1133,19 +1124,8 @@
     width: calc(var(--ar-viewport-width, 100vw) - 40px);
     margin-left: calc((100% - var(--ar-viewport-width, 100vw)) / 2 + 20px);
   }
-  /* 좁은 화면: 오른쪽 패널을 증거 목록 아래로 */
-  .ar-evidence-layout {
-    grid-template-columns: 1fr;
-  }
-  .ar-actions-panel {
-    position: static;
-    margin-top: 0;
-  }
 }
 @media (max-width: 640px) {
-  .ar-panel {
-    padding: 20px 14px 18px;
-  }
   .ar-factor-summary {
     padding: 16px;
   }
@@ -1199,24 +1179,14 @@
     transform: none;
     transition: none;
   }
-  .ar-frame-scan {
-    display: none;
-  }
 }
 @media print {
   .tn,
   .ar-actions-panel,
   .ar-toast,
-  .ar-wordmark,
   .ar-result-track,
   .ar::before {
     display: none;
-  }
-  /* 인쇄: 구간 박스는 옅은 테두리만 */
-  .ar-panel {
-    border-color: var(--line);
-    background: none;
-    box-shadow: none;
   }
   /* 인쇄: 고정·흐림 없이 최종 결과와 모든 조정 요인을 그대로 */
   .ar-result-pin {
@@ -1252,8 +1222,7 @@
   }
   /* 과실 막대의 블루가 인쇄에서도 빠지지 않도록 */
   .ar-factor-summary,
-  .ar-step-ratio,
-  .ar-icon-head-icon {
+  .ar-step-ratio {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     box-shadow: none;
