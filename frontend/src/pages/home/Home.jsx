@@ -5,7 +5,6 @@ import ConsentModal from "../../components/home/ConsentModal";
 import QuestionModal from "../../components/home/QuestionModal";
 import AnalysisProgressModal from "../../components/home/AnalysisProgressModal";
 import SituationConfirmModal from "../../components/home/SituationConfirmModal";
-import HomeWordmark from "./HomeWordmark";
 import "./Home.css";
 
 const ACCEPT_EXT = ["mp4", "mov", "avi"];
@@ -173,7 +172,6 @@ export default function Home() {
 
       <main className="uh-main">
         <footer className="uh-notice">
-          <HomeWordmark />
           <IconShield />
           <p>
             에블리는 대한민국 손해보험협회 과실비율 분쟁심의위원회 기본 인정기준과 법원 확정 판결 데이터셋에 기초하여
