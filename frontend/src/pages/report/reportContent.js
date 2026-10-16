@@ -42,7 +42,7 @@ export const EVIDENCE = [
 // 증거 오른쪽 패널: 리포트 저장·공유 + 유사 판례로 이동
 export const REPORT_ACTIONS = {
   title: "분석 결과 활용하기",
-  pdf: "PDF 다운로드",
+  pdf: "분석 결과 저장",
   share: "공유하기",
   timeline: {
     label: "사고 타임라인\n바로가기", // \n 자리에서 줄바꿈
