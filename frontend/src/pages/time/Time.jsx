@@ -3,6 +3,7 @@ import TopNav from "../../components/common/TopNav";
 import TimelineNotice from "./TimelineNotice";
 import TimelineAxis from "./TimelineAxis";
 import TimelineControls from "./TimelineControls";
+import LawPageLink from "./LawPageLink";
 import { getTimelineColor, getTimelinePosition } from "./timelineColors";
 import useTimelineWheel from "./useTimelineWheel";
 import "./Time.css";
@@ -125,7 +126,6 @@ export default function Time() {
               <TimelineControls active={active} last={LAST} onSelect={goTo} />
             </div>
           </div>
-
         </div>
 
         {/* 오른쪽: 영상 화면 · 시간축 */}
@@ -180,7 +180,10 @@ export default function Time() {
             <TimelineAxis moments={MOMENTS} active={active} onSelect={goTo} />
           </div>
         </div>
-        <TimelineNotice />
+        <div className="tl-footer">
+          <LawPageLink />
+          <TimelineNotice />
+        </div>
       </section>
     </div>
   );

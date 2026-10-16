@@ -4,6 +4,7 @@ export const HERO = {
   label: "AI 블랙박스 과실 분석",
   titleLines: ["사고의 순간부터,", "과실비율의 근거까지"],
   scrollHint: "스크롤 또는 스페이스바",
+  action: { label: "블랙박스 영상 분석하러 가기", to: "/upload-test" },
 };
 
 // visual: components/visuals 의 어떤 그림을 쓸지

@@ -88,7 +88,6 @@ export default function ConsentModal({ fileNames, onStart, onClose, onPickAnothe
               <div className="md-item">
                 <span className="md-item-text">
                   <span className="md-item-title">
-                    <em>선택</em>
                     {it.title}
                   </span>
                   <span className="md-item-body">{it.body}</span>
