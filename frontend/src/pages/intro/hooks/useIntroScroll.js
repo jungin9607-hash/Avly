@@ -35,6 +35,7 @@ export default function useIntroScroll(root, driveRef) {
           },
         })
         .to(".si-hero-text", { opacity: 0, y: -80, ease: "power1.in", duration: 0.45 }, 0)
+        .to(".si-hero-link", { autoAlpha: 0, y: -24, duration: 0.45 }, 0)
         .to(".si-scroll-hint", { opacity: 0, duration: 0.2 }, 0)
         .to(".si-sky-glow", { opacity: 0, duration: 0.6 }, 0)
         .to(".si-skyline", { opacity: 0, duration: 0.5 }, 0)

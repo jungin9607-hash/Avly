@@ -1,5 +1,6 @@
 import { Fragment, useState } from "react";
 import RoadScene from "../scene/RoadScene";
+import HeroAnalysisLink from "./HeroAnalysisLink";
 
 // 첫 화면: 밤하늘 별 + 왼쪽 아래 제목 + 오른쪽 스크롤 안내 + 밤바다 위 다리를 달리는 도로 장면
 export default function HeroSection({ content, driveRef }) {
@@ -31,6 +32,7 @@ export default function HeroSection({ content, driveRef }) {
       <div className="si-sky-glow" />
 
       <div className="si-fade" />
+      <HeroAnalysisLink content={content.action} />
     </section>
   );
 }
