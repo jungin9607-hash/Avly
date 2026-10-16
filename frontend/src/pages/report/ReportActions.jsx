@@ -13,20 +13,18 @@ export function TimelineLink({ content }) {
   );
 }
 
-// 증거 화면 맨 아래 오른쪽: "분석 결과 활용하기" 소제목 + PDF 다운로드 · 공유하기 밑줄 링크 (상자 없음)
+// 증거 화면 맨 아래 오른쪽: 다운로드 버튼과 공유하기
 export default function ReportActions({ content, onShare }) {
   return (
     <aside className="ar-actions-panel" aria-label={content.title}>
-      <h3>{content.title}</h3>
       <div className="ar-actions">
-        {/* 상자 없이 글자 왼쪽 · 아이콘 오른쪽 + 아래 흰 밑줄 */}
-        <button type="button" className="ar-text-action" onClick={() => window.print()}>
-          {content.pdf}
-          <IconDownload />
-        </button>
-        <button type="button" className="ar-text-action" onClick={onShare}>
+        <button type="button" className="ar-text-action ar-text-action-share" onClick={onShare}>
           {content.share}
           <IconShare />
+        </button>
+        <button type="button" className="ar-text-action ar-text-action-pdf" onClick={() => window.print()}>
+          {content.pdf}
+          <IconDownload />
         </button>
       </div>
     </aside>
