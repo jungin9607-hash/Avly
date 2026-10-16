@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// 인트로 스크롤 연출 + 스페이스바 단계 이동
+// 인트로 스크롤 연출 + 휠·스페이스바 단계 이동
 // root: 화면 전체 ref, driveRef: RoadScene의 계속 달리는 트윈
 export default function useIntroScroll(root, driveRef) {
   useGSAP(
@@ -25,7 +25,7 @@ export default function useIntroScroll(root, driveRef) {
           scrollTrigger: {
             trigger: ".si-hero",
             start: "top top",
-            end: "+=700",
+            end: "+=350",
             scrub: 1.2,
             pin: true,
             anticipatePin: 1, // 고정이 시작·끝나는 순간 화면이 튀지 않게
@@ -61,46 +61,64 @@ export default function useIntroScroll(root, driveRef) {
         },
       });
 
-      // 스페이스바 한 번이면 기능 소개까지: 도로 화면에서 누르면 기능 소개 맨 위로 바로 부드럽게 이동
-      // (지나가는 동안 도로 애니메이션은 스크롤에 맞춰 그대로 재생됨).
-      // Shift+스페이스바는 반대로 처음으로. 기능 소개 아래에서는 브라우저 기본 스크롤 그대로
+      // 스페이스바로 첫 화면과 기능 소개를 왕복.
+      // 이동 중에도 도로·카드 애니메이션은 스크롤에 맞춰 재생됨.
+      // Shift+스페이스바로 처음으로 돌아가는 기존 조작도 유지.
       const features = root.current.querySelector(".si-features");
+      const introRoot = root.current;
+      const getFeaturesTop = () => Math.min(
+        features.getBoundingClientRect().top + window.scrollY,
+        Math.max(0, document.documentElement.scrollHeight - window.innerHeight)
+      );
       let pending = null; // 이동 중인 목표 지점 (빠르게 연달아 눌러도 한 단계씩 넘어가게)
-      const onKeyDown = (e) => {
-        if (e.code !== "Space" || e.ctrlKey || e.metaKey || e.altKey) return;
-        // 버튼·입력칸에서는 스페이스바 원래 동작(누르기, 입력) 유지
-        if (e.target.closest?.("button, a, input, textarea, select, [contenteditable]")) return;
-        const stops = [0, features.getBoundingClientRect().top + window.scrollY];
-        const y = window.scrollY;
-        let target;
-        if (e.shiftKey) {
-          const base = Math.min(y, pending ?? Infinity);
-          if (base > stops[1] + 4) return;
-          target = [...stops].reverse().find((s) => s < base - 4);
-        } else {
-          const base = Math.max(y, pending ?? -Infinity);
-          target = stops.find((s) => s > base + 4);
-        }
-        if (target === undefined) return;
-        e.preventDefault();
+      const moveTo = (target) => {
         pending = target;
         window.scrollTo({ top: target, behavior: "smooth" });
+      };
+      // 아래 방향 휠은 기능 소개로, 기능 소개 맨 위의 위 방향 휠은 처음으로 이동.
+      // 카드 내용을 읽는 구간에서는 기본 스크롤을 유지. 이동 중 이어지는 휠 입력도
+      // 기본 스크롤을 막아 브라우저의 부드러운 이동이 중간에 끊기지 않게 함.
+      const onWheel = (e) => {
+        if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
+        if (e.deltaY === 0 || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+          pending = null;
+          return;
+        }
+        const featuresTop = getFeaturesTop();
+        const y = window.scrollY;
+        const goingDown = e.deltaY > 0;
+        if (goingDown ? y >= featuresTop - 4 : y <= 4 || y > featuresTop + 4) return;
+        const target = goingDown ? featuresTop : 0;
+        e.preventDefault();
+        if (pending !== target) moveTo(target);
+      };
+      const onKeyDown = (e) => {
+        if (e.defaultPrevented || e.code !== "Space" || e.ctrlKey || e.metaKey || e.altKey) return;
+        // 버튼·입력칸에서는 스페이스바 원래 동작(누르기, 입력) 유지
+        if (e.target.closest?.("button, a, input, textarea, select, [contenteditable]")) return;
+        // 키를 누르고 있을 때 자동 반복으로 왕복하거나 기본 스크롤이 발생하지 않게 함.
+        e.preventDefault();
+        if (e.repeat) return;
+        const featuresTop = getFeaturesTop();
+        const base = pending ?? window.scrollY;
+        const target = e.shiftKey || base >= featuresTop - 4 ? 0 : featuresTop;
+        moveTo(target);
       };
       const onScroll = () => {
         if (pending !== null && Math.abs(window.scrollY - pending) < 2) pending = null;
       };
-      // 휠·드래그로 직접 스크롤하면 목표 지점 기억을 지움
+      // 터치로 직접 스크롤하면 목표 지점 기억을 지움
       const clearPending = () => {
         pending = null;
       };
       window.addEventListener("keydown", onKeyDown);
       window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("wheel", clearPending, { passive: true });
+      introRoot.addEventListener("wheel", onWheel, { passive: false });
       window.addEventListener("touchstart", clearPending, { passive: true });
       return () => {
         window.removeEventListener("keydown", onKeyDown);
         window.removeEventListener("scroll", onScroll);
-        window.removeEventListener("wheel", clearPending);
+        introRoot.removeEventListener("wheel", onWheel);
         window.removeEventListener("touchstart", clearPending);
       };
     },
