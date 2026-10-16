@@ -39,8 +39,6 @@ export default function Law() {
       {/* 위에서 아래로 배경색이 자연스럽게 이어지는 두 구간: 메뉴 바와 이어지는 진한 남색 → 비교 버튼 네이비 */}
       <main className="law-main">
         <section className="law-band law-band-warm">
-          {/* 배경 워터마크: 아주 옅은 "Avly" 글자 */}
-          <span className="law-wordmark" aria-hidden="true">Avly</span>
           <div className="law-band-inner">
             <PageHeader section={SECTION} myAccident={MY_ACCIDENT} />
             <div className="law-grid">

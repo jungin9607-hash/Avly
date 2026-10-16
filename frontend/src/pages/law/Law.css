@@ -82,19 +82,6 @@
     radial-gradient(55% 460px at 85% 80px, var(--color-page-glow), transparent 70%),
     linear-gradient(180deg, var(--law-bg-top) 0, var(--color-navy-900) 260px, var(--color-navy-850) 520px, var(--law-band-joint) 100%);
 }
-/* 오른쪽 위 아주 옅은 "Avly" 글자 */
-.law-wordmark {
-  position: absolute;
-  right: -24px;
-  top: 56px;
-  color: var(--color-white-a04);
-  font-size: clamp(160px, 22vw, 300px);
-  font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
-}
 
 /* 2) 아래: 점점 밝아져 비교 버튼과 같은 네이비(#1d2c55)로 마무리 */
 .law-band-sand {
