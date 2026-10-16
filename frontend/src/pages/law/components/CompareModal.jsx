@@ -44,28 +44,27 @@ export default function CompareModal({ caseItem, onClose }) {
               내 사고 <span className="law-modal-vs">vs</span> {caseItem.court} 판례 정밀 대조
             </h2>
           </div>
-          <button type="button" className="law-modal-close" aria-label="닫기" onClick={onClose}>
-            ✕
-          </button>
+          {/* 제목 줄 오른쪽: PDF 다운로드
+              브라우저 인쇄 창에서 "PDF로 저장"을 고를 수 있게 (인쇄 시 팝업 내용만 출력) */}
+          <div className="law-modal-tools">
+            <button type="button" className="law-modal-download" onClick={() => window.print()}>
+              <span aria-hidden="true">↓</span>
+              {COMPARE_REPORT.button}
+            </button>
+          </div>
         </header>
 
-        <div className="law-modal-columns">
-          <CompareColumn tone="common" icon="✓" title="공통점" items={common} />
-          <CompareColumn tone="diff" icon="≠" title="차이점" items={differences} />
-        </div>
+        {/* 일반적인 팝업 닫기: 오른쪽 위 구석의 작은 × (바탕 없이 선 아이콘만) */}
+        <button type="button" className="law-modal-close" aria-label="닫기" onClick={onClose}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
+        </button>
 
-        <section className="law-modal-report">
-          <span className="law-modal-report-icon" aria-hidden="true">▤</span>
-          <div className="law-modal-report-text">
-            <strong>{COMPARE_REPORT.title}</strong>
-            <small>{COMPARE_REPORT.sub}</small>
-          </div>
-          {/* 브라우저 인쇄 창에서 "PDF로 저장"을 고를 수 있게 (인쇄 시 팝업 내용만 출력) */}
-          <button type="button" className="law-modal-download" onClick={() => window.print()}>
-            <span aria-hidden="true">↓</span>
-            {COMPARE_REPORT.button}
-          </button>
-        </section>
+        <div className="law-modal-columns">
+          <CompareColumn tone="common" title="공통점" items={common} />
+          <CompareColumn tone="diff" title="차이점" items={differences} />
+        </div>
 
         <footer className="law-modal-footer">
           <button type="button" className="law-modal-confirm" onClick={onClose}>
@@ -77,14 +76,14 @@ export default function CompareModal({ caseItem, onClose }) {
   );
 }
 
-// 팝업 안 공통점 / 차이점 한 열
-// tone: "common" | "diff" (색 구분)
-function CompareColumn({ tone, icon, title, items }) {
+// 팝업 안 공통점 / 차이점 한 열: 앞 세로 막대 + 흰 굵은 제목 + 옅은 개수
+// tone: "common" | "diff" (막대 색 구분)
+function CompareColumn({ tone, title, items }) {
   return (
     <section className={`law-modal-col is-${tone}`}>
       <h3>
-        <span aria-hidden="true">{icon}</span>
         {title}
+        <span className="law-modal-count">{items.length}</span>
       </h3>
       <ul>
         {items.map((item) => (
