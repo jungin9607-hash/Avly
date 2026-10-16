@@ -22,4 +22,6 @@ export const MY_ACCIDENT = {
 export const STICKY_BAR = {
   button: "내 사고와 비교하기",
   emptyLabel: "비교할 판례를 선택해 주세요", // 판례를 고르기 전 버튼 문구
+  // 판례를 고르면 창 오른쪽 아래 구석에 나타나는 보조 버튼
+  result: { label: "분석 결과 바로가기", to: "/analysis-test" },
 };

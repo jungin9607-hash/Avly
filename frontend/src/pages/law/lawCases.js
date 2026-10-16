@@ -240,8 +240,7 @@ export const CASES = [
   },
 ];
 
+// 비교 팝업의 PDF 다운로드 버튼 문구 (공통점·차이점 박스 위 오른쪽)
 export const COMPARE_REPORT = {
-  title: "정밀 대조 분석 의견서 다운로드",
-  sub: "보험사 제출용 PDF 리포트 (판례 첨부 포함)",
   button: "PDF 다운로드",
 };

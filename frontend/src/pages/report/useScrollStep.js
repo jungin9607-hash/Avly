@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // 넓은 화면(Report.css의 넓은 화면 조건과 같음)에서 결과 화면이 한 화면에 다 들어가면
 // 결과 화면을 고정해 두고 스크롤 거리로 단계를 넘김
@@ -19,13 +19,24 @@ const stepFromUnits = (u, count) => {
   return count - 1;
 };
 
+// i번째 단계가 시작하는 위치(구간 길이 단위) + 살짝 안쪽(0.1)으로 들어간 값
+const unitsForStep = (i) => {
+  let start = 0;
+  for (let k = 0; k < i; k += 1) start += 1 + (STEP_EXTRA[k] ?? 0);
+  return start + (i > 0 ? 0.1 : 0);
+};
+
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // 스크롤 위치에 따라 지금 보여 줄 과실 조정 단계(0 = 기본 기준 ~ count - 1 = 최종)와
 // 결과 화면을 고정했는지(pinned)를 돌려줌
+// goToStep(i): 카드를 눌렀을 때 그 단계로 바로 선택하고, 그 단계가 되는 스크롤 위치로 부드럽게 이동
+//   (이후 다시 스크롤해도 선택이 엉뚱한 카드로 튀지 않음)
 export function useScrollStep(sectionRef, count) {
   const [step, setStep] = useState(0);
   const [pinned, setPinned] = useState(false);
+  const goRef = useRef(() => {});
+  const goToStep = useCallback((i) => goRef.current(i), []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -46,8 +57,19 @@ export function useScrollStep(sectionRef, count) {
       if (cards.length > 2) gap = Math.max(cards[2].offsetTop - cards[1].offsetTop, 1);
     };
 
+    // 카드를 눌러 자동 스크롤하는 동안에는 지나가는 단계를 다시 계산하지 않음 (선택이 깜빡이지 않도록)
+    let locked = false;
+    let unlockTimer = 0;
+    const holdLock = (ms) => {
+      clearTimeout(unlockTimer);
+      unlockTimer = setTimeout(() => {
+        locked = false;
+      }, ms);
+    };
+
     const measure = () => {
       frame = 0;
+      if (locked) return;
       let next = 0;
       if (canPin) {
         // 고정 구간: 섹션이 메뉴 바 아래에 닿은 뒤 스크롤한 거리 ÷ 여분 스크롤 길이
@@ -75,7 +97,33 @@ export function useScrollStep(sectionRef, count) {
     };
     // 단계는 사용자가 스크롤할 때만 다시 계산
     const schedule = () => {
+      if (locked) {
+        holdLock(150); // 자동 스크롤이 멈추고 잠시 뒤 잠금 해제
+        return;
+      }
       if (!frame) frame = requestAnimationFrame(measure);
+    };
+
+    // 카드를 눌러 i번째 단계로: 바로 선택 + 위 measure가 i를 내는 스크롤 위치로 이동
+    goRef.current = (i) => {
+      const scroller = media.matches ? section.closest(".ar") : null; // 넓은 화면은 .ar, 좁은 화면은 창이 스크롤됨
+      let delta = 0;
+      if (canPin) {
+        const track = section.querySelector(".ar-result-track");
+        const scrolled = NAV_HEIGHT - section.getBoundingClientRect().top;
+        const target = (unitsForStep(i) / (count + EXTRA_TOTAL)) * track.offsetHeight;
+        delta = target - scrolled;
+      } else if (media.matches) {
+        delta = unitsForStep(i) * gap - scroller.scrollTop;
+      } else {
+        const card = section.querySelectorAll(".ar-factor-card")[i];
+        if (card) delta = card.getBoundingClientRect().top - (window.innerHeight * 0.4 - 20);
+      }
+      setStep(i);
+      locked = true;
+      holdLock(400); // 스크롤할 거리가 없으면 곧바로 풀림
+      const behavior = reducedMotion() ? "auto" : "smooth";
+      (scroller ?? window).scrollBy({ top: delta, behavior });
     };
     const relayout = () => {
       layout();
@@ -97,6 +145,8 @@ export function useScrollStep(sectionRef, count) {
     return () => {
       alive = false;
       cancelAnimationFrame(frame);
+      clearTimeout(unlockTimer);
+      goRef.current = () => {};
       window.removeEventListener("scroll", schedule, { capture: true });
       window.removeEventListener("resize", relayout);
       window.removeEventListener("beforeprint", showFinal);
@@ -104,7 +154,7 @@ export function useScrollStep(sectionRef, count) {
     };
   }, [sectionRef, count]);
 
-  return { step, pinned };
+  return { step, pinned, goToStep };
 }
 
 // 숫자가 이전 값에서 새 값으로 부드럽게 올라가거나 내려감

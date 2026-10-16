@@ -23,7 +23,7 @@ export default function Report() {
   const reportRef = useRef(null);
   useNavigationBackdrop(reportRef);
   const resultRef = useRef(null);
-  const { step: activeStep, pinned } = useScrollStep(resultRef, STEPS.length);
+  const { step: activeStep, pinned, goToStep } = useScrollStep(resultRef, STEPS.length);
 
   useEffect(() => {
     const report = reportRef.current;
@@ -36,6 +36,17 @@ export default function Report() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // 증거 구간이 화면 아래 40% 선 위로 올라오면 "사고 타임라인 바로가기"를 보여 줌 (위로 올라가면 다시 숨김)
+  const evidenceRef = useRef(null);
+  const [evidenceInView, setEvidenceInView] = useState(false);
+  useEffect(() => {
+    const io = new IntersectionObserver(([entry]) => setEvidenceInView(entry.isIntersecting), {
+      rootMargin: "0px 0px -40% 0px",
+    });
+    io.observe(evidenceRef.current);
+    return () => io.disconnect();
   }, []);
 
   useEffect(() => {
@@ -74,18 +85,23 @@ export default function Report() {
         >
           <div className="ar-result-pin">
             <ReportHeader content={REPORT_HEADER} />
-            <AdjustmentSteps steps={STEPS} header={FACTOR_HEADER} activeIndex={activeStep} />
+            <AdjustmentSteps
+              steps={STEPS}
+              header={FACTOR_HEADER}
+              activeIndex={activeStep}
+              onSelectStep={goToStep}
+            />
           </div>
           <div className="ar-result-track" aria-hidden="true" />
         </section>
 
-        {/* 영상 증거: 제목 줄(왼쪽 제목 | 오른쪽 타임라인 링크) → 증거 카드 3장(전체 폭)
-            → 맨 아래 오른쪽 분석 결과 활용하기(PDF · 공유) */}
-        <section className="ar-section ar-report-page ar-evidence-page">
+        {/* 영상 증거: 제목 줄(왼쪽 제목 | 오른쪽 분석 결과 저장 · 공유) → 증거 카드 3장(전체 폭)
+            → 맨 아래 오른쪽 사고 타임라인 바로가기 */}
+        <section ref={evidenceRef} className="ar-section ar-report-page ar-evidence-page">
           <div className="ar-evidence-layout">
             <div className="ar-evidence-head">
               <SectionHeader kicker={EVIDENCE_HEADER.kicker} title={EVIDENCE_HEADER.title} desc={EVIDENCE_HEADER.desc} />
-              <TimelineLink content={REPORT_ACTIONS.timeline} />
+              <ReportActions content={REPORT_ACTIONS} onShare={share} />
             </div>
             <div className="ar-evidence">
               {EVIDENCE.map((item, i) => (
@@ -95,8 +111,8 @@ export default function Report() {
               ))}
             </div>
           </div>
-          {/* 카드 정렬과 별개로 증거 화면 맨 아래 · 화면 오른쪽 끝 (법적 고지 바로 위) */}
-          <ReportActions content={REPORT_ACTIONS} onShare={share} />
+          {/* 창 오른쪽 아래 구석에 고정, 증거 구간에 들어오면 나타남 (좁은 화면은 카드 아래 오른쪽) */}
+          <TimelineLink content={REPORT_ACTIONS.timeline} visible={evidenceInView} />
           <ReportNotice />
         </section>
 
