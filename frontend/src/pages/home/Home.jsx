@@ -5,6 +5,7 @@ import ConsentModal from "../../components/home/ConsentModal";
 import QuestionModal from "../../components/home/QuestionModal";
 import AnalysisProgressModal from "../../components/home/AnalysisProgressModal";
 import SituationConfirmModal from "../../components/home/SituationConfirmModal";
+import ReportPageLink from "./ReportPageLink";
 import "./Home.css";
 
 const ACCEPT_EXT = ["mp4", "mov", "avi"];
@@ -35,7 +36,7 @@ export default function Home() {
   const [pending, setPending] = useState([]); // 동의 팝업을 기다리는 선택된 영상
   const [demoConsent, setDemoConsent] = useState(false); // 시연 파일로 동의 팝업을 연 경우
   const [popupStep, setPopupStep] = useState("consent");
-  const [answers, setAnswers] = useState(null);
+  const [answers, setAnswers] = useState({});
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -55,10 +56,9 @@ export default function Home() {
     if (valid.length) setPending(valid);
   };
 
-  // 동의와 질문 응답 후 시연용 결과 화면으로 이동
-  const submitAnswers = (nextAnswers) => {
-    setAnswers(nextAnswers);
-    setPopupStep("analyzing");
+  // 답변은 홈에서 보관해 질문 사이를 이동해도 선택값을 유지한다.
+  const updateAnswer = (key, value) => {
+    setAnswers((current) => ({ ...current, [key]: value }));
   };
 
   const finishAnalysis = () => {
@@ -70,7 +70,7 @@ export default function Home() {
     setPending([]);
     setDemoConsent(false);
     setPopupStep("consent");
-    setAnswers(null);
+    setAnswers({});
   };
 
   const pickAnother = () => {
@@ -171,35 +171,44 @@ export default function Home() {
       </section>
 
       <main className="uh-main">
-        <footer className="uh-notice">
-          <IconShield />
-          <p>
-            에블리는 대한민국 손해보험협회 과실비율 분쟁심의위원회 기본 인정기준과 법원 확정 판결 데이터셋에 기초하여
-            확률적 과실 분포를 제공합니다. 최종 법적 효력은 보험사 합의 또는 법원 판결에 따릅니다.
-          </p>
-        </footer>
+        <div className="uh-footer">
+          <ReportPageLink />
+          <footer className="uh-notice">
+            <IconShield />
+            <p>
+              에블리는 대한민국 손해보험협회 과실비율 분쟁심의위원회 기본 인정기준과 법원 확정 판결 데이터셋에 기초하여
+              확률적 과실 분포를 제공합니다. 최종 법적 효력은 보험사 합의 또는 법원 판결에 따릅니다.
+            </p>
+          </footer>
+        </div>
       </main>
 
-      {/* 영상 선택 → 수집 동의 → 추가 질문 → 분석 중 → 사고 상황 확인 */}
+      {/* 영상 선택 → 수집 동의 → 질문 1 → 질문 2 → 분석 중 → 사고 상황 확인 */}
       {(pending.length > 0 || demoConsent) &&
         (popupStep === "consent" ? (
           <ConsentModal
             fileNames={demoConsent ? [DEMO_FILE_NAME] : pending.map((f) => f.name)}
-            onStart={() => setPopupStep("preparing")}
+            onStart={() => setPopupStep("questions-1")}
             onClose={closeConsent}
             onPickAnother={pickAnother}
           />
-        ) : popupStep === "questions" ? (
+        ) : popupStep === "questions-1" ? (
           <QuestionModal
-            initialAnswers={answers}
-            onSubmit={submitAnswers}
+            key="questions-1"
+            stage={0}
+            answers={answers}
+            onAnswerChange={updateAnswer}
+            onSubmit={() => setPopupStep("questions-2")}
             onClose={closeConsent}
           />
-        ) : popupStep === "preparing" ? (
-          <AnalysisProgressModal
-            step={2}
-            description="업로드한 영상의 장면과 재생 상태를 확인하고 있어요."
-            onComplete={() => setPopupStep("questions")}
+        ) : popupStep === "questions-2" ? (
+          <QuestionModal
+            key="questions-2"
+            stage={1}
+            answers={answers}
+            onAnswerChange={updateAnswer}
+            onSubmit={() => setPopupStep("analyzing")}
+            onBack={() => setPopupStep("questions-1")}
             onClose={closeConsent}
           />
         ) : popupStep === "analyzing" ? (
@@ -212,7 +221,7 @@ export default function Home() {
         ) : (
           <SituationConfirmModal
             onConfirm={finishAnalysis}
-            onBack={() => setPopupStep("questions")}
+            onBack={() => setPopupStep("questions-1")}
             onClose={closeConsent}
           />
         ))}

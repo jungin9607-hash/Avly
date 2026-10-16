@@ -387,11 +387,21 @@
 }
 
 /* ---------- 안내문 ---------- */
+.uh-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: 28px auto;
+  align-items: start;
+  margin-top: auto;
+  min-width: 0;
+}
 .uh-notice {
+  grid-column: 1;
+  grid-row: 2;
   position: relative;
   display: flex;
   gap: 10px;
-  margin-top: auto;
+  margin-top: 0;
   padding-top: 20px;
   padding-bottom: 0;
   border-top: 1px solid var(--line);
@@ -410,6 +420,13 @@
 
 /* ---------- 반응형 ---------- */
 @media (max-width: 900px) {
+  .uh-footer {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+  }
+  .uh-notice {
+    grid-row: 1;
+  }
   .uh-main {
     padding-inline: 20px;
   }
