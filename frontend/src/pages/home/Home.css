@@ -7,6 +7,9 @@
   --uh-bg-top: var(--color-navy-950);
   --uh-bg-middle: var(--color-navy-800);
   --uh-bg-bottom: var(--color-navy-700);
+  --uh-page-background:
+    radial-gradient(55% 460px at 85% 80px, var(--color-page-glow), transparent 70%),
+    linear-gradient(180deg, var(--uh-bg-top) 0%, var(--color-navy-900) 30%, var(--uh-bg-middle) 70%, var(--uh-bg-bottom) 100%);
   --uh-font-small: 14px;
   --uh-font-caption: 15px;
   --uh-font-body: 16px;
@@ -33,19 +36,19 @@
   margin-inline: calc(50% - 50vw);
   text-align: left;
   color: var(--ink);
-  background:
-    radial-gradient(55% 460px at 85% 80px, var(--color-page-glow), transparent 70%),
-    linear-gradient(180deg, var(--uh-bg-top) 0%, var(--color-navy-900) 30%, var(--uh-bg-middle) 70%, var(--uh-bg-bottom) 100%);
+  background: var(--uh-page-background);
+  background-attachment: fixed;
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   overflow: hidden;
 }
 
-/* report와 같이 페이지 배경이 이어지는 상단 메뉴 */
+/* 화면 배경과 같은 좌표의 그라데이션으로 이어지면서 뒤의 내용은 가린다. */
 .uh .tn {
-  background: transparent;
+  background: var(--uh-page-background);
+  background-attachment: fixed;
   border-bottom: 0;
-  backdrop-filter: blur(12px);
+  backdrop-filter: none;
   text-shadow: 0 1px 4px var(--color-nav-text-shadow);
 }
 
@@ -54,26 +57,13 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  padding: 128px 40px 72px;
+  padding: 168px 40px 72px;
 }
 .uh-hero > .uh-grid {
   position: relative;
   z-index: 1;
   max-width: 1200px;
   margin: 0 auto;
-}
-.uh-wordmark {
-  position: absolute;
-  z-index: 0;
-  left: 0;
-  bottom: calc(100% + 12px);
-  color: var(--color-white-a04);
-  font-size: clamp(160px, 22vw, 300px);
-  font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
 }
 /* 네이비 배경 위의 제목과 설명 */
 .uh-hero {
@@ -437,7 +427,7 @@
 }
 @media (max-width: 640px) {
   .uh-hero {
-    padding: 104px 20px 56px;
+    padding: 144px 20px 56px;
   }
   .uh-main {
     padding: 64px 20px 16px;

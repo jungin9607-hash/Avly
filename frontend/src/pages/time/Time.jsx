@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import TopNav from "../../components/common/TopNav";
 import TimelineNotice from "./TimelineNotice";
 import TimelineAxis from "./TimelineAxis";
+import TimelineControls from "./TimelineControls";
+import { getTimelineColor, getTimelinePosition } from "./timelineColors";
+import useTimelineWheel from "./useTimelineWheel";
 import "./Time.css";
 
 // tone: 결정적 시점(key) · 충돌(impact)은 색으로 구분
@@ -53,6 +56,7 @@ const stamp = (t) => `00:${t.toFixed(2).padStart(5, "0")}`;
 const two = (n) => String(n).padStart(2, "0");
 
 export default function Time() {
+  const stageRef = useRef(null);
   const videoRef = useRef(null);
   const inputRef = useRef(null);
   const [active, setActive] = useState(0);
@@ -71,6 +75,8 @@ export default function Time() {
       video.currentTime = Math.min(MOMENTS[idx].time, Math.max(0, video.duration - 0.05));
     }
   };
+
+  useTimelineWheel(stageRef, active, MOMENTS.length, goTo);
 
   const loadVideo = (event) => {
     const file = event.target.files?.[0];
@@ -93,51 +99,38 @@ export default function Time() {
   };
 
   const m = MOMENTS[active];
+  const frameColor = getTimelineColor(getTimelinePosition(MOMENTS, m.time));
 
   return (
     <div className="tl">
       <TopNav active="타임라인" theme="dark" />
 
-      <section className="tl-stage">
+      <section className="tl-stage" ref={stageRef}>
         {/* 왼쪽: 제목 · 비율 · 지금 보고 있는 시점 */}
-        <div className="tl-side">
-          {/* 뒤에 깔리는 큰 단계 숫자: 장면이 바뀌면 함께 바뀜 */}
-          <span className={`tl-bignum tl-mono ${m.tone || ""}`} key={`n-${m.id}`} aria-hidden="true">
-            {two(active + 1)}
-          </span>
-
+        <div className="tl-side" style={{ "--accent": frameColor }}>
           <h1>
             사고 순간
             <br />
             <span className="tl-h1-accent">타임라인</span>
           </h1>
-          <div className={`tl-now ${m.tone || ""}`} key={m.id} aria-live="polite">
-            <p className="tl-now-step">
-              STEP {two(active + 1)} · <span className="tl-mono">{stamp(m.time)}</span>
-            </p>
-            <p className="tl-now-label">{m.summaryLabel || m.label}</p>
-            <p className="tl-now-text">{m.summary}</p>
-            <ol className="tl-now-dots" aria-hidden="true">
-              {MOMENTS.map((mo, i) => (
-                <li key={mo.id} className={i <= active ? "on" : ""} />
-              ))}
-            </ol>
-          </div>
-
-          <div className="tl-counter">
-            <button type="button" aria-label="이전 시점" onClick={() => goTo(active - 1)} disabled={active === 0}>
-              ←
-            </button>
-            <button type="button" aria-label="다음 시점" onClick={() => goTo(active + 1)} disabled={active === LAST}>
-              →
-            </button>
+          <div className={`tl-now ${m.tone || ""}`}>
+            <div className="tl-now-content" key={m.id} aria-live="polite">
+              <p className="tl-now-step">
+                STEP {two(active + 1)} · <span className="tl-mono">{stamp(m.time)}</span>
+              </p>
+              <p className="tl-now-label">{m.summaryLabel || m.label}</p>
+            </div>
+            <div className="tl-now-row">
+              <p className="tl-now-text" key={`summary-${m.id}`} aria-live="polite">{m.summary}</p>
+              <TimelineControls active={active} last={LAST} onSelect={goTo} />
+            </div>
           </div>
 
         </div>
 
         {/* 오른쪽: 영상 화면 · 시간축 */}
         <div className="tl-right">
-          <div className="tl-video-panel">
+          <div className="tl-video-panel" style={{ "--tl-frame-color": frameColor }}>
             <div className={`tl-player ${m.tone || ""}`}>
               {videoUrl ? (
                 <video

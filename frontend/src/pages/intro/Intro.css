@@ -299,8 +299,8 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  /* 위 여백 = 고정된 상단 메뉴(TopNav, 64px) + 36px. 메뉴 아래 보이는 영역의 가운데에 오게 */
-  padding: 100px 24px 36px;
+  /* 고정된 상단 메뉴(64px) 아래 16px만 띄워 기능 소개가 더 가깝게 이어지게 */
+  padding: 80px 24px 36px;
   background: linear-gradient(180deg, var(--night) 0%, var(--color-navy-800) 100%);
   color: var(--text);
 }
@@ -556,4 +556,13 @@
   border-bottom: 0;
   backdrop-filter: blur(12px);
   text-shadow: 0 1px 4px var(--color-nav-text-shadow);
+}
+
+/* 좁은 화면에서는 밤하늘과 같은 배경으로 뒤의 내용을 가린다. */
+@media (max-width: 900px) {
+  .si .tn {
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 27%, var(--sky-horizon) 48%);
+    background-attachment: fixed;
+    backdrop-filter: none;
+  }
 }

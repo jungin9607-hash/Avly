@@ -45,18 +45,22 @@
 /* ---------- 무대: 일반 문서 스크롤, 시점 선택으로 영상 변경 ---------- */
 .tl-stage {
   display: grid;
-  grid-template-columns: minmax(260px, 0.6fr) minmax(0, 1.75fr);
+  grid-template-columns: minmax(320px, 0.8fr) minmax(0, 1.75fr);
   grid-template-rows: 1fr auto;
-  gap: 16px 80px;
+  gap: 16px clamp(32px, 4vw, 64px);
   align-items: center;
   min-height: 100svh;
   padding: 88px 0 16px 56px;
   box-sizing: border-box;
 }
 
-/* 왼쪽: 블루 빛 번짐 + 뒤에 깔린 큰 단계 숫자 */
+/* 왼쪽: 선택한 타임라인 색상의 빛 번짐 + 단계 숫자와 제목 */
 .tl-side {
+  --tl-side-step-size: 18px;
+  --tl-side-label-size: 30px;
+  --tl-side-body-size: 20px;
   position: relative;
+  left: 20px;
   z-index: 0;
   display: flex;
   flex-direction: column;
@@ -71,42 +75,16 @@
   width: 640px;
   height: 640px;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(var(--tl-blue-rgb), 0.32), rgba(var(--tl-blue-rgb), 0.1) 55%, transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 32%, transparent), color-mix(in srgb, var(--accent) 10%, transparent) 55%, transparent);
   pointer-events: none;
-}
-.tl-bignum {
-  position: absolute;
-  z-index: -1;
-  right: -8px;
-  top: -24px;
-  font-size: clamp(140px, 15vw, 220px);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgba(var(--tl-accent-rgb), 0.22);
-  pointer-events: none;
-  animation: tl-bignum 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-.tl-bignum.key {
-  -webkit-text-stroke-color: rgba(var(--tl-accent-rgb), 0.4);
-}
-.tl-bignum.impact {
-  -webkit-text-stroke-color: rgba(var(--tl-accent-rgb), 0.22);
-}
-@keyframes tl-bignum {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
 }
 .tl-h1-accent {
   color: var(--accent);
 }
 
 .tl-side h1 {
-  margin: 0 0 28px;
-  font-size: clamp(44px, 4.8vw, 68px);
+  margin: 0 0 32px;
+  font-size: clamp(48px, 5.5vw, 80px);
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.045em;
@@ -114,37 +92,19 @@
 /* 지금 보고 있는 시점: 바뀔 때마다 살짝 떠오름 */
 .tl-now {
   --now: var(--accent);
-  width: min(100%, 360px);
+  width: min(100%, 420px);
   box-sizing: border-box;
-  padding: 16px 18px 14px;
+  padding: 22px 24px 20px;
   border-radius: 4px;
   border-left: 4px solid var(--now);
-  background: linear-gradient(90deg, rgba(var(--tl-blue-rgb), 0.32), rgba(var(--tl-blue-rgb), 0.1));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--now) 32%, transparent), color-mix(in srgb, var(--now) 10%, transparent));
+}
+.tl-now-content {
   animation: tl-now 0.45s ease both;
 }
 .tl-now.key {
   --now: var(--accent);
-  background: linear-gradient(90deg, rgba(var(--tl-accent-rgb), 0.22), rgba(var(--tl-accent-rgb), 0.06));
-}
-.tl-now.impact {
-  --now: var(--impact);
-  background: linear-gradient(90deg, rgba(var(--color-time-impact-rgb), 0.24), rgba(var(--color-time-impact-rgb), 0.06));
-}
-.tl-now-dots {
-  display: flex;
-  gap: 4px;
-  margin: 14px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.tl-now-dots li {
-  flex: 1;
-  height: 3px;
-  border-radius: 1px;
-  background: var(--color-white-a18);
-}
-.tl-now-dots li.on {
-  background: var(--now);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--now) 22%, transparent), color-mix(in srgb, var(--now) 6%, transparent));
 }
 @keyframes tl-now {
   from {
@@ -154,30 +114,43 @@
 }
 .tl-now-step {
   margin: 0 0 8px;
-  font-size: var(--tl-font-body);
+  font-size: var(--tl-side-step-size);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--now);
 }
 .tl-now-label {
   margin: 0 0 8px;
-  font-size: var(--tl-font-display);
+  font-size: var(--tl-side-label-size);
+  line-height: 1.4;
+  word-break: keep-all;
   font-weight: 800;
   letter-spacing: -0.03em;
 }
+.tl-now-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
 .tl-now-text {
+  flex: 1 1 200px;
+  min-width: 0;
   margin: 0;
-  font-size: var(--tl-font-label);
+  font-size: var(--tl-side-body-size);
   font-weight: 500;
   line-height: 1.5;
-  color: var(--muted);
+  color: var(--text);
+  word-break: keep-all;
 }
 
 .tl-counter {
+  flex: 0 0 auto;
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   gap: 8px;
-  margin: 24px 0 20px;
+  margin: 0 0 0 auto;
 }
 .tl-counter button {
   display: grid;
@@ -219,13 +192,14 @@
     visibility: hidden;
   }
 }
-/* 영상만 담는 독립 카드 */
+/* 영상 카드 왼쪽에만 둥글게 이어지는 강조선. 색상은 타임라인 시점과 연동. */
 .tl-video-panel {
   overflow: hidden;
-  border: 1px solid rgba(var(--tl-blue-rgb), 0.3);
+  border-left: 4px solid var(--tl-frame-color, var(--signal));
   border-radius: 8px;
   background: var(--color-time-video-frame);
   box-shadow: 0 18px 55px rgba(0, 0, 0, 0.32);
+  transition: border-color 0.3s ease;
 }
 /* 단일 영상 플레이어: 시점을 선택하면 영상 위치가 함께 바뀜 */
 .tl-player {
@@ -473,6 +447,11 @@
   line-height: 1.4;
   white-space: nowrap;
 }
+/* 지나온 시점의 시간과 문구도 각 타임라인 점과 같은 색상을 유지. */
+.tl-axis-dot.is-past em,
+.tl-axis-dot.is-past small {
+  color: var(--tl-dot-color);
+}
 /* 좁은 시간축에서도 긴 시점 이름은 두 줄 안에서 읽히도록 한다. */
 @media (max-width: 600px) {
   .tl-axis-dot em {
@@ -568,23 +547,20 @@
     padding: 96px 20px 40px;
   }
   .tl-side {
+    left: 0;
     min-width: 0;
     padding-right: 0;
   }
   .tl-now {
     display: none;
   }
-  .tl-counter {
-    margin: 24px 0 18px;
-  }
   .tl-notice {
     margin-right: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tl-bignum,
   .tl-rec::before,
-  .tl-now,
+  .tl-now-content,
   .tl-arrow,
   .tl-ring,
   .tl-axis-dot.impact.is-past {
