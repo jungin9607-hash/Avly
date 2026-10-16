@@ -45,7 +45,7 @@ export const REPORT_ACTIONS = {
   pdf: "분석 결과 저장",
   share: "공유하기",
   timeline: {
-    label: "사고 타임라인\n바로가기", // \n 자리에서 줄바꿈
+    label: "사고 타임라인 바로가기",
     to: "/timeline-test",
   },
 };
