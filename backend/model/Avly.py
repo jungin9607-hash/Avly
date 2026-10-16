@@ -164,8 +164,8 @@ if __name__ == '__main__':
     import numpy as np
     from openai import OpenAI
     from pydantic import BaseModel, Field, PrivateAttr
-    VERSION = 'auto-three-stage-v2.8-major-timeline'
-    CODE_VERSION = 'auto-three-stage-v2.20.8-local-video-picker'
+    VERSION = 'auto-three-stage-v2.21.0-identity-and-survey-recovery'
+    CODE_VERSION = 'auto-three-stage-v2.21.1-parking-pattern-report'
     PROJECT = MODEL_ROOT
     VIDEO_PATH = Path(VIDEO_PATH)
     VISION_MODEL = 'gpt-4.1'
@@ -675,7 +675,7 @@ if __name__ == '__main__':
             track.vehicle_id = original.strip()
             if original != track.vehicle_id:
                 notes.append(f'차량 ID 앞뒤 공백 제거: {original!r}')
-            is_ego = track.camera_role == '카메라 차량' or bool(re.search('(?:\\bA\\s*차량|블랙박스\\s*(?:장착차|장착\\s*차량)|전방\\s*카메라\\s*차량)', track.appearance))
+            is_ego = track.camera_role == '카메라 차량' or bool(re.search(r'^(?:A\s*차량|블랙박스\s*(?:장착차|장착\s*차량)|전방\s*카메라\s*차량)(?:\s*본체|\s*자체|$)', track.appearance.strip()))
             if track.vehicle_id == 'A' or is_ego:
                 notes.append('상대 차량 목록에 포함된 A 항목 제거: A 움직임은 a_phases로 관리')
                 continue
@@ -4444,7 +4444,7 @@ if __name__ == '__main__':
     def update_estimates(answers,result_path=None,asked_questions=None,display_report=True):
         path=Path(result_path or output_path);saved=json.loads(path.read_text(encoding='utf-8'))
         scene=Observation.model_validate(saved['scene']);specs,_=widget_specs(scene)
-        allowed={s['key'] for s in specs}
+        allowed={s['key'] for s in specs} | CAUSE_KEYS
         unknown=set(answers)-allowed
         if unknown:raise ValueError('기본 설문에서 지원하지 않는 상세 항목: '+', '.join(sorted(unknown)))
         previous=saved.get('questionnaire',{}).get('answers',{})
@@ -4596,6 +4596,340 @@ if __name__ == '__main__':
         safe_write_result(destination,saved)
         print(saved['user_report']);print('\nJSON:',destination)
         return saved
+
+
+    REPORT_NOTICE = '※ 본 보고서는 법적 효력이 없는 AI 참고 자료입니다. 실제 과실비율이나 법적 책임을 확정하지 않습니다.'
+
+    def finish_report(text):
+        lines = [line.rstrip() for line in text.splitlines() if line.strip() != REPORT_NOTICE]
+        while lines and not lines[-1].strip():
+            lines.pop()
+        return '\n'.join(lines) + '\n\n' + REPORT_NOTICE
+
+    def build_user_report(scene, timeline_payload, linked, survey, direction=None, bundle_override=None):
+        bundle = sanitize_case_bundle(bundle_override if bundle_override is not None else law_rule_bundle(scene, linked))
+        payload, out = bundle.get('rule_engine_input', {}), bundle.get('rule_engine_output', {})
+        scenarios = {s['scenario_id']: s for s in payload.get('scenarios', [])}
+        results = out.get('results', [])
+        titles = {r['accident_type']: csv_accident_type_details(r)['accident_type_display_name'] for r in table}
+        lines = ['에블리 | 사고 분석 보고서', '────────────────────────────', '', '1. 사고 타임라인']
+        timeline = timeline_payload or {}
+        major = major_accident_timeline(timeline)
+        for line in major:
+            lines.append(line.replace(' (접촉 확인 필요)', ' · 접촉 미확인'))
+            times = re.findall(r'\d+\.\d+', line.split('|')[0])
+            if times:
+                start, end = float(times[0]), float(times[-1])
+                kind = 'B 확인 구간' if '상대 차량' in line else 'A 움직임' if '내 차' in line else '접촉 근거 구간'
+                event = next((e for e in timeline.get('timeline', []) if e.get('kind') == kind and round(e.get('start_sec', -1), 2) == start and round(e.get('end_sec', -1), 2) == end), {})
+                detail = neat_text(event.get('evidence_text') or event.get('description') or '', 90)
+                if detail:
+                    lines.append('  ' + detail)
+        if not major:
+            lines.append('핵심 장면 확인 필요')
+        lines.append('※ 프레임 기준의 관찰 구간이며 접촉 시각은 미확정입니다.')
+        audit = getattr(scene, '_evidence_audit', {})
+        if audit.get('user_road_context'):
+            lines.append('장소: ' + scene.road_shape + ' (사용자 진술)')
+        if audit.get('user_confirmed_context'):
+            lines.append('사고 전 실선 진로변경: 사용자 진술 (영상 관찰과 구분)')
+
+        lines += ['', '2. 기본 과실비율']
+        pattern = out.get('observed_accident_pattern')
+        if not results:
+            if pattern:
+                lines.append('인식한 사고 형태: ' + pattern['title'])
+                lines.append('  내 차 ' + pattern.get('ego_motion','미확인') + ' / 상대 차 ' + pattern.get('other_motion','미확인'))
+                lines.append('  기본값 미산정 · 정지 차량 조건에 직접 대응하는 등록 기준이 없습니다.')
+                lines.append('  통로 주행을 전제로 하는 CSV127번을 정지 차량에 적용하지 않았습니다.')
+            else:
+                lines.append('미산정 · 사고 유형과 차량 진행 조건 확인 필요')
+        for n, r in enumerate(results, 1):
+            s = scenarios.get(r['scenario_id'], {})
+            prefix = f'후보 {n} · ' if len(results) > 1 else ''
+            lines.append(prefix + titles.get(r['accident_type'], '사고 유형 확인 필요'))
+            progress = s.get('service_progress', {})
+            lines.append(f"  내 차 {progress.get('A', '미확인')} / 상대 차 {progress.get('B', '미확인')}")
+            lines.append('  기본값: ' + compact_fault(r['base_fault']))
+            if s.get('reference_only'):
+                lines.append('  조건 비교용 참고값 · 영상에 적용된 유형은 미확정')
+        if results:
+            lines.append('※ 표시한 진행 조건이 실제와 일치하는 경우의 기본값입니다.')
+
+        lines += ['', '3. 법령 및 가감요소']
+        context = out.get('legal_context', {})
+        articles = context.get('articles', [])
+        if articles:
+            labels = []
+            for a in articles:
+                para = ' 제3항' if a['article'] == 18 and any(r['accident_type'] == 126 for r in results) else ''
+                labels.append(law_article_label(a['article']) + para + ' ' + a.get('title', ''))
+            lines.append('참고 법령: 도로교통법 ' + ' / '.join(dict.fromkeys(labels)))
+            edition = '사고일 이전 시행 판본 조회' if context.get('requested_accident_date') else '현행 판본 조회 · 사고 당시 판본 미확인'
+            lines.append('  ' + edition + ' · 법령 적용 여부는 별도 확인 필요')
+            if any(r['accident_type'] == 126 for r in results):
+                lines.append('  주차장 출차 기준에서 준용한 조문입니다.')
+        else:
+            lines.append('참고 법령: ' + {'disabled': '조회 비활성', 'unavailable': '조회 실패', 'not_mapped': '연결 근거 확인 필요'}.get(context.get('status'), '확인 필요'))
+        for n, r in enumerate(results, 1):
+            prefix = f'후보 {n}: ' if len(results) > 1 else ''
+            projection = r.get('conditional_projection') or {}
+            applied = r.get('applied_adjustments') or projection.get('applied_adjustments') or []
+            if applied:
+                labels = [('내 차' if f['actor'] == 'A' else '상대 차') + ' ' + f['label'] + f" {f['delta_pp']:+d}%p" for f in applied]
+                lines.append(prefix + '반영 ' + ' / '.join(dict.fromkeys(labels)))
+            else:
+                lines.append(prefix + '확인된 가감요소 없음')
+            pending = r.get('pending') or projection.get('pending') or []
+            s = scenarios.get(r['scenario_id'], {})
+            if pending or s.get('reference_only') or not s.get('eligible_for_adjustment'):
+                lines.append('  추가 확인: ' + ('유형·차량 역할 및 가감요소' if s.get('reference_only') or not s.get('eligible_for_adjustment') else '가감요소') + ' · 미확인은 미적용 확정이 아닙니다.')
+            config = ADJUSTMENT_RULES.get(str(r['accident_type']))
+            if config:
+                lines.append('  수치 기준: 손해보험협회 ' + config['official_chart'])
+            else:
+                lines.append('  해당 유형의 가감 규칙 미등록')
+
+        lines += ['', '4. 관련 판례']
+        cases = out.get('related_cases', [])[:3]
+        for n, c in enumerate(cases, 1):
+            lines.append(f"{n}) {c['court']} {case_date(c['date'])} · {c['case_number']}")
+            lines.append('  요지: ' + neat_text(c.get('summary', ''), 100))
+            lines.append('  차이: ' + neat_text(c.get('comparison_limit', ''), 90))
+            lines.append('  자료: ' + ('국가법령정보 판례 본문 발췌' if c.get('case_api_id') else '손해보험협회 요약 · 판결문 원문 조회 아님'))
+        if not cases:
+            lookups = out.get('case_lookup',[])
+            failed = any(a.get('status') in ('unavailable','error') for a in lookups)
+            if failed:
+                lines.append('판례 조회 실패 · 이번 실행에서 관련 판례를 확인하지 못했습니다.')
+            elif lookups:
+                lines.append('판례 조회는 진행했으나 관련성 검토를 통과한 자료가 없습니다.')
+            else:
+                lines.append('연결할 사고 유형이 없어 판례 검색이 진행되지 않았습니다.')
+        else:
+            lines.append('※ 유사 쟁점의 참고 사례이며 같은 과실비율을 적용하지 않습니다.')
+
+        lines += ['', '5. 과실비율 참고 결과']
+        if not results:
+            if pattern:
+                lines.append('미산정 · 정지 차량 대 후진 차량의 대응 기준·가감 규칙 보강 필요')
+            else:
+                lines.append('미산정 · 사고 유형과 차량 역할 확인 필요')
+        for n, r in enumerate(results, 1):
+            s = scenarios.get(r['scenario_id'], {})
+            projection = r.get('conditional_projection') or {}
+            fault = r.get('final_fault') or r.get('adjusted_fault') or projection.get('adjusted_fault') or r['base_fault']
+            prefix = f'후보 {n}: ' if len(results) > 1 else ''
+            lines.append(prefix + compact_fault(fault))
+            if s.get('reference_only'):
+                lines.append('  진행·차량 역할을 가정한 참고값 · 실제 적용 미확정')
+            elif not r.get('final_fault'):
+                lines.append('  추가 확인이 필요한 계산값 · 최종 비율 미확정')
+            else:
+                lines.append('  확인된 조건과 등록된 가감 기준에 따른 참고값')
+        lines += ['', '상세 조건·가감 기준·법령 및 판례 출처는 결과 JSON에 저장됩니다.']
+        return finish_report('\n'.join(lines))
+
+    _save_user_report_verbose = save_user_report
+    def save_user_report(result_path, text):
+        return _save_user_report_verbose(result_path, finish_report(text))
+
+    _safe_write_result_verbose = safe_write_result
+    def safe_write_result(path, result):
+        if result.get('user_report'):
+            result['user_report'] = finish_report(result['user_report'])
+        return _safe_write_result_verbose(path, result)
+
+
+    _normalize_tracks_before_recovery = normalize_tracks
+    def normalize_tracks(observation):
+        repairs = []
+        if isinstance(observation, Observation):
+            relation = observation.straight_relation
+            target = observation.b_vehicle_id
+            matches = [t for t in observation.tracks if t.vehicle_id.strip() == target]
+            if target and target != 'A' and len(matches) == 1:
+                track = matches[0]
+                overlap = set(track.evidence_frame_ids) & set(relation.evidence_frame_ids)
+                external = (relation.b_vehicle_id == target and relation.b_position in ('앞','뒤','옆')
+                            and relation.b_visible_face in ('전면','후면','측면') and relation.support != '미확인'
+                            and len(overlap) >= 2 and bool(relation.explanation.strip()))
+                explicit_ego = bool(re.search(r'^(?:A\s*차량|블랙박스\s*장착\s*차량|카메라\s*차량)(?:\s*자체|\s*본체|$)', track.appearance))
+                if track.camera_role == '카메라 차량' and external and not explicit_ego:
+                    before = track.model_dump()
+                    track.camera_role = '외부 차량'
+                    repairs.append({'vehicle_id': target, 'before': before, 'reason': '선택된 상대 ID·보이는 차체 면·서로 다른 근거 프레임을 교차 비교해 역할 모순 수정', 'support': '모델 기록 간 일관성 복구; 독립 영상 검증 아님'})
+        notes = _normalize_tracks_before_recovery(observation)
+        if repairs:
+            observation._evidence_audit.setdefault('identity_repairs', []).extend(repairs)
+            notes.append('상대 차량의 카메라 역할 오기 교차 검토·복구')
+        return notes
+
+    def restore_saved_identity(saved):
+        result = json.loads(json.dumps(saved))
+        scene = Observation.model_validate(result['scene'])
+        scene._evidence_audit = json.loads(json.dumps(result.get('evidence_audit', {})))
+        if scene.b_vehicle_id and any(t.vehicle_id == scene.b_vehicle_id for t in scene.tracks):
+            return result
+        # Recovery uses recorded raw fields, never creates a vehicle from a guessed description.
+        sources = [s.get('raw_identity') for s in reversed(result.get('stages', [])) if '상세' in s.get('stage','') and s.get('raw_identity')]
+        sources += [result.get('raw_review_scene', {})]
+        for raw in sources:
+            target = raw.get('b_vehicle_id')
+            if not target or target == 'A' or len([t for t in raw.get('tracks', []) if t.get('vehicle_id') == target]) != 1:
+                continue
+            trial = scene.model_copy(deep=True)
+            trial.tracks = [Track.model_validate(t) for t in raw['tracks']]
+            trial.b_vehicle_id = target
+            trial.b_identity = '구별됨'
+            relation = trial.straight_relation
+            known = {f['id'] for key in ('overview_frames','review_frames','frame_times') for f in result.get(key,[]) if isinstance(f,dict) and 'id' in f}
+            referenced = {i for t in trial.tracks for i in [t.first_frame_id,t.last_frame_id,*t.evidence_frame_ids]}
+            if known and not referenced <= known:
+                continue
+            normalize_tracks(trial)
+            if trial.b_vehicle_id != target:
+                continue
+            selected = next(t for t in trial.tracks if t.vehicle_id == target)
+            ids = preimpact_ids(trial, [i for i in relation.evidence_frame_ids if i in selected.evidence_frame_ids])
+            if relation.b_vehicle_id != target or len(ids) < 2:
+                continue
+            trial.b_pre_frame_ids = ids
+            check = next((c for c in trial.maneuver_checks if c.vehicle == 'B' and c.support != '미확인' and len(set(c.evidence_frame_ids) & set(ids)) >= 2), None)
+            if check:
+                trial.b_action = check.action
+            collect_match_facts(trial)
+            mark_accident_input(trial)
+            # Explicit prior user information is tied to the exact video digest and stays labelled user.
+            apply_confirmed_video_context(trial, result.get('video_sha256',''))
+            result.setdefault('before_identity_recovery', {'scene':result['scene'],'evidence_audit':result.get('evidence_audit',{})})
+            result['scene'] = trial.model_dump()
+            result['evidence_audit'] = trial._evidence_audit
+            result['identity_recovery'] = {'status': 'recovered_from_recorded_raw_identity', 'vehicle_id': target, 'additional_llm_calls': 0}
+            return result
+        result['identity_recovery'] = {'status': 'not_recovered', 'reason': '상대 ID와 프레임 근거를 일관되게 연결할 원본 기록 부족'}
+        return result
+
+    _survey_base_before_recovery = survey_base
+    def survey_base(saved, path):
+        return restore_saved_identity(_survey_base_before_recovery(saved, path))
+
+    _survey_candidates_before_recovery = survey_candidates
+    def survey_candidates(saved, scene, rows):
+        candidates = _survey_candidates_before_recovery(saved, scene, rows)
+        # A rejected LLM choice must not suppress deterministic comparison of all CSV rows.
+        return candidates or conditional_candidates(rows, scene)
+
+    _recompute_survey_before_recovery = recompute_survey
+    def recompute_survey(answers, result_path=None, survey_context=None, baseline_data=None, persist=True):
+        baseline = baseline_data
+        if baseline is not None and answers.get('b_lane_change') == '없음':
+            baseline = json.loads(json.dumps(baseline))
+            state = baseline.get('scene',{})
+            audit = baseline.get('evidence_audit',{})
+            # A current explicit answer overrides historical video-specific user context.
+            if audit.get('user_confirmed_context'):
+                audit.pop('user_confirmed_context',None)
+                audit.setdefault('adjustment_answers',{}).pop('b_factor_prohibited_change',None)
+                audit.get('B',{}).pop('lane_change',None)
+                audit.get('B',{}).pop('progress',None)
+                if state.get('b_action') == '진로변경':
+                    checks = [c for c in state.get('maneuver_checks',[]) if c.get('vehicle')=='B' and c.get('action')!='진로변경']
+                    state['b_action'] = checks[0]['action'] if len(checks)==1 else '미확인'
+                state.get('b_state',{})['lane_change'] = '없음'
+                original = state.get('straight_relation',{})
+                audit['straight_relation'] = {**original,'status':'inferred','cause_source':'model_record'}
+        return _recompute_survey_before_recovery(answers,result_path,survey_context,baseline,persist)
+
+    CAUSE_QUESTIONS = {
+        '직선 도로': [
+            ('a_action','사고 직전 내 차의 진행 방향은? 감속하며 전진했다면 직진입니다.',['직진','정지/대기','후진','좌회전','우회전','진로변경','미확인']),
+            ('b_relative_position','사고 직전 상대 차는 내 차의 어디에 있었나요?',['앞','뒤','옆','미확인']),
+            ('b_lane_change','사고 직전 상대 차가 내 차로로 차로변경했나요?',['있음','없음','미확인']),
+            ('b_lane_boundary','상대 차가 실제 넘어온 차선은 무엇인가요?',['실선','점선','차선 없음','미확인'])],
+        '주차장': [
+            ('a_parking_route','내 차는 주차칸에서 나왔나요, 통로를 달리고 있었나요?',['통로 주행','주차구역에서 출차','통로에서 주차구역 진입','미확인']),
+            ('b_parking_route','상대 차는 주차칸에서 나왔나요, 통로를 달리고 있었나요?',['통로 주행','주차구역에서 출차','통로에서 주차구역 진입','미확인']),
+            ('a_parking_direction','사고 직전 내 차의 이동 방향은?',['전진','후진','정지/대기','미확인']),
+            ('b_parking_direction','사고 직전 상대 차의 이동 방향은?',['전진','후진','정지/대기','미확인'])],
+        '회전교차로': [
+            ('a_route','내 차는 회전교차로에서 어떻게 진행했나요?',['진입','내부 회전','진출','진입 전 대기','미확인']),
+            ('b_route','상대 차는 회전교차로에서 어떻게 진행했나요?',['진입','내부 회전','진출','진입 전 대기','미확인']),
+            ('roundabout_lanes','회전교차로의 회전 차로 수는?',['1차로','2차로 이상','미확인'])],
+        '교차로': [
+            ('a_action','사고 직전 내 차의 진행 방향은?',['직진','좌회전','우회전','정지/대기','미확인']),
+            ('b_action','사고 직전 상대 차의 진행 방향은?',['직진','좌회전','우회전','정지/대기','미확인']),
+            ('road_width_relation','두 차량이 진입한 도로 폭은 어땠나요?',['동일폭','내 차 도로가 넓음','상대 차 도로가 넓음','미확인'])]}
+    CAUSE_KEYS = {k for specs in CAUSE_QUESTIONS.values() for k,_,_ in specs}
+
+    _collect_basic_questionnaire = collect_questionnaire
+    def collect_questionnaire(saved, input_fn=None, print_fn=None):
+        saved = restore_saved_identity(saved)
+        answers, questions = _collect_basic_questionnaire(saved, input_fn, print_fn)
+        read, say = input_fn or input, print_fn or print
+        shape = answers.get('road_shape')
+        if shape in (None,'미확인'):
+            shape = saved['scene']['road_shape']
+        say('\n사고 조건 확인 · 모르는 항목은 0 또는 Enter를 선택하세요.')
+        for key, label, options in CAUSE_QUESTIONS.get(shape, []):
+            if key == 'b_lane_boundary' and answers.get('b_lane_change') != '있음':
+                answers[key] = '미확인'
+                continue
+            values = [v for v in options if v != '미확인']
+            say(label + (' (정지/대기 = 완전히 멈춘 상태)' if '정지/대기' in values else ''))
+            say(' / '.join(f'{i+1}. {v}' for i,v in enumerate(values))+' / 0. 잘 모르겠어요')
+            while True:
+                value = read('선택: ').strip()
+                if value in ('','0','미확인','잘 모르겠어요'): value='미확인'; break
+                if value in values: break
+                if value.isdigit() and 1 <= int(value) <= len(values): value=values[int(value)-1]; break
+                say('표시된 번호 또는 선택지를 입력하세요.')
+            answers[key] = value
+            questions.append({'key':key,'group':'사고 조건 확인','label':label,'options':options})
+        return answers, questions
+
+    _update_estimates_before_recovery = update_estimates
+    def update_estimates(answers, result_path=None, asked_questions=None, display_report=True):
+        path = Path(result_path or output_path)
+        result = _update_estimates_before_recovery(answers,path,asked_questions,display_report=False)
+        # Baseline preservation is only useful when that baseline actually has calculation scenarios.
+        if not result.get('rule_engine_output',{}).get('results') and answers.get('b_vehicle_confirm') != '아니에요':
+            scene = Observation.model_validate(result['scene'])
+            scene._evidence_audit = json.loads(json.dumps(result.get('evidence_audit',{})))
+            collect_match_facts(scene)
+            context, notes = matching_context(scene)
+            rows = search_rows(context)
+            candidates = survey_candidates(result,context,rows)
+            byid = {r['accident_type']:r for r in rows}
+            linked = [link_match(c,byid[c.accident_type],context) for c in candidates if c.accident_type in byid]
+            bundle = law_rule_bundle(scene,linked)
+            result.update(bundle, scene=scene.model_dump(), evidence_audit=scene._evidence_audit,
+                          internal_candidate_scenarios=linked, matching_context=context.model_dump(), matching_notes=notes,
+                          similar_accidents=public_scenarios(scene,linked),reference_scenarios=reference_scenarios(scene,linked))
+            result['accident_type_candidates'] = [{'accident_type_id':s['accident_type'],'status':s.get('scenario_status','조건부 참고')} for s in bundle['rule_engine_input'].get('scenarios',[])]
+            result['catalog_assessments'] = compare_all_csv_rows(rows,context)
+            result['csv_comparison'] = {'scope':'all_rows','total':len(table),'compared':len(rows),'prefiltered':0,'method':'post_survey_empty_baseline_recheck'}
+            result['no_match_reason'] = '' if bundle['rule_engine_output'].get('results') else '현재 답변·관찰과 양립하는 등록 기준 부족'
+            result['user_report'] = build_user_report(scene,result,linked,[],bundle_override=bundle)
+            result['user_report'] += '\n설문 반영: 사용자 진술과 영상 관찰을 구분했습니다. 빈 후보를 전체 CSV와 재비교했습니다.'
+            result.setdefault('questionnaire',{})['empty_result_recheck'] = {'compared_csv_count':len(rows),'additional_llm_calls':0}
+            result['questionnaire']['selection_policy'] = 'empty_baseline_rechecked'
+        out = result.get('rule_engine_output',{})
+        results = out.get('results',[])
+        result.setdefault('diagnostics',{})['selected_type_count'] = len({r['accident_type'] for r in results})
+        result['result_status'] = {
+            'status': 'conditional_reference' if any(s.get('reference_only') for s in result.get('rule_engine_input',{}).get('scenarios',[])) else 'calculated_reference' if results else 'needs_evidence_or_supported_standard',
+            'scenario_count':len(results),'report_available':True,
+            'reason': '' if results else '답변·영상과 양립하는 등록 기준 부족. 결과 보고서는 제공하며 임의 비율·판례는 생성하지 않음'}
+        if not results:
+            result['user_report'] += '\n계산 조건 확인 결과: 현재 답변에 맞는 기준을 찾지 못했습니다. 답변·관찰·제외 사유는 JSON에 보존됩니다.'
+        result['version'] = CODE_VERSION
+        result['user_report'] = finish_report(result['user_report'])
+        destination = path.with_name(path.stem.removesuffix('_survey')+'_survey.json')
+        safe_write_result(destination,result)
+        if display_report:
+            print(result['user_report']); print('\n보고서:',destination.with_name(destination.stem+'_report.txt'));print('JSON:',destination)
+        return result
 
 
     _process_log = io.StringIO()

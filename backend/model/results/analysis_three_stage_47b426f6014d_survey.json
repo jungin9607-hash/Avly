@@ -1,5 +1,5 @@
 {
-  "version": "auto-three-stage-v2.20.8-local-video-picker",
+  "version": "auto-three-stage-v2.20.9-concise-text-report",
   "video": "/home/dkswnsgh/Avly/backend/uploads/주차장(지하)1.mp4",
   "video_sha256": "47b426f6014da3ebb1b7ac11d9575675bd65b5479292c123a3144b6c274c8779",
   "csv_sha256": "a4fee0c48a0c554ac9624a7ffc3b081e2e2cb59ad71f0ce467356182e2cedc25",
@@ -328,7 +328,7 @@
       "sec": 9.933333333333334
     }
   ],
-  "user_report": "에블리 | 사고 분석 보고서\n────────────────────────────\n\n1. 사고 타임라인\n• 4.67~7.67초 | 상대 차량 확인\n  흰색 세단, 전방 우측에서 좌측으로 횡단 / 화면 이동: 오른쪽→왼쪽; 도로상 진행: 미확인\n• 5.07~5.73초 | 충돌 의심 장면 · 접촉 미확인\n  에서 B가 A 전방 가까이 접근, B 차체와 A 보닛이 겹치는 장면 및 충돌 직후 B 이동량 급감\n※ 프레임 기준의 관찰 구간이며 정확한 충돌 시각은 아닙니다.\n※ 장소: 주차장 · 사용자 확인 정보, Vision 판단과 구분\n\n2. 기본 과실비율\n후보 1 · 주차장(또는 차도가 아닌 장소) / 주차구역과 통로\n  내 차 통로 직진 / 상대 차 주차구역에서 직진 출차\n  기본값  내 차 30% / 상대 차 70%\n  상태  진행·역할을 가정한 참고값\n  조건: 탐색용 조건 비교이며 현재 영상에 적용된 사고 유형이 아님\n  조건: 내 차 통로 직진 / 상대 차 주차구역에서 직진 출차 조건이 실제와 맞는 경우에만 아래 비율을 참고\n  조건: A의 '통로 직진' 진행 조건은 미확인: 추가 가정이 필요함\n후보 2 · 주차장(또는 차도가 아닌 장소) / 주차구역과 통로\n  내 차 통로 직진 / 상대 차 주차구역에서 후진 출차\n  기본값  내 차 25% / 상대 차 75%\n  상태  진행·역할을 가정한 참고값\n  조건: 탐색용 조건 비교이며 현재 영상에 적용된 사고 유형이 아님\n  조건: 내 차 통로 직진 / 상대 차 주차구역에서 후진 출차 조건이 실제와 맞는 경우에만 아래 비율을 참고\n  조건: A의 '통로 직진' 진행 조건은 미확인: 추가 가정이 필요함\n\n3. 법령 및 가감요소\n관련 법령: 도로교통법\n  제18조 제3항 · 횡단 등의 금지\n법령 판본: 현행법령 · 사고 당시 판본 확인 아님 / 시행일 20261013\n※ 주차장 출차 기준에서 준용하는 근거이며 직접 적용을 확정하지 않습니다.\n후보 1\n  적용: 대기 · 진행·차량 역할 미확인\n  조건부 계산: 확인된 가감요소 없음 · 미확인은 미적용으로 확정하지 않음\n  추가 확인: 내 차 서행 불이행, 내 차 주차장 화살표 반대 주행, 내 차 현저한 과실, 내 차 중대한 과실, 상대 차 서행 불이행, 상대 차 현저한 과실, 상대 차 중대한 과실, 상대 차 차량 앞부분을 내밀고 대기 후 출차\n  기준(내 차): 서행 불이행 +10%p, 주차장 화살표 반대 주행 +10%p, 현저한 과실 +10%p, 중대한 과실 +20%p\n  기준(상대 차): 서행 불이행 +10%p, 현저한 과실 +10%p, 중대한 과실 +20%p, 차량 앞부분을 내밀고 대기 후 출차 -10%p\n  수치 출처: 손해보험협회 차51-1\n후보 2\n  적용: 대기 · 진행·차량 역할 미확인\n\n4. 관련 판례 · 사고 유형의 참고 사례\n1) 서울중앙지방법원 · 2015-12-18 · 2015나37411\n   요지: 지하주차장에서 후진 출차 차량이 통로 진행 차량의 옆부분을 충격한 사례. 출차 차량의 과실 100%가 인정된 것으로 소개됨.\n   비교: 후진 출차 사례이며, 현재 영상의 출차 여부·진행 방향이 미확인이므로 같은 비율을 적용하지 않음.\n   자료: 손해보험협회 판례 요약 · 판결문 원문 조회 아님\n   출처: https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A851-1&chartType=1\n   연결 기준: 후보 사고 유형의 도표에 소개된 사례이며, 영상과 동일한 사고라는 뜻은 아닙니다.\n※ 유형 126: 1/3건 · 민사 배상·차량 충돌·장소·진행 조건을 검토한 참고 자료가 부족합니다. 무관한 판례로 개수를 채우지 않습니다.\n※ 유형 127: 0/3건 · 민사 배상·차량 충돌·장소·진행 조건을 검토한 참고 자료가 부족합니다. 무관한 판례로 개수를 채우지 않습니다.\n\n5. 조건에 따른 과실비율 참고\n후보 1\n  가정하의 기본 참고값 · 확인된 가감 없음  내 차 30% / 상대 차 70%\n  유형·차량 역할을 가정한 계산이며 실제 적용 최종값은 미확정\n  추가 가감요소 미확인\n후보 2\n  최종 산정 미완료\n  기본 참고값  내 차 25% / 상대 차 75%\n  사유: 진행·차량 역할 확인 필요\n\n※ AI 참고 분석입니다. 판례의 비율을 이번 사고에 그대로 적용하지 않습니다.\n※ 법령 원문·출처 링크·상세 판단 근거는 결과 JSON에 저장됩니다.\n\n설문 반영: 사용자 진술과 영상 관찰을 구분했습니다.\n상대 차량 최초 확인: 가까워진 뒤\n내 차 방향지시등: 해당 없음\n※ 기본 설문은 영상 분석을 보완합니다. 대응하는 과실 기준이나 판례 자료가 부족하면 결과 일부가 미산정될 수 있습니다.",
+  "user_report": "에블리 | 사고 분석 보고서\n────────────────────────────\n\n1. 사고 타임라인\n• 4.67~7.67초 | 상대 차량 확인\n  흰색 세단, 전방 우측에서 좌측으로 횡단 / 화면 이동: 오른쪽→왼쪽; 도로상 진행: 미확인\n• 5.07~5.73초 | 충돌 의심 장면 · 접촉 미확인\n  에서 B가 A 전방 가까이 접근, B 차체와 A 보닛이 겹치는 장면 및 충돌 직후 B 이동량 급감\n※ 프레임 기준의 관찰 구간이며 접촉 시각은 미확정입니다.\n장소: 주차장 (사용자 진술)\n\n2. 기본 과실비율\n후보 1 · 주차장(또는 차도가 아닌 장소) / 주차구역과 통로\n  내 차 통로 직진 / 상대 차 주차구역에서 직진 출차\n  기본값: 내 차 30% / 상대 차 70%\n  조건 비교용 참고값 · 영상에 적용된 유형은 미확정\n후보 2 · 주차장(또는 차도가 아닌 장소) / 주차구역과 통로\n  내 차 통로 직진 / 상대 차 주차구역에서 후진 출차\n  기본값: 내 차 25% / 상대 차 75%\n  조건 비교용 참고값 · 영상에 적용된 유형은 미확정\n※ 표시한 진행 조건이 실제와 일치하는 경우의 기본값입니다.\n\n3. 법령 및 가감요소\n참고 법령: 도로교통법 제18조 제3항 횡단 등의 금지\n  현행 판본 조회 · 사고 당시 판본 미확인 · 법령 적용 여부는 별도 확인 필요\n  주차장 출차 기준에서 준용한 조문입니다.\n후보 1: 확인된 가감요소 없음\n  추가 확인: 유형·차량 역할 및 가감요소 · 미확인은 미적용 확정이 아닙니다.\n  수치 기준: 손해보험협회 차51-1\n후보 2: 확인된 가감요소 없음\n  추가 확인: 유형·차량 역할 및 가감요소 · 미확인은 미적용 확정이 아닙니다.\n  해당 유형의 가감 규칙 미등록\n\n4. 관련 판례\n1) 서울중앙지방법원 2015-12-18 · 2015나37411\n  요지: 지하주차장에서 후진 출차 차량이 통로 진행 차량의 옆부분을 충격한 사례. 출차 차량의 과실 100%가 인정된 것으로 소개됨.\n  차이: 후진 출차 사례이며, 현재 영상의 출차 여부·진행 방향이 미확인이므로 같은 비율을 적용하지 않음.\n  자료: 손해보험협회 요약 · 판결문 원문 조회 아님\n※ 유사 쟁점의 참고 사례이며 같은 과실비율을 적용하지 않습니다.\n\n5. 과실비율 참고 결과\n후보 1: 내 차 30% / 상대 차 70%\n  진행·차량 역할을 가정한 참고값 · 실제 적용 미확정\n후보 2: 내 차 25% / 상대 차 75%\n  진행·차량 역할을 가정한 참고값 · 실제 적용 미확정\n\n상세 조건·가감 기준·법령 및 판례 출처는 결과 JSON에 저장됩니다.\n\n\n설문 반영: 사용자 진술과 영상 관찰을 구분했습니다.\n새 판단 정보가 없어 기존 후보와 기본비율을 유지했습니다.\n상대 차량 최초 확인: 가까워진 뒤\n\n※ 기본 설문은 영상 분석을 보완합니다. 대응하는 과실 기준이나 판례 자료가 부족하면 결과 일부가 미산정될 수 있습니다.\n\n※ 본 보고서는 법적 효력이 없는 AI 참고 자료입니다. 실제 과실비율이나 법적 책임을 확정하지 않습니다.",
   "overview": [
     {
       "summary": "A(카메라 차량)는 주차장 내부 통로에서 계속 전진하다 정지함. 외부 차량(V1)이 A의 전방 우측에서 빠르게 진입·통과하며 접촉이 의심되는 급접근이 있었으나 충돌음 등 확정적 근거는 없음. 이후 V1은 A 바로 앞에서 이동을 멈추고 움직임 없음.",
@@ -1130,14 +1130,14 @@
       "notice": "벽·천장 여러 영역의 로컬 이동 단서. 정지/접촉의 독립 확정이 아닌 보조 근거"
     },
     "collision_pattern": {
-      "value": "미확인",
-      "status": "unknown",
+      "value": "교차 진행/측면 접근",
+      "status": "inferred",
       "source": "모델 관찰 문구의 보수적인 분류; 실제 충돌 종류의 확정은 아님",
       "rear_evidence": false,
-      "crossing_evidence": false,
+      "crossing_evidence": true,
       "parked_evidence": true,
       "prior_accident_evidence": false,
-      "source_text": "frame_000076~frame_000086에서 B가 A 전방 가까이 접근, B 차체와 A 보닛이 겹치는 장면 및 충돌 직후 B 이동량 급감 frame_000084~086에서 B 운전석 앞부분과 A 전면 겹침 frame_000084 이후 B 진행 급감 및 정지 화면 이동: 오른쪽→왼쪽; 도로상 진행: 미확인"
+      "source_text": "frame_000076~frame_000086에서 B가 A 전방 가까이 접근, B 차체와 A 보닛이 겹치는 장면 및 충돌 직후 B 이동량 급감 frame_000084~086에서 B 운전석 앞부분과 A 전면 겹침 frame_000084 이후 B 진행 급감 및 정지 우측에서 좌측으로 통로 횡단 진행 후 정지"
     },
     "parking_motion_history": {
       "A": [
@@ -1233,7 +1233,7 @@
     },
     "questionnaire": {
       "answers": {
-        "a_indicator_timing": "해당 없음",
+        "a_indicator_timing": "미확인",
         "a_vehicle_condition": "알고 있는 고장 없음",
         "b_vehicle_confirm": "맞아요",
         "road_shape": "주차장",
@@ -1250,9 +1250,6 @@
       "value": "주차장",
       "model_value": "주차장",
       "source": "이번 설문 답변"
-    },
-    "signal_user_answers": {
-      "signal_present": "없음"
     }
   },
   "catalog_assessments": [
@@ -4012,7 +4009,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -4080,7 +4077,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -4157,7 +4154,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -4225,7 +4222,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -4302,7 +4299,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -4370,7 +4367,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -4467,7 +4464,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -4555,7 +4552,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -4634,7 +4631,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             },
@@ -4718,7 +4715,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             },
@@ -4811,7 +4808,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             },
@@ -4895,7 +4892,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             },
@@ -4986,7 +4983,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5054,7 +5051,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5131,7 +5128,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5199,7 +5196,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5276,7 +5273,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5344,7 +5341,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5423,7 +5420,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             },
@@ -5507,7 +5504,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             },
@@ -5590,7 +5587,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5650,7 +5647,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5719,7 +5716,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5779,7 +5776,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5848,7 +5845,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5908,7 +5905,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -5977,7 +5974,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6037,7 +6034,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6106,7 +6103,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6166,7 +6163,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6235,7 +6232,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6295,7 +6292,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6364,7 +6361,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6424,7 +6421,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6493,7 +6490,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6553,7 +6550,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6622,7 +6619,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6682,7 +6679,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6751,7 +6748,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6811,7 +6808,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6880,7 +6877,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -6940,7 +6937,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7009,7 +7006,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7069,7 +7066,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7138,7 +7135,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7198,7 +7195,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7267,7 +7264,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7327,7 +7324,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7396,7 +7393,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7456,7 +7453,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7525,7 +7522,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7585,7 +7582,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7654,7 +7651,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7714,7 +7711,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7783,7 +7780,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7843,7 +7840,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7912,7 +7909,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -7972,7 +7969,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8041,7 +8038,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8101,7 +8098,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8170,7 +8167,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8230,7 +8227,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8295,7 +8292,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8353,7 +8350,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8422,7 +8419,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8482,7 +8479,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8551,7 +8548,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8611,7 +8608,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8680,7 +8677,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8740,7 +8737,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8809,7 +8806,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8869,7 +8866,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8938,7 +8935,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -8998,7 +8995,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -9077,7 +9074,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -9147,7 +9144,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -9217,7 +9214,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -9277,7 +9274,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -19632,7 +19629,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -19692,7 +19689,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -19761,7 +19758,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -19820,7 +19817,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -25225,7 +25222,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -25285,7 +25282,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31043,7 +31040,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31111,7 +31108,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31189,7 +31186,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31257,7 +31254,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31335,7 +31332,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31403,7 +31400,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31481,7 +31478,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31549,7 +31546,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31627,7 +31624,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31695,7 +31692,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31773,7 +31770,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31841,7 +31838,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31919,7 +31916,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -31987,7 +31984,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32065,7 +32062,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32133,7 +32130,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32211,7 +32208,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32279,7 +32276,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32377,7 +32374,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32465,7 +32462,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32563,7 +32560,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32651,7 +32648,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32729,7 +32726,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32797,7 +32794,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32875,7 +32872,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -32943,7 +32940,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33021,7 +33018,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33089,7 +33086,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33167,7 +33164,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33235,7 +33232,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33313,7 +33310,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33381,7 +33378,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33459,7 +33456,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33527,7 +33524,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33605,7 +33602,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33673,7 +33670,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33751,7 +33748,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33819,7 +33816,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33889,7 +33886,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -33949,7 +33946,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34019,7 +34016,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34079,7 +34076,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34149,7 +34146,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34209,7 +34206,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34279,7 +34276,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34339,7 +34336,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34409,7 +34406,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34469,7 +34466,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34539,7 +34536,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34599,7 +34596,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34669,7 +34666,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34729,7 +34726,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34799,7 +34796,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34859,7 +34856,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34929,7 +34926,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -34989,7 +34986,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35059,7 +35056,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35119,7 +35116,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35189,7 +35186,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35249,7 +35246,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35319,7 +35316,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35379,7 +35376,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35449,7 +35446,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35509,7 +35506,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35579,7 +35576,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35639,7 +35636,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35709,7 +35706,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35769,7 +35766,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35839,7 +35836,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35899,7 +35896,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -35969,7 +35966,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36029,7 +36026,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36099,7 +36096,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36159,7 +36156,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36229,7 +36226,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36289,7 +36286,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36359,7 +36356,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36419,7 +36416,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36489,7 +36486,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36549,7 +36546,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36619,7 +36616,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36679,7 +36676,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36749,7 +36746,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36809,7 +36806,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36879,7 +36876,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -36939,7 +36936,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37009,7 +37006,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37069,7 +37066,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37139,7 +37136,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37199,7 +37196,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37269,7 +37266,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37329,7 +37326,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37399,7 +37396,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37459,7 +37456,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37529,7 +37526,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37589,7 +37586,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37659,7 +37656,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37719,7 +37716,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37789,7 +37786,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37849,7 +37846,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37919,7 +37916,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -37979,7 +37976,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38049,7 +38046,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38109,7 +38106,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38179,7 +38176,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38239,7 +38236,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38309,7 +38306,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38369,7 +38366,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38439,7 +38436,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38499,7 +38496,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38569,7 +38566,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38629,7 +38626,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38699,7 +38696,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38759,7 +38756,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38825,7 +38822,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38883,7 +38880,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -38949,7 +38946,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39007,7 +39004,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39077,7 +39074,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39137,7 +39134,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39207,7 +39204,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39267,7 +39264,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39337,7 +39334,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39397,7 +39394,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39467,7 +39464,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39527,7 +39524,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39597,7 +39594,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39657,7 +39654,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39727,7 +39724,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39787,7 +39784,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39868,7 +39865,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -39938,7 +39935,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40019,7 +40016,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40089,7 +40086,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40170,7 +40167,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40240,7 +40237,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40310,7 +40307,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40370,7 +40367,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40440,7 +40437,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40500,7 +40497,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40570,7 +40567,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40630,7 +40627,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40700,7 +40697,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40760,7 +40757,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40840,7 +40837,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40910,7 +40907,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -40990,7 +40987,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -41060,7 +41057,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53299,7 +53296,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53367,7 +53364,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53445,7 +53442,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53513,7 +53510,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53591,7 +53588,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53659,7 +53656,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53737,7 +53734,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53805,7 +53802,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53883,7 +53880,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -53951,7 +53948,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54049,7 +54046,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54137,7 +54134,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54235,7 +54232,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54323,7 +54320,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54401,7 +54398,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54469,7 +54466,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54547,7 +54544,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54615,7 +54612,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54693,7 +54690,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54761,7 +54758,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54831,7 +54828,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54891,7 +54888,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -54961,7 +54958,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55021,7 +55018,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55091,7 +55088,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55151,7 +55148,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55221,7 +55218,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55281,7 +55278,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55351,7 +55348,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55411,7 +55408,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55481,7 +55478,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55541,7 +55538,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55611,7 +55608,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55671,7 +55668,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55741,7 +55738,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55801,7 +55798,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55871,7 +55868,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -55931,7 +55928,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56001,7 +55998,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56061,7 +56058,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56131,7 +56128,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56191,7 +56188,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56261,7 +56258,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56321,7 +56318,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56391,7 +56388,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56451,7 +56448,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56521,7 +56518,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56581,7 +56578,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56651,7 +56648,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56711,7 +56708,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56781,7 +56778,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56841,7 +56838,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56911,7 +56908,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -56971,7 +56968,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57041,7 +57038,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57101,7 +57098,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57171,7 +57168,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57231,7 +57228,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57301,7 +57298,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57361,7 +57358,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57431,7 +57428,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57491,7 +57488,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57561,7 +57558,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57621,7 +57618,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57691,7 +57688,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57751,7 +57748,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57821,7 +57818,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57881,7 +57878,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -57951,7 +57948,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -58011,7 +58008,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -58081,7 +58078,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -58141,7 +58138,7 @@
             {
               "field": "signal_present",
               "expected": "없음",
-              "status": "user",
+              "status": "observed",
               "contradicted": false,
               "note": "신호등이 없는 교차로라는 조건 확인 필요"
             }
@@ -59926,8 +59923,7 @@
       431,
       432,
       433
-    ],
-    "method": "local_all_row_recheck_after_survey"
+    ]
   },
   "refinement_history": [],
   "pipeline": {
@@ -60204,7 +60200,9 @@
       }
     ],
     "accident_object": "차대차",
-    "road_place_codes": [],
+    "road_place_codes": [
+      5
+    ],
     "road_evidence": "실내 기둥, 천장, 주변 전체 주차구역, 매립된 통로 및 주차 표시판 다수. 통로 바닥과 구획선, 인도 없음.",
     "contact": "접촉 추정",
     "contact_evidence": "frame_000076~frame_000086에서 B가 A 전방 가까이 접근, B 차체와 A 보닛이 겹치는 장면 및 충돌 직후 B 이동량 급감",
@@ -61167,7 +61165,7 @@
       ]
     }
   ],
-  "no_match_reason": "전체 CSV를 재검토했으나 입력 조건과 양립하는 유형을 찾지 못함",
+  "no_match_reason": "전체 CSV를 비교했으나 사고 장소·대상·진행 및 필수조건과 양립하는 유형을 선택하지 못했습니다.",
   "uncertainty_details": [
     {
       "field": "a_action",
@@ -61807,54 +61805,30 @@
     }
   },
   "current_run_usage": {
-    "input_tokens": 36179,
-    "output_tokens": 4156,
-    "total_tokens": 40335
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
   },
   "stages": [
     {
       "stage": "1/3 전체 흐름 분석",
       "model": "gpt-4.1",
-      "cached": false,
-      "usage": {
-        "input_tokens": 6091,
-        "output_tokens": 610,
-        "total_tokens": 6701
-      },
-      "attempt": 1,
-      "status": "completed",
-      "incomplete_reason": null,
-      "max_output_tokens": 3200,
+      "cached": true,
+      "usage": null,
       "normalization": []
     },
     {
       "stage": "2/3 사고 전후 상세 확인",
       "model": "gpt-4.1",
-      "cached": false,
-      "usage": {
-        "input_tokens": 17160,
-        "output_tokens": 2645,
-        "total_tokens": 19805
-      },
-      "attempt": 1,
-      "status": "completed",
-      "incomplete_reason": null,
-      "max_output_tokens": 5000,
+      "cached": true,
+      "usage": null,
       "normalization": []
     },
     {
       "stage": "3/3 CSV 연결·과실 시나리오",
       "model": "gpt-4.1-mini",
-      "cached": false,
-      "usage": {
-        "input_tokens": 12928,
-        "output_tokens": 901,
-        "total_tokens": 13829
-      },
-      "attempt": 1,
-      "status": "completed",
-      "incomplete_reason": null,
-      "max_output_tokens": 1800,
+      "cached": true,
+      "usage": null,
       "normalization": []
     }
   ],
@@ -62799,21 +62773,8 @@
     },
     "source_file": "원본 분석 JSON"
   },
-  "survey_answers": {
-    "signal_present": "없음",
-    "a_indicator_timing": "해당 없음",
-    "a_vehicle_condition": "알고 있는 고장 없음",
-    "b_vehicle_confirm": "맞아요",
-    "road_shape": "주차장",
-    "weather": "미확인",
-    "road_surface": "미확인",
-    "a_first_notice": "가까워진 뒤",
-    "signal_operating": "미확인",
-    "a_signal": "미확인"
-  },
-  "survey_update_llm_tokens": 0,
   "survey_baseline": {
-    "version": "auto-three-stage-v2.20.8-local-video-picker",
+    "version": "auto-three-stage-v2.20.9-concise-text-report",
     "video": "/home/dkswnsgh/Avly/backend/uploads/주차장(지하)1.mp4",
     "video_sha256": "47b426f6014da3ebb1b7ac11d9575675bd65b5479292c123a3144b6c274c8779",
     "csv_sha256": "a4fee0c48a0c554ac9624a7ffc3b081e2e2cb59ad71f0ce467356182e2cedc25",
@@ -63142,7 +63103,7 @@
         "sec": 9.933333333333334
       }
     ],
-    "user_report": "에블리 | 사고 분석 보고서\n────────────────────────────\n\n1. 사고 타임라인\n• 4.67~7.67초 | 상대 차량 확인\n  흰색 세단, 전방 우측에서 좌측으로 횡단 / 화면 이동: 오른쪽→왼쪽; 도로상 진행: 미확인\n• 5.07~5.73초 | 충돌 의심 장면 · 접촉 미확인\n  에서 B가 A 전방 가까이 접근, B 차체와 A 보닛이 겹치는 장면 및 충돌 직후 B 이동량 급감\n※ 프레임 기준의 관찰 구간이며 정확한 충돌 시각은 아닙니다.\n\n2. 기본 과실비율\n후보 1 · 주차장(또는 차도가 아닌 장소) / 주차구역과 통로\n  내 차 통로 직진 / 상대 차 주차구역에서 직진 출차\n  기본값  내 차 30% / 상대 차 70%\n  상태  진행·역할을 가정한 참고값\n  조건: 탐색용 조건 비교이며 현재 영상에 적용된 사고 유형이 아님\n  조건: 내 차 통로 직진 / 상대 차 주차구역에서 직진 출차 조건이 실제와 맞는 경우에만 아래 비율을 참고\n  조건: A의 '통로 직진' 진행 조건은 미확인: 추가 가정이 필요함\n후보 2 · 주차장(또는 차도가 아닌 장소) / 주차구역과 통로\n  내 차 통로 직진 / 상대 차 주차구역에서 후진 출차\n  기본값  내 차 25% / 상대 차 75%\n  상태  진행·역할을 가정한 참고값\n  조건: 탐색용 조건 비교이며 현재 영상에 적용된 사고 유형이 아님\n  조건: 내 차 통로 직진 / 상대 차 주차구역에서 후진 출차 조건이 실제와 맞는 경우에만 아래 비율을 참고\n  조건: A의 '통로 직진' 진행 조건은 미확인: 추가 가정이 필요함\n\n3. 법령 및 가감요소\n관련 법령: 도로교통법\n  제18조 제3항 · 횡단 등의 금지\n법령 판본: 현행법령 · 사고 당시 판본 확인 아님 / 시행일 20261013\n※ 주차장 출차 기준에서 준용하는 근거이며 직접 적용을 확정하지 않습니다.\n후보 1\n  적용: 대기 · 진행·차량 역할 미확인\n  조건부 계산: 확인된 가감요소 없음 · 미확인은 미적용으로 확정하지 않음\n  추가 확인: 내 차 서행 불이행, 내 차 주차장 화살표 반대 주행, 내 차 현저한 과실, 내 차 중대한 과실, 상대 차 서행 불이행, 상대 차 현저한 과실, 상대 차 중대한 과실, 상대 차 차량 앞부분을 내밀고 대기 후 출차\n  기준(내 차): 서행 불이행 +10%p, 주차장 화살표 반대 주행 +10%p, 현저한 과실 +10%p, 중대한 과실 +20%p\n  기준(상대 차): 서행 불이행 +10%p, 현저한 과실 +10%p, 중대한 과실 +20%p, 차량 앞부분을 내밀고 대기 후 출차 -10%p\n  수치 출처: 손해보험협회 차51-1\n후보 2\n  적용: 대기 · 진행·차량 역할 미확인\n\n4. 관련 판례 · 사고 유형의 참고 사례\n1) 서울중앙지방법원 · 2015-12-18 · 2015나37411\n   요지: 지하주차장에서 후진 출차 차량이 통로 진행 차량의 옆부분을 충격한 사례. 출차 차량의 과실 100%가 인정된 것으로 소개됨.\n   비교: 후진 출차 사례이며, 현재 영상의 출차 여부·진행 방향이 미확인이므로 같은 비율을 적용하지 않음.\n   자료: 손해보험협회 판례 요약 · 판결문 원문 조회 아님\n   출처: https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A851-1&chartType=1\n   연결 기준: 후보 사고 유형의 도표에 소개된 사례이며, 영상과 동일한 사고라는 뜻은 아닙니다.\n※ 유형 126: 1/3건 · 민사 배상·차량 충돌·장소·진행 조건을 검토한 참고 자료가 부족합니다. 무관한 판례로 개수를 채우지 않습니다.\n※ 유형 127: 0/3건 · 민사 배상·차량 충돌·장소·진행 조건을 검토한 참고 자료가 부족합니다. 무관한 판례로 개수를 채우지 않습니다.\n\n5. 최종 과실비율\n후보 1\n  가정하의 기본 참고값 · 확인된 가감 없음  내 차 30% / 상대 차 70%\n  유형·차량 역할을 가정한 계산이며 실제 적용 최종값은 미확정\n  추가 가감요소 미확인\n후보 2\n  최종 산정 미완료\n  기본 참고값  내 차 25% / 상대 차 75%\n  사유: 진행·차량 역할 확인 필요\n\n※ AI 참고 분석입니다. 판례의 비율을 이번 사고에 그대로 적용하지 않습니다.\n※ 법령 원문·출처 링크·상세 판단 근거는 결과 JSON에 저장됩니다.",
+    "user_report": "에블리 | 사고 분석 보고서\n────────────────────────────\n\n1. 사고 타임라인\n• 4.67~7.67초 | 상대 차량 확인\n  흰색 세단, 전방 우측에서 좌측으로 횡단 / 화면 이동: 오른쪽→왼쪽; 도로상 진행: 미확인\n• 5.07~5.73초 | 충돌 의심 장면 · 접촉 미확인\n  에서 B가 A 전방 가까이 접근, B 차체와 A 보닛이 겹치는 장면 및 충돌 직후 B 이동량 급감\n※ 프레임 기준의 관찰 구간이며 접촉 시각은 미확정입니다.\n\n2. 기본 과실비율\n후보 1 · 주차장(또는 차도가 아닌 장소) / 주차구역과 통로\n  내 차 통로 직진 / 상대 차 주차구역에서 직진 출차\n  기본값: 내 차 30% / 상대 차 70%\n  조건 비교용 참고값 · 영상에 적용된 유형은 미확정\n후보 2 · 주차장(또는 차도가 아닌 장소) / 주차구역과 통로\n  내 차 통로 직진 / 상대 차 주차구역에서 후진 출차\n  기본값: 내 차 25% / 상대 차 75%\n  조건 비교용 참고값 · 영상에 적용된 유형은 미확정\n※ 표시한 진행 조건이 실제와 일치하는 경우의 기본값입니다.\n\n3. 법령 및 가감요소\n참고 법령: 도로교통법 제18조 제3항 횡단 등의 금지\n  현행 판본 조회 · 사고 당시 판본 미확인 · 법령 적용 여부는 별도 확인 필요\n  주차장 출차 기준에서 준용한 조문입니다.\n후보 1: 확인된 가감요소 없음\n  추가 확인: 유형·차량 역할 및 가감요소 · 미확인은 미적용 확정이 아닙니다.\n  수치 기준: 손해보험협회 차51-1\n후보 2: 확인된 가감요소 없음\n  추가 확인: 유형·차량 역할 및 가감요소 · 미확인은 미적용 확정이 아닙니다.\n  해당 유형의 가감 규칙 미등록\n\n4. 관련 판례\n1) 서울중앙지방법원 2015-12-18 · 2015나37411\n  요지: 지하주차장에서 후진 출차 차량이 통로 진행 차량의 옆부분을 충격한 사례. 출차 차량의 과실 100%가 인정된 것으로 소개됨.\n  차이: 후진 출차 사례이며, 현재 영상의 출차 여부·진행 방향이 미확인이므로 같은 비율을 적용하지 않음.\n  자료: 손해보험협회 요약 · 판결문 원문 조회 아님\n※ 유사 쟁점의 참고 사례이며 같은 과실비율을 적용하지 않습니다.\n\n5. 과실비율 참고 결과\n후보 1: 내 차 30% / 상대 차 70%\n  진행·차량 역할을 가정한 참고값 · 실제 적용 미확정\n후보 2: 내 차 25% / 상대 차 75%\n  진행·차량 역할을 가정한 참고값 · 실제 적용 미확정\n\n상세 조건·가감 기준·법령 및 판례 출처는 결과 JSON에 저장됩니다.\n\n※ 본 보고서는 법적 효력이 없는 AI 참고 자료입니다. 실제 과실비율이나 법적 책임을 확정하지 않습니다.",
     "overview": [
       {
         "summary": "A(카메라 차량)는 주차장 내부 통로에서 계속 전진하다 정지함. 외부 차량(V1)이 A의 전방 우측에서 빠르게 진입·통과하며 접촉이 의심되는 급접근이 있었으나 충돌음 등 확정적 근거는 없음. 이후 V1은 A 바로 앞에서 이동을 멈추고 움직임 없음.",
@@ -124601,65 +124562,54 @@
       }
     },
     "current_run_usage": {
-      "input_tokens": 36179,
-      "output_tokens": 4156,
-      "total_tokens": 40335
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
     },
     "stages": [
       {
         "stage": "1/3 전체 흐름 분석",
         "model": "gpt-4.1",
-        "cached": false,
-        "usage": {
-          "input_tokens": 6091,
-          "output_tokens": 610,
-          "total_tokens": 6701
-        },
-        "attempt": 1,
-        "status": "completed",
-        "incomplete_reason": null,
-        "max_output_tokens": 3200,
+        "cached": true,
+        "usage": null,
         "normalization": []
       },
       {
         "stage": "2/3 사고 전후 상세 확인",
         "model": "gpt-4.1",
-        "cached": false,
-        "usage": {
-          "input_tokens": 17160,
-          "output_tokens": 2645,
-          "total_tokens": 19805
-        },
-        "attempt": 1,
-        "status": "completed",
-        "incomplete_reason": null,
-        "max_output_tokens": 5000,
+        "cached": true,
+        "usage": null,
         "normalization": []
       },
       {
         "stage": "3/3 CSV 연결·과실 시나리오",
         "model": "gpt-4.1-mini",
-        "cached": false,
-        "usage": {
-          "input_tokens": 12928,
-          "output_tokens": 901,
-          "total_tokens": 13829
-        },
-        "attempt": 1,
-        "status": "completed",
-        "incomplete_reason": null,
-        "max_output_tokens": 1800,
+        "cached": true,
+        "usage": null,
         "normalization": []
       }
     ],
     "notice": "CSV 기본값 기반 조건부 참고 예측. 실제 과실비율과 다를 수 있으며 등록 규칙과 확인된 요소만 가감산하며 법령 조회 상태는 별도 표시."
   },
+  "survey_answers": {
+    "signal_present": "미확인",
+    "a_indicator_timing": "미확인",
+    "a_vehicle_condition": "알고 있는 고장 없음",
+    "b_vehicle_confirm": "맞아요",
+    "road_shape": "주차장",
+    "weather": "미확인",
+    "road_surface": "미확인",
+    "a_first_notice": "가까워진 뒤",
+    "signal_operating": "미확인",
+    "a_signal": "미확인"
+  },
+  "survey_update_llm_tokens": 0,
   "survey_update_api_tokens": 0,
   "questionnaire": {
     "status": "submitted",
     "answers": {
-      "signal_present": "없음",
-      "a_indicator_timing": "해당 없음",
+      "signal_present": "미확인",
+      "a_indicator_timing": "미확인",
       "a_vehicle_condition": "알고 있는 고장 없음",
       "b_vehicle_confirm": "맞아요",
       "road_shape": "주차장",
@@ -124721,18 +124671,16 @@
         "label": "내 차에 적용된 신호 (해당 없거나 모르면 잘 모르겠어요)"
       }
     ],
-    "derived_inputs": {
-      "signal_present": "없음"
-    },
+    "derived_inputs": {},
     "conflicts": [],
-    "selection_policy": "baseline_rebuild_preserve_valid_candidates",
+    "selection_policy": "unchanged_without_new_facts",
     "context_only_fields": [
       "weather",
       "road_surface",
       "a_first_notice"
     ],
     "additional_llm_calls": 0,
-    "legal_case_api_may_be_called": true,
+    "legal_case_api_may_be_called": false,
     "source": "사용자 진술; 영상 관찰과 구분",
     "video_observations_preserved_in": "survey_baseline",
     "form_mode": "basic_fixed_v1",
@@ -124741,8 +124689,8 @@
   "survey_history": [
     {
       "answers": {
-        "signal_present": "없음",
-        "a_indicator_timing": "해당 없음",
+        "signal_present": "미확인",
+        "a_indicator_timing": "미확인",
         "a_vehicle_condition": "알고 있는 고장 없음",
         "b_vehicle_confirm": "맞아요",
         "road_shape": "주차장",
@@ -124753,8 +124701,8 @@
         "a_signal": "미확인"
       },
       "changes": {
-        "signal_present": "없음",
-        "a_indicator_timing": "해당 없음",
+        "signal_present": "미확인",
+        "a_indicator_timing": "미확인",
         "a_vehicle_condition": "알고 있는 고장 없음",
         "b_vehicle_confirm": "맞아요",
         "road_shape": "주차장",
