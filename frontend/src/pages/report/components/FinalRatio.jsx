@@ -1,4 +1,4 @@
-import useCalculating from "./useCalculating";
+import useCalculating from "../hooks/useCalculating";
 
 // AI 예상 과실 비율: 작은 제목 → 큰 "20 : 80" + 오른쪽 범례 → 아래 얇은 비율 막대
 // 페이지에 들어오면 "산정 중"(숫자가 뒤섞이고 막대에 빛이 훑음) → "산정 완료"(예상 비율에 멈추며 튀어 오름)

@@ -9,9 +9,9 @@ RUN apt-get update \
 WORKDIR /app
 
 ARG INSTALL_YOLO=false
-COPY requirements.txt requirements-model.txt requirements-yolo.txt ./
-RUN pip install --no-cache-dir -r requirements.txt -r requirements-model.txt \
-    && if [ "$INSTALL_YOLO" = "true" ]; then pip install --no-cache-dir -r requirements-yolo.txt; fi
+COPY requirements.txt requirements-worker.txt ./
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-worker.txt \
+    && if [ "$INSTALL_YOLO" = "true" ]; then pip install --no-cache-dir ultralytics huggingface_hub; fi
 
 COPY . .
 

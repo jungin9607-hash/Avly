@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { lastAnalysisId } from "../../api/session";
-import { ROUTES } from "../../routes";
+import { lastAnalysisId } from "../../../api/session";
+import { ROUTES } from "../../../routes";
 import "./ReportPageLink.css";
 
 export default function ReportPageLink() {

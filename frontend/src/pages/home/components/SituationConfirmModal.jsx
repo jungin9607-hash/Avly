@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LEVEL_LABEL, cascade, normalizeSelection, resolveOption, selectionFrom } from "../../api/adapters";
+import { LEVEL_LABEL, cascade, normalizeSelection, resolveOption, selectionFrom } from "../../../api/adapters";
 import ModalShell from "./ModalShell";
 
 const LEVELS = ["place", "feature", "my_progress", "other_progress"];

@@ -1,4 +1,4 @@
-import { getTimelineColor, getTimelinePosition } from "./timelineColors";
+import { getTimelineColor, getTimelinePosition } from "../timelineColors";
 
 const stamp = (time) => `00:${time.toFixed(2).padStart(5, "0")}`;
 

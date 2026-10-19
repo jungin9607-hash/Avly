@@ -1,4 +1,0 @@
-# 번호판·사람 탐지(REDACTION=yolo)에 필요한 패키지. PyTorch 를 함께 설치해서 용량이 크다 (수 GB).
-# 개발 중 REDACTION=dev_copy 로 쓸 때는 필요 없다. 버전은 고정하지 않았다.
-ultralytics
-huggingface_hub

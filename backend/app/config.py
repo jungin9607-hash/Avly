@@ -65,7 +65,7 @@ def load_settings() -> Settings:
         engine=os.getenv("ENGINE", "avly").lower(),
         redaction=os.getenv("REDACTION", "yolo").lower(),
         worker_poll_seconds=float(os.getenv("WORKER_POLL_SECONDS", "2")),
-        fault_table_path=Path(os.getenv("FAULT_TABLE_PATH", str(BASE_DIR / "model" / "data" / "fault_table_car_to_car.csv"))),
+        fault_table_path=Path(os.getenv("FAULT_TABLE_PATH", str(BASE_DIR / "model" / "avly" / "data" / "fault_table_car_to_car.csv"))),
         replay_dir=Path(os.getenv("REPLAY_DIR", str(BASE_DIR / "tests" / "fixtures"))),
         avly_max_attempts=int(os.getenv("JOB_MAX_ATTEMPTS", "2")),
     )

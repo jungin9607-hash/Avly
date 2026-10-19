@@ -186,6 +186,8 @@ POST /accidents (동의, session_id 받기)
 | `reference_candidates[]` | 분석 단계의 과실표 후보 (`unresolved`일 때 참고용으로 보여 준다) |
 | `notice` | 법적 효력이 없다는 고지 문구 |
 
+**판례 규칙:** 최대 3개를 보여 준다. 순서는 도표 등록 판례(`registered_chart_reference`) → 조건이 모두 맞는 API 판례 → 일부만 맞는 판례(`partial_reference`)이다. 일부 일치 판례는 `comparison_limit`에 몇 개 조건이 맞았는지 적고, 조건이 전혀 맞지 않는 판례로는 채우지 않으므로 3개보다 적거나 0개일 수 있다.
+
 **보여주지 않는 값:** 속도, G값, 감속, 차간거리, 방향지시등 확률, 충돌 시각의 확정, 판례 유사도 퍼센트는 서버가 만들지 않는다.
 
 예시 응답: [frontend/src/api/fixtures/](../frontend/src/api/fixtures/) (`result_final.json`, `result_partial.json`, `result_base_only.json`, `result_unresolved.json` 등. 실제 서버 코드가 만든 값)

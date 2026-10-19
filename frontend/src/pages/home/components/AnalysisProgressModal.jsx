@@ -1,4 +1,4 @@
-import { STAGE_LABELS, stageIndex } from "../../api/adapters";
+import { STAGE_LABELS, stageIndex } from "../../../api/adapters";
 import ModalShell from "./ModalShell";
 
 // 서버가 일하는 동안 보여 주는 진행 팝업.

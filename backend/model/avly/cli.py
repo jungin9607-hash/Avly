@@ -15,7 +15,7 @@ def parse_args():
     selector.add_argument('--video', help='영상 경로. 생략하면 영상 선택 메뉴 표시')
     selector.add_argument('--pick-video', action='store_true', help='파일 선택 창. GUI 미지원 시 터미널 메뉴')
     parser.add_argument('--backend', help='backend 폴더의 절대 경로. 기본값: 자동 탐색')
-    parser.add_argument('--csv', help='과실표 CSV 경로. 기본값: model/data/fault_table_car_to_car.csv (차대차 전용)')
+    parser.add_argument('--csv', help='과실표 CSV 경로. 기본값: avly/data/fault_table_car_to_car.csv (차대차 전용)')
     parser.add_argument('--results', help='결과 폴더 경로. 기본값: model/results')
     parser.add_argument('--show-logs', action='store_true', help='단계별 처리 로그 표시')
     parser.add_argument('--no-cache', action='store_true', help='저장된 Vision 응답 대신 새 API 요청')

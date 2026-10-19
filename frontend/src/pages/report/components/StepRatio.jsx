@@ -1,4 +1,4 @@
-import { useAnimatedNumber } from "./useScrollStep";
+import { useAnimatedNumber } from "../hooks/useScrollStep";
 
 // 가감요소 왼쪽의 작은 과실 비율 박스: 지금 단계의 카드 옆으로 미끄러져 내려가며 비율이 바뀜
 // offset = 지금 단계 카드의 목록 안 세로 위치(px)

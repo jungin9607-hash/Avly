@@ -283,10 +283,17 @@ def match_case_body_v219(body, profile):
     identifier = law_text(body.get('판례정보일련번호') or body.get('판례일련번호'))
     return {'court': court, 'date': date, 'case_number': number, 'summary': excerpt, 'comparison_limit': '검색 일치 조건: ' + (' / '.join(matched) or '교통사고') + '; 신호·진행·접촉 위치·위반 사정이 실제 영상과 같은지는 별도 검토가 필요하며 비율을 자동 적용하지 않음.', 'source': 'https://www.law.go.kr/DRF/lawService.do?' + urlencode({'target': 'prec', 'ID': identifier, 'type': 'JSON'}), 'source_kind': '국가법령정보 공동활용 판례 본문에서 발췌; 키워드 기반 참고 후보', 'matched_terms': matched, 'relevance_status': 'keyword_reference', 'case_api_id': identifier, 'score': len(matched) * 2 + sum((2 for name, words in profile['groups'] if any((w in primary for w in words))))}
 
+def case_search_queries(profile):
+    """사고 조건 단어를 한꺼번에 담은 검색어를 먼저, 단어 하나짜리 검색어를 나중에 쓴다. (한 단어만 검색하면 형사 사건이 대부분이다)"""
+    names = [name for name, words in profile['groups']][:3]
+    combined = [' '.join(names) + ' 과실', ' '.join(names) + ' 과실비율', '교통사고 ' + ' '.join(names) + ' 손해배상 과실'] if names else []
+    return list(dict.fromkeys(combined + profile['queries']))
+
 def related_cases_for_row(row, client=None):
     profile = case_profile(row)
+    queries = case_search_queries(profile)
     seeds = [dict(c) for c in VERIFIED_CASES.get(row['accident_type'], [])]
-    audit = {'accident_type': row['accident_type'], 'target_count': CASE_TARGET_COUNT, 'queries': profile['queries'], 'source': '판례 본문 검색 + 유형별 등록 자료', 'status': 'ok', 'errors': []}
+    audit = {'accident_type': row['accident_type'], 'target_count': CASE_TARGET_COUNT, 'queries': queries, 'source': '판례 본문 검색 + 유형별 등록 자료', 'status': 'ok', 'errors': []}
     if len(seeds) >= CASE_TARGET_COUNT:
         return (seeds[:CASE_TARGET_COUNT], {**audit, 'status': 'registered_complete', 'count': CASE_TARGET_COUNT})
     if not CASE_API_ENABLED:
@@ -300,8 +307,9 @@ def related_cases_for_row(row, client=None):
         seen = {re.sub('\\s+', '', c['case_number']) for c in seeds}
         seen_ids = set()
         found = []
+        partial = []
         attempts = 0
-        for query in profile['queries']:
+        for query in queries:
             for item in client.search(query):
                 identifier = law_text(item.get('판례일련번호') or item.get('판례정보일련번호'))
                 number = re.sub('\\s+', '', law_text(item.get('사건번호')))
@@ -318,6 +326,12 @@ def related_cases_for_row(row, client=None):
                     continue
                 case = match_case_body(body, profile)
                 if not case:
+                    partial_case = match_case_body_partial(body, profile)
+                    if partial_case and (not partial_case['case_api_id']):
+                        partial_case['case_api_id'] = identifier
+                        partial_case['source'] = 'https://www.law.go.kr/DRF/lawService.do?' + urlencode({'target': 'prec', 'ID': identifier, 'type': 'JSON'})
+                    if partial_case and re.sub('\\s+', '', partial_case['case_number']) not in seen:
+                        partial.append(partial_case)
                     continue
                 if not case['case_api_id']:
                     case['case_api_id'] = identifier
@@ -330,9 +344,19 @@ def related_cases_for_row(row, client=None):
             if len(seeds) + len(found) >= CASE_TARGET_COUNT or attempts >= CASE_MAX_BODY_REQUESTS:
                 break
         selected = (seeds + sorted(found, key=lambda c: c['score'], reverse=True))[:CASE_TARGET_COUNT]
+        if len(selected) < CASE_TARGET_COUNT:
+            # 엄격한 기준을 통과한 판례가 모자라면, 일부 조건만 맞는 판례를 비슷한 순서로 채운다 (표시는 '일부 일치'로 구분)
+            chosen = {re.sub('\\s+', '', c['case_number']) for c in selected}
+            extra = []
+            for c in sorted(partial, key=lambda c: c['score'], reverse=True):
+                number = re.sub('\\s+', '', c['case_number'])
+                if number not in chosen:
+                    chosen.add(number)
+                    extra.append(c)
+            selected = selected + extra[:CASE_TARGET_COUNT - len(selected)]
         audit.update(count=len(selected), body_requests=attempts, status='ok' if len(selected) == CASE_TARGET_COUNT else 'insufficient')
         if len(selected) < CASE_TARGET_COUNT:
-            audit['reason'] = '관련 본문·중복 검토를 통과한 자료가 목표3개보다 적음; 무관한 판례로 채우지 않음'
+            audit['reason'] = '관련 본문·중복 검토를 통과한 자료가 목표3개보다 적음; 조건이 전혀 맞지 않는 판례로는 채우지 않음'
         return (selected, audit)
     except Exception:
         audit.update(status='unavailable', count=len(seeds), reason='판례 검색 실패: law_api의 판례 목록·본문 조회 이용 권한 또는 연결을 확인하세요.')
@@ -397,6 +421,38 @@ def match_case_body(body,profile):
         relevance_status=CASE_RELEVANCE_VERSION,
         relevance_checks={'civil_case':True,'claim_subject':True,'vehicle_collision_context':True,'location_and_mechanism':True},
         comparison_limit='차량 간 충돌과 민사 배상 쟁점을 본문에서 함께 확인한 참고 사례입니다. 사고 경로·차량 역할·회피 가능성과 비율은 별도 비교가 필요합니다.')
+    return result
+
+def match_case_body_partial(body, profile):
+    """엄격한 기준(match_case_body)은 통과하지 못했지만 일부 조건이 맞는 판례. 상위 순위를 채우는 데만 쓴다.
+
+    지키는 것: 민사 과실 사건, 손해배상 등 청구, 과실·주의의무 쟁점, 교통사고 문맥, 장소·사고 방식 조건 중 최소 하나. 주차장·회전교차로는 반드시 맞아야 한다.
+    풀어 준 것: 모든 조건이 같은 문단 안에서 함께 나와야 한다는 요구, 차량 간 표현 요구, 사고 방식 조건이 없어도 되는 것.
+    """
+    number = case_plain(body.get('사건번호', ''))
+    if not civil_fault_number(number):
+        return None
+    title = case_plain(body.get('사건명', ''))
+    if not re.search(r'손해배상|구상금|보험금|채무부존재', title):
+        return None
+    text = ' '.join((case_plain(body.get(k, '')) for k in ('판시사항', '판결요지', '판례내용')))
+    if not re.search(r'과실|안전거리|전방주시|주의의무|배상책임|손해배상', text):
+        return None
+    if not re.search(r'교통사고|추돌|충돌|충격', text):
+        return None
+    matched_groups = [(name, words) for name, words in profile['groups'] if any((w in text for w in words))]
+    if not matched_groups:
+        return None
+    hard = [name for name, words in profile['groups'] if name in ('주차장', '회전교차로')]
+    if hard and not all((name in [m[0] for m in matched_groups] for name in hard)):
+        return None
+    result = match_case_body_v219(body, {**profile, 'groups': matched_groups})
+    if not result:
+        return None
+    total = len(profile['groups']) or 1
+    matched = result['matched_terms']
+    result.update(case_name=title, relevance_status='partial_reference',
+                  comparison_limit='검색 일치 조건: ' + (' / '.join(matched) or '교통사고') + '; 일부만 일치하는 참고 판례입니다(' + str(len(matched)) + '/' + str(total) + '개 조건). 조건이 같은 대목에서 함께 확인되지는 않았고, 사고 경로·차량 역할·비율은 별도 비교가 필요합니다.')
     return result
 
 def filter_display_cases(cases):
