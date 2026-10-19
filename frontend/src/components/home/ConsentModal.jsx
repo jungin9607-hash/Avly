@@ -7,17 +7,12 @@ const ITEMS = [
     title: "교통사고 과실 산정을 위한 영상 수집 및 AI 영상 분석 처리 동의",
     body: "블랙박스 프레임 분석, 차선 및 객체 추적, 손해보험협회 인정기준 및 판례 데이터셋 대조를 위한 일시적 영상 전송 및 비전 추론 처리에 동의합니다.",
   },
-  {
-    key: "quiz",
-    title: "사고 예방 퀴즈 사용 동의",
-    body: "차량 번호판 및 보행자 얼굴 등 민감 식별정보를 AI 블러링(비식별화) 처리한 후, 운전자 안전의식 고취를 위한 '사고 예방 퀴즈' 및 안전운전 AI 알고리즘 고도화에 기여합니다.",
-  },
 ];
 
 /* 1단계: 영상 수집 동의
- * 모든 항목은 선택 사항: 동의하지 않아도 다음 단계로 넘어갈 수 있음 */
+ * 분석 동의는 필수: 동의해야 영상 분석을 시작할 수 있음 */
 export default function ConsentModal({ fileNames, onStart, onClose, onPickAnother }) {
-  const [agreed, setAgreed] = useState({ analysis: false, quiz: false });
+  const [agreed, setAgreed] = useState({ analysis: false });
   const [blocked, setBlocked] = useState(false); // "분석 불가 사고" 시뮬레이션 화면
   const [unsupported, setUnsupported] = useState(false);
 
@@ -79,7 +74,7 @@ export default function ConsentModal({ fileNames, onStart, onClose, onPickAnothe
         <label className={allAgreed ? "md-all is-on" : "md-all"}>
           <input type="checkbox" checked={allAgreed} onChange={toggleAll} />
           <span className="md-check" aria-hidden="true" />
-          전체 항목 동의(선택)
+          위 내용에 동의합니다 (필수)
         </label>
 
         <ul className="md-items">
@@ -99,8 +94,8 @@ export default function ConsentModal({ fileNames, onStart, onClose, onPickAnothe
       </div>
 
       <footer className="md-foot">
-        <button type="button" className="md-btn md-btn-wide" onClick={() => onStart(agreed)}>
-          {allAgreed ? "동의하고 영상 분석 시작하기" : "영상 분석 시작하기"}
+        <button type="button" className="md-btn md-btn-wide" disabled={!allAgreed} onClick={() => onStart(agreed)}>
+          동의하고 영상 분석 시작하기
           <span aria-hidden="true">→</span>
         </button>
 

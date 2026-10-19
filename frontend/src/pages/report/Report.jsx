@@ -4,15 +4,11 @@ import useNavigationBackdrop from "../../components/common/useNavigationBackdrop
 import ReportNotice from "./ReportNotice";
 import AdjustmentSteps from "./AdjustmentSteps";
 import ReportHeader from "./ReportHeader";
-import EvidenceCard from "./EvidenceCard";
 import ReportActions, { TimelineLink } from "./ReportActions";
-import SectionHeader from "./SectionHeader";
 import {
   REPORT_HEADER,
   FACTOR_HEADER,
   STEPS,
-  EVIDENCE_HEADER,
-  EVIDENCE,
   REPORT_ACTIONS,
 } from "./reportContent";
 import { useScrollStep } from "./useScrollStep";
@@ -95,23 +91,14 @@ export default function Report() {
           <div className="ar-result-track" aria-hidden="true" />
         </section>
 
-        {/* 영상 증거: 제목 줄(왼쪽 제목 | 오른쪽 분석 결과 저장 · 공유) → 증거 카드 3장(전체 폭)
-            → 맨 아래 오른쪽 사고 타임라인 바로가기 */}
+        {/* 분석 결과 저장 · 공유 + 맨 아래 오른쪽 사고 타임라인 바로가기 */}
         <section ref={evidenceRef} className="ar-section ar-report-page ar-evidence-page">
           <div className="ar-evidence-layout">
             <div className="ar-evidence-head">
-              <SectionHeader kicker={EVIDENCE_HEADER.kicker} title={EVIDENCE_HEADER.title} desc={EVIDENCE_HEADER.desc} />
               <ReportActions content={REPORT_ACTIONS} onShare={share} />
             </div>
-            <div className="ar-evidence">
-              {EVIDENCE.map((item, i) => (
-                <Reveal key={item.title} className="ar-ev" delay={i * 80}>
-                  {() => <EvidenceCard item={item} />}
-                </Reveal>
-              ))}
-            </div>
           </div>
-          {/* 창 오른쪽 아래 구석에 고정, 증거 구간에 들어오면 나타남 (좁은 화면은 카드 아래 오른쪽) */}
+          {/* 창 오른쪽 아래 구석에 고정, 이 구간에 들어오면 나타남 */}
           <TimelineLink content={REPORT_ACTIONS.timeline} visible={evidenceInView} />
           <ReportNotice />
         </section>
@@ -122,37 +109,5 @@ export default function Report() {
         {toast}
       </p>
     </div>
-  );
-}
-
-/* ---------- 작은 부품 ---------- */
-
-function Reveal({ className, delay = 0, children }) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setInView(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.25 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  return (
-    <article
-      ref={ref}
-      className={`${className} ar-reveal${inView ? " is-in" : ""}`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children(inView)}
-    </article>
   );
 }

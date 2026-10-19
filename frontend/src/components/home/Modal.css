@@ -474,6 +474,12 @@ input:focus-visible + .md-radio {
   transform: translateY(-1px);
   box-shadow: 0 10px 24px var(--color-home-popup-button-shadow);
 }
+/* 필수 동의 전에는 눌 수 없음 */
+.md-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .md-btn-wide {
   width: 100%;
   padding: 16px 20px;

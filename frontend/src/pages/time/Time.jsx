@@ -28,7 +28,7 @@ const MOMENTS = [
     summary: "급차선변경 · 깜빡이 미점등",
     tag: "★ 과실 가감산 결정적 요인",
     title: "상대 차량 방향지시등(깜빡이) 미점등 급차선 변경 시작",
-    hud: "TELEMETRY_SPEED 46km/h",
+    hud: "CAM_FRONT",
     tone: "key",
   },
   {
@@ -38,7 +38,7 @@ const MOMENTS = [
     summary: "충돌 회피 한계 입증",
     tag: "불가항력 회피 한계",
     title: "차간거리 3.4m 급감 및 긴급 제동 (방어운전 노력 입증)",
-    hud: "DECEL: -0.62G",
+    hud: "CAM_FRONT",
   },
   {
     id: "m0",
@@ -47,7 +47,7 @@ const MOMENTS = [
     summary: "물리적 접촉 좌표 포착",
     tag: "충돌 좌표 확정",
     title: "우측 전면 범퍼-상대 좌측 후미 불가항력 접촉",
-    hud: "IMPACT FORCE 1.48G",
+    hud: "CAM_FRONT",
     tone: "impact",
   },
 ];

@@ -22,7 +22,7 @@ const GUIDES = [
   },
   {
     title: "음성 녹음 여부 무관",
-    body: "에블리 AI 비전 모델은 순수 시각 좌표 및 텔레메트리 궤적만을 추출하므로 블랙박스 내부 대화나 오디오 스트림은 전송 단계에서 완전 음소거 처리됩니다.",
+    body: "에블리 AI 비전 모델은 영상 속 장면(이미지)만 분석하므로 블랙박스 내부 대화나 오디오 스트림은 전송 단계에서 완전 음소거 처리됩니다.",
   },
 ];
 
@@ -44,16 +44,18 @@ export default function Home() {
 
   const unsupportedMessage = (name) => `${name}: MP4, MOV, AVI 영상만 올릴 수 있어요.`;
 
-  // 형식만 먼저 확인하고, 통과한 영상은 동의 팝업으로 넘김
+  // 영상은 하나만 받는다. 형식만 먼저 확인하고, 통과한 영상은 동의 팝업으로 넘김
   const selectFiles = (list) => {
     setError("");
-    const valid = [];
-    for (const file of list) {
-      const ext = file.name.split(".").pop().toLowerCase();
-      if (ACCEPT_EXT.includes(ext)) valid.push(file);
-      else setError(unsupportedMessage(file.name));
+    if (list.length > 1) {
+      setError("영상은 한 번에 하나만 올릴 수 있어요.");
+      return;
     }
-    if (valid.length) setPending(valid);
+    const file = list[0];
+    if (!file) return;
+    const ext = file.name.split(".").pop().toLowerCase();
+    if (ACCEPT_EXT.includes(ext)) setPending([file]);
+    else setError(unsupportedMessage(file.name));
   };
 
   // 답변은 홈에서 보관해 질문 사이를 이동해도 선택값을 유지한다.
@@ -128,7 +130,6 @@ export default function Home() {
                 ref={inputRef}
                 type="file"
                 accept=".mp4,.mov,.avi,video/mp4,video/quicktime,video/x-msvideo"
-                multiple
                 hidden
                 onChange={(e) => {
                   selectFiles(e.target.files);
