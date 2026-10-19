@@ -1,71 +1,58 @@
 # 프론트엔드 구조 가이드
 
-`frontend/src` 기준입니다. 화면 5개(`/`, `/home`, `/report`, `/time`, `/law`)가 같은 헤더·푸터와 데이터 파일을 공유하도록 정리했습니다.
+`frontend/src` 기준입니다. 화면은 소개, 업로드(분석 흐름), 결과, 타임라인, 판례 다섯 개입니다.
 
 ## 폴더 구조
 
 ```
 src/
-├─ App.jsx                    라우팅
+├─ App.jsx, routes.js            라우팅과 경로 정의 (경로 문자열은 routes.js에서만 만든다)
+├─ api/                          서버 연결
+│  ├─ config.js, session.js      서버 주소, 세션(session_id) 보관
+│  ├─ client.js                  fetch 래퍼 (X-Session-Id, 오류 → 한국어 문구)
+│  ├─ adapters.js                서버 응답 → 화면용 모양 변환 (+ adapters.test.js)
+│  ├─ useAnalysis.js             분석 상태를 주기적으로 조회하는 훅
+│  └─ fixtures/                  테스트용 예시 응답
 ├─ components/
-│  ├─ layout/
-│  │  ├─ Header.jsx           상단 헤더 + 데스크톱 메뉴
-│  │  ├─ MobileMenu.jsx       모바일 드로어 메뉴
-│  │  ├─ Footer.jsx           법적 고지 + 링크 + 저작권
-│  │  └─ layout.css           위 3개의 공통 스타일
-│  └─ ui/Icon.jsx             Material Symbols 아이콘 <Icon name="close" />
-├─ constants/navItems.js      메뉴 항목 정의 + 현재 경로 → 활성 메뉴 판별
-├─ data/                      화면에 보여줄 (현재는 시연용) 데이터
-│  ├─ timeline.js             /time 타임라인, 필터
-│  ├─ precedents.js           /law 판례, 비교 항목
-│  └─ report.js               /report 과실 사유, 텔레메트리, 증거
-├─ hooks/useToast.js          토스트 메시지 (자동 사라짐)
-└─ page/
-   ├─ intro/                  /
-   ├─ home/                   /home (업로드 → 분석 모달)
-   ├─ report/                 /report
-   ├─ time/                   /time
-   └─ law/                    /law
+│  ├─ common/                    TopNav, AnalysisGate(분석 id로 결과를 불러와 상태별로 보여줌), 법적 안내
+│  └─ home/                      동의, 진행, 사고 상황 확인, 가감요소 질문, 안내 모달
+├─ pages/
+│  ├─ intro/                     /
+│  ├─ home/                      /upload  (Home.jsx + useAnalysisFlow.js 흐름 상태)
+│  ├─ report/                    /analysis/:id
+│  ├─ time/                      /analysis/:id/timeline
+│  └─ law/                       /analysis/:id/law
+├─ assets/, styles/
 ```
+
+## 분석 흐름 (`/upload`)
+
+`useAnalysisFlow`(reducer 훅)가 단계를 관리하고 `Home.jsx`가 단계에 맞는 모달을 보여 줍니다.
+
+```
+동의 → 업로드 → 진행(서버 조회) ─┬→ 사고 상황 확인(장소 → 유형 → 내 차 → 상대 차) → 가감요소 질문 → 결과 화면으로 이동
+                                 ├→ 지원하지 않는 사고 안내
+                                 └→ 오류 안내
+```
+
+- 사고 상황 확인의 선택지는 서버의 `/catalog/accident-types`에서 받고, 앞 항목을 고르면 뒤 항목의 보기를 좁힙니다 (`cascade`, `resolveOption`, `normalizeSelection`).
+- 결과 화면은 `AnalysisGate`가 상태(진행 중, 확인 대기, 지원 안 함, 실패, 완료)에 맞는 화면을 고릅니다.
+- 결과 상태 `final / partial / base_only / unresolved`에 따라 보여 주는 내용이 다릅니다 (`pages/report/reportContent.js`).
 
 ## 무엇을 고치려면 어디를 보나
 
 | 하고 싶은 일 | 파일 |
-|---|---|
-| 메뉴 추가/이름 변경/링크 변경 | `constants/navItems.js` (데스크톱·모바일 모두 반영) |
-| 헤더·푸터 디자인 변경 | `components/layout/*` (5개 화면 모두 반영) |
-| 푸터 안내 문구 | 각 페이지의 `<Footer notice="..." />` |
-| 타임라인/판례/리포트 내용 수정 | `data/*.js` |
-| 질문 문항, 재분석 사유, 가이드 문구 | `page/home/constants.js` |
-| 분석 모달 단계별 화면 | `page/home/stages/*` |
-| 분석 진행률 동작 | `page/home/useAnalysisProgress.js` |
-| 허용 파일 형식/용량 | `page/home/constants.js` (`ALLOWED_EXTENSIONS`, `MAX_FILE_SIZE`) |
+| --- | --- |
+| 서버 응답 모양이 바뀜 | `api/adapters.js` (+ 테스트) |
+| 분석 흐름 단계 추가·변경 | `pages/home/useAnalysisFlow.js`, `Home.jsx` |
+| 동의 문구 | `components/home/ConsentModal.jsx` (법률 검토 전 문구) |
+| 결과 화면 문구·상태별 안내 | `pages/report/reportContent.js`, `StatusNotice.jsx` |
+| 타임라인 / 판례 화면 문구 | `pages/time/`, `pages/law/lawContent.js` |
+| 법적 안내 | `components/common/LegalNotice.jsx`, `CaseBasisNotice.jsx`, `pages/time/TimelineNotice.jsx` |
+| 경로 변경 | `routes.js` |
 
-## /home 분석 모달 흐름
+## 원칙
 
-`page/home/home.jsx`가 모달 열림 여부(`modalOpen`)와 현재 단계(`stage`)를 들고 있고, `AnalysisModal.jsx`가 `stage`에 맞는 단계 컴포넌트를 보여줍니다.
-
-```
-consent ─(동의)→ analyzing ─→ questionnaire ─(제출)→ reanalyzing ─→ resultSummary
-   │                                                                 │   │
-   ├→ errorFormat (파일 오류)                       일치함 → /report ◄┘   └─(불일치)→ reanalysis ─→ reanalyzing
-   └→ unsupported (분석 불가 유형)
-```
-
-- 단계 이름은 `constants.js`의 `STAGE`에 모여 있습니다. 문자열을 직접 쓰지 말고 `STAGE.XXX`를 쓰세요.
-- 단계별 입력값(동의 체크, 질문 답변 등)은 해당 단계 컴포넌트 안에서만 관리합니다.
-- 진행률은 `useAnalysisProgress`가 타이머로 시뮬레이션합니다. 실제 API 연결 시 이 훅을 교체하면 됩니다.
-
-## 스타일 규칙
-
-- CSS는 전역으로 번들링됩니다. 클래스명이 겹치면 다른 화면에 영향을 줄 수 있습니다.
-- 공통 헤더/푸터 클래스(`site-header`, `mobile-menu-*`, `site-footer-*`, `brand-*`, `nav-*`)는 `layout.css`에만 정의합니다. 페이지 CSS에 다시 만들지 마세요.
-- 페이지 고유 스타일은 각 페이지 CSS에 둡니다 (`time-`, `law-`, `report-` 접두사 사용).
-- 알려진 중복: `home.css`와 `report.css`에 각각 `.modal-overlay`, `.modal-header` 등이 따로 있습니다. 공통 `Modal` 컴포넌트로 합치는 것이 다음 정리 후보입니다.
-
-## 다음 정리 후보
-
-- `Modal`, `Breadcrumb`, 과실비율 표시(`FaultRatio`)를 공통 컴포넌트로 분리
-- 색상·간격 CSS 변수(디자인 토큰) 도입
-- 외부 이미지 URL(`data/*.js`)을 `assets/`로 이전
-- 백엔드 API 연결 시 `data/*.js`를 API 응답으로 교체
+- **서버가 주지 않은 값은 만들어 보여 주지 않는다.** 속도, G값, 충돌 시각 확정, 판례 유사도 퍼센트 등은 없다.
+- 서버의 쉬운 말 문장은 그대로 보여 준다.
+- CSS는 전역으로 번들링되므로 클래스명이 겹치지 않게 화면별 접두사를 쓴다.

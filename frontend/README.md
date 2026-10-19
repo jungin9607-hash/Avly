@@ -1,47 +1,36 @@
 # AVLY 프론트엔드
 
-AVLY 교통사고 분석 서비스의 React 19 + Vite 프론트엔드입니다.
+React 19 + Vite 프론트엔드입니다. 백엔드 API와 연결되어 실제 분석 결과를 보여줍니다.
 
-> 폴더 구조와 수정 위치 안내: [docs/frontend-structure.md](../docs/frontend-structure.md)
+> 폴더 구조와 수정 위치: [docs/frontend-structure.md](../docs/frontend-structure.md) · API: [docs/api.md](../docs/api.md)
 
 ## 화면
 
-| 경로 | 화면 | 주요 내용 |
-| --- | --- | --- |
-| `/` | 인트로 | 서비스 소개 및 분석 시작 진입점 |
-| `/upload-test` | 영상 업로드 | 시연 파일 업로드 및 분석 동의·질문 흐름 |
-| `/analysis-test` | 분석 결과 | 과실비율 분석 결과와 판단 근거 |
-| `/timeline-test` | 타임라인 | 사고 순간 타임라인 |
-| `/law` | 유사 판례 | 유사 판례 목록과 내 사고 비교 |
+| 경로 | 화면 |
+| --- | --- |
+| `/` | 소개 |
+| `/upload` | 동의 → 영상 업로드 → 분석 진행 → 사고 상황 확인 → 가감요소 질문 |
+| `/analysis/:id` | 과실비율 결과 (단계별 계산, 관련 법령) |
+| `/analysis/:id/timeline` | 사고 타임라인 |
+| `/analysis/:id/law` | 유사 판례와 내 사고 비교 |
 
-## 네비게이션
+예전 `-test` 경로(`/upload-test` 등)는 새 경로로 이동합니다. 분석 화면은 `?resume=<analysis_id>`로 진행 중인 분석을 이어 볼 수 있습니다.
 
-- 화면 상단의 공통 메뉴에서 업로드, 분석 결과, 타임라인, 유사 판례 화면으로 이동할 수 있습니다.
-- React Router를 사용하며, 화면 컴포넌트는 `src/pages/` 아래 화면별 폴더에 있습니다.
+## 서버 연결
 
-## 폴더 구조
-
-- `src/pages/{intro,home,report,time,law}/`: 각 화면과 화면별 스타일
-- `src/components/home/`: 업로드 화면에서만 쓰는 동의·질문 모달
-- `src/components/common/`: 여러 화면에서 공유하는 상단 메뉴와 법적 안내
-- `src/assets/`: 화면에서 사용하는 이미지
-- `src/App.jsx`: URL과 화면 연결
-
-## 구현 현황 (2026-10-08)
-
-- 인트로 히어로, 마스코트 이미지, 기능 카드, 반응형 레이아웃을 다듬었습니다.
-- 업로드 화면에 동의·질문 팝업과 시연용 분석 흐름을 제공합니다.
-
-### 분석 흐름 현황
-
-업로드 화면의 모달은 현재 시뮬레이션 흐름으로 동작합니다. 실제 영상 AI 분석 API 연동은 포함되어 있지 않습니다.
+- 서버 주소는 `VITE_API_BASE_URL`(기본 `http://localhost:8000`)입니다.
+- 사고를 만들 때 받은 `session_id`를 브라우저에 보관하고 이후 요청에 `X-Session-Id`로 보냅니다 (`src/api/session.js`).
+- 서버가 안 켜져 있으면 화면이 안내 문구를 보여 줍니다. 가짜 데이터로 대신 채우지 않습니다.
+- `src/api/fixtures/`는 **테스트용 예시 응답**입니다. 화면은 이 값을 쓰지 않습니다.
 
 ## 개발
 
 ```bash
-npm run dev
+npm run dev      # 개발 서버
 npm run build
 npm run lint
+node --test      # 단위 테스트 (API 변환, 분석 흐름 상태)
 ```
 
-위 명령은 `frontend` 디렉터리에서 실행합니다. 저장소의 Docker Compose 설정으로도 실행할 수 있습니다.
+위 명령은 `frontend` 디렉터리에서 실행합니다. 저장소 루트의 `docker compose up`으로도 실행됩니다.
+브라우저 전체 흐름 시험(Playwright)은 [e2e/README.md](e2e/README.md)를 보세요.
