@@ -77,6 +77,8 @@ async def upload_video(
     upload: UploadFile,
 ) -> Video:
     get_accident(repo, accident_id)
+    if repo.list_videos(accident_id):
+        raise AppError(409, "VIDEO_ALREADY_UPLOADED", "영상은 사고마다 하나만 올릴 수 있습니다.")
     stored = await storage.save_video(upload)
     # TODO: 영상 길이(duration)와 썸네일 추출 구현 전까지는 값을 꾸며내지 않고 null 로 둔다.
     return repo.add_video(

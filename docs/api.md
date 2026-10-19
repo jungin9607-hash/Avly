@@ -85,6 +85,7 @@ POST        POST           POST          POST         GET (반복)
 | 404 | `NOT_FOUND` | 존재하지 않는 경로 |
 | 405 | `METHOD_NOT_ALLOWED` | 지원하지 않는 HTTP 메서드 |
 | 409 | `VIDEO_REQUIRED` | 영상 없이 분석 시작 |
+| 409 | `VIDEO_ALREADY_UPLOADED` | 이미 영상이 있는 사고에 다시 업로드 (영상은 사고마다 하나만) |
 | 409 | `ANALYSIS_IN_PROGRESS` | 같은 사고의 분석이 이미 진행 중 |
 | 409 | `ANALYSIS_NOT_COMPLETED` | 완료되지 않은 분석으로 리포트 요청 |
 | 413 | `FILE_TOO_LARGE` | 업로드 용량 초과 (기본 200MB) |
@@ -207,7 +208,9 @@ POST        POST           POST          POST         GET (반복)
 | `thumbnail` | 썸네일 URL. **추출 기능 미구현으로 현재 항상 `null`** |
 | `duration` | 영상 길이(초). **추출 기능 미구현으로 현재 항상 `null`** |
 
-**오류**: 400 `EMPTY_FILE`, 404 `ACCIDENT_NOT_FOUND`, 413 `FILE_TOO_LARGE`, 415 `UNSUPPORTED_FILE_TYPE`, 422 (`file` 필드 누락)
+**영상은 사고마다 하나만** 올릴 수 있습니다. 이미 있으면 409 `VIDEO_ALREADY_UPLOADED`입니다.
+
+**오류**: 400 `EMPTY_FILE`, 404 `ACCIDENT_NOT_FOUND`, 409 `VIDEO_ALREADY_UPLOADED`, 413 `FILE_TOO_LARGE`, 415 `UNSUPPORTED_FILE_TYPE`, 422 (`file` 필드 누락)
 
 ---
 

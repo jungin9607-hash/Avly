@@ -47,6 +47,7 @@ async def get_accident(
     responses={
         **NOT_FOUND,
         400: {"model": ErrorResponse, "description": "EMPTY_FILE"},
+        409: {"model": ErrorResponse, "description": "VIDEO_ALREADY_UPLOADED"},
         413: {"model": ErrorResponse, "description": "FILE_TOO_LARGE"},
         415: {"model": ErrorResponse, "description": "UNSUPPORTED_FILE_TYPE"},
     },
