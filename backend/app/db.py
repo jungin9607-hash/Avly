@@ -54,6 +54,15 @@ class ForeignSchemaError(RuntimeError):
     """이 마이그레이션이 만들지 않은 테이블이 이미 있는 DB 이다 (예: 팀 공용 DB 의 이전 스키마)."""
 
 
+def pending_migrations(engine: Engine | None = None, directory: Path = MIGRATIONS_DIR) -> list[str]:
+    """아직 적용하지 않은 마이그레이션 파일 이름. DB 를 바꾸지 않는다(읽기만)."""
+    engine = engine or get_engine()
+    with engine.connect() as conn:
+        tracked = conn.execute(text("SELECT to_regclass('public.schema_migration') IS NOT NULL")).scalar()
+        done = {row[0] for row in conn.execute(text("SELECT name FROM schema_migration"))} if tracked else set()
+    return [path.name for path in migration_files(directory) if path.name not in done]
+
+
 def migrate(engine: Engine | None = None, directory: Path = MIGRATIONS_DIR) -> list[str]:
     """아직 적용하지 않은 migrations/*.sql 을 파일 이름 순서대로 적용하고, 새로 적용한 이름을 돌려준다.
 

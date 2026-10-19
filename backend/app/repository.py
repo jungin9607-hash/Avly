@@ -45,8 +45,17 @@ def now() -> datetime:
 
 
 class Repository:
-    def __init__(self, engine=None):
+    def __init__(self, engine=None, owner: str | None = None):
         self.engine = engine or get_engine()
+        self._owner = owner
+
+    @property
+    def owner(self) -> str:
+        """이 PC 의 이름표. 작업과 영상이 누구 것인지 구분한다 (app/instance.py)."""
+        if self._owner is None:
+            from app.instance import instance_id
+            self._owner = instance_id()
+        return self._owner
 
     # ------------------------------------------------------------ accident
     def create_accident(self, title: str, consent_version: str, retention: bool, ttl_hours: int) -> dict:
@@ -127,11 +136,13 @@ class Repository:
                 {"h": hours, "a": accident_id})
 
     def videos_to_delete(self, at: datetime | None = None) -> list[dict]:
-        """만료 시각이 지났는데 아직 파일이 남아 있는 영상."""
+        """만료 시각이 지났는데 아직 파일이 남아 있는 영상. 다른 PC 가 올린 영상(그 사고의 작업이 다른 소유자 것)은 파일이 여기에 없으므로 제외한다."""
         with self.engine.connect() as conn:
             return _rows(conn.execute(text(
-                "SELECT * FROM video WHERE expires_at IS NOT NULL AND expires_at <= :t AND deleted_at IS NULL"),
-                {"t": at or now()}))
+                "SELECT v.* FROM video v WHERE v.expires_at IS NOT NULL AND v.expires_at <= :t AND v.deleted_at IS NULL"
+                " AND NOT EXISTS (SELECT 1 FROM job j JOIN analysis a ON a.id = j.analysis_id WHERE a.accident_id = v.accident_id"
+                " AND j.payload->>'owner' IS NOT NULL AND j.payload->>'owner' <> :owner)"),
+                {"t": at or now(), "owner": self.owner}))
 
     # ------------------------------------------------------------ analysis
     def create_analysis(self, accident_id: UUID, video_id: UUID) -> dict:
@@ -143,7 +154,8 @@ class Repository:
                     "INSERT INTO analysis (id, accident_id, video_id, status, attempt)"
                     " VALUES (:id, :a, :v, 'queued', (SELECT COALESCE(MAX(attempt), 0) + 1 FROM analysis WHERE accident_id = :a))"
                     " RETURNING *"), {"id": analysis_id, "a": accident_id, "v": video_id}))
-                conn.execute(text("INSERT INTO job (analysis_id, kind) VALUES (:id, 'analyze')"), {"id": analysis_id})
+                conn.execute(_q("INSERT INTO job (analysis_id, kind, payload) VALUES (:id, 'analyze', :p)", "p"),
+                             {"id": analysis_id, "p": {"owner": self.owner}})
                 conn.execute(text("UPDATE accident SET status = 'analyzing' WHERE id = :a"), {"a": accident_id})
                 return row
         except IntegrityError as exc:
@@ -187,17 +199,18 @@ class Repository:
                 {"confirmed": confirmed, "id": analysis_id}))
             if row is None:
                 raise NotAwaitingConfirmation
-            conn.execute(text("INSERT INTO job (analysis_id, kind) VALUES (:id, 'finalize')"), {"id": analysis_id})
+            conn.execute(_q("INSERT INTO job (analysis_id, kind, payload) VALUES (:id, 'finalize', :p)", "p"),
+                         {"id": analysis_id, "p": {"owner": self.owner}})
             return row
 
     # ------------------------------------------------------------ job (worker)
     def claim_job(self) -> dict | None:
-        """대기 중인 작업 하나를 가져온다. 다른 worker 가 가져간 것은 건너뛴다."""
+        """대기 중인 작업 하나를 가져온다. 다른 worker 가 가져간 것과 다른 PC 가 등록한 작업은 건너뛴다. (소유자가 없는 이전 작업은 누구나)"""
         with self.engine.begin() as conn:
             return _one(conn.execute(text(
                 "UPDATE job SET status = 'running', locked_at = now(), attempts = attempts + 1"
-                " WHERE id = (SELECT id FROM job WHERE status = 'queued' ORDER BY id FOR UPDATE SKIP LOCKED LIMIT 1)"
-                " RETURNING *")))
+                " WHERE id = (SELECT id FROM job WHERE status = 'queued' AND (payload->>'owner' IS NULL OR payload->>'owner' = :owner)"
+                " ORDER BY id FOR UPDATE SKIP LOCKED LIMIT 1) RETURNING *"), {"owner": self.owner}))
 
     def finish_job(self, job_id: int, ok: bool, error: str | None = None) -> None:
         with self.engine.begin() as conn:
@@ -209,12 +222,14 @@ class Repository:
         with self.engine.begin() as conn:
             requeued = conn.execute(text(
                 "UPDATE job SET status = 'queued', locked_at = NULL"
-                " WHERE status = 'running' AND locked_at < now() - make_interval(secs => :age) AND attempts < :max"),
-                {"age": max_age_seconds, "max": max_attempts}).rowcount
+                " WHERE status = 'running' AND locked_at < now() - make_interval(secs => :age) AND attempts < :max"
+                " AND (payload->>'owner' IS NULL OR payload->>'owner' = :owner)"),
+                {"age": max_age_seconds, "max": max_attempts, "owner": self.owner}).rowcount
             failed = conn.execute(text(
                 "UPDATE job SET status = 'failed', finished_at = now(), error = 'worker 가 응답하지 않아 중단됨'"
-                " WHERE status = 'running' AND locked_at < now() - make_interval(secs => :age) AND attempts >= :max"),
-                {"age": max_age_seconds, "max": max_attempts}).rowcount
+                " WHERE status = 'running' AND locked_at < now() - make_interval(secs => :age) AND attempts >= :max"
+                " AND (payload->>'owner' IS NULL OR payload->>'owner' = :owner)"),
+                {"age": max_age_seconds, "max": max_attempts, "owner": self.owner}).rowcount
             return requeued, failed
 
     def add_stage_log(self, analysis_id: UUID, stage: str, provider: str | None = None, model: str | None = None,

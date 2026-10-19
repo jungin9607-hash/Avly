@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from dotenv import load_dotenv
+from sqlalchemy.engine import make_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,6 +17,14 @@ load_dotenv(BASE_DIR / ".env")
 
 def _split(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def _default_auto_migrate(database_url: str | None) -> bool:
+    """docker compose 의 로컬 db 서비스(호스트 이름이 db)는 빈 DB 라서 스키마를 자동으로 만든다. 그 밖의 DB(팀 공용 등)는 건드리지 않는다."""
+    try:
+        return bool(database_url) and make_url(database_url).host == "db"
+    except Exception:
+        return False
 
 
 def _extension(ext: str) -> str:
@@ -62,7 +71,8 @@ def load_settings() -> Settings:
         session_ttl_hours=int(os.getenv("SESSION_TTL_HOURS", "24")),
         unsupported_retention_hours=int(os.getenv("UNSUPPORTED_RETENTION_HOURS", "24")),
         media_url_ttl_seconds=int(os.getenv("MEDIA_URL_TTL_SECONDS", "600")),
-        auto_migrate=os.getenv("AUTO_MIGRATE", "false").lower() in ("1", "true", "yes"),   # 공용 DB 를 실수로 바꾸지 않도록 기본은 끈다
+        # 정하지 않으면: 로컬 db 서비스에서만 켠다. 팀 공용 DB 는 실수로 바뀌지 않도록 꺼 두고 `python -m app.migrate` 로 적용한다
+        auto_migrate=(os.getenv("AUTO_MIGRATE").lower() in ("1", "true", "yes")) if os.getenv("AUTO_MIGRATE") else _default_auto_migrate(os.getenv("DATABASE_URL")),
         engine=os.getenv("ENGINE", "avly").lower(),
         redaction=os.getenv("REDACTION", "yolo").lower(),
         worker_poll_seconds=float(os.getenv("WORKER_POLL_SECONDS", "2")),
