@@ -50,12 +50,29 @@ def migration_files(directory: Path = MIGRATIONS_DIR) -> list[Path]:
     return sorted(directory.glob("*.sql"))
 
 
+class ForeignSchemaError(RuntimeError):
+    """이 마이그레이션이 만들지 않은 테이블이 이미 있는 DB 이다 (예: 팀 공용 DB 의 이전 스키마)."""
+
+
 def migrate(engine: Engine | None = None, directory: Path = MIGRATIONS_DIR) -> list[str]:
-    """아직 적용하지 않은 migrations/*.sql 을 파일 이름 순서대로 적용하고, 새로 적용한 이름을 돌려준다."""
+    """아직 적용하지 않은 migrations/*.sql 을 파일 이름 순서대로 적용하고, 새로 적용한 이름을 돌려준다.
+
+    전체가 한 트랜잭션이라 중간에 실패하면 아무것도 바뀌지 않는다.
+    마이그레이션 기록이 없는데 같은 이름의 테이블이 이미 있으면, 남의 스키마를 건드리지 않도록 시작 전에 멈춘다.
+    """
     engine = engine or get_engine()
     applied_now: list[str] = []
     with engine.begin() as conn:
         conn.execute(text("SELECT pg_advisory_xact_lock(:id)"), {"id": MIGRATION_LOCK_ID})
+        tracked = conn.execute(text("SELECT to_regclass('public.schema_migration') IS NOT NULL")).scalar()
+        if not tracked:
+            existing = [r[0] for r in conn.execute(text(
+                "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
+                " AND table_name IN ('accident', 'analysis', 'video', 'survey', 'legal_case', 'report')"))]
+            if existing:
+                raise ForeignSchemaError(
+                    "이 DB 에는 마이그레이션 기록 없이 이미 테이블이 있습니다: " + ", ".join(sorted(existing))
+                    + ". 새 스키마는 빈 DB(docker compose 의 db 서비스)에서 쓰세요. 기존 DB 에 적용하려면 먼저 스키마를 정리해야 합니다.")
         conn.execute(text(
             "CREATE TABLE IF NOT EXISTS schema_migration ("
             " name TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())"

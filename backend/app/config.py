@@ -59,7 +59,7 @@ def load_settings() -> Settings:
         app_secret=os.getenv("APP_SECRET", "dev-only-secret-change-me"),
         session_ttl_hours=int(os.getenv("SESSION_TTL_HOURS", "24")),
         media_url_ttl_seconds=int(os.getenv("MEDIA_URL_TTL_SECONDS", "600")),
-        auto_migrate=os.getenv("AUTO_MIGRATE", "true").lower() in ("1", "true", "yes"),
+        auto_migrate=os.getenv("AUTO_MIGRATE", "false").lower() in ("1", "true", "yes"),   # 공용 DB 를 실수로 바꾸지 않도록 기본은 끈다
         engine=os.getenv("ENGINE", "avly").lower(),
         redaction=os.getenv("REDACTION", "yolo").lower(),
         worker_poll_seconds=float(os.getenv("WORKER_POLL_SECONDS", "2")),

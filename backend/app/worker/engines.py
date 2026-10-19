@@ -42,9 +42,9 @@ class ReplayEngine:
             raise EngineNotConfigured(f"재생할 결과 파일이 없습니다: {path}")
         return json.loads(path.read_text(encoding="utf-8"))
 
-    def analyze(self, video_path, report):
+    def analyze(self, video_path, report, fixture: str | None = None):
         scope = _scope()
-        data = self._load(self.fixture)
+        data = self._load(fixture or self.fixture)
         report("overview")
         snapshot = snap.from_model_result(data, self.name)
         if snapshot["accident_object"] not in scope.SUPPORTED_ACCIDENT_OBJECTS and snapshot["accident_object"] is not None:
@@ -85,9 +85,9 @@ class FakeEngine(ReplayEngine):
             raise scope.VideoTooLong(float(words[2]) if len(words) > 2 else 60.0)
         if words[1:2] == ["fail"]:
             raise RuntimeError("FAKE 지시로 만든 실패")
-        if words[1:2] == ["fixture"] and len(words) > 2:
-            self.fixture = words[2]
-        return super().analyze(video_path, report)
+        # 지시로 고른 재생 파일은 이번 영상에만 쓴다 (다음 영상에 남아서는 안 된다)
+        fixture = words[2] if words[1:2] == ["fixture"] and len(words) > 2 else None
+        return super().analyze(video_path, report, fixture)
 
 
 class AvlyEngine:

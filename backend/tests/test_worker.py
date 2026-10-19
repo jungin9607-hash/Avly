@@ -318,6 +318,19 @@ class EngineTests(unittest.TestCase):
             snap, _ = FakeEngine(directory=FIXTURES).analyze(Path(f.name), lambda stage: None)
         self.assertEqual(snap["situation"]["candidates"][0]["accident_type_id"], 11)
 
+    def test_a_fixture_directive_applies_only_to_that_video(self):
+        import tempfile
+        engine = FakeEngine(directory=FIXTURES)
+        with tempfile.NamedTemporaryFile(suffix=".mp4") as special, tempfile.NamedTemporaryFile(suffix=".mp4") as ordinary:
+            special.write(b"FAKE fixture parking\n")
+            special.flush()
+            ordinary.write(b"ordinary")
+            ordinary.flush()
+            first, _ = engine.analyze(Path(special.name), lambda stage: None)
+            second, _ = engine.analyze(Path(ordinary.name), lambda stage: None)
+        self.assertIsNone(first["situation"]["default_index"])           # 주차장 결과
+        self.assertEqual(second["situation"]["candidates"][0]["accident_type_id"], 11)   # 다음 영상은 기본 결과로 돌아간다
+
     def test_make_engine(self):
         self.assertEqual(make_engine("replay").name, "replay")
         self.assertEqual(make_engine("FAKE").name, "fake")
