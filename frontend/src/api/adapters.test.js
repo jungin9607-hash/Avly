@@ -95,6 +95,16 @@ test("확인하지 못한 요소가 있으면 최종 비율 없이 지금까지 
   assert.match(model.factorHeader.desc, /확인한 가감요소만/);
 });
 
+test("확인하지 못한 요소만 있고 적용된 가감요소가 없으면 기본 비율 그대로라고 알려 준다", () => {
+  const result = structuredClone(fixture("result_partial.json"));
+  result.adjustments.applied = [];
+  result.steps = result.steps.slice(0, 1);
+  const model = toReportModel(result, "a");
+  assert.equal(model.appliedCount, 0);
+  assert.match(model.factorHeader.desc, /적용된 가감요소가 없어서 기본 비율 그대로/);
+  assert.equal(toReportModel(fixture("result_partial.json"), "a").appliedCount, 1);
+});
+
 test("가감요소가 없는 유형은 기본 비율만 보여 준다", () => {
   const model = toReportModel(fixture("result_base_only.json"), "a");
   assert.equal(model.state, "base_only");

@@ -1358,3 +1358,12 @@
   opacity: 0.8;
   font-size: 14px;
 }
+
+/* 적용된 가감요소가 하나도 없을 때 목록 맨 아래 안내 */
+.ar-factor-empty {
+  padding: 16px 22px;
+  border-top: 1px solid rgba(var(--color-law-panel-rgb, 25, 35, 70), 0.1);
+  color: var(--color-ink-secondary);
+  font-size: 15.5px;
+  line-height: 1.6;
+}

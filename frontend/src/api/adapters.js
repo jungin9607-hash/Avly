@@ -80,7 +80,7 @@ export function toSteps(result) {
 
 const FACTOR_DESC = {
   final: (n) => (n > 0 ? `${n}가지 가감요소를 반영했어요. 어려운 법적 근거는 눌러서 볼 수 있어요.` : "반영할 가감요소가 없어서 기본 비율 그대로예요."),
-  partial: () => "확인한 가감요소만 반영했어요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요.",
+  partial: (n) => (n > 0 ? "확인한 가감요소만 반영했어요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요." : "적용된 가감요소가 없어서 기본 비율 그대로예요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요."),
   base_only: () => "이 사고 유형은 가감요소가 아직 등록되지 않아 기본 비율만 안내해요.",
 };
 
@@ -96,6 +96,7 @@ export function toReportModel(result, analysisId) {
       desc: result.summary ?? "블랙박스 영상을 분석해 산정한 과실 비율과 그 근거예요.",
       keywords: type ? [type.place, type.feature, `식별 코드 ${String(analysisId ?? "").slice(0, 8)}`] : [`식별 코드 ${String(analysisId ?? "").slice(0, 8)}`],
     },
+    appliedCount: applied,
     factorHeader: { kicker: "판단 근거", desc: (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) },
     statusText: result.explanation?.status ?? "",
     steps: state === "unresolved" ? [] : toSteps(result),

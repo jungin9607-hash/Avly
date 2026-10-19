@@ -6,7 +6,7 @@ import SectionHeader from "./SectionHeader";
 
 // 위: 최종 과실 비율(고정) / 아래: 왼쪽 움직이는 작은 비율 박스 + 오른쪽 가감요소 목록
 // onSelectStep(i): 선택 안 된 카드를 눌렀을 때 그 단계로 이동
-export default function AdjustmentSteps({ steps, header, ratioLabel, confirmed = true, title, activeIndex = steps.length - 1, onSelectStep }) {
+export default function AdjustmentSteps({ steps, header, ratioLabel, confirmed = true, title, emptyNote = "", activeIndex = steps.length - 1, onSelectStep }) {
   const [finalMine, finalOther] = steps[steps.length - 1].ratio;
   const listRef = useRef(null);
   const [offset, setOffset] = useState(0);
@@ -49,6 +49,7 @@ export default function AdjustmentSteps({ steps, header, ratioLabel, confirmed =
                 onSelect={onSelectStep}
               />
             ))}
+            {emptyNote && <li className="ar-factor-empty">{emptyNote}</li>}
           </ol>
         </div>
       </div>

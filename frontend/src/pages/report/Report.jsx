@@ -133,6 +133,7 @@ function ResolvedView({ model, analysisId }) {
             ratioLabel={RATIO_LABEL[model.state]}
             confirmed={model.state === "final"}
             title={FACTOR_TITLE[model.state]}
+            emptyNote={model.appliedCount === 0 && (model.state === "final" || model.state === "partial") ? "적용된 가감요소가 없어서 기본 비율 그대로예요." : ""}
             activeIndex={activeStep}
             onSelectStep={goToStep}
           />
