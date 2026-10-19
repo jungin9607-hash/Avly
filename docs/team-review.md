@@ -27,7 +27,7 @@
 
 - **판례 AI 비교**: 판례 본문이 있으면 AI가 사건 개요, 법원 판단 요지, 공통점·차이점을 판결문 인용과 함께 정리한다. 서버가 인용이 본문에 있는지 확인하고 2차로 AI가 주장과 인용의 일치를 다시 판정한다. 비교 결과는 DB에 저장해 같은 설명을 다시 쓴다. 규칙 비교는 AI를 쓸 수 없을 때와 본문이 한 줄뿐인 등록 판례에 쓴다. 검수용 정리: [review/case-compare-review.md](review/case-compare-review.md)
 - 규칙 비교 오류 두 가지 수정: "신호등 없음"을 신호가 있는 것으로 세던 것, "차로변경"과 "진로변경"을 다른 상황으로 보던 것.
-- DB 마이그레이션 `0003_case_ai.sql` 추가: **팀 공용 DB에는 자동 적용되지 않으므로 한 번 수동으로 적용해야 한다.**
+- DB 마이그레이션 `0003_case_ai.sql` 추가: 팀 공용 DB에는 이미 적용돼 있다(0001~0003 확인).
 
 ## 3. 검증한 것과 못 한 것
 
@@ -50,7 +50,8 @@
 
 ## 5. 머지 전에 알아둘 것
 - `SJI`에는 `main` 대비 커밋이 120개 쌓여 있고 변경 파일은 229개입니다. 모델 원본(`Avly.py`, 노트북, `results/`)이 포함돼 있어 크게 보입니다.
-- `backend/.env`가 있어야 compose가 시작됩니다. `.env.example`을 복사하세요. 팀 공용 DB(`DATABASE_URL`)에는 마이그레이션이 자동으로 돌지 않습니다(`AUTO_MIGRATE` 기본 꺼짐).
+- `backend/.env`가 있어야 compose가 시작됩니다. `.env.example`을 복사하세요.
+- **DB는 `.env`의 `DATABASE_URL` 한 줄로 고릅니다.** 공용 DB(Supabase) 주소를 쓰면 팀원이 같은 데이터를 보고, 로컬 주소(`postgresql://postgres:avly@db:5432/avly`)를 쓰면 내 PC에만 쌓입니다. 공용 DB에서는 작업과 영상에 이 PC의 이름표를 붙여 서로 방해하지 않고, 마이그레이션도 자동으로 적용하지 않습니다(`python -m app.migrate`로 확인하고 `--apply`로 적용). 개인정보가 든 실제 영상은 로컬 DB로 시험하세요.
 - 기본 개발 모드는 **가짜 분석 + 비식별 없는 복사**입니다. 실제 분석은 `ENGINE=avly REDACTION=yolo INSTALL_YOLO=true`와 `OPENAI_API_KEY`가 필요합니다.
 - 실행 방법은 루트 [README.md](../README.md)를 보세요.
 

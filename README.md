@@ -106,7 +106,8 @@ docker compose up --build
 docker compose up
 ```
 
-db(로컬 PostgreSQL), backend, worker, frontend가 함께 뜹니다. 기본은 **키 없이 시험하는 개발 모드**(가짜 분석, 가리지 않는 비식별화)라
+db(로컬 PostgreSQL), backend, worker, frontend가 함께 뜹니다. **어느 DB를 쓰는지는 `backend/.env`의 `DATABASE_URL` 한 줄로 정합니다.**
+팀 공용 DB(Supabase)를 쓰면 팀원이 같은 판례 저장분과 분석 결과를 같이 보고, 로컬 DB(`postgresql://postgres:avly@db:5432/avly`)를 쓰면 내 PC에만 쌓입니다. 자세한 내용은 [backend/README.md](backend/README.md#데이터베이스-공용-db와-로컬-db)를 보세요. 기본은 **키 없이 시험하는 개발 모드**(가짜 분석, 가리지 않는 비식별화)라
 실제 AI 분석이 아닙니다. 실제 분석으로 돌리는 방법과 환경변수는 [backend/README.md](backend/README.md)를 보세요.
 
 ---
