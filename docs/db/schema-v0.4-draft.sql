@@ -134,7 +134,7 @@ CREATE TABLE analysis
     CONSTRAINT ck_analysis_status CHECK (status IN
         ('queued', 'processing', 'awaiting_confirmation', 'completed', 'failed', 'unsupported')),
     CONSTRAINT ck_analysis_stage CHECK (stage IS NULL OR stage IN
-        ('plate_masking', 'overview', 'detail_review', 'case_matching')),
+        ('plate_masking', 'overview', 'detail_review', 'case_matching', 'finalize')),
     CONSTRAINT ck_analysis_fault_range CHECK (
         (fault_me    IS NULL OR fault_me    BETWEEN 0 AND 100) AND
         (fault_other IS NULL OR fault_other BETWEEN 0 AND 100)),
@@ -150,7 +150,7 @@ CREATE TABLE analysis
 COMMENT ON TABLE  analysis                    IS '분석 (상태와 결과)';
 COMMENT ON COLUMN analysis.video_id           IS '분석에 쓴 영상. 번호판 비식별본(kind=masked)만 가리킨다';
 COMMENT ON COLUMN analysis.status             IS 'queued/processing/awaiting_confirmation/completed/failed/unsupported';
-COMMENT ON COLUMN analysis.stage              IS '진행 단계 (plate_masking/overview/detail_review/case_matching)';
+COMMENT ON COLUMN analysis.stage              IS '진행 단계 (plate_masking/overview/detail_review/case_matching/finalize)';
 COMMENT ON COLUMN analysis.parent_analysis_id IS '재분석이면 이전 분석 id';
 COMMENT ON COLUMN analysis.unsupported_reason IS '지원하지 않는 사고 유형일 때 이유 (예: 차대보행자)';
 COMMENT ON COLUMN analysis.accident_type_id   IS '확정된 과실표 유형 번호 (fault_table_car_to_car.csv 의 accident_type)';

@@ -45,11 +45,7 @@ def register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(RequestValidationError)
     async def handle_validation_error(request: Request, exc: RequestValidationError):
         details = [
-            {
-                "field": ".".join(str(part) for part in err["loc"]),
-                "message": err["msg"],
-                "type": err["type"],
-            }
+            {"field": ".".join(str(part) for part in err["loc"]), "message": err["msg"], "type": err["type"]}
             for err in exc.errors()
         ]
         return error_response(422, "VALIDATION_ERROR", "요청 형식이 올바르지 않습니다.", details)
