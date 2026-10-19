@@ -1,0 +1,7 @@
+{
+ "observed": "모델 인용 근거 있음",
+ "inferred": "연결 추정",
+ "conflicted": "관찰 간 모순",
+ "unknown": "근거 부족",
+ "user": "설문 답변"
+}

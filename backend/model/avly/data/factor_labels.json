@@ -1,0 +1,22 @@
+{
+ "low_speed_unjustified_stop": "저속주행 또는 편도 3차로 이상 도로에서 이유 없는 정지",
+ "unjustified_sudden_stop": "이유 없는 급정지",
+ "brake_light_fault": "제동등화의 고장",
+ "residential_area": "주택가·상점가 등",
+ "signal_delay": "진로변경 신호불이행·지연",
+ "prohibited_change": "진로변경 금지장소",
+ "bus_lane_violation": "버스·다인승전용차로 위반",
+ "passing_lane_change": "고속도로·자동차전용도로 추월차로로 변경",
+ "gross_negligence": "현저한 과실",
+ "serious_negligence": "중대한 과실",
+ "slow_failure": "서행 불이행",
+ "opposite_arrow": "주차장 화살표 반대 주행",
+ "protruding_wait_exit": "차량 앞부분을 내밀고 대기 후 출차",
+ "slow_or_stop": "서행 또는 일시정지",
+ "wide_right_turn": "대우회전",
+ "clear_prior_entry": "명확한 선진입",
+ "t_intersection_turn": "삼거리(T자) 회전",
+ "round_entry_stop": "회전차량과 충돌 회피를 위한 진입차량 일시정지",
+ "round_entry_prior": "진입차량 명확한 선진입",
+ "round_entry_signal_delay": "회전교차로 진입신호 불이행·지연"
+}
