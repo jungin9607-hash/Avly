@@ -14,6 +14,7 @@ from .tables import SUPPORT_LABELS
 from .context import ctx
 from .config import configure_local_runtime
 from .schemas import Matches, Observation, Scan
+from .scope import check_supported
 from .facts import collect_match_facts, mark_accident_input, parking_environment
 from .vision import call, digest_file
 from .video import background_cues, display_frames, get_frames, image_content, inspect_video, plan_review, review_high_ids, uniform_pick
@@ -97,6 +98,7 @@ def run(settings):
                 prompt = prompt_text('overview_scan') + json.dumps(ctx.places, ensure_ascii=False)
                 prompt += '\n배경 변화: ' + json.dumps(cues)
                 chosen = call('1/3 전체 흐름 분석', VISION_MODEL, Scan, image_content(prompt, context_frames), 3200, validator=lambda value: validate(value, context_frames))
+                check_supported(chosen)
                 overview_results = [(chosen, context_frames)]
                 nearby = overview_results
                 nearby_frames = context_frames
@@ -145,6 +147,7 @@ def run(settings):
                     review_prompt += prompt_text('detail_review_rule_11')
                     review_prompt += '\n배경 변화: ' + json.dumps(review_cues)
                     scene = call('2/3 사고 전후 상세 확인', VISION_MODEL, Observation, image_content(review_prompt, review_frames, high_ids=high_ids), 5000, validator=lambda s: validate(s, nearby_frames + review_frames))
+                    check_supported(scene)
                     validate(scene, nearby_frames + review_frames)
                     raw_review_scene = scene.model_dump()
                     anchor = {f['id']: f['index'] for f in review_frames}.get(scene.impact_anchor_frame_id, anchor)

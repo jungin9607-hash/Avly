@@ -194,7 +194,7 @@ def csv_accident_type_details(row, table_role='미확인'):
     obj = str(row.get('accident_object_name', '')).strip()
     parts = [x for x in (place, feature) if x and x.lower() != 'nan']
     display_name = ' / '.join(dict.fromkeys(parts)) or '사고 유형 명칭 확인 필요'
-    return {'accident_type_id': row['accident_type'], 'accident_type_display_name': display_name, 'accident_type_title_kind': 'CSV 장소·특징으로 구성한 설명형 제목 (공식 유형명 아님)', 'accident_object': obj, 'accident_place': place, 'accident_place_feature': feature, 'dashcam_table_role': table_role, 'dashcam_progress_condition': a_progress, 'other_vehicle_progress_condition': b_progress, 'source': 'fault_table.csv'}
+    return {'accident_type_id': row['accident_type'], 'accident_type_display_name': display_name, 'accident_type_title_kind': 'CSV 장소·특징으로 구성한 설명형 제목 (공식 유형명 아님)', 'accident_object': obj, 'accident_place': place, 'accident_place_feature': feature, 'dashcam_table_role': table_role, 'dashcam_progress_condition': a_progress, 'other_vehicle_progress_condition': b_progress, 'source': ctx.csv_path.name}
 
 def link_match(candidate, row, scene):
     conditions = ['추가 가정(모델 제안, 영상 확인 아님): ' + text for text in candidate.assumed_conditions]

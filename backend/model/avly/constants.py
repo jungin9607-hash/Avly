@@ -60,3 +60,6 @@ CASE_MAX_BODY_REQUESTS = 12
 CASE_RELEVANCE_VERSION = 'v2205-civil-claim-context'
 
 REPORT_NOTICE = '※ 본 보고서는 법적 효력이 없는 AI 참고 자료입니다. 실제 과실비율이나 법적 책임을 확정하지 않습니다.'
+
+# 서비스가 지원하는 사고 대상 (과실표 fault_table_car_to_car.csv 의 accident_object_name)
+SUPPORTED_ACCIDENT_OBJECTS = ('차대차',)
