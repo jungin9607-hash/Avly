@@ -23,7 +23,8 @@ CREATE TABLE accident
     status           VARCHAR(20)     DEFAULT 'uploaded' NOT NULL,
     session_id       UUID            NOT NULL, -- 소유 토큰. 로그인이 없으므로 이 값을 아는 사람만 이 사고를 볼 수 있다.
     consent_version  VARCHAR(20)     NULL,     -- 수집 동의 문서 버전
-    consent_at       TIMESTAMPTZ     NULL,     -- 수집 동의 시각
+    consent_at       TIMESTAMPTZ     NULL,     -- 분석 동의 시각 (필수 동의. 동의해야 분석을 시작한다)
+    retention_consent_at TIMESTAMPTZ NULL,     -- 영상 저장·추가 활용 동의 시각 (선택). NULL 이면 세션이 끝날 때 영상을 삭제한다
     expires_at       TIMESTAMPTZ     NULL,     -- 세션 만료 시각. 지나면 원본 영상을 삭제한다.
     created_at       TIMESTAMPTZ     DEFAULT now() NOT NULL,
     CONSTRAINT pk_accident PRIMARY KEY (id),
@@ -36,7 +37,8 @@ COMMENT ON COLUMN accident.title           IS '사고 제목';
 COMMENT ON COLUMN accident.status          IS '처리 상태 (uploaded/analyzing/completed/failed/unsupported)';
 COMMENT ON COLUMN accident.session_id      IS '소유 토큰(세션). 요청마다 함께 보내 본인 사고인지 확인한다';
 COMMENT ON COLUMN accident.consent_version IS '수집 동의 문서 버전';
-COMMENT ON COLUMN accident.consent_at      IS '수집 동의 시각';
+COMMENT ON COLUMN accident.consent_at      IS '분석 동의 시각 (필수)';
+COMMENT ON COLUMN accident.retention_consent_at IS '영상 저장·추가 활용 동의 시각 (선택). NULL 이면 세션 종료 시 영상 삭제';
 COMMENT ON COLUMN accident.expires_at      IS '세션 만료 시각. 지나면 원본 영상 삭제';
 COMMENT ON COLUMN accident.created_at      IS '등록 시각';
 
@@ -91,6 +93,9 @@ ALTER TABLE video
 ALTER TABLE video
     ADD CONSTRAINT fk_video_source FOREIGN KEY (source_video_id)
         REFERENCES video (id) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+-- 영상은 사고마다 하나만 (원본 기준). 비식별을 다시 처리하면 masked 는 여러 개가 될 수 있다.
+CREATE UNIQUE INDEX uq_video_original ON video (accident_id) WHERE kind = 'original';
 
 
 -- =========================================================

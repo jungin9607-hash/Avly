@@ -46,7 +46,7 @@ POST        POST          POST         POST         GET        GET            �
 | 상태값 추가 | `awaiting_confirmation` (사용자 확인 대기), `unsupported` (지원하지 않는 사고 유형) |
 | 응답 필드 추가 | `stage`, `situation`, `follow_up_questions`, `unsupported_reason` |
 | 엔드포인트 추가 | `POST /analyses/{id}/answers`, `POST /analyses/{id}/confirm` |
-| 요청 변경 | 사전 설문 항목에 `key` 추가 |
+| 요청 변경 | 사고 생성에 동의 정보 추가, 사전 설문 항목에 `key` 추가 |
 | 결과 형식 변경 | `fault_me`/`fault_other` → `fault_options[]`, `timeline`, `related_cases` 확장 |
 | 삭제 | `confidence` (모델이 만들지 않음) |
 | 유지 | 공통 규칙, 오류 형식, 사고 생성·조회, 영상 업로드 |
@@ -75,6 +75,31 @@ queued → processing → awaiting_confirmation → completed
 `awaiting_confirmation`일 때 사고는 `analyzing`으로 둡니다. 분석이 `unsupported`로 끝나면 사고도 `unsupported`가 됩니다.
 
 ## 5. 엔드포인트
+
+### POST /api/v1/accidents — 사고 생성 (변경)
+
+수집 동의 정보를 함께 받습니다. **분석 동의는 필수**이고, **영상 저장·추가 활용 동의는 선택**입니다.
+
+**요청**
+```json
+{
+  "title": "퇴근길 차선 변경 사고",
+  "consent": { "version": "2026-10-19", "analysis": true, "retention": false }
+}
+```
+
+| 필드 | 필수 | 설명 |
+| --- | --- | --- |
+| `consent.version` | ✅ | 사용자가 본 동의 문서의 버전 |
+| `consent.analysis` | ✅ | **`true`여야 합니다.** 아니면 `422 CONSENT_REQUIRED` |
+| `consent.retention` | | 영상 저장·추가 활용 동의. `true`일 때만 영상을 보관하고, 아니면 세션이 끝날 때 영상을 삭제합니다 |
+
+**응답 201**에는 `session_id`가 추가됩니다. 이후 모든 요청에 이 값을 함께 보내야 합니다 (헤더 이름은 [합의 항목](#합의가-필요한-항목)에서 정합니다).
+
+### POST /api/v1/accidents/{accident_id}/videos — 영상 업로드 (변경 없음, 규칙만 추가)
+
+- 영상은 **사고마다 하나만** 올릴 수 있습니다. 이미 있으면 `409 VIDEO_ALREADY_UPLOADED`입니다. (v0.3 백엔드에 이미 반영됨)
+- 영상 길이는 **사고 전후 15초 내외(최대 20초)**입니다. 길이는 번호판 비식별화나 분석 시작 때 확인하므로, 초과하면 분석이 `failed`(`error.code = VIDEO_TOO_LONG`)로 끝납니다.
 
 ### POST /api/v1/accidents/{accident_id}/survey — 사전 설문 (변경)
 
@@ -323,6 +348,9 @@ queued → processing → awaiting_confirmation → completed
 | --- | --- | --- |
 | 409 | `ANALYSIS_NOT_AWAITING` | 확인 대기 상태가 아닌데 `/answers` 또는 `/confirm` 호출 |
 | 409 | `ANALYSIS_NOT_COMPLETED` | 완료 전에 `result` 또는 리포트 요청 (기존) |
+| 409 | `VIDEO_ALREADY_UPLOADED` | 이미 영상이 있는 사고에 다시 업로드 |
+| 422 | `CONSENT_REQUIRED` | 분석 동의 없이 사고 생성 |
+| — | `VIDEO_TOO_LONG` | 영상이 20초를 넘음. HTTP 오류가 아니라 **분석 상태 `failed`의 `error.code`**로 전달됨 |
 | 502 | `AI_SERVICE_ERROR` | OpenAI 등 외부 API 호출 실패 (분석 `failed`의 `error.code`로도 사용) |
 
 ## 8. DB 변경 사항
@@ -353,3 +381,5 @@ queued → processing → awaiting_confirmation → completed
 6. **분석 소요 시간과 업로드 용량.** 단계마다 OpenAI를 호출하므로 영상 길이에 따라 오래 걸립니다. 영상 길이 상한과 타임아웃 기준이 필요합니다.
 7. **지원하지 않는 사고(`unsupported`)의 처리.** 화면 문구(프론트에 `unsupported` 단계가 이미 있음), 이미 올라간 영상을 바로 삭제할지, 이용자에게 대신 안내할 방법(예: 보험사 상담)이 있는지.
 8. **사고 대상 판단이 틀렸을 때.** 모델이 차대차를 보행자로 잘못 판단하면 정상 사고를 거부하게 됩니다. 그래서 불확실하면 계속 진행하도록 했지만, 사용자가 "아니요, 차대차예요"로 다시 시도할 수 있게 할지 정해야 합니다.
+9. **`session_id`를 어떻게 보낼지.** 헤더(`X-Session-Id`)로 보낼지, 쿠키로 보낼지. 쿠키는 공유 링크와 CORS 설정을 함께 정해야 합니다.
+10. **영상 길이 확인 시점.** 지금은 분석 시작 때 확인하므로 사용자가 올린 뒤에야 알게 됩니다. 업로드 직후(번호판 처리 전)나 프론트에서 재생 메타데이터로 미리 막을지 정해야 합니다.
