@@ -100,10 +100,9 @@ def configure_local_runtime(settings):
     if csv_value:
         csv_path=backend_path(csv_value,backend)
     else:
-        candidates=[model/'data/fault_table_car_to_car.csv',backend/'data/fault_table_car_to_car.csv',model/'fault_table_car_to_car.csv',backend.parent/'data/fault_table_car_to_car.csv']
-        csv_path=next((p.resolve() for p in candidates if p.is_file()),None)
-    if csv_path is None or not csv_path.is_file():
-        raise FileNotFoundError('fault_table_car_to_car.csv를 backend/model/data에 넣거나 CSV_FILE에 정확한 경로를 지정하세요.')
+        csv_path=(Path(__file__).parent/'data'/'fault_table_car_to_car.csv').resolve()
+    if not csv_path.is_file():
+        raise FileNotFoundError('과실표 CSV를 찾지 못했습니다: '+str(csv_path)+'\nCSV_FILE(또는 FAULT_TABLE_PATH)에 정확한 경로를 지정하세요.')
     results=backend_path(settings['RESULTS_DIR'],backend) if settings.get('RESULTS_DIR') else model/'results'
     results.mkdir(parents=True,exist_ok=True)
     print('Python:',sys.executable)
