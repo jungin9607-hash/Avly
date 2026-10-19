@@ -6,7 +6,7 @@ backend/model 폴더에서:  python -m avly.cli --video "uploads/영상.mp4"
 import argparse
 
 from .pipeline import run
-from .scope import UnsupportedAccident
+from .scope import UnsupportedAccident, VideoTooLong
 
 
 def parse_args():
@@ -38,6 +38,9 @@ def main():
         })
     except UnsupportedAccident as exc:
         print('\n[지원하지 않는 사고] ' + str(exc))
+        raise SystemExit(2)
+    except VideoTooLong as exc:
+        print('\n[영상 길이 초과] ' + str(exc))
         raise SystemExit(2)
 
 

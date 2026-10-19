@@ -63,3 +63,6 @@ REPORT_NOTICE = '※ 본 보고서는 법적 효력이 없는 AI 참고 자료�
 
 # 서비스가 지원하는 사고 대상 (과실표 fault_table_car_to_car.csv 의 accident_object_name)
 SUPPORTED_ACCIDENT_OBJECTS = ('차대차',)
+
+# 영상 길이 상한(초). 사고 전후 15초 내외 영상을 기준으로 하고 여유를 두어 20초까지 받는다.
+MAX_VIDEO_SECONDS = setting('AVLY_MAX_VIDEO_SECONDS', 20.0)

@@ -66,9 +66,10 @@
 | `AVLY_REVIEW_IMAGES` | `40` |
 | `AVLY_REVIEW_HIGH_IMAGES` | `8` |
 | `AVLY_PRE_SECONDS` / `AVLY_POST_SECONDS` | `4.0` / `2.0` |
+| `AVLY_MAX_VIDEO_SECONDS` | `20.0` (영상 길이 상한) |
 | `AVLY_DEV_OVERRIDES` | (없음) 개발용 확인값 파일 경로 |
 
-## 서비스 범위: 차대차 사고만 지원
+## 서비스 범위: 차대차 사고, 15초 내외 영상 하나
 
 - 과실표는 `data/fault_table_car_to_car.csv`(133행)를 기본으로 씁니다. 기존 `data/fault_table.csv`(434행)의 차대차 행과 내용이 같습니다.
   다른 표를 쓰려면 `--csv` 옵션을 쓰세요. (기존 434행 파일은 지우지 않았습니다.)
@@ -76,6 +77,9 @@
   이후 단계(AI 호출)를 실행하지 않고 멈춥니다. 사고 대상이 비어 있거나 불확실하면 계속 진행합니다.
   - 명령줄에서는 `[지원하지 않는 사고]` 안내를 출력하고 종료 코드 2로 끝납니다.
   - 서버에서 쓸 때는 `UnsupportedAccident` 예외를 받아 분석 상태를 `unsupported`로 바꾸면 됩니다.
+- **영상 길이는 사고 전후 15초 내외**를 기준으로 하고, 여유를 두어 **20초까지** 받습니다. 20초를 넘으면 AI를 호출하기 전에
+  `VideoTooLong` 예외로 멈춥니다. (명령줄은 `[영상 길이 초과]` 안내, 종료 코드 2.) 상한은 `AVLY_MAX_VIDEO_SECONDS`로 바꿀 수 있습니다.
+- **영상은 분석 한 번에 하나만** 받습니다.
 - 가감요소 7개 유형은 모두 이 133개 안에 있습니다. (가감요소 커버리지 7/133)
 
 ## 실행
@@ -111,6 +115,7 @@ python -m avly.cli --video "../uploads/영상.mp4"
 9. **차대차 전용 과실표가 기본**이고, 지원하지 않는 사고는 1/3, 2/3단계 직후에 멈춥니다. (위 "서비스 범위" 참고)
    바뀐 곳: `config.py`(기본 CSV 경로), `matching.py`(결과 JSON의 `source`에 실제 CSV 파일명 기록),
    `pipeline.py`(`check_supported` 호출 2줄), 새 파일 `scope.py`, `constants.py`(`SUPPORTED_ACCIDENT_OBJECTS`).
+10. **영상 길이 상한(기본 20초)**을 영상 분석 시작 전에 확인합니다. (`pipeline.py`에 `check_duration` 호출 1줄, `scope.py`, `constants.py`의 `MAX_VIDEO_SECONDS`)
 
 ## 알려진 제약
 
@@ -125,7 +130,7 @@ python -m avly.cli --video "../uploads/영상.mp4"
 
 원본 `Avly.py`와 비교해서 확인했습니다. (원본이 남아 있는 동안 다시 돌려볼 수 있습니다.)
 
-- 함수·클래스 **211개 본문이 원본과 구조(AST)까지 같음** (위 1, 4, 5, 9번의 변경만 예외)
+- 함수·클래스 **211개 본문이 원본과 구조(AST)까지 같음** (위 1, 4, 5, 9, 10번의 변경만 예외)
 - 실행 흐름(`run`) 22개 문장이 원본과 같음
 - 표·상수 **36개가 1단계 사본과 타입·키 순서까지 같음** (`tuple`, 숫자 키 포함)
 - 프롬프트 18개 파일 내용이 원본 문자열과 같음

@@ -14,7 +14,7 @@ from .tables import SUPPORT_LABELS
 from .context import ctx
 from .config import configure_local_runtime
 from .schemas import Matches, Observation, Scan
-from .scope import check_supported
+from .scope import check_duration, check_supported
 from .facts import collect_match_facts, mark_accident_input, parking_environment
 from .vision import call, digest_file
 from .video import background_cues, display_frames, get_frames, image_content, inspect_video, plan_review, review_high_ids, uniform_pick
@@ -71,6 +71,7 @@ def run(settings):
     ctx.fps, ctx.frame_count, ctx.video_read_audit = inspect_video(ctx.VIDEO_PATH)
     ctx.last_frame_index = ctx.frame_count - 1
     ctx.duration = ctx.frame_count / ctx.fps
+    check_duration(ctx.duration)
     ctx.cap = None
 
     _process_log = io.StringIO()
