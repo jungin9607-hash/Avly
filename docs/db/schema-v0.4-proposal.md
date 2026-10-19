@@ -70,7 +70,7 @@ queued → processing → awaiting_confirmation → completed
 
 ## 5. `analysis.result` JSON 구조
 
-[API 명세 v0.4](../api-v0.4-draft.md)의 `result`와 같은 형태입니다.
+[API 명세 v0.4](../api.md)의 `result`와 같은 형태입니다.
 
 ```json
 {
