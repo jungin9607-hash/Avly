@@ -28,6 +28,7 @@
 | `matching.py` | CSV 과실표와 비교해서 후보 연결 |
 | `law.py` | 법령/판례 API 조회 |
 | `adjustments.py` | 기본 과실비율에 가감요소 적용 |
+| `explain.py` | 기본 비율과 가감요소를 **쉬운 말로 설명** (AI 없이 `data/adjustment_explanations.json`의 문장으로 조립) |
 | `timeline.py` | 타임라인 생성 |
 | `report.py` | 사용자용 보고서 |
 | `survey.py` | 추가 질문 생성, 답변 반영 |
@@ -44,6 +45,7 @@
 | `data/verified_cases.json` | 유형별 판례 (5개 유형) |
 | `data/law_articles.json` | 유형별 관련 법조문 |
 | `data/factor_labels.json` | 가감요소 이름 |
+| `data/adjustment_explanations.json` | 가감요소 20개의 쉬운 제목·설명·질문, 도로교통법 조문 풀이. **AI가 쓴 초안이며 검수 전**(`reviewed: false`). 조문 7개는 아직 비어 있음 |
 | `data/support_labels.json`, `special_labels.json` | 화면 표시용 라벨 |
 | `data/survey_options.json` | 설문 선택지 |
 | `data/cause_questions.json` | 사고 원인 질문 |
@@ -125,6 +127,13 @@ python -m avly.cli --video "../uploads/영상.mp4"
   연결 구조라서 지울 수 없습니다. 하나로 합치는 건 3단계 작업입니다.
 - 코드 안에 `accident_type == 126` 같은 **특정 유형 번호 분기가 약 17곳** 남아 있습니다. 3단계에서 다룹니다.
 - 프롬프트 중 100자 미만 짧은 문장과, 사용자에게 보이는 안내 문구(`TIMELINE_NOTICE`, `REPORT_NOTICE` 등)는 아직 코드 안에 있습니다.
+
+## 테스트
+
+```bash
+cd backend/model
+python -m unittest avly.test_explain -v      # 쉬운 말 설명 (표준 라이브러리만 필요)
+```
 
 ## 검증
 
