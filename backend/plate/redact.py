@@ -12,6 +12,7 @@
 주의: 자동 탐지는 완전하지 않다. 멀거나 어둡거나 일부만 보이는 번호판과 사람은 놓칠 수 있다.
 사용자에게는 "자동으로 가리며 일부 누락될 수 있음"을 알려야 한다. 반환하는 통계(탐지 프레임 수 등)는 DB 의 video 에 기록한다.
 """
+import os
 import shutil
 import subprocess
 from collections import deque
@@ -20,7 +21,8 @@ from pathlib import Path
 import cv2
 
 PLATE_MODEL_REPO = 'Koushim/yolov8-license-plate-detection'  # plate_mosaic.py 와 같은 번호판 모델
-PERSON_WEIGHTS = 'yolov8n.pt'  # COCO 로 학습된 일반 모델. 0번 클래스가 사람(person)이다.
+MODEL_DIR = Path(os.environ.get('AVLY_MODEL_DIR', Path.home() / '.cache' / 'avly'))  # 내려받은 모델을 두는 곳 (소스 폴더를 더럽히지 않는다)
+PERSON_WEIGHTS = MODEL_DIR / 'yolov8n.pt'  # COCO 로 학습된 일반 모델. 0번 클래스가 사람(person)이다. 없으면 처음 쓸 때 내려받는다.
 PERSON_CLASS_ID = 0
 
 
@@ -73,7 +75,8 @@ class YoloPersonDetector:
         from ultralytics import YOLO
 
         self.conf = conf
-        self.model = YOLO(weights)
+        Path(weights).parent.mkdir(parents=True, exist_ok=True)
+        self.model = YOLO(str(weights))
 
     def detect(self, frame):
         result = self.model.predict(source=frame, conf=self.conf, classes=[PERSON_CLASS_ID], verbose=False)[0]
