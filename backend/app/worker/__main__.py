@@ -17,7 +17,7 @@ def main() -> None:
         db.migrate()
     repo = Repository()
     engine = make_engine()
-    Worker(repo, engine, make_redaction(), make_cases(repo, engine)).loop()
+    Worker(repo, engine, make_redaction(), make_cases(repo)).loop()
 
 
 if __name__ == "__main__":

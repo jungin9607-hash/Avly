@@ -10,11 +10,23 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(sorted(rows)[0], 0)
         self.assertEqual(sorted(rows)[-1], 132)
 
-    def test_every_type_has_two_orientations_and_sums_to_100(self):
+    def test_options_are_unique_by_the_four_visible_items_and_sum_to_100(self):
         options = catalog.options()
-        self.assertEqual(len(options), 266)
+        labels = [(o["place"], o["feature"], o["my_progress"], o["other_progress"]) for o in options]
+        self.assertEqual(len(labels), len(set(labels)))   # 화면에서 네 항목을 고르면 선택지가 하나로 정해진다
         for o in options:
             self.assertEqual(o["base_me"] + o["base_other"], 100)
+        self.assertEqual(len(options), 261)
+
+    def test_every_type_is_reachable(self):
+        reachable = {o["accident_type_id"] for o in catalog.options()}
+        # 114번과 116번은 같은 상황이라 번호가 작은 114번만 남는다. 그 밖의 유형은 모두 고를 수 있다.
+        self.assertEqual(set(catalog.rows()) - reachable, {116})
+
+    def test_symmetric_types_appear_once(self):
+        ids = [o["accident_type_id"] for o in catalog.options()]
+        self.assertEqual(ids.count(6), 1)    # 마주 보며 직진, 50:50
+        self.assertEqual(ids.count(12), 1)   # 동시 차로변경, 50:50
 
     def test_orientation_swaps_progress_and_fault(self):
         row = catalog.get_row(11)

@@ -84,12 +84,19 @@ def orient(row: Row, role: str) -> dict:
 
 
 def options() -> list[dict]:
-    """프론트가 장소 → 사고 유형 → 내 차 과정 → 상대 차 과정 순서로 좁혀 가는 데 쓰는 전체 선택지."""
-    out = []
-    for row in rows().values():
+    """프론트가 장소 → 사고 유형 → 내 차 과정 → 상대 차 과정 순서로 좁혀 가는 데 쓰는 전체 선택지.
+
+    화면에 보이는 네 항목이 같으면 하나로 줄인다 (번호가 가장 작은 유형을 남긴다).
+    - 양쪽 진행이 같고 50:50 인 유형은 내 차가 A 든 B 든 같으므로 하나만 둔다
+    - 과실표에 같은 상황이 두 번 적힌 경우(예: 114번과 116번)도 하나만 둔다
+    """
+    seen: dict[tuple, dict] = {}
+    for row in sorted(rows().values(), key=lambda r: r.id):
         for role in ("A", "B"):
-            out.append(orient(row, role))
-    return out
+            option = orient(row, role)
+            key = (option["place"], option["feature"], option["my_progress"], option["other_progress"])
+            seen.setdefault(key, option)
+    return list(seen.values())
 
 
 def adjustment_questions(accident_type_id: int, role: str, facts: list[dict] | None = None) -> list[dict]:

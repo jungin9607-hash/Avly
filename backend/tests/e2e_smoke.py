@@ -103,6 +103,10 @@ def main():
     check("최종 비율과 단계", result["state"] == "final" and len(result["steps"]) >= 2, result.get("state"))
     print(f"    기본 {result['fault']['base']} → 최종 {result['fault']['final']}")
     check("타임라인이 있음", bool(result["timeline"]))
+    cases = result["related_cases"]
+    check("유사 판례와 규칙 기반 비교", len(cases) >= 1 and cases[0]["comparison"]["match_level"] in ("same_type", "partial")
+          and cases[0]["comparison"]["common"] and cases[0]["comparison"]["differences"], cases[:1])
+    print(f"    판례 {len(cases)}건, 첫 판례 {cases[0]['court']} {cases[0]['case_number']} → {cases[0]['comparison']['match_label']}")
     _, video = call("GET", f"/api/v1/accidents/{accident_id}/video-url", headers=headers)
     check("비식별 영상 주소(개발용 복사)", video["available"])
     if video["available"]:

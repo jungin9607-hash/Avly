@@ -244,21 +244,25 @@ class FinalizeTests(WorkerTestCase):
         self.assertEqual((row["status"], row["error_code"]), (st.FAILED, "FINALIZE_FAILED"))
         self.assertNotIn("boom", row["error_message"])
 
-    def test_cases_are_looked_up_for_the_confirmed_type(self):
+    def test_cases_are_looked_up_for_the_confirmed_type_and_compared(self):
         accident, analysis, w = self.awaiting()
         cases = mock.Mock()
-        cases.related_for.return_value = [{"court": "서울", "case_number": "1"}]
+        cases.related_for.return_value = [{"court": "서울", "case_number": "1", "relevance_status": "registered_chart_reference",
+                                           "summary": "진로변경 중 충돌", "comparison_limit": "한계"}]
         w.cases = cases
         self.confirm(analysis, 11, "A")
         w.run_once()
-        cases.related_for.assert_called_once()
-        self.assertEqual(cases.related_for.call_args.args[0], 11)
-        self.assertEqual(self.analysis(analysis)["result"]["related_cases"], [{"court": "서울", "case_number": "1"}])
+        cases.related_for.assert_called_once_with(11)
+        related = self.analysis(analysis)["result"]["related_cases"]
+        self.assertEqual(related[0]["court"], "서울")
+        self.assertEqual(related[0]["comparison"]["match_level"], "same_type")
+        self.assertEqual(related[0]["comparison"]["differences"][0], "한계")
         accident2, analysis2, _ = self.awaiting()
         cases.related_for.reset_mock()
         self.confirm(analysis2, None, None)
         w.run_once()
         cases.related_for.assert_not_called()   # 유형이 없으면 판례를 찾지 않는다
+        self.assertEqual(self.analysis(analysis2)["result"]["related_cases"], [])
 
 
 class CleanupTests(WorkerTestCase):

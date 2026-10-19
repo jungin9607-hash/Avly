@@ -219,3 +219,54 @@ class Repository:
                 " VALUES (:a, :stage, :p, :m, :i, :o, :c, :l, :s)"),
                 {"a": analysis_id, "stage": stage, "p": provider, "m": model, "i": input_tokens, "o": output_tokens,
                  "c": cached, "l": latency_ms, "s": status})
+
+    # ------------------------------------------------------------ 판례 (DB 먼저, 없으면 API 로 보충)
+    def upsert_case(self, case: dict) -> UUID:
+        """판례를 저장한다. (법원, 사건번호)가 같으면 갱신하되, 이미 검수된 표시는 낮추지 않는다."""
+        row = {"id": uuid4(), **{k: case.get(k) for k in (
+            "court", "decided_on", "case_number", "title", "summary", "fault_ratio", "source_kind", "source_url",
+            "verified", "verified_by", "verified_at", "raw", "fetched_at")}}
+        row["verified"] = bool(row["verified"])
+        with self.engine.begin() as conn:
+            return conn.execute(_q(
+                "INSERT INTO legal_case (id, court, decided_on, case_number, title, summary, fault_ratio, source_kind, source_url,"
+                " verified, verified_by, verified_at, raw, fetched_at)"
+                " VALUES (:id, :court, :decided_on, :case_number, :title, :summary, :fault_ratio, :source_kind, :source_url,"
+                " :verified, :verified_by, :verified_at, :raw, :fetched_at)"
+                " ON CONFLICT (court, case_number) DO UPDATE SET"
+                " title = COALESCE(EXCLUDED.title, legal_case.title), summary = EXCLUDED.summary,"
+                " source_url = COALESCE(EXCLUDED.source_url, legal_case.source_url),"
+                " raw = COALESCE(EXCLUDED.raw, legal_case.raw), fetched_at = COALESCE(EXCLUDED.fetched_at, legal_case.fetched_at),"
+                " verified = legal_case.verified OR EXCLUDED.verified,"
+                " verified_by = CASE WHEN legal_case.verified THEN legal_case.verified_by ELSE EXCLUDED.verified_by END,"
+                " verified_at = CASE WHEN legal_case.verified THEN legal_case.verified_at ELSE EXCLUDED.verified_at END"
+                " RETURNING id", "raw"), row).scalar_one()
+
+    def link_case(self, accident_type_id: int, case_id: UUID, relevance_status: str, comparison_limit: str | None) -> None:
+        with self.engine.begin() as conn:
+            conn.execute(text(
+                "INSERT INTO case_accident_type (accident_type_id, case_id, relevance_status, comparison_limit)"
+                " VALUES (:t, :c, :r, :l) ON CONFLICT (accident_type_id, case_id) DO UPDATE SET"
+                " relevance_status = EXCLUDED.relevance_status, comparison_limit = EXCLUDED.comparison_limit"),
+                {"t": accident_type_id, "c": case_id, "r": relevance_status, "l": comparison_limit})
+
+    def cases_for_type(self, accident_type_id: int) -> list[dict]:
+        """이 유형에 연결된 판례. 검수된 것, 날짜가 최근인 것 순서."""
+        with self.engine.connect() as conn:
+            return _rows(conn.execute(text(
+                "SELECT c.id AS case_id, c.court, c.decided_on, c.case_number, c.title, c.summary, c.fault_ratio, c.source_kind,"
+                " c.source_url, c.verified, c.verified_at, l.relevance_status, l.comparison_limit"
+                " FROM case_accident_type l JOIN legal_case c ON c.id = l.case_id WHERE l.accident_type_id = :t"
+                " ORDER BY c.verified DESC, c.decided_on DESC NULLS LAST, c.case_number"), {"t": accident_type_id}))
+
+    def get_case_lookup(self, accident_type_id: int) -> dict | None:
+        with self.engine.connect() as conn:
+            return _one(conn.execute(text("SELECT * FROM case_lookup WHERE accident_type_id = :t"), {"t": accident_type_id}))
+
+    def set_case_lookup(self, accident_type_id: int, status: str, case_count: int, retry_after: datetime | None) -> None:
+        with self.engine.begin() as conn:
+            conn.execute(text(
+                "INSERT INTO case_lookup (accident_type_id, status, case_count, looked_up_at, retry_after)"
+                " VALUES (:t, :s, :n, now(), :r) ON CONFLICT (accident_type_id) DO UPDATE SET"
+                " status = EXCLUDED.status, case_count = EXCLUDED.case_count, looked_up_at = now(), retry_after = EXCLUDED.retry_after"),
+                {"t": accident_type_id, "s": status, "n": case_count, "r": retry_after})

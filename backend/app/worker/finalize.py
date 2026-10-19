@@ -4,6 +4,7 @@
 """
 
 from app import catalog
+from app.worker import compare
 from avly import explain
 from avly.constants import REPORT_NOTICE
 from avly.tables import LAW_ARTICLES_BY_TYPE
@@ -73,6 +74,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict]) -> 
 
     row = catalog.get_row(type_id)
     option = catalog.orient(row, role)
+    common["related_cases"] = [{**c, "comparison": compare.compare_case(c, option)} for c in related_cases]
     scenario = {
         "scenario_id": f"{type_id}:{role}:confirmed", "accident_type": type_id, "dashcam_table_role": role,
         "eligible_for_adjustment": True,   # 사용자가 유형과 역할을 확정했다

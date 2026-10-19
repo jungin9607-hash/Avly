@@ -27,7 +27,7 @@ STALE_JOB_SECONDS = 30 * 60
 class NoCases:
     """판례 조회가 없는 기본값 (테스트용)."""
 
-    def related_for(self, accident_type_id: int, context: dict | None = None) -> list[dict]:
+    def related_for(self, accident_type_id: int) -> list[dict]:
         return []
 
 
@@ -114,7 +114,7 @@ class Worker:
         confirmed = analysis["confirmed"] or {}
         try:
             type_id = confirmed.get("accident_type_id")
-            related = self.cases.related_for(type_id, analysis["scene"]) if type_id is not None else []
+            related = self.cases.related_for(type_id) if type_id is not None else []
             result = finalize.build_result(analysis["scene"], confirmed, related)
         except Exception:
             logger.exception("결과 계산 실패: %s", analysis_id)

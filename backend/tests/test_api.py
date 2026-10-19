@@ -284,7 +284,7 @@ class MediaTests(ApiTestCase):
 class CatalogAndHealthTests(ApiTestCase):
     def test_catalog(self):
         body = self.client.get("/api/v1/catalog/accident-types").json()
-        self.assertEqual(body["count"], 266)
+        self.assertEqual(body["count"], 261)
         self.assertEqual({i["role"] for i in body["items"]}, {"A", "B"})
 
     def test_health(self):
