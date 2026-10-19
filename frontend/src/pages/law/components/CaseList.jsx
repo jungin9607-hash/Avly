@@ -37,11 +37,10 @@ export default function CaseList({ cases, selectedId, onToggle, selectedExtra, r
   );
 }
 
-// 판례 카드 1개: 한 줄에 법원 이름 + 핵심 수치 2개 + "상세 보기" 버튼
+// 판례 카드 1개: 한 줄에 법원 이름 + 핵심 정보 2개 + "상세 보기" 버튼
 // 카드 아무 곳이나 누르면 선택, 선택된 카드를 한 번 더 누르면 해제 (on/off)
 // "상세 보기" 버튼은 선택한 카드에만 나타나고(선택 전엔 자리도 접힘), 누르면 펼치기만
 function CaseCard({ item, index, selected, expanded, onToggle, onToggleDetails }) {
-  const [mine, other] = item.ratio.split(":").map((v) => v.trim());
   const inputId = `law-case-${item.id}`;
 
   return (
@@ -79,16 +78,12 @@ function CaseCard({ item, index, selected, expanded, onToggle, onToggleDetails }
         {/* 핵심 수치: 작은 라벨 위 · 숫자 아래로 묶음 (두 숫자는 같은 크기) */}
         <dl className="law-case-metrics">
           <div>
-            <dt>유사도</dt>
-            <dd className="law-stat-sim">{item.similarity}</dd>
+            <dt>비교</dt>
+            <dd className="law-stat-sim">{item.matchLabel || "—"}</dd>
           </div>
           <div>
-            <dt>기준 과실</dt>
-            <dd>
-              <span className="law-stat-mine">{mine}</span>
-              <span className="law-stat-sep"> : </span>
-              <span className="law-stat-other">{other}</span>
-            </dd>
+            <dt>검수</dt>
+            <dd>{item.verified ? "검수됨" : "검수 전"}</dd>
           </div>
         </dl>
 

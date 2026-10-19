@@ -1,0 +1,201 @@
+// 서버 응답을 기존 화면 컴포넌트가 읽는 모양으로 바꾸는 순수 함수들. (화면도, 서버 호출도 여기에 없다)
+import { ROUTES } from "../routes.js";
+
+// ---------------------------------------------------------------- 사고 상황 확인 (장소 → 사고 유형 → 내 차 → 상대 차)
+const LEVELS = ["place", "feature", "my_progress", "other_progress"];
+
+export const LEVEL_LABEL = {
+  place: "사고 장소",
+  feature: "사고 유형",
+  my_progress: "내 차의 움직임",
+  other_progress: "상대 차의 움직임",
+};
+
+const unique = (values) => [...new Set(values)];
+
+// selection 의 앞 항목들과 맞는 선택지만 남긴다.
+function matching(items, selection, upTo) {
+  return items.filter((item) => LEVELS.slice(0, upTo).every((level) => item[level] === selection[level]));
+}
+
+// 각 항목에서 고를 수 있는 값. 앞 항목을 바꾸면 뒤 항목의 보기가 좁혀진다.
+export function cascade(items, selection) {
+  return Object.fromEntries(
+    LEVELS.map((level, index) => [level, unique(matching(items, selection, index).map((item) => item[level]))]),
+  );
+}
+
+// 네 항목이 모두 정해지면 선택지 하나(유형 번호와 내 차가 표에서 맡은 쪽 포함)로 돌려준다. 아직이면 null.
+export function resolveOption(items, selection) {
+  if (!LEVELS.every((level) => selection[level])) return null;
+  return matching(items, selection, LEVELS.length)[0] ?? null;
+}
+
+// 앞 항목이 바뀌어 더는 고를 수 없게 된 뒤 항목의 선택을 지운다.
+export function normalizeSelection(items, selection) {
+  const next = { ...selection };
+  const options = cascade(items, next);
+  for (const level of LEVELS) {
+    if (next[level] && !options[level].includes(next[level])) {
+      for (const later of LEVELS.slice(LEVELS.indexOf(level))) next[later] = "";
+      break;
+    }
+    options[level] = cascade(items, next)[level];
+  }
+  return next;
+}
+
+export function selectionFrom(option) {
+  return option ? Object.fromEntries(LEVELS.map((level) => [level, option[level]])) : Object.fromEntries(LEVELS.map((level) => [level, ""]));
+}
+
+// ---------------------------------------------------------------- 분석 진행 단계
+export const STAGE_LABELS = [
+  { id: "plate_masking", label: "번호판·사람 가리기" },
+  { id: "overview", label: "전체 흐름 분석" },
+  { id: "detail_review", label: "사고 전후 상세 확인" },
+  { id: "case_matching", label: "과실 유형 비교" },
+];
+
+// 지금 진행 중인 단계의 위치. 아직 시작 전이면 -1. 단계 id 를 모르면 -1.
+export function stageIndex(stageId) {
+  return STAGE_LABELS.findIndex((stage) => stage.id === stageId);
+}
+
+// ---------------------------------------------------------------- 결과 화면
+// 과실 단계 카드(StepRatio, FactorCard)가 읽는 모양: { title, tag, ratio: [내 과실, 상대 과실], body, legal }
+export function toSteps(result) {
+  const laws = (result.laws ?? []).map((law) => ({
+    name: law.name ?? law.label,
+    text: law.easy ?? "조문의 쉬운 풀이를 준비하고 있어요. 국가법령정보센터에서 원문을 확인해 주세요.",
+  }));
+  return result.steps.map((step, index) => ({
+    title: step.title,
+    tag: step.kind === "base" ? "출발점" : step.effect,
+    ratio: [step.me, step.other],
+    body: step.easy ?? "",
+    legal: index === 0 ? laws : [],
+  }));
+}
+
+const FACTOR_DESC = {
+  final: (n) => (n > 0 ? `${n}가지 가감요소를 반영했어요. 어려운 법적 근거는 눌러서 볼 수 있어요.` : "반영할 가감요소가 없어서 기본 비율 그대로예요."),
+  partial: () => "확인한 가감요소만 반영했어요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요.",
+  base_only: () => "이 사고 유형은 가감요소가 아직 등록되지 않아 기본 비율만 안내해요.",
+};
+
+// 결과 화면 맨 위 문구와 상태별 안내
+export function toReportModel(result, analysisId) {
+  const state = result.state;
+  const type = result.accident_type;
+  const applied = result.adjustments?.applied?.length ?? 0;
+  return {
+    state,
+    header: {
+      title: "과실 분석 결과",
+      desc: result.summary ?? "블랙박스 영상을 분석해 산정한 과실 비율과 그 근거예요.",
+      keywords: type ? [type.place, type.feature, `식별 코드 ${String(analysisId ?? "").slice(0, 8)}`] : [`식별 코드 ${String(analysisId ?? "").slice(0, 8)}`],
+    },
+    factorHeader: { kicker: "판단 근거", desc: (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) },
+    statusText: result.explanation?.status ?? "",
+    steps: state === "unresolved" ? [] : toSteps(result),
+    // 맨 위 큰 비율에 보여 줄 값: 확정이면 최종, 아니면 지금까지 반영한 값 (마지막 단계)
+    shown: state === "unresolved" ? null : result.steps[result.steps.length - 1],
+    final: result.fault?.final ?? null,
+    pending: result.adjustments?.pending ?? [],
+    candidates: result.reference_candidates ?? [],
+    notice: result.notice,
+  };
+}
+
+// ---------------------------------------------------------------- 타임라인
+const KIND_LABEL = { "A 움직임": "내 차의 움직임", "B 확인 구간": "상대 차 확인", "접촉 근거 구간": "접촉 근거" };
+
+const round1 = (value) => Math.round(value * 10) / 10;
+
+// Time 화면이 읽는 모양: { id, label, time, summary, tag, title, hud, tone }
+// impact.confirmed 일 때만 "충돌 N초 전"처럼 충돌 시점을 기준으로 말한다. 아니면 영상 시각만 보여 준다.
+export function toMoments(result) {
+  const impact = result.impact ?? {};
+  const events = [...(result.timeline ?? [])].sort((a, b) => a.start_sec - b.start_sec);
+  return events.map((event, index) => {
+    const contact = event.kind === "접촉 근거 구간";
+    // 시간축 위치는 순서대로 고르게 나눈다. 구간 시작 시각이 서로 가까우면(같은 시각도 흔하다) 글자가 겹쳐서 읽을 수 없다.
+    const position = events.length > 1 ? (index / (events.length - 1)) * 100 : 0;
+    let label = `${round1(event.start_sec)}초`;
+    if (impact.confirmed && impact.sec != null) {
+      const gap = round1(impact.sec - event.start_sec);
+      if (contact) label = "충돌 시점";
+      else if (gap > 0) label = `충돌 ${gap}초 전`;
+      else if (gap < 0) label = `충돌 ${-gap}초 후`;
+    } else if (contact) {
+      label = "충돌 의심 구간";
+    }
+    return {
+      id: `e${index}`,
+      label,
+      time: event.start_sec,
+      endTime: event.end_sec,
+      position,
+      summary: KIND_LABEL[event.kind] ?? event.kind,
+      tag: event.certainty ?? "",
+      title: event.description ?? "",
+      evidence: event.evidence_text ?? "",
+      hud: "CAM_FRONT",
+      tone: contact ? "impact" : undefined,
+    };
+  });
+}
+
+// ---------------------------------------------------------------- 유사 판례
+const SOURCE_LABEL = { knia_chart: "손해보험협회 도표 요약", law_api: "법령정보 API", manual: "직접 입력" };
+
+// Law 화면 카드가 읽는 모양
+export function toCaseCards(relatedCases) {
+  return (relatedCases ?? []).map((item, index) => ({
+    id: item.case_id ?? String(index),
+    court: item.court,
+    date: item.date ?? "선고일 미상",
+    caseNumber: item.case_number,
+    category: item.source_label ?? SOURCE_LABEL[item.source_kind] ?? "",
+    matchLabel: item.comparison?.match_label ?? "",
+    summary: item.summary,
+    verified: Boolean(item.verified),
+    sourceUrl: item.source_url ?? null,
+    limit: item.comparison_limit ?? "",
+    note: item.comparison?.note ?? "",
+    factors: item.comparison?.common ?? [],
+    comparison: {
+      common: (item.comparison?.common ?? []).map((text, i) => ({ label: `공통점 ${i + 1}`, text: [text] })),
+      differences: (item.comparison?.differences ?? []).map((text, i) => ({ label: `차이점 ${i + 1}`, text: [text] })),
+    },
+  }));
+}
+
+export function myAccidentPoints(result) {
+  const type = result.accident_type;
+  return type ? [type.feature, `내 차: ${type.my_progress}`, `상대 차: ${type.other_progress}`] : ["표에서 맞는 유형을 찾지 못한 사고"];
+}
+
+// ---------------------------------------------------------------- 결과 화면에 들어가기 전 안내
+// 지금 상태에 맞는 안내 문구
+export function describeAnalysis({ session, analysis, error, loading, analysisId }) {
+  if (!session) {
+    return { title: "이 브라우저에서 만든 분석이 아니에요", body: "분석 결과는 영상을 올린 브라우저에서만 볼 수 있어요. 영상을 다시 올려 분석해 주세요." };
+  }
+  if (error) return { title: "결과를 불러오지 못했어요", body: error.message, retry: error.status !== 404 };
+  if (loading || !analysis) return { title: "결과를 불러오는 중이에요" };
+  switch (analysis.status) {
+    case "queued":
+    case "processing":
+      return { title: "아직 분석하고 있어요", body: analysis.stage ? `지금은 '${analysis.stage.label}' 단계예요. 끝나면 이 화면이 자동으로 바뀌어요.` : "곧 시작해요. 끝나면 이 화면이 자동으로 바뀌어요." };
+    case "awaiting_confirmation":
+      return { title: "사고 상황을 확인해 주세요", body: "분석은 끝났어요. 사고 상황을 확인하면 결과를 볼 수 있어요.", link: { to: ROUTES.resume(analysisId), label: "이어서 확인하기" } };
+    case "unsupported":
+      return { title: "지원하지 않는 사고예요", body: analysis.unsupported_reason };
+    case "failed":
+      return { title: "분석하지 못했어요", body: analysis.error?.message };
+    default:
+      return { title: "결과를 볼 수 없어요" };
+  }
+}

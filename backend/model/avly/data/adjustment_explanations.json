@@ -1,0 +1,219 @@
+{
+ "_meta": {
+  "status": "draft",
+  "reviewed": false,
+  "note": "쉬운 말 설명 초안입니다(AI가 작성). 사람이 법적 정확성과 표현을 검수한 뒤 항목별 reviewed 를 true 로 바꾸세요. 예시(휴대전화, 음주 등)는 공식 과실비율 인정기준 도표와 대조가 필요합니다.",
+  "rules": "question 은 '예'라고 답하면 그 가감요소가 적용되도록 쓴다. {who} 에는 '내 차' 또는 '상대 차'가 들어간다. easy 에는 과실이 늘고 줄어드는 방향을 쓰지 않는다(방향은 effect 템플릿이 붙인다)."
+ },
+ "templates": {
+  "base": "이런 사고의 기본 책임은 내 차 {me}% : 상대 차 {other}%예요.",
+  "situation": "{place}에서 내 차는 '{my_progress}', 상대 차는 '{other_progress}' 상황이에요.",
+  "effect_up": "{who} 과실 +{n}%p",
+  "effect_down": "{who} 과실 -{n}%p",
+  "manual": "영상만으로는 알 수 없어서 직접 확인이 필요해요."
+ },
+ "factors": {
+  "low_speed_unjustified_stop": {
+   "label": "저속주행 또는 편도 3차로 이상 도로에서 이유 없는 정지",
+   "title": "이유 없이 너무 느리게 가거나 멈췄어요",
+   "easy": "교통 흐름에 맞지 않게 아주 느리게 달리거나, 편도 3차로 이상 도로에서 이유 없이 멈춘 경우예요. 뒤따르는 차가 미리 대비하기 어려워요.",
+   "question": "{who}가 이유 없이 아주 느리게 가거나 멈췄나요?",
+   "reviewed": false
+  },
+  "unjustified_sudden_stop": {
+   "label": "이유 없는 급정지",
+   "title": "이유 없이 갑자기 멈췄어요",
+   "easy": "앞에 장애물이나 위험이 없는데도 갑자기 급하게 멈춘 경우예요. 뒤따르는 차가 피하기 매우 어려워요.",
+   "question": "{who}가 이유 없이 급하게 멈췄나요?",
+   "reviewed": false
+  },
+  "brake_light_fault": {
+   "label": "제동등화의 고장",
+   "title": "브레이크등이 고장 나 있었어요",
+   "easy": "브레이크를 밟아도 브레이크등이 켜지지 않아, 뒤차가 멈추는 것을 알아보기 어려웠던 경우예요.",
+   "question": "{who}의 브레이크등이 고장 나 있었나요?",
+   "reviewed": false
+  },
+  "residential_area": {
+   "label": "주택가·상점가 등",
+   "title": "사고 장소가 주택가·상점가였어요",
+   "easy": "사람과 차의 왕래가 많은 주택가나 상점가에서는 평소보다 더 조심해서 운전해야 해요.",
+   "question": "사고가 난 곳이 주택가나 상점가였나요?",
+   "reviewed": false
+  },
+  "signal_delay": {
+   "label": "진로변경 신호불이행·지연",
+   "title": "방향지시등을 켜지 않았거나 너무 늦게 켰어요",
+   "easy": "차선을 바꾸기 전에 방향지시등(깜빡이)을 미리 켜야 하는데, 켜지 않았거나 바꾸는 순간에야 켠 경우예요. 뒤차가 대비할 시간이 없어요.",
+   "question": "{who}가 방향지시등을 켜지 않았거나, 차선을 바꾸는 순간에야 켰나요?",
+   "reviewed": false
+  },
+  "prohibited_change": {
+   "label": "진로변경 금지장소",
+   "title": "차선을 바꾸면 안 되는 곳에서 바꿨어요",
+   "easy": "실선 구간처럼 법으로 차선 변경이 금지된 곳에서 차선을 바꾼 경우예요.",
+   "question": "{who}가 차선 변경이 금지된 곳(실선 등)에서 차선을 바꿨나요?",
+   "reviewed": false
+  },
+  "bus_lane_violation": {
+   "label": "버스·다인승전용차로 위반",
+   "title": "버스전용차로 규정을 어겼어요",
+   "easy": "버스전용차로나 다인승전용차로를 이용할 수 없는 차가 그 차로로 들어가거나, 그 차로에서 차선을 바꾼 경우예요.",
+   "question": "{who}가 버스·다인승전용차로 규정을 어겼나요?",
+   "reviewed": false
+  },
+  "passing_lane_change": {
+   "label": "고속도로·자동차전용도로 추월차로로 변경",
+   "title": "고속도로 추월차로로 차선을 바꿨어요",
+   "easy": "고속도로나 자동차전용도로에서 추월차로로 차선을 바꾼 경우예요. 추월차로에는 빠르게 달리는 차가 많아 더 조심해야 해요.",
+   "question": "{who}가 고속도로·자동차전용도로에서 추월차로로 차선을 바꿨나요?",
+   "reviewed": false
+  },
+  "gross_negligence": {
+   "label": "현저한 과실",
+   "title": "눈에 띄게 큰 부주의가 있었어요 (현저한 과실)",
+   "easy": "휴대전화를 보거나 졸음운전을 하는 등 일반적인 부주의보다 눈에 띄게 큰 잘못이 있는 경우예요. 영상만으로는 알기 어려워 직접 확인이 필요해요.",
+   "question": "{who}에게 휴대전화 사용이나 졸음운전처럼 눈에 띄게 큰 부주의가 있었나요?",
+   "reviewed": false
+  },
+  "serious_negligence": {
+   "label": "중대한 과실",
+   "title": "아주 큰 잘못이 있었어요 (중대한 과실)",
+   "easy": "음주운전, 무면허운전, 약물운전, 제한속도를 크게 넘긴 과속처럼 아주 큰 잘못이 있는 경우예요. 영상만으로는 알 수 없어 직접 확인이 필요해요.",
+   "question": "{who}가 음주, 무면허, 약물운전처럼 아주 큰 잘못을 했나요?",
+   "reviewed": false
+  },
+  "slow_failure": {
+   "label": "서행 불이행",
+   "title": "서행하지 않았어요",
+   "easy": "서행해야 하는 곳에서, 바로 멈출 수 있을 만큼 속도를 줄이지 않은 경우예요.",
+   "question": "{who}가 서행해야 하는 곳에서 속도를 충분히 줄이지 않았나요?",
+   "reviewed": false
+  },
+  "opposite_arrow": {
+   "label": "주차장 화살표 반대 주행",
+   "title": "주차장 화살표와 반대로 달렸어요",
+   "easy": "주차장 바닥에 그려진 진행 방향 화살표와 반대 방향으로 달린 경우예요.",
+   "question": "{who}가 주차장 화살표와 반대 방향으로 달렸나요?",
+   "reviewed": false
+  },
+  "protruding_wait_exit": {
+   "label": "차량 앞부분을 내밀고 대기 후 출차",
+   "title": "차 앞부분을 내밀고 기다렸다가 나왔어요",
+   "easy": "주차구역에서 나오기 전에 차 앞부분을 통로 쪽으로 조금 내밀어, 다가오는 차가 미리 알아볼 수 있게 한 경우예요.",
+   "question": "{who}가 주차구역에서 차 앞부분을 내밀고 기다렸다가 나왔나요?",
+   "reviewed": false
+  },
+  "slow_or_stop": {
+   "label": "서행 또는 일시정지",
+   "title": "서행하거나 잠깐 멈춰서 살폈어요",
+   "easy": "교차로에 들어가기 전에 속도를 줄이거나 잠깐 멈춰서 주변을 살핀 경우예요.",
+   "question": "{who}가 교차로에 들어가기 전에 서행하거나 일시정지했나요?",
+   "reviewed": false
+  },
+  "wide_right_turn": {
+   "label": "대우회전",
+   "title": "우회전을 크게 돌았어요",
+   "easy": "우회전할 때 도로 오른쪽에 바짝 붙지 않고 넓게 돌아서 다른 차의 길을 막은 경우예요.",
+   "question": "{who}가 우회전을 도로 오른쪽에 붙지 않고 크게 돌았나요?",
+   "reviewed": false
+  },
+  "clear_prior_entry": {
+   "label": "명확한 선진입",
+   "title": "상대보다 분명히 먼저 교차로에 들어갔어요",
+   "easy": "상대 차보다 눈에 띄게 먼저 교차로에 들어가 있었던 경우예요. 먼저 들어간 차를 존중하는 원칙이 있어요.",
+   "question": "{who}가 상대보다 분명히 먼저 교차로에 들어갔나요?",
+   "reviewed": false
+  },
+  "t_intersection_turn": {
+   "label": "삼거리(T자) 회전",
+   "title": "T자(삼거리) 교차로에서 회전했어요",
+   "easy": "삼거리(T자) 교차로에서 회전한 경우예요. 이때는 도표에 정해진 기준에 따라 비율이 달라져요.",
+   "question": "{who}가 T자(삼거리) 교차로에서 회전했나요?",
+   "reviewed": false
+  },
+  "round_entry_stop": {
+   "label": "회전차량과 충돌 회피를 위한 진입차량 일시정지",
+   "title": "회전교차로 앞에서 멈춰 양보했어요",
+   "easy": "회전교차로에 들어가기 전에, 이미 돌고 있는 차와 부딪히지 않도록 일시정지한 경우예요.",
+   "question": "{who}가 돌고 있는 차를 위해 회전교차로 앞에서 일시정지했나요?",
+   "reviewed": false
+  },
+  "round_entry_prior": {
+   "label": "진입차량 명확한 선진입",
+   "title": "회전교차로에 분명히 먼저 들어갔어요",
+   "easy": "회전교차로에 다른 차보다 눈에 띄게 먼저 들어간 경우예요.",
+   "question": "{who}가 다른 차보다 분명히 먼저 회전교차로에 들어갔나요?",
+   "reviewed": false
+  },
+  "round_entry_signal_delay": {
+   "label": "회전교차로 진입신호 불이행·지연",
+   "title": "회전교차로에 들어갈 때 방향지시등을 켜지 않았어요",
+   "easy": "회전교차로에 들어갈 때 방향지시등을 켜지 않았거나 늦게 켠 경우예요.",
+   "question": "{who}가 회전교차로에 들어갈 때 방향지시등을 켜지 않았거나 늦게 켰나요?",
+   "reviewed": false
+  }
+ },
+ "laws": {
+  "19": {
+   "name": "도로교통법 제19조 (안전거리 확보 등)",
+   "easy": "진로를 바꾸려는 방향으로 오는 차의 정상적인 통행을 방해할 우려가 있으면 진로를 바꾸면 안 됩니다.",
+   "source": "frontend/src/pages/law/lawCases.js (팀 작성)",
+   "reviewed": false
+  },
+  "38": {
+   "name": "도로교통법 제38조 (차의 신호)",
+   "easy": "같은 방향으로 가면서 진로를 바꿀 때는 방향지시기 등으로 그 행위가 끝날 때까지 신호를 해야 합니다.",
+   "source": "frontend/src/pages/law/lawCases.js (팀 작성)",
+   "reviewed": false
+  },
+  "48": {
+   "name": "도로교통법 제48조 (안전운전 의무)",
+   "easy": "도로 상황에 맞게 조향·제동장치를 정확히 조작하고, 남에게 위험을 주는 속도나 방법으로 운전하면 안 됩니다.",
+   "source": "frontend/src/pages/law/lawCases.js (팀 작성)",
+   "reviewed": false
+  },
+  "14": {
+   "name": null,
+   "easy": null,
+   "todo": "조문 제목과 쉬운 풀이를 법령 원문(국가법령정보센터)으로 확인해서 작성",
+   "reviewed": false
+  },
+  "17": {
+   "name": null,
+   "easy": null,
+   "todo": "조문 제목과 쉬운 풀이를 법령 원문(국가법령정보센터)으로 확인해서 작성",
+   "reviewed": false
+  },
+  "18": {
+   "name": null,
+   "easy": null,
+   "todo": "조문 제목과 쉬운 풀이를 법령 원문(국가법령정보센터)으로 확인해서 작성",
+   "reviewed": false
+  },
+  "25": {
+   "name": null,
+   "easy": null,
+   "todo": "조문 제목과 쉬운 풀이를 법령 원문(국가법령정보센터)으로 확인해서 작성",
+   "reviewed": false
+  },
+  "25의2": {
+   "name": null,
+   "easy": null,
+   "todo": "조문 제목과 쉬운 풀이를 법령 원문(국가법령정보센터)으로 확인해서 작성",
+   "reviewed": false
+  },
+  "26": {
+   "name": null,
+   "easy": null,
+   "todo": "조문 제목과 쉬운 풀이를 법령 원문(국가법령정보센터)으로 확인해서 작성",
+   "reviewed": false
+  },
+  "31": {
+   "name": null,
+   "easy": null,
+   "todo": "조문 제목과 쉬운 풀이를 법령 원문(국가법령정보센터)으로 확인해서 작성",
+   "reviewed": false
+  }
+ }
+}

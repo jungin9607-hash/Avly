@@ -98,13 +98,16 @@ git checkout develop
 docker compose up --build
 ```
 
-(최초 1회)
+(최초 1회, 코드나 requirements가 바뀌었을 때도)
 
 이후에는
 
 ```bash
 docker compose up
 ```
+
+db(로컬 PostgreSQL), backend, worker, frontend가 함께 뜹니다. 기본은 **키 없이 시험하는 개발 모드**(가짜 분석, 가리지 않는 비식별화)라
+실제 AI 분석이 아닙니다. 실제 분석으로 돌리는 방법과 환경변수는 [backend/README.md](backend/README.md)를 보세요.
 
 ---
 
@@ -121,6 +124,8 @@ Backend
 ```
 http://localhost:8000/docs
 ```
+
+(`backend/.env` 파일이 있어야 compose가 시작됩니다. `backend/.env.example`을 복사해 만드세요. 개발 모드에서는 키를 채우지 않아도 됩니다.)
 
 ---
 
@@ -141,5 +146,7 @@ docker compose down
 
 # 문서
 
-- 백엔드 실행·구조: [backend/README.md](backend/README.md)
+- 백엔드 실행·구조·환경변수·테스트: [backend/README.md](backend/README.md)
+- 프론트 구조: [frontend/README.md](frontend/README.md), [docs/frontend-structure.md](docs/frontend-structure.md)
 - API 명세 (프론트 연동): [docs/api.md](docs/api.md)
+- 서비스 범위와 결정 사항 (PRD 참고): [docs/prd-reference.md](docs/prd-reference.md)

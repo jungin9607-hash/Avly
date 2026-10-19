@@ -1,4 +1,59 @@
 services:
+  db:
+    image: postgres:17-alpine
+    container_name: avly_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: avly
+      POSTGRES_DB: avly
+    volumes:
+      - avly_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d avly"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+    container_name: avly_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    environment:
+      # 개발용 로컬 DB. 팀 공용 DB(.env 의 DATABASE_URL)를 쓰려면 실행할 때 DEV_DATABASE_URL 을 지정한다.
+      DATABASE_URL: ${DEV_DATABASE_URL:-postgresql://postgres:avly@db:5432/avly}
+      AUTO_MIGRATE: ${AUTO_MIGRATE:-true}   # 로컬 db 서비스는 빈 DB 라서 시작할 때 스키마를 만든다
+    depends_on:
+      db:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.worker
+      args:
+        INSTALL_YOLO: ${INSTALL_YOLO:-false}
+    container_name: avly_worker
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: ${DEV_DATABASE_URL:-postgresql://postgres:avly@db:5432/avly}
+      # 개발 기본값: AI 키 없이 전체 흐름을 시험하는 가짜 엔진, 가리지 않는 복사.
+      # 실제 분석은 ENGINE=avly (OPENAI_API_KEY 필요), 운영 비식별은 REDACTION=yolo (INSTALL_YOLO=true 로 빌드)
+      AUTO_MIGRATE: ${AUTO_MIGRATE:-true}
+      ENGINE: ${ENGINE:-fake}
+      REDACTION: ${REDACTION:-dev_copy}
+    depends_on:
+      db:
+        condition: service_healthy
+
   frontend:
     build:
       context: ./frontend
@@ -11,13 +66,5 @@ services:
     depends_on:
       - backend
 
-  backend:
-    build:
-      context: ./backend
-    container_name: avly_backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app
-    env_file:
-      - ./backend/.env
+volumes:
+  avly_db:

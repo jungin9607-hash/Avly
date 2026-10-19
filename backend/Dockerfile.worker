@@ -1,0 +1,19 @@
+# 분석과 비식별화를 맡는 worker. api(Dockerfile)보다 무겁다.
+#   번호판·사람 탐지(ultralytics, PyTorch)까지 넣으려면:  --build-arg INSTALL_YOLO=true
+FROM python:3.12-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ffmpeg libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+ARG INSTALL_YOLO=false
+COPY requirements.txt requirements-model.txt requirements-yolo.txt ./
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-model.txt \
+    && if [ "$INSTALL_YOLO" = "true" ]; then pip install --no-cache-dir -r requirements-yolo.txt; fi
+
+COPY . .
+
+ENV PYTHONPATH=/app:/app/model
+CMD ["python", "-m", "app.worker"]

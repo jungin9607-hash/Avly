@@ -1,0 +1,497 @@
+{
+ "11": {
+  "official_chart": "차43-2",
+  "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A843-2&chartType=1",
+  "expected_a_progress": "후행 직진",
+  "expected_b_progress": "선행 진로변경",
+  "expected_base": [
+   30,
+   70
+  ],
+  "coverage": "등록된 8개 가감 항목; 일방과실 예외 판단은 미구현",
+  "rules": [
+   {
+    "id": "11_A_gross",
+    "actor": "A",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "11_A_serious",
+    "actor": "A",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "11_B_signal",
+    "actor": "B",
+    "factor": "signal_delay",
+    "delta_pp": 10,
+    "group": "B_signal"
+   },
+   {
+    "id": "11_B_prohibited",
+    "actor": "B",
+    "factor": "prohibited_change",
+    "delta_pp": 20,
+    "group": "B_prohibited"
+   },
+   {
+    "id": "11_B_bus",
+    "actor": "B",
+    "factor": "bus_lane_violation",
+    "delta_pp": 10,
+    "group": "B_bus"
+   },
+   {
+    "id": "11_B_passing",
+    "actor": "B",
+    "factor": "passing_lane_change",
+    "delta_pp": 10,
+    "group": "B_passing"
+   },
+   {
+    "id": "11_B_gross",
+    "actor": "B",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "B_severity",
+    "manual_only": true
+   },
+   {
+    "id": "11_B_serious",
+    "actor": "B",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "B_severity",
+    "manual_only": true
+   }
+  ]
+ },
+ "1": {
+  "official_chart": "차41-1",
+  "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A841-1&chartType=1",
+  "expected_a_progress": "후행 추돌",
+  "expected_b_progress": "선행 직진",
+  "expected_base": [
+   100,
+   0
+  ],
+  "coverage": "등록된 6개 항목; 고의적 급정거·별도 사고 유형·인과관계 예외는 별도 검토",
+  "rules": [
+   {
+    "id": "1_B_low",
+    "actor": "B",
+    "factor": "low_speed_unjustified_stop",
+    "delta_pp": 10,
+    "group": "B_stop",
+    "manual_only": true
+   },
+   {
+    "id": "1_B_sudden",
+    "actor": "B",
+    "factor": "unjustified_sudden_stop",
+    "delta_pp": 30,
+    "group": "B_stop",
+    "manual_only": true
+   },
+   {
+    "id": "1_B_brake",
+    "actor": "B",
+    "factor": "brake_light_fault",
+    "delta_pp": 20,
+    "group": "B_brake",
+    "manual_only": true
+   },
+   {
+    "id": "1_A_area",
+    "actor": "A",
+    "factor": "residential_area",
+    "delta_pp": 10,
+    "group": "A_area",
+    "requires_B_adjustment": true
+   },
+   {
+    "id": "1_A_gross",
+    "actor": "A",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "A_severity",
+    "manual_only": true,
+    "requires_B_adjustment": true
+   },
+   {
+    "id": "1_A_serious",
+    "actor": "A",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "A_severity",
+    "manual_only": true,
+    "requires_B_adjustment": true
+   }
+  ]
+ },
+ "3": {
+  "official_chart": "차43-1",
+  "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A843-1&chartType=1",
+  "expected_a_progress": "본선에서 직진",
+  "expected_b_progress": "차로 감소 도로에서 본선으로 합류",
+  "expected_base": [
+   40,
+   60
+  ],
+  "coverage": "표시된 4개 과실 정도 항목; 상세 항목별 인과관계·중복 평가는 별도 검토",
+  "rules": [
+   {
+    "id": "3_A_gross_negligence",
+    "actor": "A",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "3_A_serious_negligence",
+    "actor": "A",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "3_B_gross_negligence",
+    "actor": "B",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "B_severity",
+    "manual_only": true
+   },
+   {
+    "id": "3_B_serious_negligence",
+    "actor": "B",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "B_severity",
+    "manual_only": true
+   }
+  ]
+ },
+ "126": {
+  "official_chart": "차51-1",
+  "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A851-1&chartType=1",
+  "expected_a_progress": "통로 직진",
+  "expected_b_progress": "주차구역에서 직진 출차",
+  "expected_base": [
+   30,
+   70
+  ],
+  "coverage": "전진 출차 CSV 126번의 8개 요소; 후진 수치·일방과실 예외·현저한 과실 세부 중복은 별도 검토",
+  "rules": [
+   {
+    "id": "126_A_slow",
+    "actor": "A",
+    "factor": "slow_failure",
+    "delta_pp": 10,
+    "group": "A_speed",
+    "manual_only": true
+   },
+   {
+    "id": "126_A_arrow",
+    "actor": "A",
+    "factor": "opposite_arrow",
+    "delta_pp": 10,
+    "group": "A_arrow"
+   },
+   {
+    "id": "126_A_gross",
+    "actor": "A",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "126_A_serious",
+    "actor": "A",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "126_B_slow",
+    "actor": "B",
+    "factor": "slow_failure",
+    "delta_pp": 10,
+    "group": "B_speed",
+    "manual_only": true
+   },
+   {
+    "id": "126_B_gross",
+    "actor": "B",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "B_severity",
+    "manual_only": true
+   },
+   {
+    "id": "126_B_serious",
+    "actor": "B",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "B_severity",
+    "manual_only": true
+   },
+   {
+    "id": "126_B_wait",
+    "actor": "B",
+    "factor": "protruding_wait_exit",
+    "delta_pp": -10,
+    "group": "B_wait"
+   }
+  ]
+ },
+ "21": {
+  "official_chart": "차12-1",
+  "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A812-1&chartType=1",
+  "expected_a_progress": "오른쪽에서 직진",
+  "expected_b_progress": "왼쪽에서 직진",
+  "expected_base": [
+   40,
+   60
+  ],
+  "coverage": "해당 도표의 등록 가감요소; 세부 과실 중복·특수 예외는 별도 검토",
+  "rules": [
+   {
+    "id": "21_A_gross_negligence",
+    "actor": "A",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "21_A_serious_negligence",
+    "actor": "A",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "21_A_slow_or_stop",
+    "actor": "A",
+    "factor": "slow_or_stop",
+    "delta_pp": -10,
+    "group": "A_speed",
+    "manual_only": true
+   },
+   {
+    "id": "21_B_gross_negligence",
+    "actor": "B",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "B_severity",
+    "manual_only": true
+   },
+   {
+    "id": "21_B_serious_negligence",
+    "actor": "B",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "B_severity",
+    "manual_only": true
+   },
+   {
+    "id": "21_B_slow_or_stop",
+    "actor": "B",
+    "factor": "slow_or_stop",
+    "delta_pp": -10,
+    "group": "B_speed",
+    "manual_only": true
+   }
+  ]
+ },
+ "27": {
+  "official_chart": "차13-1",
+  "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A813-1&chartType=1",
+  "expected_a_progress": "우회전",
+  "expected_b_progress": "직진",
+  "expected_base": [
+   60,
+   40
+  ],
+  "coverage": "해당 도표의 등록 가감요소; 세부 과실 중복·특수 예외는 별도 검토",
+  "rules": [
+   {
+    "id": "27_A_gross_negligence",
+    "actor": "A",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "27_A_serious_negligence",
+    "actor": "A",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "27_A_slow_failure",
+    "actor": "A",
+    "factor": "slow_failure",
+    "delta_pp": 10,
+    "group": "A_speed",
+    "manual_only": true
+   },
+   {
+    "id": "27_B_gross_negligence",
+    "actor": "B",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "B_severity",
+    "manual_only": true
+   },
+   {
+    "id": "27_B_serious_negligence",
+    "actor": "B",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "B_severity",
+    "manual_only": true
+   },
+   {
+    "id": "27_B_slow_failure",
+    "actor": "B",
+    "factor": "slow_failure",
+    "delta_pp": 10,
+    "group": "B_speed",
+    "manual_only": true
+   },
+   {
+    "id": "27_A_wide_right_turn",
+    "actor": "A",
+    "factor": "wide_right_turn",
+    "delta_pp": 10,
+    "group": "A_wide_right_turn",
+    "manual_only": true
+   },
+   {
+    "id": "27_A_clear_prior_entry",
+    "actor": "A",
+    "factor": "clear_prior_entry",
+    "delta_pp": -20,
+    "group": "A_clear_prior_entry",
+    "manual_only": true
+   },
+   {
+    "id": "27_A_t_intersection_turn",
+    "actor": "A",
+    "factor": "t_intersection_turn",
+    "delta_pp": 10,
+    "group": "A_t_intersection_turn",
+    "manual_only": true
+   },
+   {
+    "id": "27_B_clear_prior_entry",
+    "actor": "B",
+    "factor": "clear_prior_entry",
+    "delta_pp": -10,
+    "group": "B_clear_prior_entry",
+    "manual_only": true
+   }
+  ]
+ },
+ "128": {
+  "official_chart": "차54-1 (CSV 차량 역할 역대응)",
+  "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A854-1&chartType=1",
+  "expected_a_progress": "회전교차로 진입",
+  "expected_b_progress": "교차로 내 회전",
+  "expected_base": [
+   80,
+   20
+  ],
+  "coverage": "1차로 및 우측 가장자리 회전 차로 진입/회전 기본 조건의 9개 수정요소; 대진입·진출 등은 별도 유형",
+  "rules": [
+   {
+    "id": "128_A_slow",
+    "actor": "A",
+    "factor": "slow_failure",
+    "delta_pp": 10,
+    "group": "A_speed",
+    "manual_only": true
+   },
+   {
+    "id": "128_A_gross",
+    "actor": "A",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "128_A_serious",
+    "actor": "A",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "A_severity",
+    "manual_only": true
+   },
+   {
+    "id": "128_A_stop",
+    "actor": "A",
+    "factor": "round_entry_stop",
+    "delta_pp": -10,
+    "group": "A_stop",
+    "manual_only": true
+   },
+   {
+    "id": "128_A_prior",
+    "actor": "A",
+    "factor": "round_entry_prior",
+    "delta_pp": -10,
+    "group": "A_prior",
+    "manual_only": true
+   },
+   {
+    "id": "128_A_signal",
+    "actor": "A",
+    "factor": "round_entry_signal_delay",
+    "delta_pp": 10,
+    "group": "A_signal",
+    "manual_only": true
+   },
+   {
+    "id": "128_B_slow",
+    "actor": "B",
+    "factor": "slow_failure",
+    "delta_pp": 10,
+    "group": "B_speed",
+    "manual_only": true
+   },
+   {
+    "id": "128_B_gross",
+    "actor": "B",
+    "factor": "gross_negligence",
+    "delta_pp": 10,
+    "group": "B_severity",
+    "manual_only": true
+   },
+   {
+    "id": "128_B_serious",
+    "actor": "B",
+    "factor": "serious_negligence",
+    "delta_pp": 20,
+    "group": "B_severity",
+    "manual_only": true
+   }
+  ]
+ }
+}

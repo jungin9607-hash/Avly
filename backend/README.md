@@ -1,117 +1,101 @@
-# Avly Backend (v0.3)
+# Avly Backend (v0.4)
 
-FastAPI 백엔드입니다. 지금은 **AI·PostgreSQL 없이** 로컬에서 실행되는 Mock 버전입니다.
+FastAPI API 서버와 **worker**(분석 작업 실행기)로 이루어져 있습니다. 데이터는 PostgreSQL에 저장됩니다.
 
-> ⚠️ **데이터는 메모리에만 저장됩니다.** 서버를 재시작하면(코드 수정으로 `--reload`가 동작할 때 포함)
-> 사고, 설문, 분석 결과가 모두 초기화됩니다. 업로드한 영상 파일은 `backend/uploads/`에 남지만
-> 서버는 더 이상 그 파일을 기억하지 못합니다.
+- API 명세: [docs/api.md](../docs/api.md)
+- 서비스 범위와 결정 사항: [docs/prd-reference.md](../docs/prd-reference.md)
+- 분석 모델(`avly` 패키지): [model/avly/README.md](model/avly/README.md)
 
-API 명세(프론트 연동용): [docs/api.md](../docs/api.md)
+## 구성
 
----
-
-## 실행 방법 1: Windows PowerShell (Python 직접 실행)
-
-Python 3.12 이상이 필요합니다.
-
-```powershell
-cd backend
-
-# 1) 가상환경 생성 (최초 1회)
-python -m venv .venv
-
-# 2) 가상환경 활성화
-#    "스크립트를 실행할 수 없습니다" 오류가 나면 아래 줄을 먼저 실행하세요.
-#    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
-
-# 3) 패키지 설치 (최초 1회, requirements.txt 가 바뀌었을 때)
-pip install -r requirements.txt
-
-# 4) 환경변수 파일 만들기 (최초 1회)
-Copy-Item .env.example .env
-
-# 5) 서버 실행
-uvicorn main:app --reload
+```
+브라우저 ─▶ backend (FastAPI)  ─▶ PostgreSQL ◀─ worker ─▶ avly 모델 / OpenAI / 판례·법령 API
+              요청 접수, 조회        상태·결과·job      영상 처리, 분석, 결과 계산
 ```
 
-## 실행 방법 2: Docker (WSL, 팀 공통 환경)
+API 서버는 분석을 직접 하지 않고 DB의 `job` 표에 일을 넣습니다. worker가 그 표를 보고 한 번에 하나씩 처리합니다.
+(avly 모델이 전역 상태를 쓰기 때문에 worker는 한 번에 한 작업만 합니다.)
 
-프로젝트 루트에서 실행합니다. `requirements.txt`가 바뀌었으므로 **처음 한 번은 `--build`가 필요합니다.**
+## 실행
+
+프로젝트 루트에서 (db, backend, worker, frontend가 함께 뜹니다):
 
 ```bash
 docker compose up --build
 ```
 
-## 접속 주소
+기본 설정은 **키 없이 전체 흐름을 시험하는 개발 모드**입니다 (`ENGINE=fake`, `REDACTION=dev_copy`, 로컬 db 사용, 마이그레이션 자동 적용).
+이 모드에서는 실제 AI 분석도, 실제 비식별화도 하지 않습니다.
 
 | 용도 | 주소 |
 | --- | --- |
-| Swagger 문서 (API 직접 테스트) | http://localhost:8000/docs |
-| ReDoc 문서 | http://localhost:8000/redoc |
-| 상태 확인 | http://localhost:8000/health |
+| Swagger | http://localhost:8000/docs |
+| 상태 확인 | http://localhost:8000/health, /health/db |
+| 프론트 | http://localhost:5173 |
 
----
-
-## 처음 테스트하는 순서 (Swagger)
-
-http://localhost:8000/docs 에서 각 API의 **Try it out → Execute**를 누릅니다.
-
-1. `GET /health` → `{"status": "ok"}`
-2. `POST /api/v1/accidents` → `{"title": "테스트 사고"}` 입력 → 응답의 `id` 복사
-3. `POST /api/v1/accidents/{accident_id}/videos` → `id` 붙여넣기, mp4 파일 선택
-4. `POST /api/v1/accidents/{accident_id}/survey` → 설문 응답 저장 (선택)
-5. `POST /api/v1/accidents/{accident_id}/analyses` → 응답의 `analysis_id` 복사
-6. `GET /api/v1/analyses/{analysis_id}` → 처음엔 `queued`/`processing`, 약 3초 뒤 `completed`
-
----
-
-## 환경변수 (`.env`)
+## 환경변수 (`backend/.env`, 예시는 `.env.example`)
 
 | 이름 | 기본값 | 설명 |
 | --- | --- | --- |
-| `CORS_ORIGINS` | `http://localhost:5173,http://127.0.0.1:5173` | 요청을 허용할 프론트 주소 (쉼표 구분) |
-| `PUBLIC_BASE_URL` | `http://localhost:8000` | `video_url` 생성에 쓰는 백엔드 주소 |
-| `UPLOAD_DIR` | `uploads` | 업로드 저장 폴더 (상대 경로는 `backend/` 기준) |
-| `MAX_UPLOAD_SIZE_MB` | `200` | 영상 최대 용량 |
-| `ALLOWED_VIDEO_EXTENSIONS` | `.mp4,.mov,.avi,.mkv,.webm` | 허용 확장자 |
-| `MOCK_ANALYSIS_DELAY_SECONDS` | `3` | Mock 분석 완료까지 걸리는 시간 |
+| `DATABASE_URL` | (필수) | PostgreSQL 주소. compose는 로컬 db로 덮어쓴다 (`DEV_DATABASE_URL`로 바꿀 수 있음) |
+| `AUTO_MIGRATE` | `false` | 시작할 때 `migrations/*.sql` 적용. **공용 DB 보호를 위해 기본은 끔.** compose의 로컬 db에서만 켠다 |
+| `APP_SECRET` | 개발용 값 | 영상 서명 URL 비밀값. 운영에서는 반드시 바꾼다 |
+| `SESSION_TTL_HOURS` | `24` | 이 시간이 지나면 원본 영상을 삭제한다 |
+| `UNSUPPORTED_RETENTION_HOURS` | `24` | 차대차가 아니라 분석하지 않은 영상(원본·비식별본)을 저장 동의와 상관없이 이 시간 뒤 삭제한다 |
+| `ENGINE` | `avly` | `fake`(키 없이 시험) / `replay`(저장 결과 재생) / `avly`(실제 분석) |
+| `REDACTION` | `yolo` | `yolo`(번호판·사람 탐지, 운영) / `dev_copy`(가리지 않고 복사만, **운영 금지**) |
+| `OPENAI_API_KEY` | | `ENGINE=avly`에 필요 |
+| `law_api` | | 판례·법령 API 키. 없으면 판례 보충을 건너뛴다 |
+| `CORS_ORIGINS`, `UPLOAD_DIR`, `MAX_UPLOAD_SIZE_MB`, `ALLOWED_VIDEO_EXTENSIONS` | | 기존과 같다 |
 
----
+**실제 분석으로 돌리려면:** `backend/.env`에 `OPENAI_API_KEY`, `law_api`를 넣고 `ENGINE=avly`, `REDACTION=yolo`로 바꾼 뒤
+worker 이미지를 YOLO 포함으로 빌드한다: `INSTALL_YOLO=true docker compose up --build worker`.
+(이 조합은 아직 실제 영상으로 끝까지 검증하지 못했다.)
+
+개발 중 `ENGINE=fake`에서는 영상 파일 첫 줄의 지시로 상황을 만들 수 있다. 목록은 [docs/api.md](../docs/api.md#개발테스트).
+
+## 테스트
+
+DB 테스트는 **실제 PostgreSQL**이 필요하고, 테스트마다 `public` 스키마를 비우므로 **빈 DB**를 쓰세요. 공용 DB를 가리키면 안 됩니다.
+
+```bash
+cd backend
+pip install -r requirements.txt -r requirements-dev.txt -r requirements-model.txt
+TEST_DATABASE_URL=postgresql://postgres:x@localhost:5432/postgres \
+PYTHONPATH=.:model python -m unittest discover -s tests -t . -v     # API, worker, 판례, 마이그레이션 등
+PYTHONPATH=.:model python -m unittest model.avly.test_explain       # 쉬운 말 설명
+python -m unittest plate.test_redact                                 # 비식별화 (가짜 탐지기)
+```
+
+`TEST_DATABASE_URL`이 없으면 DB 테스트는 건너뜁니다. 실제 compose 스택을 HTTP로 확인하는 스크립트: `python tests/e2e_smoke.py`.
 
 ## 폴더 구조
 
 ```
 backend/
-  main.py              앱 조립: CORS, 라우터, 오류 처리, /files 정적 파일
+  main.py             앱 조립: CORS, 라우터, 오류 처리
   app/
-    config.py          환경변수 설정
-    models.py          내부 데이터 구조 (9개 테이블 초안)
-    schemas.py         API 요청·응답 형식 (Pydantic)
-    errors.py          통일된 오류 응답
-    routers/           URL ↔ 서비스 연결
-    services.py        업무 로직
-    repository.py      메모리 저장소        ← PostgreSQL 로 교체할 부분
-    storage.py         로컬 파일 저장소      ← S3 등 객체 스토리지로 교체할 부분
-    analyzer.py        Mock AI / Mock 판례 검색 ← 실제 AI, pgvector RAG 로 교체할 부분
+    config.py         환경변수 설정
+    db.py             연결, 마이그레이션 실행 (모르는 DB에는 적용하지 않는 안전장치 포함)
+    repository.py     DB 읽기·쓰기 (SQL)
+    catalog.py        과실표 선택지, 가감요소 질문
+    security.py       세션(X-Session-Id), 서명 영상 URL
+    storage.py        영상 파일 저장·삭제
+    schemas.py, presenters.py, status.py, errors.py, deps.py
+    routers/          accidents, analyses, catalog, media
+    worker/           runner(작업 반복), engines(fake/replay/avly), finalize(결과 계산),
+                      cases·compare(판례 조회와 규칙 기반 비교), redaction, cleanup
+  migrations/         0001_initial.sql, 0002_job.sql (적용 기록: schema_migration 표)
+  plate/              번호판·사람 비식별화 (redact.py)
+  model/avly/         분석 모델 패키지
+  tests/              API, worker, 판례, 마이그레이션 테스트와 e2e_smoke.py
 ```
 
-요청 흐름: `routers` → `services` → `repository` / `storage` / `analyzer`
+DB 설계 배경은 [docs/db/schema-v0.4-proposal.md](../docs/db/schema-v0.4-proposal.md)입니다. 설계 초안이 `migrations/0001`이 되었고,
+작업 큐(`job` 표, `0002`)와 `finalize` 단계가 추가되었습니다.
 
-## Mock 으로 동작하는 부분
+## 아직 안 된 것
 
-| 기능 | 현재 | 교체 예정 |
-| --- | --- | --- |
-| 데이터 저장 | 메모리 (`repository.py`) | PostgreSQL |
-| 영상 저장 | `backend/uploads/videos/`, `/files`로 누구나 접근 가능 | 객체 스토리지 + 접근 제어 (서명 URL 등) |
-| 영상 길이·썸네일 | 추출하지 않음 → `null` | ffmpeg 등으로 추출 |
-| 사고 분석 | 고정 결과 반환 (`analyzer.analyze_accident`) | AI 모델 |
-| 유사 판례 | 테스트용 가상 판례 3건 (`analyzer.search_similar_cases`) | pgvector RAG |
-| 분석 작업 실행 | 서버 프로세스 내 백그라운드 작업 | 필요 시 작업 큐 (Celery/RQ 등) |
-| PDF 리포트 | 501 반환 | PDF 생성 |
-
-## Supabase(PostgreSQL) 연결 확인
-
-1. `backend/.env.example`을 `backend/.env`로 복사하고 `DATABASE_URL`의 `<비밀번호>`를 팀 공유 채널에서 받은 값으로 바꿉니다. (`.env`는 Git에 올리지 않습니다.)
-2. 서버를 실행한 뒤 `GET /health/db`가 `{"status":"ok", ...}`를 반환하면 연결된 것입니다. (읽기 전용 쿼리만 실행합니다.)
-3. 현재 API의 데이터 저장은 여전히 메모리 저장소(`repository.py`)입니다. DB 연결은 확인용이며, 저장소 교체는 별도 작업입니다.
+- 서버 PDF (`POST .../reports`는 501. PDF는 브라우저 인쇄)
+- 실제 OpenAI 분석, 판례·법령 API, worker 이미지의 실제 YOLO 모델은 키·영상이 없어 **end-to-end로 검증하지 못함**
+- 가감요소 등록은 133개 유형 중 7개

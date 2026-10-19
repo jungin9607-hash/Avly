@@ -1,0 +1,117 @@
+{
+ "126": [
+  {
+   "court": "서울중앙지방법원",
+   "date": "2015-12-18",
+   "case_number": "2015나37411",
+   "summary": "지하주차장에서 후진 출차 차량이 통로 진행 차량의 옆부분을 충격한 사례. 출차 차량의 과실 100%가 인정된 것으로 소개됨.",
+   "comparison_limit": "후진 출차 사례이며, 현재 영상의 출차 여부·진행 방향이 미확인이므로 같은 비율을 적용하지 않음.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A851-1&chartType=1",
+   "source_kind": "손해보험협회 도표의 판례 요약; 판결문 원문 조회 아님",
+   "verified_date": "2026-10-14"
+  }
+ ],
+ "1": [
+  {
+   "court": "대법원",
+   "date": "1997-11-25",
+   "case_number": "97다41639",
+   "summary": "앞차가 브레이크 이외의 작용으로 갑자기 정지한 경우에도 후행 차량의 안전거리 확보 의무가 문제된다는 취지의 사례.",
+   "comparison_limit": "급정지의 원인과 안전거리 쟁점을 참고하는 판례입니다. 현재 영상의 진로변경·급정지 원인 또는 과실100%를 이 판례만으로 확정하지 않습니다.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A841-1&chartType=1",
+   "source_kind": "손해보험협회 추돌 기준에 소개된 판례 요약; 판결문 원문 조회 아님",
+   "verified_date": "2026-10-14"
+  },
+  {
+   "court": "서울동부지방법원",
+   "date": "2007-01-26",
+   "case_number": "2005가단49363",
+   "summary": "고속도로에서 앞서 진행하던 차량을 뒤 차량이 전방주시 의무를 소홀히 해 추돌한 사례로, 앞 차량 과실0%로 소개됨.",
+   "comparison_limit": "주간 사고이며 뒤 차량의 전방주시 태만이 인정된 사례입니다. 현재 영상에서 차로변경·급정지 이유와 전방주시 태만은 확인되지 않았으므로 결과 비율을 그대로 적용하지 않습니다.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A841-1&chartType=1",
+   "source_kind": "손해보험협회 추돌 기준에 소개된 판례 요약; 판결문 원문 조회 아님",
+   "verified_date": "2026-10-14"
+  }
+ ],
+ "11": [
+  {
+   "court": "대법원",
+   "date": "1986-12-09",
+   "case_number": "86다카1551",
+   "summary": "진로를 변경하려는 차량은 뒤에서 진행하는 차량과 충돌을 피할 거리를 확보해야 한다는 취지의 판례.",
+   "comparison_limit": "진로변경 차량의 거리 확보 의무를 참고합니다. 현재 사고의 실선 여부·회피 가능성·과실비율을 이 판례만으로 확정하지 않습니다.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A843-2&chartType=1",
+   "source_kind": "손해보험협회 진로변경 기준에 소개된 판례 요약; 판결문 원문 조회 아님",
+   "verified_date": "2026-10-14"
+  },
+  {
+   "court": "서울중앙지방법원",
+   "date": "2019-04-23",
+   "case_number": "2018나47693",
+   "summary": "방향지시등 없이 진로를 변경한 차량과 후행 차량의 충돌에서, 후행 차량의 경고·감속 미흡도 함께 고려한 사례.",
+   "comparison_limit": "이 영상의 방향지시등 유무와 경고·감속 가능성은 별도 확인이 필요합니다. 실선 위반 요소나 현재 계산값을 이 판례의 비율로 대체하지 않습니다.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A843-2&chartType=1",
+   "source_kind": "손해보험협회 진로변경 기준에 소개된 판례 요약; 판결문 원문 조회 아님",
+   "verified_date": "2026-10-14"
+  },
+  {
+   "court": "서울중앙지방법원",
+   "date": "2018-05-29",
+   "case_number": "2018나1901",
+   "summary": "무리한 진로변경과, 이를 알면서도 적절히 제동하지 않고 차량 간격을 줄인 후행 차량의 운전이 함께 문제된 사례.",
+   "comparison_limit": "현재 영상에서 후행 차량이 가속해 간격을 줄였다고 확인된 것은 아닙니다. 갑작스러운 진입과 회피 가능성을 구분해 참고해야 합니다.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A843-2&chartType=1",
+   "source_kind": "손해보험협회 진로변경 기준에 소개된 판례 요약; 판결문 원문 조회 아님",
+   "verified_date": "2026-10-14"
+  }
+ ],
+ "21": [
+  {
+   "court": "서울중앙지방법원",
+   "date": "2008-09-03",
+   "case_number": "2007가단290391",
+   "summary": "신호 없는 사거리에서 우측 차량의 서행·일시정지 미흡과 좌측 차량의 전방·좌우주시 미흡이 문제된 충돌 사례.",
+   "comparison_limit": "진입 방향과 서행 여부를 비교해야 하며, 현재 영상의 신호·도로 폭·역할이 같다고 확정하지 않음.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A812-1&chartType=1",
+   "source_kind": "손해보험협회 교차로 기준에 소개된 판례 요약; 판결문 원문 조회 아님"
+  },
+  {
+   "court": "대전고등법원",
+   "date": "2003-01-29",
+   "case_number": "2002나5536",
+   "summary": "신호 없는 사거리에서 과속 진입 차량과 오른쪽에서 먼저 진입한 차량의 충돌 사례.",
+   "comparison_limit": "이 영상의 과속과 명확한 선진입은 미확인입니다. 해당 판례의 과실비율을 그대로 적용하지 않음.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A812-1&chartType=1",
+   "source_kind": "손해보험협회 교차로 기준에 소개된 판례 요약; 판결문 원문 조회 아님"
+  },
+  {
+   "court": "춘천지방법원 강릉지원",
+   "date": "1993-08-26",
+   "case_number": "92가합1264",
+   "summary": "신호 없는 교차로에서 좌측 직진 자동차와 우측 직진 이륜차의 주시의무가 문제된 사례.",
+   "comparison_limit": "이륜차가 포함된 사례로 현재 자동차 간 사고와 차량 종류가 다르며 법리 참고로만 표시함.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A812-1&chartType=1",
+   "source_kind": "손해보험협회 교차로 기준에 소개된 판례 요약; 판결문 원문 조회 아님"
+  }
+ ],
+ "27": [
+  {
+   "court": "대구지방법원",
+   "date": "2012-09-13",
+   "case_number": "2010가단4991",
+   "summary": "신호 없는 교차로에서 우회전 차량의 진입 경로와 직진 차량의 전방주시가 문제된 야간 충돌 사례.",
+   "comparison_limit": "현재 영상의 우회전 여부와 진입 차로는 별도 확인이 필요하며 해당 결과 비율을 자동 적용하지 않음.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A813-1&chartType=1",
+   "source_kind": "손해보험협회 우회전 기준에 소개된 판례 요약; 판결문 원문 조회 아님"
+  },
+  {
+   "court": "서울중앙지방법원",
+   "date": "2019-01-25",
+   "case_number": "2018나50637",
+   "summary": "교통정리가 없는 삼거리에서 우회전 차량과 왼쪽에서 오른쪽으로 직진한 차량이 충돌한 사례.",
+   "comparison_limit": "삼거리 구조와 우회전 조건이 현재 영상과 같은지 미확인입니다. 현재 영상의 적용 유형을 확정하지 않음.",
+   "source": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A813-1&chartType=1",
+   "source_kind": "손해보험협회 우회전 기준에 소개된 판례 요약; 판결문 원문 조회 아님"
+  }
+ ]
+}

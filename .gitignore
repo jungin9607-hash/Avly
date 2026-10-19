@@ -25,3 +25,15 @@ Thumbs.db
 
 # Backend uploads (개발용 로컬 파일)
 backend/uploads/
+
+# Backend model: 실행 결과/캐시, 백업, Windows 다운로드 흔적
+backend/model/results/
+backend/model/**/*.bak
+*.bak
+*:Zone.Identifier
+
+# 모델 가중치 (용량이 커서 git 대신 별도 보관)
+*.pt
+*.pth
+*.onnx
+*.safetensors

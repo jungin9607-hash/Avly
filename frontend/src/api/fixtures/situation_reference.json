@@ -1,0 +1,47 @@
+{
+ "summary": "도로 형태: 주차장. 내 차 진행 후보: 미확인, 상대 차 진행 후보: 진로변경.",
+ "road_shape": "주차장",
+ "my_action": "미확인",
+ "other_action": "진로변경",
+ "contact": "접촉 추정",
+ "needs_check": [
+  "직접 접촉 장면은 영상에서 확인되지 않았습니다."
+ ],
+ "technical_notes": [
+  "A 정지 상태와 배경 변화가 불일치: 정지 확정 보류",
+  "B lane_change: 사고 전 근거 부족",
+  "A 타임라인의 정지 구간과 배경 이동 단서 불일치",
+  "B 진로변경 주장에 차로 경계 통과 근거가 없어 미확인 처리",
+  "정지 판단의 시간 범위가 짧거나 사고 직전 배경 변동이 반복됨: A 이동/카메라 변동 구분 필요",
+  "B의 진행 근거 부족: 추정 확인 필요"
+ ],
+ "candidates": [
+  {
+   "accident_type_id": 126,
+   "role": "A",
+   "place": "주차장(또는 차도가 아닌 장소)",
+   "feature": "주차구역과 통로",
+   "my_progress": "통로 직진",
+   "other_progress": "주차구역에서 직진 출차",
+   "base_me": 30,
+   "base_other": 70,
+   "source": "reference",
+   "eligible": false,
+   "note": "탐색용 조건 비교 · 적용 유형 미확정"
+  },
+  {
+   "accident_type_id": 127,
+   "role": "A",
+   "place": "주차장(또는 차도가 아닌 장소)",
+   "feature": "주차구역과 통로",
+   "my_progress": "통로 직진",
+   "other_progress": "주차구역에서 후진 출차",
+   "base_me": 25,
+   "base_other": 75,
+   "source": "reference",
+   "eligible": false,
+   "note": "탐색용 조건 비교 · 적용 유형 미확정"
+  }
+ ],
+ "default_index": null
+}

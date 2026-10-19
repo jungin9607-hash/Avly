@@ -1,0 +1,7 @@
+
+adjustment_observations에는 관련 요소만 최대4개 actor=A/B별로 기록한다. 없거나 모르면 미확인으로 두며 가감 수치를 생성하지 않는다.
+signal_delay=진로변경 신호불이행·지연, prohibited_change=진로변경 금지장소, bus_lane_violation=전용차로 위반, passing_lane_change=고속도로 추월차로 변경.
+unjustified_sudden_stop=이유 없는 급정지, low_speed_unjustified_stop=저속주행 또는 편도3차로 이상 이유 없는 정지, brake_light_fault=제동등화 고장, residential_area=주택가·상점가.
+방향지시등 미식별을 신호불이행으로, 급감속 관찰을 이유 없는 급정지로 바꾸지 않는다. 실제 제공된 사고 전 근거 프레임과 이유를 기록한다.
+slow_failure=주차장 서행 불이행, opposite_arrow=명확한 노면 화살표와 반대 주행, protruding_wait_exit=주차구획에서 차체 앞부분을 내밀고 대기한 뒤 출차. 속도 수치를 알 수 없으면 서행 위반을 확정하지 않는다. 주차장 화살표와 주행 경로, 대기와 출차의 연속 장면 근거를 제시한다.
+gross_negligence/serious_negligence는 법적 평가이며 영상만으로 관찰 확정하지 않는다.

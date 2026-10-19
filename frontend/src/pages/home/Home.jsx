@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import TopNav from "../../components/common/TopNav";
 import ConsentModal from "../../components/home/ConsentModal";
-import QuestionModal from "../../components/home/QuestionModal";
 import AnalysisProgressModal from "../../components/home/AnalysisProgressModal";
 import SituationConfirmModal from "../../components/home/SituationConfirmModal";
+import AdjustmentModal from "../../components/home/AdjustmentModal";
+import NoticeModal from "../../components/home/NoticeModal";
+import { ROUTES } from "../../routes";
 import ReportPageLink from "./ReportPageLink";
+import useAnalysisFlow from "./useAnalysisFlow";
 import "./Home.css";
 
 const ACCEPT_EXT = ["mp4", "mov", "avi"];
@@ -22,11 +25,9 @@ const GUIDES = [
   },
   {
     title: "음성 녹음 여부 무관",
-    body: "에블리 AI 비전 모델은 순수 시각 좌표 및 텔레메트리 궤적만을 추출하므로 블랙박스 내부 대화나 오디오 스트림은 전송 단계에서 완전 음소거 처리됩니다.",
+    body: "에블리 AI 비전 모델은 영상 속 장면(이미지)만 분석하므로 블랙박스 내부 대화나 오디오 스트림은 전송 단계에서 완전 음소거 처리됩니다.",
   },
 ];
-
-const DEMO_FILE_NAME = "블랙박스_시연용_차선사고.mp4";
 
 export default function Home() {
   const inputRef = useRef(null);
@@ -34,9 +35,10 @@ export default function Home() {
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState("");
   const [pending, setPending] = useState([]); // 동의 팝업을 기다리는 선택된 영상
-  const [demoConsent, setDemoConsent] = useState(false); // 시연 파일로 동의 팝업을 연 경우
-  const [popupStep, setPopupStep] = useState("consent");
-  const [answers, setAnswers] = useState({});
+  const [started, setStarted] = useState(false); // 동의하고 분석을 시작했는지
+  const [params] = useSearchParams();
+  const resumeId = params.get("resume"); // 결과 화면에서 "이어서 확인하기"로 들어온 분석 번호
+  const { state: flow, start, choose, confirm, back, reset } = useAnalysisFlow(resumeId);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -44,39 +46,42 @@ export default function Home() {
 
   const unsupportedMessage = (name) => `${name}: MP4, MOV, AVI 영상만 올릴 수 있어요.`;
 
-  // 형식만 먼저 확인하고, 통과한 영상은 동의 팝업으로 넘김
+  // 영상은 하나만 받는다. 형식만 먼저 확인하고, 통과한 영상은 동의 팝업으로 넘김
   const selectFiles = (list) => {
     setError("");
-    const valid = [];
-    for (const file of list) {
-      const ext = file.name.split(".").pop().toLowerCase();
-      if (ACCEPT_EXT.includes(ext)) valid.push(file);
-      else setError(unsupportedMessage(file.name));
+    if (list.length > 1) {
+      setError("영상은 한 번에 하나만 올릴 수 있어요.");
+      return;
     }
-    if (valid.length) setPending(valid);
+    const file = list[0];
+    if (!file) return;
+    const ext = file.name.split(".").pop().toLowerCase();
+    if (ACCEPT_EXT.includes(ext)) setPending([file]);
+    else setError(unsupportedMessage(file.name));
   };
 
-  // 답변은 홈에서 보관해 질문 사이를 이동해도 선택값을 유지한다.
-  const updateAnswer = (key, value) => {
-    setAnswers((current) => ({ ...current, [key]: value }));
-  };
-
-  const finishAnalysis = () => {
-    closeConsent();
-    navigate("/analysis-test");
-  };
-
-  const closeConsent = () => {
+  // 팝업을 모두 닫고 처음 화면으로 돌아간다 (서버에서 진행 중인 분석은 계속된다)
+  const closeAll = () => {
+    reset();
     setPending([]);
-    setDemoConsent(false);
-    setPopupStep("consent");
-    setAnswers({});
+    setStarted(false);
+    if (resumeId) navigate(ROUTES.home, { replace: true });
   };
 
   const pickAnother = () => {
-    closeConsent();
+    closeAll();
     inputRef.current.click();
   };
+
+  const begin = ({ retention }) => {
+    setStarted(true);
+    start(pending[0], retention);
+  };
+
+  // 결과가 나오면 결과 화면으로 이동한다
+  useEffect(() => {
+    if (flow.phase === "done") navigate(ROUTES.report(flow.analysisId));
+  }, [flow.phase, flow.analysisId, navigate]);
 
   const onDrop = (e) => {
     e.preventDefault();
@@ -128,7 +133,6 @@ export default function Home() {
                 ref={inputRef}
                 type="file"
                 accept=".mp4,.mov,.avi,video/mp4,video/quicktime,video/x-msvideo"
-                multiple
                 hidden
                 onChange={(e) => {
                   selectFiles(e.target.files);
@@ -141,14 +145,6 @@ export default function Home() {
                 </p>
               )}
             </section>
-            <button
-              type="button"
-              className="uh-btn uh-btn-line uh-demo-trigger"
-              onClick={() => setDemoConsent(true)}
-            >
-              <IconBolt />
-              단계별 분석 팝업 시연
-            </button>
           </div>
 
           {/* 오른쪽: 영상 가이드 타일 3개 */}
@@ -176,56 +172,84 @@ export default function Home() {
           <footer className="uh-notice">
             <IconShield />
             <p>
-              에블리는 대한민국 손해보험협회 과실비율 분쟁심의위원회 기본 인정기준과 법원 확정 판결 데이터셋에 기초하여
-              확률적 과실 분포를 제공합니다. 최종 법적 효력은 보험사 합의 또는 법원 판결에 따릅니다.
+              에블리는 손해보험협회 과실비율 인정기준과 판례 요약을 참고해 과실 비율을 안내하는 AI 참고 서비스예요.
+              확정한 비율이 아니며 법적 효력이 없고, 최종 판단은 보험사 합의나 법원 판결에 따릅니다.
             </p>
           </footer>
         </div>
       </main>
 
-      {/* 영상 선택 → 수집 동의 → 질문 1 → 질문 2 → 분석 중 → 사고 상황 확인 */}
-      {(pending.length > 0 || demoConsent) &&
-        (popupStep === "consent" ? (
-          <ConsentModal
-            fileNames={demoConsent ? [DEMO_FILE_NAME] : pending.map((f) => f.name)}
-            onStart={() => setPopupStep("questions-1")}
-            onClose={closeConsent}
-            onPickAnother={pickAnother}
-          />
-        ) : popupStep === "questions-1" ? (
-          <QuestionModal
-            key="questions-1"
-            stage={0}
-            answers={answers}
-            onAnswerChange={updateAnswer}
-            onSubmit={() => setPopupStep("questions-2")}
-            onClose={closeConsent}
-          />
-        ) : popupStep === "questions-2" ? (
-          <QuestionModal
-            key="questions-2"
-            stage={1}
-            answers={answers}
-            onAnswerChange={updateAnswer}
-            onSubmit={() => setPopupStep("analyzing")}
-            onBack={() => setPopupStep("questions-1")}
-            onClose={closeConsent}
-          />
-        ) : popupStep === "analyzing" ? (
-          <AnalysisProgressModal
-            step={4}
-            description="사고 장면과 차량 움직임을 분석하고 있어요."
-            onComplete={() => setPopupStep("confirm")}
-            onClose={closeConsent}
-          />
-        ) : (
-          <SituationConfirmModal
-            onConfirm={finishAnalysis}
-            onBack={() => setPopupStep("questions-1")}
-            onClose={closeConsent}
-          />
-        ))}
+      {/* 영상 선택 → 수집 동의 → 업로드·분석 → 사고 상황 확인 → 가감요소 질문 → 결과 */}
+      {(pending.length > 0 || flow.phase !== "idle") && (
+        <FlowModals
+          file={pending[0]}
+          started={started || flow.phase !== "idle"}
+          flow={flow}
+          onBegin={begin}
+          onClose={closeAll}
+          onPickAnother={pickAnother}
+          onChoose={choose}
+          onConfirm={confirm}
+          onBack={back}
+        />
+      )}
     </div>
+  );
+}
+
+/* ---------- 단계별 팝업 ---------- */
+function FlowModals({ file, started, flow, onBegin, onClose, onPickAnother, onChoose, onConfirm, onBack }) {
+  if (!started) return <ConsentModal fileName={file?.name} onStart={onBegin} onClose={onClose} onPickAnother={onPickAnother} />;
+  switch (flow.phase) {
+    case "uploading":
+      return <AnalysisProgressModal phase="uploading" progress={flow.progress} onClose={onClose} />;
+    case "analyzing":
+      return <AnalysisProgressModal phase="analyzing" stage={flow.stage} onClose={onClose} />;
+    case "finalizing":
+    case "done":
+      return <AnalysisProgressModal phase="finalizing" onClose={onClose} />;
+    case "confirming":
+      return <SituationConfirmModal situation={flow.situation} items={flow.catalog} onChoose={onChoose} onClose={onClose} />;
+    case "adjusting":
+      return <AdjustmentModal option={flow.option} questions={flow.questions} onSubmit={(answers) => onConfirm(flow.option, answers)} onBack={onBack} onClose={onClose} />;
+    case "unsupported":
+      return (
+        <NoticeModal
+          title="지원하지 않는 사고예요"
+          desc={flow.unsupportedReason}
+          primary={{ label: "다른 영상 선택", onClick: onPickAnother }}
+          secondary={{ label: "닫기", onClick: onClose }}
+        >
+          <p className="md-hint">에블리는 지금 차량끼리 부딪힌 사고(차대차)만 분석할 수 있어요. 보행자, 이륜차, 자전거 사고는 보험사나 전문가에게 상담해 주세요.</p>
+        </NoticeModal>
+      );
+    case "failed":
+      return <FailedNotice error={flow.error} onPickAnother={onPickAnother} onClose={onClose} />;
+    default:
+      return <AnalysisProgressModal phase="uploading" progress={0} onClose={onClose} />;
+  }
+}
+
+// 오류 코드별로 사용자에게 알려 줄 안내
+const FAILURE = {
+  VIDEO_TOO_LONG: { title: "영상이 너무 길어요", hint: "사고 전후 구간만 잘라서 다시 올려 주세요." }, // 서버 메시지에 길이 기준(최대 20초)이 들어 있다
+  AI_NOT_CONFIGURED: { title: "분석 서비스를 준비하고 있어요", hint: "지금은 분석을 시작할 수 없어요. 잠시 후 다시 시도해 주세요." },
+  NETWORK_ERROR: { title: "서버에 연결하지 못했어요", hint: "인터넷 연결을 확인하고 다시 시도해 주세요." },
+  FILE_TOO_LARGE: { title: "영상 용량이 너무 커요", hint: "용량을 줄이거나 사고 전후 구간만 잘라서 올려 주세요." },
+  UNSUPPORTED_FILE_TYPE: { title: "지원하지 않는 영상 형식이에요", hint: "MP4, MOV, AVI 영상만 올릴 수 있어요." },
+};
+
+function FailedNotice({ error, onPickAnother, onClose }) {
+  const known = FAILURE[error?.code];
+  return (
+    <NoticeModal
+      title={known?.title ?? "분석하지 못했어요"}
+      desc={error?.message}
+      primary={{ label: "다른 영상 선택", onClick: onPickAnother }}
+      secondary={{ label: "닫기", onClick: onClose }}
+    >
+      {known && <p className="md-hint">{known.hint}</p>}
+    </NoticeModal>
   );
 }
 
@@ -255,11 +279,6 @@ const IconPlus = () => (
   <Svg size={18}>
     <circle cx="12" cy="12" r="9" />
     <path d="M12 8v8M8 12h8" />
-  </Svg>
-);
-const IconBolt = () => (
-  <Svg size={16}>
-    <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
   </Svg>
 );
 const IconShield = () => (
