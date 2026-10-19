@@ -7,6 +7,7 @@
 | 위치 | 내용 | 규모 |
 |---|---|---|
 | `backend/model/avly/vision.py` | `OpenAI().responses.create()` 호출, 재시도, 오류 처리를 Gemini SDK(`google-genai`)로 교체. 이 파일이 공급자 경계다. | 가장 큼 (파일 하나) |
+| `backend/model/avly/textllm.py` | 판례 비교용 텍스트 전용 호출(OpenAI Responses API + JSON 스키마). Gemini로 바꾸면 같이 교체. 판례 비교 프롬프트는 `backend/app/worker/ai_compare.py`에 있다 | 작음 (함수 하나) |
 | `backend/model/avly/video.py` `image_content()` | 이미지 입력 형식이 OpenAI 전용(`input_text`, `input_image`, `detail: high/low`). Gemini 형식으로 변환. `detail` 옵션은 없어서 해상도 조절 방식이 달라진다. | 작음 (함수 하나) |
 | `backend/model/avly/constants.py` | 모델 이름 `gpt-4.1`, `gpt-4.1-mini`를 Gemini 모델로 | 설정값 |
 | `backend/model/avly/config.py` | `OPENAI_API_KEY` 대신 `GEMINI_API_KEY` | 작음 |
