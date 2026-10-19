@@ -53,6 +53,8 @@ def compare_case(case: dict, option: dict) -> dict:
         differences.insert(0, limit)
     elif not registered:
         differences.insert(0, "신호, 진행 방식, 접촉 위치가 실제 영상과 같은지는 별도 확인이 필요해요.")
+        if case.get("relevance_status") == "partial_reference":
+            differences.insert(0, "내 사고 조건 중 일부만 이 판례에서 확인돼요. 모든 조건이 같은 대목에서 나오지는 않았어요.")
     if not differences:
         differences.append("요약문만으로는 뚜렷한 차이를 찾지 못했어요. 판결 원문과 실제 사고 상황을 함께 확인해 주세요.")
     level = "same_type" if registered else "partial"

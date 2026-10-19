@@ -258,13 +258,13 @@ class Repository:
                 {"t": accident_type_id, "c": case_id, "r": relevance_status, "l": comparison_limit})
 
     def cases_for_type(self, accident_type_id: int) -> list[dict]:
-        """이 유형에 연결된 판례. 검수된 것, 날짜가 최근인 것 순서."""
+        """이 유형에 연결된 판례. 도표 등록, 조건이 모두 맞는 판례, 일부만 맞는 판례 순서이고 같은 단계에서는 검수된 것, 최근 것이 먼저."""
         with self.engine.connect() as conn:
             return _rows(conn.execute(text(
                 "SELECT c.id AS case_id, c.court, c.decided_on, c.case_number, c.title, c.summary, c.fault_ratio, c.source_kind,"
                 " c.source_url, c.verified, c.verified_at, l.relevance_status, l.comparison_limit"
                 " FROM case_accident_type l JOIN legal_case c ON c.id = l.case_id WHERE l.accident_type_id = :t"
-                " ORDER BY c.verified DESC, c.decided_on DESC NULLS LAST, c.case_number"), {"t": accident_type_id}))
+                " ORDER BY (l.relevance_status = 'partial_reference'), c.verified DESC, c.decided_on DESC NULLS LAST, c.case_number"), {"t": accident_type_id}))
 
     def get_case_lookup(self, accident_type_id: int) -> dict | None:
         with self.engine.connect() as conn:

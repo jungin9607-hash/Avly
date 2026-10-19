@@ -101,7 +101,7 @@ class CaseService:
         if len(rows) < self.target and self._may_fetch(accident_type_id):
             self._fetch(accident_type_id)
             rows = self.repo.cases_for_type(accident_type_id)
-        return [view(r) for r in rows][: max(self.target, 1) + 2]
+        return [view(r) for r in rows][: max(self.target, 1)]
 
     def _may_fetch(self, accident_type_id: int) -> bool:
         lookup = self.repo.get_case_lookup(accident_type_id)
