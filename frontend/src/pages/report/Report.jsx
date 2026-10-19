@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import TopNav from "../../components/common/TopNav";
-import AnalysisGate from "../../components/common/AnalysisGate";
-import useNavigationBackdrop from "../../components/common/useNavigationBackdrop";
+import TopNav from "../common/components/TopNav";
+import AnalysisGate from "../common/components/AnalysisGate";
+import useNavigationBackdrop from "../common/hooks/useNavigationBackdrop";
 import { toReportModel } from "../../api/adapters";
 import { ROUTES } from "../../routes";
-import ReportNotice from "./ReportNotice";
-import AdjustmentSteps from "./AdjustmentSteps";
-import ReportHeader from "./ReportHeader";
-import ReportActions, { TimelineLink } from "./ReportActions";
-import StatusNotice from "./StatusNotice";
+import ReportNotice from "./components/ReportNotice";
+import AdjustmentSteps from "./components/AdjustmentSteps";
+import ReportHeader from "./components/ReportHeader";
+import ReportActions, { TimelineLink } from "./components/ReportActions";
+import StatusNotice from "./components/StatusNotice";
 import { FACTOR_TITLE, RATIO_LABEL, REPORT_ACTIONS } from "./reportContent";
-import { useScrollStep } from "./useScrollStep";
+import { useScrollStep } from "./hooks/useScrollStep";
 import "./Report.css";
 
 // 분석 결과 화면. 서버의 분석 결과를 불러와서 상태(확정, 일부만 반영, 기본값만, 확정 불가)에 맞게 보여 준다.

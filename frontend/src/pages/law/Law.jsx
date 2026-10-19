@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import TopNav from "../../components/common/TopNav";
-import useNavigationBackdrop from "../../components/common/useNavigationBackdrop";
-import CaseBasisNotice from "../../components/common/CaseBasisNotice";
+import TopNav from "../common/components/TopNav";
+import useNavigationBackdrop from "../common/hooks/useNavigationBackdrop";
+import CaseBasisNotice from "../common/components/CaseBasisNotice";
 import PageHeader from "./components/PageHeader";
 import CaseList, { GuideCard } from "./components/CaseList";
 import SummaryAside, { SummaryCard } from "./components/SummaryAside";
 import StickyCompareBar from "./components/StickyCompareBar";
 import CompareModal from "./components/CompareModal";
-import AnalysisGate from "../../components/common/AnalysisGate";
+import AnalysisGate from "../common/components/AnalysisGate";
 import { myAccidentPoints, toCaseCards } from "../../api/adapters";
 import { ROUTES } from "../../routes";
 import { EMPTY, SECTION, SUMMARY, GUIDE, STICKY_BAR } from "./lawContent";

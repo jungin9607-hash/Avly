@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import TopNav from "../../components/common/TopNav";
+import TopNav from "../common/components/TopNav";
 import HeroSection from "./components/HeroSection";
 import FeaturesSection from "./components/FeaturesSection";
 import useIntroScroll from "./hooks/useIntroScroll";

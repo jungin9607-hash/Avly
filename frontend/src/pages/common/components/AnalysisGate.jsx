@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { describeAnalysis } from "../../api/adapters";
-import useAnalysis from "../../api/useAnalysis";
-import { ROUTES } from "../../routes";
+import { describeAnalysis } from "../../../api/adapters";
+import useAnalysis from "../../../api/useAnalysis";
+import { ROUTES } from "../../../routes";
 import TopNav from "./TopNav";
 import "./AnalysisGate.css";
 

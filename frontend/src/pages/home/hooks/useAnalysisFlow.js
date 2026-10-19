@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { api } from "../../api/client.js";
-import { CONSENT_VERSION } from "../../api/config.js";
-import { getSession, rememberAnalysis } from "../../api/session.js";
+import { api } from "../../../api/client.js";
+import { CONSENT_VERSION } from "../../../api/config.js";
+import { getSession, rememberAnalysis } from "../../../api/session.js";
 
 // 영상 올리기 → 분석 → (사용자 확인) → 가감 질문 → 결과 계산까지 한 줄로 이어지는 흐름.
 // 화면은 phase 만 보고 어떤 팝업을 띄울지 정한다.
