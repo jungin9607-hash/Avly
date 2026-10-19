@@ -1,0 +1,188 @@
+// 실행: node --test src/api/adapters.test.js   (Node 내장 테스트 도구. 추가 설치가 필요 없다)
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { test } from "node:test";
+import {
+  cascade, myAccidentPoints, normalizeSelection, resolveOption, selectionFrom, stageIndex, toCaseCards, toMoments, toReportModel, toSteps,
+} from "./adapters.js";
+
+const fixture = (name) => JSON.parse(readFileSync(new URL(`./fixtures/${name}`, import.meta.url), "utf8"));
+const catalog = fixture("catalog.json");
+const items = catalog.items;
+
+test("과실표 선택지는 네 항목으로 유형 하나가 정해진다", () => {
+  const keys = items.map((i) => [i.place, i.feature, i.my_progress, i.other_progress].join("|"));
+  assert.equal(new Set(keys).size, keys.length);
+  assert.equal(items.length, catalog.count);
+});
+
+test("앞 항목을 고르면 뒤 항목의 보기가 좁혀진다", () => {
+  const place = "직선 도로";
+  const afterPlace = cascade(items, { place, feature: "", my_progress: "", other_progress: "" });
+  assert.ok(afterPlace.feature.length > 0);
+  for (const feature of afterPlace.feature) assert.ok(items.some((i) => i.place === place && i.feature === feature));
+  const everyFeature = new Set(items.map((i) => i.feature));
+  assert.ok(afterPlace.feature.length < everyFeature.size, "장소를 고르면 사고 유형이 줄어든다");
+  const feature = afterPlace.feature[0];
+  const afterFeature = cascade(items, { place, feature, my_progress: "", other_progress: "" });
+  for (const progress of afterFeature.my_progress) assert.ok(items.some((i) => i.place === place && i.feature === feature && i.my_progress === progress));
+});
+
+test("장소를 고르기 전에는 사고 유형 보기가 없다", () => {
+  const options = cascade(items, { place: "", feature: "", my_progress: "", other_progress: "" });
+  assert.equal(options.feature.length, 0);
+  assert.equal(options.my_progress.length, 0);
+});
+
+test("네 항목이 모두 정해지면 유형 번호와 역할을 돌려준다", () => {
+  const picked = items.find((i) => i.accident_type_id === 11 && i.role === "A");
+  const found = resolveOption(items, selectionFrom(picked));
+  assert.equal(found.accident_type_id, 11);
+  assert.equal(found.role, "A");
+  assert.equal(resolveOption(items, { ...selectionFrom(picked), other_progress: "" }), null);
+});
+
+test("모든 선택지는 자기 네 항목으로 다시 찾아진다", () => {
+  for (const item of items) {
+    const found = resolveOption(items, selectionFrom(item));
+    assert.equal(found.accident_type_id, item.accident_type_id);
+    assert.equal(found.role, item.role);
+  }
+});
+
+test("앞 항목을 바꾸면 이제 맞지 않는 뒤 항목의 선택은 지워진다", () => {
+  const picked = items.find((i) => i.accident_type_id === 11 && i.role === "A");
+  const selection = selectionFrom(picked);
+  const other = items.find((i) => i.place !== picked.place);
+  const next = normalizeSelection(items, { ...selection, place: other.place });
+  assert.equal(next.place, other.place);
+  assert.equal(next.feature, "");
+  assert.equal(next.my_progress, "");
+  assert.equal(next.other_progress, "");
+  // 같은 장소 안에서 바꾸면 맞는 항목은 유지된다
+  assert.deepEqual(normalizeSelection(items, selection), selection);
+});
+
+test("진행 단계 위치", () => {
+  assert.equal(stageIndex("plate_masking"), 0);
+  assert.equal(stageIndex("case_matching"), 3);
+  assert.equal(stageIndex("finalize"), -1);
+  assert.equal(stageIndex(null), -1);
+});
+
+test("확정 결과는 단계 카드로 바뀐다", () => {
+  const result = fixture("result_final.json");
+  const model = toReportModel(result, "3f2a1c9e-0000-0000-0000-000000000000");
+  assert.equal(model.state, "final");
+  assert.equal(model.steps.length, 2);
+  assert.deepEqual(model.steps[0].ratio, [30, 70]);
+  assert.equal(model.steps[0].tag, "출발점");
+  assert.deepEqual(model.steps[1].ratio, [20, 80]);
+  assert.equal(model.steps[1].tag, "상대 차 과실 +10%p");
+  assert.deepEqual(model.final, { me: 20, other: 80 });
+  assert.ok(model.steps[0].legal.length > 0, "법적 근거는 첫 단계에 붙는다");
+  assert.deepEqual(model.steps[1].legal, []);
+  assert.equal(model.header.keywords.at(-1), "식별 코드 3f2a1c9e");
+  assert.match(model.factorHeader.desc, /1가지 가감요소/);
+});
+
+test("확인하지 못한 요소가 있으면 최종 비율 없이 지금까지 반영한 값만 보여 준다", () => {
+  const model = toReportModel(fixture("result_partial.json"), "a");
+  assert.equal(model.state, "partial");
+  assert.equal(model.final, null);
+  assert.deepEqual([model.shown.me, model.shown.other], [20, 80]);
+  assert.ok(model.pending.length > 0);
+  assert.match(model.factorHeader.desc, /확인한 가감요소만/);
+});
+
+test("가감요소가 없는 유형은 기본 비율만 보여 준다", () => {
+  const model = toReportModel(fixture("result_base_only.json"), "a");
+  assert.equal(model.state, "base_only");
+  assert.equal(model.steps.length, 1);
+  assert.equal(model.final, null);
+  assert.match(model.factorHeader.desc, /기본 비율만/);
+});
+
+test("유형을 못 정한 결과에는 비율이 없다", () => {
+  const model = toReportModel(fixture("result_unresolved.json"), "a");
+  assert.equal(model.state, "unresolved");
+  assert.deepEqual([model.steps, model.shown, model.final], [[], null, null]);
+  assert.ok(model.candidates.length > 0);
+  assert.equal(model.header.keywords.length, 1);
+});
+
+test("법조문 풀이가 없으면 안내 문구를 대신 보여 준다", () => {
+  const result = fixture("result_final.json");
+  const steps = toSteps({ ...result, laws: [{ label: "도로교통법 제14조", name: null, easy: null }] });
+  assert.equal(steps[0].legal[0].name, "도로교통법 제14조");
+  assert.match(steps[0].legal[0].text, /준비하고 있어요/);
+});
+
+test("타임라인: 접촉이 확실하면 충돌 시점을 기준으로 말한다", () => {
+  const result = fixture("result_final.json");
+  assert.equal(result.impact.confirmed, true);
+  const moments = toMoments(result);
+  assert.equal(moments.length, result.timeline.length);
+  const times = moments.map((m) => m.time);
+  assert.deepEqual(times, [...times].sort((a, b) => a - b));
+  const contact = moments.find((m) => m.tone === "impact");
+  assert.equal(contact.label, "충돌 시점");
+  assert.ok(moments.some((m) => /^충돌 [\d.]+초 (전|후)$/.test(m.label)));
+  for (const m of moments) assert.equal(m.hud, "CAM_FRONT");
+});
+
+test("타임라인: 시간축 위치는 시작 시각이 같아도 겹치지 않게 고르게 나뉜다", () => {
+  const same = { kind: "A 움직임", actor: "me", start_sec: 2.3, end_sec: 5, description: "d", certainty: "c" };
+  const moments = toMoments({ timeline: [same, { ...same, kind: "B 확인 구간" }, { ...same, start_sec: 5.9 }, { ...same, start_sec: 6 }], impact: {} });
+  const expected = [0, 100 / 3, 200 / 3, 100];
+  moments.forEach((m, i) => assert.ok(Math.abs(m.position - expected[i]) < 1e-9, `${i}번째 위치 ${m.position}`));
+  assert.deepEqual(toMoments({ timeline: [same], impact: {} }).map((m) => m.position), [0]);
+});
+
+test("타임라인: 접촉이 확실하지 않으면 충돌 기준 표현을 쓰지 않는다", () => {
+  const result = fixture("result_final.json");
+  const moments = toMoments({ ...result, impact: { ...result.impact, confirmed: false } });
+  assert.ok(moments.every((m) => !/^충돌 [\d.]+초/.test(m.label)));
+  assert.ok(moments.some((m) => m.label === "충돌 의심 구간"));
+});
+
+test("타임라인이 비어 있어도 오류 없이 빈 목록", () => {
+  assert.deepEqual(toMoments({ timeline: [], impact: {} }), []);
+});
+
+test("판례 카드: 퍼센트 없이 단계와 공통점·차이점을 보여 준다", () => {
+  const cards = toCaseCards(fixture("result_final.json").related_cases);
+  assert.equal(cards.length, 2);
+  assert.equal(cards[0].matchLabel, "같은 사고 유형");
+  assert.equal(cards[1].matchLabel, "조건 일부 일치");
+  assert.equal(cards[0].verified, true);
+  assert.equal(cards[1].verified, false);
+  assert.ok(cards[0].comparison.common[0].text[0].length > 0);
+  assert.ok(cards[0].comparison.differences.length > 0);
+  for (const card of cards) assert.ok(!JSON.stringify({ ...card, sourceUrl: null }).includes("%"), "유사도 퍼센트를 만들지 않는다"); // 주소의 %EC 같은 인코딩은 제외
+});
+
+test("판례가 하나도 없어도 빈 목록", () => {
+  assert.deepEqual(toCaseCards([]), []);
+  assert.deepEqual(toCaseCards(undefined), []);
+});
+
+test("내 사고 요약", () => {
+  assert.deepEqual(myAccidentPoints(fixture("result_final.json")).length, 3);
+  assert.equal(myAccidentPoints(fixture("result_unresolved.json"))[0], "표에서 맞는 유형을 찾지 못한 사고");
+});
+
+test("결과 화면에 들어가기 전 안내: 상태마다 알맞은 문구와 이동 링크", async () => {
+  const { describeAnalysis } = await import("./adapters.js");
+  const session = { sessionId: "s", accidentId: "a" };
+  assert.match(describeAnalysis({ session: null, analysisId: "x" }).title, /이 브라우저에서 만든 분석이 아니에요/);
+  assert.equal(describeAnalysis({ session, error: { status: 404, message: "없음" }, analysisId: "x" }).retry, false);
+  assert.equal(describeAnalysis({ session, error: { status: 500, message: "오류" }, analysisId: "x" }).retry, true);
+  assert.match(describeAnalysis({ session, loading: true, analysisId: "x" }).title, /불러오는 중/);
+  const processing = describeAnalysis({ session, analysis: { status: "processing", stage: { label: "전체 흐름 분석" } }, analysisId: "x" });
+  assert.match(processing.body, /전체 흐름 분석/);
+  const waiting = describeAnalysis({ session, analysis: { status: "awaiting_confirmation" }, analysisId: "abc" });
+  assert.equal(waiting.link.to, "/upload?resume=abc");
+  assert.equal(describeAnalysis({ session, analysis: { status: "unsupported", unsupported_reason: "차대보행자 사고는 지원하지 않습니다." }, analysisId: "x" }).body, "차대보행자 사고는 지원하지 않습니다.");
+  assert.equal(describeAnalysis({ session, analysis: { status: "failed", error: { message: "실패했어요" } }, analysisId: "x" }).body, "실패했어요");
+});

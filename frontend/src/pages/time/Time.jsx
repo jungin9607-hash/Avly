@@ -1,5 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import AnalysisGate from "../../components/common/AnalysisGate";
 import TopNav from "../../components/common/TopNav";
+import { api } from "../../api/client";
+import { toMoments } from "../../api/adapters";
 import TimelineNotice from "./TimelineNotice";
 import TimelineAxis from "./TimelineAxis";
 import TimelineControls from "./TimelineControls";
@@ -8,76 +11,84 @@ import { getTimelineColor, getTimelinePosition } from "./timelineColors";
 import useTimelineWheel from "./useTimelineWheel";
 import "./Time.css";
 
-// tone: 결정적 시점(key) · 충돌(impact)은 색으로 구분
-const MOMENTS = [
-  {
-    id: "m5",
-    label: "충돌 5초 전",
-    time: 7.45,
-    summary: "정상 주행 & 거리 확보",
-    tag: "정상 주행권 인정",
-    title: "본인 정상 주행 및 전방 안전거리 35m 확보",
-    hud: "CAM_FRONT",
-  },
-  {
-    id: "m3",
-    label: "충돌 3초 전",
-    chipLabel: "충돌 3초 전 (가감산 핵심)",
-    summaryLabel: "충돌 3초 전 (결정적)",
-    time: 9.12,
-    summary: "급차선변경 · 깜빡이 미점등",
-    tag: "★ 과실 가감산 결정적 요인",
-    title: "상대 차량 방향지시등(깜빡이) 미점등 급차선 변경 시작",
-    hud: "CAM_FRONT",
-    tone: "key",
-  },
-  {
-    id: "m1",
-    label: "충돌 1초 전",
-    time: 10.85,
-    summary: "충돌 회피 한계 입증",
-    tag: "불가항력 회피 한계",
-    title: "차간거리 3.4m 급감 및 긴급 제동 (방어운전 노력 입증)",
-    hud: "CAM_FRONT",
-  },
-  {
-    id: "m0",
-    label: "충돌 시점",
-    time: 11.9,
-    summary: "물리적 접촉 좌표 포착",
-    tag: "충돌 좌표 확정",
-    title: "우측 전면 범퍼-상대 좌측 후미 불가항력 접촉",
-    hud: "CAM_FRONT",
-    tone: "impact",
-  },
-];
-
-const LAST = MOMENTS.length - 1;
 const stamp = (t) => `00:${t.toFixed(2).padStart(5, "0")}`;
 const two = (n) => String(n).padStart(2, "0");
 
-export default function Time() {
+// 사고 타임라인. 서버가 영상에서 찾은 구간(시작~끝 초)을 시간순으로 보여 주고, 영상이 있으면 그 시점으로 이동한다.
+export default function Time({ analysisId }) {
+  return (
+    <AnalysisGate analysisId={analysisId} active="타임라인" theme="dark">
+      {({ analysis, session }) => <TimeView result={analysis.result} analysisId={analysisId} session={session} />}
+    </AnalysisGate>
+  );
+}
+
+function TimeView({ result, analysisId, session }) {
+  const moments = useMemo(() => toMoments(result), [result]);
+  if (moments.length === 0) {
+    return (
+      <div className="tl">
+        <TopNav active="타임라인" theme="dark" />
+        <section className="tl-stage">
+          <div className="tl-side">
+            <h1>
+              사고 순간
+              <br />
+              <span className="tl-h1-accent">타임라인</span>
+            </h1>
+            <p className="tl-now-text">영상에서 표시할 사고 장면을 찾지 못했어요.</p>
+          </div>
+          <div className="tl-footer">
+            <LawPageLink analysisId={analysisId} />
+            <TimelineNotice />
+          </div>
+        </section>
+      </div>
+    );
+  }
+  return <Moments moments={moments} analysisId={analysisId} session={session} />;
+}
+
+function Moments({ moments, analysisId, session }) {
+  const LAST = moments.length - 1;
   const stageRef = useRef(null);
   const videoRef = useRef(null);
   const inputRef = useRef(null);
   const [active, setActive] = useState(0);
-  const [videoUrl, setVideoUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState(""); // 사용자가 직접 고른 영상(영상을 보관하지 않은 경우의 대안)
   const [videoName, setVideoName] = useState("");
+  const [serverVideo, setServerVideo] = useState(null); // 번호판·사람을 가린 영상 (보관 동의한 경우)
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const goTo = (i) => {
-    const idx = Math.max(0, Math.min(LAST, i));
-    setActive(idx);
+  // 서버에 보관된 비식별 영상이 있으면 그 영상을 쓴다. 서명 주소는 짧게 유효하므로 화면에 들어올 때 받는다.
+  useEffect(() => {
+    let cancelled = false;
+    api.videoUrl(session.accidentId, { sessionId: session.sessionId }).then(
+      (url) => !cancelled && setServerVideo(url),
+      () => {},
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [session.accidentId, session.sessionId]);
+
+  const seek = (time) => {
     const video = videoRef.current;
     if (video && video.readyState >= HTMLMediaElement.HAVE_METADATA && Number.isFinite(video.duration)) {
-      video.currentTime = Math.min(MOMENTS[idx].time, Math.max(0, video.duration - 0.05));
+      video.currentTime = Math.min(time, Math.max(0, video.duration - 0.05));
     }
   };
 
-  useTimelineWheel(stageRef, active, MOMENTS.length, goTo);
+  const goTo = (i) => {
+    const idx = Math.max(0, Math.min(LAST, i));
+    setActive(idx);
+    seek(moments[idx].time);
+  };
+
+  useTimelineWheel(stageRef, active, moments.length, goTo);
 
   const loadVideo = (event) => {
     const file = event.target.files?.[0];
@@ -92,15 +103,11 @@ export default function Time() {
     return () => URL.revokeObjectURL(videoUrl);
   }, [videoUrl]);
 
-  const syncVideoToMoment = () => {
-    const video = videoRef.current;
-    if (video && Number.isFinite(video.duration)) {
-      video.currentTime = Math.min(MOMENTS[active].time, Math.max(0, video.duration - 0.05));
-    }
-  };
+  const syncVideoToMoment = () => seek(moments[active].time);
+  const source = videoUrl || serverVideo;
 
-  const m = MOMENTS[active];
-  const frameColor = getTimelineColor(getTimelinePosition(MOMENTS, m.time));
+  const m = moments[active];
+  const frameColor = getTimelineColor(m.position ?? getTimelinePosition(moments, m.time));
 
   return (
     <div className="tl">
@@ -132,11 +139,11 @@ export default function Time() {
         <div className="tl-right">
           <div className="tl-video-panel" style={{ "--tl-frame-color": frameColor }}>
             <div className={`tl-player ${m.tone || ""}`}>
-              {videoUrl ? (
+              {source ? (
                 <video
                   ref={videoRef}
                   className="tl-video"
-                  src={videoUrl}
+                  src={source}
                   controls
                   onLoadedMetadata={syncVideoToMoment}
                   aria-label={`${m.label} 블랙박스 영상`}
@@ -177,11 +184,11 @@ export default function Time() {
             </div>
 
             {/* 실제 시각 비율대로 놓인 시간축: 지나온 구간이 채워짐 */}
-            <TimelineAxis moments={MOMENTS} active={active} onSelect={goTo} />
+            <TimelineAxis moments={moments} active={active} onSelect={goTo} />
           </div>
         </div>
         <div className="tl-footer">
-          <LawPageLink />
+          <LawPageLink analysisId={analysisId} />
           <TimelineNotice />
         </div>
       </section>
@@ -189,29 +196,7 @@ export default function Time() {
   );
 }
 
-/* ---------- 장면 그림 (블랙박스 화면 자리) ---------- */
-
-// 뒤에서 본 승용차. brake: 제동등 켜짐
-function Car({ x, y, s, rotate = 0, brake = false }) {
-  return (
-    <g transform={`translate(${x} ${y}) rotate(${rotate}) scale(${s})`}>
-      <path d="M-28 -16 Q-25 -27 -14 -28 H14 Q25 -27 28 -16 Z" fill="#3a3d48" />
-      <path d="M-22 -17 Q-19 -24 -12 -25 H12 Q19 -24 22 -17 Z" fill="#16171d" />
-      <rect x="-36" y="-17" width="72" height="24" rx="4" fill="#5b5f6c" />
-      <rect x="-33" y="-12" width="13" height="6" rx="1.5" fill={brake ? "#ff4d4d" : "#6b2a2a"} />
-      <rect x="20" y="-12" width="13" height="6" rx="1.5" fill={brake ? "#ff4d4d" : "#6b2a2a"} />
-      {brake && (
-        <>
-          <circle cx="-26" cy="-9" r="9" fill="#ff4d4d" opacity="0.25" />
-          <circle cx="26" cy="-9" r="9" fill="#ff4d4d" opacity="0.25" />
-        </>
-      )}
-      <rect x="-10" y="-3" width="20" height="6" rx="1" fill="#d9d9de" />
-      <rect x="-32" y="7" width="10" height="6" rx="2" fill="#111" />
-      <rect x="22" y="7" width="10" height="6" rx="2" fill="#111" />
-    </g>
-  );
-}
+/* ---------- 영상이 없을 때 보여 주는 도로 배경 (실제 장면이 아니다) ---------- */
 
 function Scene({ id }) {
   return (
@@ -228,50 +213,6 @@ function Scene({ id }) {
       <path d="M151 70 L40 180 M169 70 L280 180" stroke="#b8b8c4" strokeWidth="1.5" opacity="0.55" />
       <path d="M160 70 L160 180" stroke="#e2b25a" strokeWidth="1.5" opacity="0.7" />
       <path d="M155 70 L100 180 M165 70 L220 180" stroke="#fff" strokeWidth="1.2" strokeDasharray="7 9" opacity="0.35" />
-
-      {id === "m5" && (
-        <>
-          <Car x={138} y={98} s={0.42} />
-          <path d="M132 176 L136 106" stroke="var(--accent)" strokeWidth="1.2" strokeDasharray="3 4" />
-          <text x="142" y="146" fill="var(--accent)" fontSize="10" fontWeight="700">
-            35m
-          </text>
-        </>
-      )}
-      {id === "m3" && (
-        <>
-          <defs>
-            <marker id={`arrow-${id}`} viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-              <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)" />
-            </marker>
-          </defs>
-          <Car x={212} y={112} s={0.68} rotate={-14} />
-          <rect x="184" y="88" width="58" height="38" fill="none" stroke="var(--accent)" strokeWidth="1.3" strokeDasharray="4 3" />
-          <path className="tl-arrow" d="M196 128 Q170 140 150 150" stroke="var(--accent)" strokeWidth="2" fill="none" markerEnd={`url(#arrow-${id})`} />
-          <text x="186" y="82" fill="var(--accent)" fontSize="9" fontWeight="700">
-            깜빡이 OFF
-          </text>
-        </>
-      )}
-      {id === "m1" && (
-        <>
-          <Car x={150} y={132} s={1.15} brake />
-          <path d="M150 178 L150 150" stroke="var(--accent)" strokeWidth="1.2" strokeDasharray="3 3" />
-          <text x="156" y="172" fill="var(--accent)" fontSize="10" fontWeight="700">
-            3.4m
-          </text>
-        </>
-      )}
-      {id === "m0" && (
-        <>
-          <Car x={176} y={146} s={1.6} rotate={-6} brake />
-          <circle className="tl-ring" cx="122" cy="160" r="10" fill="none" stroke="#ff8a7a" strokeWidth="2" />
-          <path
-            d="M122 146 L126 155 L136 152 L129 160 L137 168 L126 165 L122 175 L118 165 L107 168 L115 160 L108 152 L118 155 Z"
-            fill="#ff8a7a"
-          />
-        </>
-      )}
     </svg>
   );
 }

@@ -6,7 +6,7 @@ import SectionHeader from "./SectionHeader";
 
 // 위: 최종 과실 비율(고정) / 아래: 왼쪽 움직이는 작은 비율 박스 + 오른쪽 가감요소 목록
 // onSelectStep(i): 선택 안 된 카드를 눌렀을 때 그 단계로 이동
-export default function AdjustmentSteps({ steps, header, activeIndex = steps.length - 1, onSelectStep }) {
+export default function AdjustmentSteps({ steps, header, ratioLabel, confirmed = true, title, activeIndex = steps.length - 1, onSelectStep }) {
   const [finalMine, finalOther] = steps[steps.length - 1].ratio;
   const listRef = useRef(null);
   const [offset, setOffset] = useState(0);
@@ -29,12 +29,12 @@ export default function AdjustmentSteps({ steps, header, activeIndex = steps.len
 
   return (
     <div className="ar-factor-overview">
-      <FinalRatio mine={finalMine} other={finalOther} />
+      <FinalRatio mine={finalMine} other={finalOther} label={ratioLabel} confirmed={confirmed} />
       {/* 가감요소 구간: 상자 없이 제목 → 기본 기준 카드 | 조정 요인 카드 */}
       <div className="ar-factor-panel">
         <SectionHeader
           kicker={header?.kicker}
-          title={`왜 ${finalMine}:${finalOther}으로 분석됐나요?`}
+          title={title ?? `왜 ${finalMine}:${finalOther}으로 분석됐나요?`}
           desc={header?.desc}
         />
         <div className="ar-factor-steps">

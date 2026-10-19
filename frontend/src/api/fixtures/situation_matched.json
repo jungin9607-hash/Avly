@@ -1,0 +1,28 @@
+{
+ "summary": "도로 형태: 직선 도로. 내 차: 직진, 상대 차: 정지/대기. 상대 위치: 앞, 방향: 같은 방향.",
+ "road_shape": "직선 도로",
+ "my_action": "직진",
+ "other_action": "진로변경",
+ "contact": "충돌 정황 강함",
+ "needs_check": [],
+ "technical_notes": [
+  "A lane_change: 사고 전 근거 부족",
+  "B lane_change: 사고 전 근거 부족"
+ ],
+ "candidates": [
+  {
+   "accident_type_id": 11,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "차로변경(진로변경)",
+   "my_progress": "후행 직진",
+   "other_progress": "선행 진로변경",
+   "base_me": 30,
+   "base_other": 70,
+   "source": "matched",
+   "eligible": true,
+   "note": "조건부 예상 — 표시한 진행·역할을 가정한 CSV 기본값"
+  }
+ ],
+ "default_index": 0
+}

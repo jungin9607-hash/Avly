@@ -1,114 +1,55 @@
 import { useState } from "react";
 import ModalShell from "./ModalShell";
 
-const ITEMS = [
-  {
-    key: "analysis",
-    title: "교통사고 과실 산정을 위한 영상 수집 및 AI 영상 분석 처리 동의",
-    body: "블랙박스 프레임 분석, 차선 및 객체 추적, 손해보험협회 인정기준 및 판례 데이터셋 대조를 위한 일시적 영상 전송 및 비전 추론 처리에 동의합니다.",
-  },
-];
+// ⚠️ 동의 문구는 초안이다. 서비스에 올리기 전에 법무 검토로 확정하고, 바꾸면 api/config.js 의 CONSENT_VERSION 도 함께 바꾼다.
+//   - 영상 일부 장면(이미지)이 외부 AI 서비스로 전송된다는 사실을 밝혀야 한다 (국외 이전에 해당할 수 있음)
+//   - 자동으로 가리는 방식은 완전하지 않다는 점을 알려야 한다
+const ANALYSIS = {
+  title: "영상 분석과 외부 AI 서비스 이용 동의",
+  body: "올린 영상에서 번호판과 사람을 자동으로 가린 뒤, 그 영상의 일부 장면(이미지)을 외부 AI 서비스로 보내 사고 상황을 분석합니다. 자동으로 가리는 방식은 완전하지 않아서 일부가 가려지지 않을 수 있어요. 분석 결과는 손해보험협회 과실비율 인정기준과 판례 자료를 참고한 안내이며 법적 효력이 없습니다. 올린 원본 영상은 이용이 끝나면 삭제합니다.",
+};
+const RETENTION = {
+  title: "영상 저장과 서비스 개선 활용 동의",
+  body: "번호판과 사람을 가린 영상을 서비스에 저장하고, 분석 결과를 다시 확인하거나 서비스를 개선하고 새 기능을 만드는 데 활용하는 것에 동의합니다. 동의하지 않아도 분석은 이용할 수 있으며, 이 경우 영상은 이용이 끝나면 삭제됩니다.",
+};
 
 /* 1단계: 영상 수집 동의
- * 분석 동의는 필수: 동의해야 영상 분석을 시작할 수 있음 */
-export default function ConsentModal({ fileNames, onStart, onClose, onPickAnother }) {
-  const [agreed, setAgreed] = useState({ analysis: false });
-  const [blocked, setBlocked] = useState(false); // "분석 불가 사고" 시뮬레이션 화면
-  const [unsupported, setUnsupported] = useState(false);
-
-  const allAgreed = ITEMS.every((it) => agreed[it.key]);
-  const toggleAll = () => setAgreed(Object.fromEntries(ITEMS.map((it) => [it.key, !allAgreed])));
-
-  if (blocked) {
-    return (
-      <ModalShell
-        title="분석할 수 없는 사고 영상이에요"
-        desc="사고 장면이 충분히 담기지 않았거나 화면이 어두워 과실을 판단하기 어려워요. 영상 가이드를 확인한 뒤 다른 영상을 올려 주세요."
-        onClose={onClose}
-      >
-        <footer className="md-foot md-foot-row">
-          <button type="button" className="md-btn" onClick={onPickAnother}>
-            다른 영상 선택
-          </button>
-          <button type="button" className="md-btn-ghost" onClick={onClose}>
-            취소
-          </button>
-        </footer>
-      </ModalShell>
-    );
-  }
-
-  if (unsupported) {
-    return (
-      <ModalShell
-        title="지원하지 않는 영상 파일이에요"
-        desc="MP4, MOV, AVI 형식의 영상만 분석할 수 있어요. 지원되는 형식의 영상을 선택해 주세요."
-        onClose={onClose}
-      >
-        <footer className="md-foot md-foot-row">
-          <button type="button" className="md-btn" onClick={onPickAnother}>
-            다른 영상 선택
-          </button>
-          <button type="button" className="md-btn-ghost" onClick={onClose}>
-            취소
-          </button>
-        </footer>
-      </ModalShell>
-    );
-  }
+ * 분석 동의(필수)가 있어야 분석을 시작할 수 있고, 저장 동의(선택)는 하지 않아도 된다. */
+export default function ConsentModal({ fileName, onStart, onClose, onPickAnother }) {
+  const [analysis, setAnalysis] = useState(false);
+  const [retention, setRetention] = useState(false);
 
   return (
-    <ModalShell
-      title="블랙박스 영상 수집 동의"
-      progress={[1, 5]}
-      onClose={onClose}
-    >
+    <ModalShell title="블랙박스 영상 수집 동의" progress={[1, 4]} onClose={onClose}>
       <div className="md-body">
-        {fileNames.length > 0 && (
+        {fileName && (
           <p className="md-file">
             <IconVideo />
-            <span>{fileNames.length === 1 ? fileNames[0] : `${fileNames[0]} 외 ${fileNames.length - 1}개`}</span>
+            <span>{fileName}</span>
           </p>
         )}
 
-        <label className={allAgreed ? "md-all is-on" : "md-all"}>
-          <input type="checkbox" checked={allAgreed} onChange={toggleAll} />
-          <span className="md-check" aria-hidden="true" />
-          위 내용에 동의합니다 (필수)
-        </label>
-
-        <ul className="md-items">
-          {ITEMS.map((it) => (
-            <li key={it.key}>
-              <div className="md-item">
-                <span className="md-item-text">
-                  <span className="md-item-title">
-                    {it.title}
-                  </span>
-                  <span className="md-item-body">{it.body}</span>
-                </span>
-              </div>
-            </li>
-          ))}
+        <ul className="md-items md-consent-list">
+          <li>
+            <Consent checked={analysis} onChange={setAnalysis} required item={ANALYSIS} />
+          </li>
+          <li>
+            <Consent checked={retention} onChange={setRetention} item={RETENTION} />
+          </li>
         </ul>
       </div>
 
       <footer className="md-foot">
-        <button type="button" className="md-btn md-btn-wide" disabled={!allAgreed} onClick={() => onStart(agreed)}>
+        <button type="button" className="md-btn md-btn-wide" disabled={!analysis} onClick={() => onStart({ retention })}>
           동의하고 영상 분석 시작하기
           <span aria-hidden="true">→</span>
         </button>
-
-        <div className="md-sim">
-          <span className="md-sim-label">예외 상황 시뮬레이션:</span>
-          <button type="button" onClick={() => setUnsupported(true)}>
-            <IconAlert />
-            지원하지 않는 파일 테스트
+        <div className="md-foot-row md-foot-sub">
+          <button type="button" className="md-btn-ghost" onClick={onPickAnother}>
+            다른 영상 선택
           </button>
-          <i aria-hidden="true" />
-          <button type="button" onClick={() => setBlocked(true)}>
-            <IconCar />
-            분석 불가 사고 테스트
+          <button type="button" className="md-btn-ghost" onClick={onClose}>
+            취소
           </button>
         </div>
       </footer>
@@ -116,37 +57,25 @@ export default function ConsentModal({ fileNames, onStart, onClose, onPickAnothe
   );
 }
 
-const Svg = ({ children, size = 16 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.9"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    {children}
-  </svg>
-);
+function Consent({ checked, onChange, required = false, item }) {
+  return (
+    <label className={checked ? "md-all md-consent is-on" : "md-all md-consent"}>
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <span className="md-check" aria-hidden="true" />
+      <span className="md-item-text">
+        <span className="md-item-title">
+          <em>{required ? "필수" : "선택"}</em>
+          {item.title}
+        </span>
+        <span className="md-item-body">{item.body}</span>
+      </span>
+    </label>
+  );
+}
+
 const IconVideo = () => (
-  <Svg>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <rect x="3" y="6" width="13" height="12" rx="2" />
     <path d="m16 10 5-3v10l-5-3" />
-  </Svg>
-);
-const IconAlert = () => (
-  <Svg size={14}>
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 7.5v5M12 16h.01" />
-  </Svg>
-);
-const IconCar = () => (
-  <Svg size={14}>
-    <path d="M5 16V11l2-5h10l2 5v5" />
-    <path d="M3 16h18v3H3zM5 11h14" />
-    <path d="M7 19v2M17 19v2" />
-  </Svg>
+  </svg>
 );

@@ -1,0 +1,171 @@
+{
+ "accident_type_id": 11,
+ "role": "A",
+ "registered": true,
+ "questions": [
+  {
+   "key": "me.gross_negligence",
+   "factor": "gross_negligence",
+   "who": "내 차",
+   "group": "A_severity",
+   "title": "눈에 띄게 큰 부주의가 있었어요 (현저한 과실)",
+   "easy": "휴대전화를 보거나 졸음운전을 하는 등 일반적인 부주의보다 눈에 띄게 큰 잘못이 있는 경우예요. 영상만으로는 알기 어려워 직접 확인이 필요해요.",
+   "question": "내 차에게 휴대전화 사용이나 졸음운전처럼 눈에 띄게 큰 부주의가 있었나요?",
+   "effect": "내 차 과실 +10%p",
+   "delta_pp": 10,
+   "needs_user": true,
+   "requires_other_adjustment": false,
+   "options": [
+    "예",
+    "아니요",
+    "잘 모르겠어요"
+   ],
+   "suggested": null,
+   "reviewed": false
+  },
+  {
+   "key": "me.serious_negligence",
+   "factor": "serious_negligence",
+   "who": "내 차",
+   "group": "A_severity",
+   "title": "아주 큰 잘못이 있었어요 (중대한 과실)",
+   "easy": "음주운전, 무면허운전, 약물운전, 제한속도를 크게 넘긴 과속처럼 아주 큰 잘못이 있는 경우예요. 영상만으로는 알 수 없어 직접 확인이 필요해요.",
+   "question": "내 차가 음주, 무면허, 약물운전처럼 아주 큰 잘못을 했나요?",
+   "effect": "내 차 과실 +20%p",
+   "delta_pp": 20,
+   "needs_user": true,
+   "requires_other_adjustment": false,
+   "options": [
+    "예",
+    "아니요",
+    "잘 모르겠어요"
+   ],
+   "suggested": null,
+   "reviewed": false
+  },
+  {
+   "key": "other.signal_delay",
+   "factor": "signal_delay",
+   "who": "상대 차",
+   "group": "B_signal",
+   "title": "방향지시등을 켜지 않았거나 너무 늦게 켰어요",
+   "easy": "차선을 바꾸기 전에 방향지시등(깜빡이)을 미리 켜야 하는데, 켜지 않았거나 바꾸는 순간에야 켠 경우예요. 뒤차가 대비할 시간이 없어요.",
+   "question": "상대 차가 방향지시등을 켜지 않았거나, 차선을 바꾸는 순간에야 켰나요?",
+   "effect": "상대 차 과실 +10%p",
+   "delta_pp": 10,
+   "needs_user": false,
+   "requires_other_adjustment": false,
+   "options": [
+    "예",
+    "아니요",
+    "잘 모르겠어요"
+   ],
+   "suggested": {
+    "answer": "예",
+    "basis": "영상에서 관찰",
+    "evidence": "방향지시등이 켜지지 않은 장면"
+   },
+   "reviewed": false
+  },
+  {
+   "key": "other.prohibited_change",
+   "factor": "prohibited_change",
+   "who": "상대 차",
+   "group": "B_prohibited",
+   "title": "차선을 바꾸면 안 되는 곳에서 바꿨어요",
+   "easy": "실선 구간처럼 법으로 차선 변경이 금지된 곳에서 차선을 바꾼 경우예요.",
+   "question": "상대 차가 차선 변경이 금지된 곳(실선 등)에서 차선을 바꿨나요?",
+   "effect": "상대 차 과실 +20%p",
+   "delta_pp": 20,
+   "needs_user": false,
+   "requires_other_adjustment": false,
+   "options": [
+    "예",
+    "아니요",
+    "잘 모르겠어요"
+   ],
+   "suggested": null,
+   "reviewed": false
+  },
+  {
+   "key": "other.bus_lane_violation",
+   "factor": "bus_lane_violation",
+   "who": "상대 차",
+   "group": "B_bus",
+   "title": "버스전용차로 규정을 어겼어요",
+   "easy": "버스전용차로나 다인승전용차로를 이용할 수 없는 차가 그 차로로 들어가거나, 그 차로에서 차선을 바꾼 경우예요.",
+   "question": "상대 차가 버스·다인승전용차로 규정을 어겼나요?",
+   "effect": "상대 차 과실 +10%p",
+   "delta_pp": 10,
+   "needs_user": false,
+   "requires_other_adjustment": false,
+   "options": [
+    "예",
+    "아니요",
+    "잘 모르겠어요"
+   ],
+   "suggested": null,
+   "reviewed": false
+  },
+  {
+   "key": "other.passing_lane_change",
+   "factor": "passing_lane_change",
+   "who": "상대 차",
+   "group": "B_passing",
+   "title": "고속도로 추월차로로 차선을 바꿨어요",
+   "easy": "고속도로나 자동차전용도로에서 추월차로로 차선을 바꾼 경우예요. 추월차로에는 빠르게 달리는 차가 많아 더 조심해야 해요.",
+   "question": "상대 차가 고속도로·자동차전용도로에서 추월차로로 차선을 바꿨나요?",
+   "effect": "상대 차 과실 +10%p",
+   "delta_pp": 10,
+   "needs_user": false,
+   "requires_other_adjustment": false,
+   "options": [
+    "예",
+    "아니요",
+    "잘 모르겠어요"
+   ],
+   "suggested": null,
+   "reviewed": false
+  },
+  {
+   "key": "other.gross_negligence",
+   "factor": "gross_negligence",
+   "who": "상대 차",
+   "group": "B_severity",
+   "title": "눈에 띄게 큰 부주의가 있었어요 (현저한 과실)",
+   "easy": "휴대전화를 보거나 졸음운전을 하는 등 일반적인 부주의보다 눈에 띄게 큰 잘못이 있는 경우예요. 영상만으로는 알기 어려워 직접 확인이 필요해요.",
+   "question": "상대 차에게 휴대전화 사용이나 졸음운전처럼 눈에 띄게 큰 부주의가 있었나요?",
+   "effect": "상대 차 과실 +10%p",
+   "delta_pp": 10,
+   "needs_user": true,
+   "requires_other_adjustment": false,
+   "options": [
+    "예",
+    "아니요",
+    "잘 모르겠어요"
+   ],
+   "suggested": null,
+   "reviewed": false
+  },
+  {
+   "key": "other.serious_negligence",
+   "factor": "serious_negligence",
+   "who": "상대 차",
+   "group": "B_severity",
+   "title": "아주 큰 잘못이 있었어요 (중대한 과실)",
+   "easy": "음주운전, 무면허운전, 약물운전, 제한속도를 크게 넘긴 과속처럼 아주 큰 잘못이 있는 경우예요. 영상만으로는 알 수 없어 직접 확인이 필요해요.",
+   "question": "상대 차가 음주, 무면허, 약물운전처럼 아주 큰 잘못을 했나요?",
+   "effect": "상대 차 과실 +20%p",
+   "delta_pp": 20,
+   "needs_user": true,
+   "requires_other_adjustment": false,
+   "options": [
+    "예",
+    "아니요",
+    "잘 모르겠어요"
+   ],
+   "suggested": null,
+   "reviewed": false
+  }
+ ]
+}

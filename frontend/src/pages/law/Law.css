@@ -1405,3 +1405,29 @@
   backdrop-filter: none;
   text-shadow: 0 1px 4px var(--color-nav-text-shadow);
 }
+
+/* ---------- 판례가 없을 때, 비교 팝업의 안내 문장, 출처 링크 ---------- */
+.law-empty {
+  padding: 22px 24px;
+  border: 1px solid var(--law-line, rgba(255, 255, 255, 0.25));
+  border-radius: 6px;
+  line-height: 1.7;
+}
+.law-empty h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+.law-empty p {
+  margin: 0;
+  opacity: 0.85;
+}
+.law-modal-note {
+  margin: 0 0 14px;
+  opacity: 0.8;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.law-details-source a {
+  color: inherit;
+  text-decoration: underline;
+}

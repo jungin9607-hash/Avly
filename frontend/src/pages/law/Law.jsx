@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import TopNav from "../../components/common/TopNav";
 import useNavigationBackdrop from "../../components/common/useNavigationBackdrop";
 import CaseBasisNotice from "../../components/common/CaseBasisNotice";
@@ -7,17 +7,30 @@ import CaseList, { GuideCard } from "./components/CaseList";
 import SummaryAside, { SummaryCard } from "./components/SummaryAside";
 import StickyCompareBar from "./components/StickyCompareBar";
 import CompareModal from "./components/CompareModal";
-import { CASES } from "./lawCases";
-import { SECTION, SUMMARY, GUIDE, MY_ACCIDENT, STICKY_BAR } from "./lawContent";
+import AnalysisGate from "../../components/common/AnalysisGate";
+import { myAccidentPoints, toCaseCards } from "../../api/adapters";
+import { ROUTES } from "../../routes";
+import { EMPTY, SECTION, SUMMARY, GUIDE, STICKY_BAR } from "./lawContent";
 import "./Law.css";
 
-export default function Law() {
+// 유사 판례 화면. 서버가 이 사고 유형에 연결해 준 판례와 규칙 기반 비교를 보여 준다.
+export default function Law({ analysisId }) {
+  return (
+    <AnalysisGate analysisId={analysisId} active="유사 판례">
+      {({ analysis }) => <LawView result={analysis.result} analysisId={analysisId} />}
+    </AnalysisGate>
+  );
+}
+
+function LawView({ result, analysisId }) {
+  const cases = useMemo(() => toCaseCards(result.related_cases), [result]);
+  const myAccident = useMemo(() => ({ label: "내 사고", points: myAccidentPoints(result) }), [result]);
   const pageRef = useRef(null);
   useNavigationBackdrop(pageRef, ".law-band");
   // 처음 들어오면 선택된 판례 없음 → 카드를 눌러야 "비슷한 점" 박스가 나타남
   const [selectedId, setSelectedId] = useState(null);
   const [compareOpen, setCompareOpen] = useState(false);
-  const selectedCase = CASES.find((item) => item.id === selectedId) ?? null;
+  const selectedCase = cases.find((item) => item.id === selectedId) ?? null;
   const closeCompare = useCallback(() => setCompareOpen(false), []);
 
   // 다른 페이지에 갔다 와도 이전 스크롤 위치가 남지 않고 항상 맨 위(처음 화면)에서 시작
@@ -39,13 +52,19 @@ export default function Law() {
       <main className="law-main">
         <section className="law-band law-band-warm">
           <div className="law-band-inner">
-            <PageHeader section={SECTION} myAccident={MY_ACCIDENT} />
+            <PageHeader section={SECTION} myAccident={myAccident} />
             <div className="law-grid">
               {/* 왼쪽: 판례 카드 3개 + 바로 아래 활용 가이드 */}
               <div className="law-case-column">
+                {cases.length === 0 && (
+                  <section className="law-empty">
+                    <h3>{EMPTY.title}</h3>
+                    <p>{EMPTY.text}</p>
+                  </section>
+                )}
                 <CaseList
                   ref={listRef}
-                  cases={CASES}
+                  cases={cases}
                   selectedId={selectedId}
                   onToggle={toggleCase}
                   selectedExtra={summary}
@@ -64,6 +83,7 @@ export default function Law() {
               content={STICKY_BAR}
               caseItem={selectedCase}
               onOpen={openCompare}
+              resultTo={ROUTES.report(analysisId)}
             />
           </div>
         </section>

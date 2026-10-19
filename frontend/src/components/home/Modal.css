@@ -576,3 +576,202 @@ input:focus-visible + .md-radio {
     animation: none;
   }
 }
+
+/* ---------- 동의 ---------- */
+.md-consent {
+  align-items: flex-start;
+  font-size: var(--md-font-body);
+  font-weight: 400;
+}
+.md-consent .md-item-title {
+  font-weight: 700;
+}
+.md-consent-list li + li {
+  border-top: 0;
+  margin-top: 10px;
+}
+.md-foot-sub {
+  margin-top: 10px;
+  justify-content: center;
+}
+
+/* ---------- 진행 팝업 ---------- */
+.md-bar {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--md-mid);
+}
+.md-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--md-primary);
+  transition: width 0.2s ease;
+}
+.md-stages {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+.md-stages li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--muted);
+  font-size: var(--md-font-body);
+}
+.md-stages li span {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--md-mid);
+  font-size: var(--md-font-caption);
+  font-weight: 800;
+}
+.md-stages li.is-done {
+  color: var(--ink-2);
+}
+.md-stages li.is-done span {
+  background: var(--md-primary);
+  color: var(--color-white);
+}
+.md-stages li.is-active {
+  border-color: var(--md-primary);
+  background: var(--md-soft);
+  color: var(--ink);
+  font-weight: 700;
+}
+.md-stages li.is-active span {
+  background: var(--md-primary);
+  color: var(--color-white);
+}
+.md-hint {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: var(--md-font-caption);
+  line-height: 1.55;
+}
+
+/* ---------- 사고 상황 확인 ---------- */
+.md-note {
+  margin: 12px 0 0;
+  padding: 0 0 0 20px;
+  color: var(--ink-2);
+  font-size: var(--md-font-caption);
+  line-height: 1.6;
+}
+.md-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 0;
+}
+.md-chip {
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--color-white);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--md-font-caption);
+  cursor: pointer;
+}
+.md-chip:hover {
+  border-color: var(--md-primary);
+  color: var(--md-primary);
+}
+.md-fields {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0 0;
+}
+.md-field {
+  display: grid;
+  gap: 6px;
+}
+.md-field > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-2);
+  font-size: var(--md-font-caption);
+  font-weight: 700;
+}
+.md-field > span b {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--md-mid);
+  color: var(--md-navy);
+  font-size: 12px;
+}
+.md-select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  background: var(--color-white);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--md-font-body);
+}
+.md-select:focus-visible {
+  outline: 2px solid var(--md-primary);
+  outline-offset: 2px;
+}
+.md-select:disabled {
+  background: var(--md-soft);
+  color: var(--muted);
+}
+.md-base {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 4px;
+  background: var(--md-soft);
+  color: var(--ink-2);
+  font-size: var(--md-font-body);
+  line-height: 1.6;
+}
+.md-none {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  align-items: center;
+}
+
+/* ---------- 가감요소 질문 ---------- */
+.md-q-easy {
+  margin: 4px 0 4px;
+  color: var(--ink-2);
+  font-size: var(--md-font-caption);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+.md-q-effect {
+  margin: 0 0 6px;
+  color: var(--md-primary);
+  font-size: var(--md-font-caption);
+  font-weight: 700;
+}
+.md-suggest {
+  margin: 0 0 8px;
+  padding: 7px 10px;
+  border-radius: 4px;
+  background: var(--md-soft);
+  color: var(--md-navy);
+  font-size: var(--md-font-caption);
+  line-height: 1.5;
+}

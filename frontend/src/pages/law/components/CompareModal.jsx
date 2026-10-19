@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { COMPARE_REPORT } from "../lawCases";
+import { COMPARE_REPORT } from "../lawContent";
 
 // 선택한 판례와 내 사고의 공통점·차이점 정밀 대조 팝업
 export default function CompareModal({ caseItem, onClose }) {
@@ -38,7 +38,7 @@ export default function CompareModal({ caseItem, onClose }) {
         <header className="law-modal-header">
           <div>
             <p className="law-modal-kicker">
-              {caseItem.date} 판결 · 기준 과실 {caseItem.ratio}
+              {caseItem.date} 판결 · {caseItem.matchLabel}
             </p>
             <h2 id="law-modal-title">
               내 사고 <span className="law-modal-vs">vs</span> {caseItem.court} 판례 정밀 대조
@@ -60,6 +60,8 @@ export default function CompareModal({ caseItem, onClose }) {
             <path d="M6 6l12 12M18 6 6 18" />
           </svg>
         </button>
+
+        {caseItem.note && <p className="law-modal-note">{caseItem.note}</p>}
 
         <div className="law-modal-columns">
           <CompareColumn tone="common" title="공통점" items={common} />

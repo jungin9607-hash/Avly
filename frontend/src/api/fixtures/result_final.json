@@ -1,0 +1,300 @@
+{
+ "summary": "도로 형태: 직선 도로. 내 차: 직진, 상대 차: 정지/대기. 상대 위치: 앞, 방향: 같은 방향.",
+ "situation": {
+  "road_shape": "직선 도로",
+  "my_action": "직진",
+  "other_action": "진로변경",
+  "contact": "충돌 정황 강함"
+ },
+ "timeline": [
+  {
+   "kind": "A 움직임",
+   "actor": "me",
+   "start_sec": 2.33,
+   "end_sec": 5.73,
+   "description": "A(블랙박스 차량)가 이동한 것으로 추정됨.",
+   "certainty": "이동 추정",
+   "evidence_text": "노면 차선 및 가로등이 후방으로 이동하며 고정 배경에 따라 직선도로 주행 관찰(frame_000041, frame_000071)"
+  },
+  {
+   "kind": "B 확인 구간",
+   "actor": "other",
+   "start_sec": 2.33,
+   "end_sec": 6.93,
+   "description": "B로 선택된 상대 차량이 확인된 구간.",
+   "certainty": "구별됨",
+   "evidence_text": "흰색 또는 밝은색 SUV, 두 개의 리어램프 밝음 / 화면 이동: 뚜렷한 좌우 이동 미확인; 도로상 진행: 정지/대기"
+  },
+  {
+   "kind": "A 움직임",
+   "actor": "me",
+   "start_sec": 5.8,
+   "end_sec": 6.4,
+   "description": "A(블랙박스 차량)가 이동한 것으로 추정됨.",
+   "certainty": "이동 추정",
+   "evidence_text": "B와 근접 중 급격한 감속 또는 접촉, 차량 진동·흔들림 및 배경 변화(frame_000087, frame_000096)"
+  },
+  {
+   "kind": "접촉 근거 구간",
+   "actor": "both",
+   "start_sec": 5.87,
+   "end_sec": 6.47,
+   "description": "A와 상대 차량 사이에 충돌 정황이 강하게 관찰됨. 직접 접촉 확정과는 구분됨.",
+   "certainty": "충돌 정황 강함",
+   "evidence_text": "B 후면과의 매우 근접(프레임 연속), 충돌 순간 카메라 진동 및 B의 오른쪽 이탈 시작(frame_000089~frame_000097)"
+  }
+ ],
+ "impact": {
+  "sec": 6.4,
+  "contact": "충돌 정황 강함",
+  "confirmed": true
+ },
+ "related_cases": [
+  {
+   "case_id": "c1",
+   "court": "서울중앙지방법원",
+   "date": "2019-04-23",
+   "case_number": "2018나47693",
+   "title": null,
+   "summary": "방향지시등 없이 진로를 변경한 차량과 후행 차량의 충돌에서, 후행 차량의 경고·감속 미흡도 함께 고려한 사례.",
+   "comparison_limit": "이 영상의 방향지시등 유무와 경고·감속 가능성은 별도 확인이 필요합니다.",
+   "source_url": "https://accident.knia.or.kr/myaccident-content?chartNo=%EC%B0%A843-2&chartType=1",
+   "source_kind": "knia_chart",
+   "source_label": "손해보험협회 도표에 소개된 판례 요약",
+   "verified": true,
+   "relevance_status": "registered_chart_reference",
+   "comparison": {
+    "match_level": "same_type",
+    "match_label": "같은 사고 유형",
+    "common": [
+     "같은 사고 유형(직선 도로 · 차로변경(진로변경))을 설명하는 손해보험협회 도표에 소개된 판례예요."
+    ],
+    "differences": [
+     "이 영상의 방향지시등 유무와 경고·감속 가능성은 별도 확인이 필요합니다.",
+     "내 사고의 '직진' 상황은 이 판례 요약에서 확인되지 않아요.",
+     "내 사고의 '진로변경' 상황은 이 판례 요약에서 확인되지 않아요.",
+     "내 사고의 '차로변경' 상황은 이 판례 요약에서 확인되지 않아요."
+    ],
+    "note": "판례 요약문만 비교한 결과예요. 실제 사고와 같은 비율이 나온다는 뜻이 아니에요."
+   }
+  },
+  {
+   "case_id": "c2",
+   "court": "대법원",
+   "date": "2020-03-04",
+   "case_number": "2020다1111",
+   "title": "손해배상(자)",
+   "summary": "진로 변경 중 충돌한 사고의 과실을 따졌다.",
+   "comparison_limit": "검색 일치 조건: 진로변경; 별도 검토 필요",
+   "source_url": "https://www.law.go.kr/x",
+   "source_kind": "law_api",
+   "source_label": "법령정보 API의 판례",
+   "verified": false,
+   "relevance_status": "civil_traffic_context_reference",
+   "comparison": {
+    "match_level": "partial",
+    "match_label": "조건 일부 일치",
+    "common": [
+     "판결 본문에서 '진로변경' 조건이 확인돼요."
+    ],
+    "differences": [
+     "신호, 진행 방식, 접촉 위치가 실제 영상과 같은지는 별도 확인이 필요해요.",
+     "내 사고의 '직진' 상황은 이 판례 요약에서 확인되지 않아요.",
+     "내 사고의 '진로변경' 상황은 이 판례 요약에서 확인되지 않아요.",
+     "내 사고의 '차로변경' 상황은 이 판례 요약에서 확인되지 않아요."
+    ],
+    "note": "판례 요약문만 비교한 결과예요. 실제 사고와 같은 비율이 나온다는 뜻이 아니에요."
+   }
+  }
+ ],
+ "reference_candidates": [
+  {
+   "accident_type_id": 11,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "차로변경(진로변경)",
+   "my_progress": "후행 직진",
+   "other_progress": "선행 진로변경",
+   "base_me": 30,
+   "base_other": 70,
+   "source": "matched",
+   "eligible": true,
+   "note": "조건부 예상 — 표시한 진행·역할을 가정한 CSV 기본값"
+  }
+ ],
+ "notice": "※ 본 보고서는 법적 효력이 없는 AI 참고 자료입니다. 실제 과실비율이나 법적 책임을 확정하지 않습니다.",
+ "state": "final",
+ "accident_type": {
+  "accident_type_id": 11,
+  "role": "A",
+  "place": "직선 도로",
+  "feature": "차로변경(진로변경)",
+  "my_progress": "후행 직진",
+  "other_progress": "선행 진로변경"
+ },
+ "fault": {
+  "base": {
+   "me": 30,
+   "other": 70
+  },
+  "adjusted": {
+   "me": 20,
+   "other": 80
+  },
+  "final": {
+   "me": 20,
+   "other": 80
+  },
+  "bounds_applied": false
+ },
+ "steps": [
+  {
+   "kind": "base",
+   "title": "이런 사고의 기본 책임은 내 차 30% : 상대 차 70%예요.",
+   "easy": "직선 도로에서 내 차는 '후행 직진', 상대 차는 '선행 진로변경' 상황이에요.",
+   "effect": null,
+   "who": null,
+   "factor": null,
+   "delta_pp": null,
+   "me": 30,
+   "other": 70
+  },
+  {
+   "kind": "adjustment",
+   "title": "방향지시등을 켜지 않았거나 너무 늦게 켰어요",
+   "easy": "차선을 바꾸기 전에 방향지시등(깜빡이)을 미리 켜야 하는데, 켜지 않았거나 바꾸는 순간에야 켠 경우예요. 뒤차가 대비할 시간이 없어요.",
+   "effect": "상대 차 과실 +10%p",
+   "who": "상대 차",
+   "factor": "signal_delay",
+   "delta_pp": 10,
+   "me": 20,
+   "other": 80
+  }
+ ],
+ "adjustments": {
+  "registered": true,
+  "applied": [
+   {
+    "factor": "signal_delay",
+    "who": "상대 차",
+    "title": "방향지시등을 켜지 않았거나 너무 늦게 켰어요",
+    "easy": "차선을 바꾸기 전에 방향지시등(깜빡이)을 미리 켜야 하는데, 켜지 않았거나 바꾸는 순간에야 켠 경우예요. 뒤차가 대비할 시간이 없어요.",
+    "effect": "상대 차 과실 +10%p",
+    "delta_pp": 10,
+    "reviewed": false
+   }
+  ],
+  "not_applied": [
+   {
+    "factor": "gross_negligence",
+    "who": "내 차",
+    "title": "눈에 띄게 큰 부주의가 있었어요 (현저한 과실)",
+    "easy": "휴대전화를 보거나 졸음운전을 하는 등 일반적인 부주의보다 눈에 띄게 큰 잘못이 있는 경우예요. 영상만으로는 알기 어려워 직접 확인이 필요해요.",
+    "effect": "내 차 과실 +10%p",
+    "delta_pp": 10,
+    "reviewed": false,
+    "reason": "해당 요소 없음으로 확인"
+   },
+   {
+    "factor": "serious_negligence",
+    "who": "내 차",
+    "title": "아주 큰 잘못이 있었어요 (중대한 과실)",
+    "easy": "음주운전, 무면허운전, 약물운전, 제한속도를 크게 넘긴 과속처럼 아주 큰 잘못이 있는 경우예요. 영상만으로는 알 수 없어 직접 확인이 필요해요.",
+    "effect": "내 차 과실 +20%p",
+    "delta_pp": 20,
+    "reviewed": false,
+    "reason": "해당 요소 없음으로 확인"
+   },
+   {
+    "factor": "prohibited_change",
+    "who": "상대 차",
+    "title": "차선을 바꾸면 안 되는 곳에서 바꿨어요",
+    "easy": "실선 구간처럼 법으로 차선 변경이 금지된 곳에서 차선을 바꾼 경우예요.",
+    "effect": "상대 차 과실 +20%p",
+    "delta_pp": 20,
+    "reviewed": false,
+    "reason": "해당 요소 없음으로 확인"
+   },
+   {
+    "factor": "bus_lane_violation",
+    "who": "상대 차",
+    "title": "버스전용차로 규정을 어겼어요",
+    "easy": "버스전용차로나 다인승전용차로를 이용할 수 없는 차가 그 차로로 들어가거나, 그 차로에서 차선을 바꾼 경우예요.",
+    "effect": "상대 차 과실 +10%p",
+    "delta_pp": 10,
+    "reviewed": false,
+    "reason": "해당 요소 없음으로 확인"
+   },
+   {
+    "factor": "passing_lane_change",
+    "who": "상대 차",
+    "title": "고속도로 추월차로로 차선을 바꿨어요",
+    "easy": "고속도로나 자동차전용도로에서 추월차로로 차선을 바꾼 경우예요. 추월차로에는 빠르게 달리는 차가 많아 더 조심해야 해요.",
+    "effect": "상대 차 과실 +10%p",
+    "delta_pp": 10,
+    "reviewed": false,
+    "reason": "해당 요소 없음으로 확인"
+   },
+   {
+    "factor": "gross_negligence",
+    "who": "상대 차",
+    "title": "눈에 띄게 큰 부주의가 있었어요 (현저한 과실)",
+    "easy": "휴대전화를 보거나 졸음운전을 하는 등 일반적인 부주의보다 눈에 띄게 큰 잘못이 있는 경우예요. 영상만으로는 알기 어려워 직접 확인이 필요해요.",
+    "effect": "상대 차 과실 +10%p",
+    "delta_pp": 10,
+    "reviewed": false,
+    "reason": "해당 요소 없음으로 확인"
+   },
+   {
+    "factor": "serious_negligence",
+    "who": "상대 차",
+    "title": "아주 큰 잘못이 있었어요 (중대한 과실)",
+    "easy": "음주운전, 무면허운전, 약물운전, 제한속도를 크게 넘긴 과속처럼 아주 큰 잘못이 있는 경우예요. 영상만으로는 알 수 없어 직접 확인이 필요해요.",
+    "effect": "상대 차 과실 +20%p",
+    "delta_pp": 20,
+    "reviewed": false,
+    "reason": "해당 요소 없음으로 확인"
+   }
+  ],
+  "pending": []
+ },
+ "laws": [
+  {
+   "article": "14",
+   "label": "도로교통법 제14조",
+   "name": null,
+   "easy": null,
+   "missing": true,
+   "reviewed": false
+  },
+  {
+   "article": "19",
+   "label": "도로교통법 제19조",
+   "name": "도로교통법 제19조 (안전거리 확보 등)",
+   "easy": "진로를 바꾸려는 방향으로 오는 차의 정상적인 통행을 방해할 우려가 있으면 진로를 바꾸면 안 됩니다.",
+   "missing": false,
+   "reviewed": false
+  },
+  {
+   "article": "38",
+   "label": "도로교통법 제38조",
+   "name": "도로교통법 제38조 (차의 신호)",
+   "easy": "같은 방향으로 가면서 진로를 바꿀 때는 방향지시기 등으로 그 행위가 끝날 때까지 신호를 해야 합니다.",
+   "missing": false,
+   "reviewed": false
+  },
+  {
+   "article": "48",
+   "label": "도로교통법 제48조",
+   "name": "도로교통법 제48조 (안전운전 의무)",
+   "easy": "도로 상황에 맞게 조향·제동장치를 정확히 조작하고, 남에게 위험을 주는 속도나 방법으로 운전하면 안 됩니다.",
+   "missing": false,
+   "reviewed": false
+  }
+ ],
+ "explanation": {
+  "base": "이런 사고의 기본 책임은 내 차 30% : 상대 차 70%예요.",
+  "situation": "직선 도로에서 내 차는 '후행 직진', 상대 차는 '선행 진로변경' 상황이에요.",
+  "status": "등록된 가감요소를 모두 확인해서 계산한 예상 비율이에요."
+ }
+}

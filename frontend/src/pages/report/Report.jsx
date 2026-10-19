@@ -1,25 +1,36 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import TopNav from "../../components/common/TopNav";
+import AnalysisGate from "../../components/common/AnalysisGate";
 import useNavigationBackdrop from "../../components/common/useNavigationBackdrop";
+import { toReportModel } from "../../api/adapters";
+import { ROUTES } from "../../routes";
 import ReportNotice from "./ReportNotice";
 import AdjustmentSteps from "./AdjustmentSteps";
 import ReportHeader from "./ReportHeader";
 import ReportActions, { TimelineLink } from "./ReportActions";
-import {
-  REPORT_HEADER,
-  FACTOR_HEADER,
-  STEPS,
-  REPORT_ACTIONS,
-} from "./reportContent";
+import StatusNotice from "./StatusNotice";
+import { FACTOR_TITLE, RATIO_LABEL, REPORT_ACTIONS } from "./reportContent";
 import { useScrollStep } from "./useScrollStep";
 import "./Report.css";
 
-export default function Report() {
-  const [toast, setToast] = useState("");
+// 분석 결과 화면. 서버의 분석 결과를 불러와서 상태(확정, 일부만 반영, 기본값만, 확정 불가)에 맞게 보여 준다.
+export default function Report({ analysisId }) {
+  return (
+    <AnalysisGate analysisId={analysisId} active="분석 결과">
+      {({ analysis }) => <ReportView analysis={analysis} analysisId={analysisId} />}
+    </AnalysisGate>
+  );
+}
+
+function ReportView({ analysis, analysisId }) {
+  const model = useMemo(() => toReportModel(analysis.result, analysisId), [analysis, analysisId]);
+  return model.state === "unresolved" ? <UnresolvedView model={model} analysisId={analysisId} /> : <ResolvedView model={model} analysisId={analysisId} />;
+}
+
+/* ---------- 공통 틀: 메뉴, 배경, 너비 측정 ---------- */
+function ReportFrame({ children }) {
   const reportRef = useRef(null);
   useNavigationBackdrop(reportRef);
-  const resultRef = useRef(null);
-  const { step: activeStep, pinned, goToStep } = useScrollStep(resultRef, STEPS.length);
 
   useEffect(() => {
     const report = reportRef.current;
@@ -34,31 +45,42 @@ export default function Report() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 증거 구간이 화면 아래 40% 선 위로 올라오면 "사고 타임라인 바로가기"를 보여 줌 (위로 올라가면 다시 숨김)
-  const evidenceRef = useRef(null);
-  const [evidenceInView, setEvidenceInView] = useState(false);
+  return (
+    <div className="ar" ref={reportRef}>
+      <TopNav active="분석 결과" />
+      <main className="ar-main">{children}</main>
+    </div>
+  );
+}
+
+/* ---------- 결과 아래: 상태 안내 · 저장·공유 · 타임라인 바로가기 · 법적 고지 ---------- */
+function ActionsSection({ model, analysisId, summaryText, children }) {
+  const [toast, setToast] = useState("");
+  const sectionRef = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  // 이 구간이 화면 아래 40% 선 위로 올라오면 "사고 타임라인 바로가기"를 보여 줌 (위로 올라가면 다시 숨김)
   useEffect(() => {
-    const io = new IntersectionObserver(([entry]) => setEvidenceInView(entry.isIntersecting), {
-      rootMargin: "0px 0px -40% 0px",
-    });
-    io.observe(evidenceRef.current);
+    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { rootMargin: "0px 0px -40% 0px" });
+    io.observe(sectionRef.current);
     return () => io.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!toast) return;
+    if (!toast) return undefined;
     const id = setTimeout(() => setToast(""), 2200);
     return () => clearTimeout(id);
   }, [toast]);
 
+  // 결과 화면의 주소는 이 브라우저에서만 열리므로(세션), 링크 대신 결과 요약 글을 공유한다.
   const share = async () => {
-    const data = { title: "에블리 과실 분석 결과 · AV-24901", url: window.location.href };
+    const data = { title: "에블리 과실 분석 결과", text: summaryText };
     try {
       if (navigator.share) {
         await navigator.share(data);
       } else {
-        await navigator.clipboard.writeText(data.url);
-        setToast("결과 링크를 복사했어요");
+        await navigator.clipboard.writeText(`${data.title}\n${data.text}`);
+        setToast("결과 요약을 복사했어요");
       }
     } catch {
       // 사용자가 공유 창을 닫은 경우 등은 조용히 무시
@@ -66,48 +88,88 @@ export default function Report() {
   };
 
   return (
-    <div className="ar" ref={reportRef}>
-      {/* 메뉴 바는 유사 판례와 같은 기본 스타일 (색은 Report.css에서 맞춤) */}
-      <TopNav active="분석 결과" />
-
-      <main className="ar-main">
-        {/* 최종 과실 비율과 전체 조정 요인을 함께 표시 */}
-        {/* 넓은 화면: 안쪽(pin)이 화면에 고정된 채 아래 track 길이만큼 스크롤하면
-            기본 기준 → 조정 요인 → 최종 순으로 과실 비율이 바뀜 */}
-        <section
-          ref={resultRef}
-          className={`ar-section ar-report-page ar-result-page${pinned ? " is-pinned" : ""}`}
-          style={{ "--ar-step-count": STEPS.length }}
-        >
-          <div className="ar-result-pin">
-            <ReportHeader content={REPORT_HEADER} />
-            <AdjustmentSteps
-              steps={STEPS}
-              header={FACTOR_HEADER}
-              activeIndex={activeStep}
-              onSelectStep={goToStep}
-            />
+    <>
+      <section ref={sectionRef} className="ar-section ar-report-page ar-evidence-page">
+        <div className="ar-evidence-layout">
+          {children}
+          <StatusNotice text={model.statusText} pending={model.pending} />
+          <div className="ar-evidence-head">
+            <ReportActions content={REPORT_ACTIONS} onShare={share} />
           </div>
-          <div className="ar-result-track" aria-hidden="true" />
-        </section>
-
-        {/* 분석 결과 저장 · 공유 + 맨 아래 오른쪽 사고 타임라인 바로가기 */}
-        <section ref={evidenceRef} className="ar-section ar-report-page ar-evidence-page">
-          <div className="ar-evidence-layout">
-            <div className="ar-evidence-head">
-              <ReportActions content={REPORT_ACTIONS} onShare={share} />
-            </div>
-          </div>
-          {/* 창 오른쪽 아래 구석에 고정, 이 구간에 들어오면 나타남 */}
-          <TimelineLink content={REPORT_ACTIONS.timeline} visible={evidenceInView} />
-          <ReportNotice />
-        </section>
-
-      </main>
-
+        </div>
+        {/* 창 오른쪽 아래 구석에 고정, 이 구간에 들어오면 나타남 */}
+        <TimelineLink content={{ ...REPORT_ACTIONS.timeline, to: ROUTES.timeline(analysisId) }} visible={inView} />
+        <ReportNotice>{model.notice}</ReportNotice>
+      </section>
       <p className={toast ? "ar-toast is-on" : "ar-toast"} role="status">
         {toast}
       </p>
-    </div>
+    </>
+  );
+}
+
+/* ---------- 비율을 보여 줄 수 있는 결과 (확정, 일부만 반영, 기본값만) ---------- */
+function ResolvedView({ model, analysisId }) {
+  const resultRef = useRef(null);
+  const { step: activeStep, pinned, goToStep } = useScrollStep(resultRef, model.steps.length);
+  const shown = model.shown;
+  const summaryText = model.final
+    ? `AI 예상 과실 비율: 내 차 ${model.final.me}% : 상대 차 ${model.final.other}% (법적 효력이 없는 참고 자료예요)`
+    : `${RATIO_LABEL[model.state]}: 내 차 ${shown.me}% : 상대 차 ${shown.other}% (확정한 비율이 아니에요. 법적 효력이 없는 참고 자료예요)`;
+
+  return (
+    <ReportFrame>
+      {/* 넓은 화면: 안쪽(pin)이 화면에 고정된 채 아래 track 길이만큼 스크롤하면 기본 기준 → 조정 요인 → 최종 순으로 과실 비율이 바뀜 */}
+      <section
+        ref={resultRef}
+        className={`ar-section ar-report-page ar-result-page${pinned ? " is-pinned" : ""}`}
+        style={{ "--ar-step-count": model.steps.length }}
+      >
+        <div className="ar-result-pin">
+          <ReportHeader content={model.header} />
+          <AdjustmentSteps
+            steps={model.steps}
+            header={model.factorHeader}
+            ratioLabel={RATIO_LABEL[model.state]}
+            confirmed={model.state === "final"}
+            title={FACTOR_TITLE[model.state]}
+            activeIndex={activeStep}
+            onSelectStep={goToStep}
+          />
+        </div>
+        <div className="ar-result-track" aria-hidden="true" />
+      </section>
+      <ActionsSection model={model} analysisId={analysisId} summaryText={summaryText} />
+    </ReportFrame>
+  );
+}
+
+/* ---------- 맞는 사고 유형을 못 정한 결과: 비율 없이 상황 설명과 참고 후보만 ---------- */
+function UnresolvedView({ model, analysisId }) {
+  return (
+    <ReportFrame>
+      <section className="ar-section ar-report-page ar-unresolved-page">
+        <ReportHeader content={model.header} />
+        {model.candidates.length > 0 && (
+          <div className="ar-candidates">
+            <h2>가장 가까운 사고 유형 (참고용)</h2>
+            <ul>
+              {model.candidates.map((c) => (
+                <li key={`${c.accident_type_id}-${c.role}`}>
+                  <strong>
+                    {c.place} · {c.feature}
+                  </strong>
+                  <span>
+                    내 차 {c.my_progress} / 상대 차 {c.other_progress}
+                  </span>
+                  <small>이 유형의 기본 비율은 내 차 {c.base_me}% : 상대 차 {c.base_other}%예요. 영상에 적용된다고 확정한 값은 아니에요.</small>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+      <ActionsSection model={model} analysisId={analysisId} summaryText="사고 유형을 확정하지 못해 과실 비율을 안내하지 않았어요. 법적 효력이 없는 참고 자료예요." />
+    </ReportFrame>
   );
 }

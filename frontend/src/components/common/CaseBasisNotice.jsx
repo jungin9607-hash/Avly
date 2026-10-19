@@ -1,7 +1,7 @@
 import "./CaseBasisNotice.css";
 
 const DEFAULT_NOTICE =
-  "에블리는 대한민국 손해보험협회 과실비율 분쟁심의위원회 기본 인정기준과 법원 확정 판결 데이터셋에 기초하여 확률적 과실 분포를 제공합니다. 최종 법적 효력은 보험사 합의 또는 법원 판결에 따릅니다.";
+  "에블리는 손해보험협회 과실비율 인정기준과 판례 요약을 참고해 과실 비율을 안내하는 AI 참고 서비스예요. 확정한 비율이 아니며 법적 효력이 없고, 최종 판단은 보험사 합의나 법원 판결에 따릅니다.";
 
 export default function CaseBasisNotice({ children = DEFAULT_NOTICE, className = "" }) {
   return (
