@@ -61,3 +61,18 @@ class CompareTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ConceptMatchTests(unittest.TestCase):
+    def run_case(self, type_id, summary):
+        return compare.compare_case({"relevance_status": "civil_traffic_context_reference", "summary": summary, "comparison_limit": ""}, option(type_id))
+
+    def test_lane_change_synonyms_count_as_the_same_situation(self):
+        c = self.run_case(11, "선행 차량이 차선변경을 하다가 후행 직진 차량과 충돌했다.")
+        self.assertIn("'진로변경' 상황이 판례와 내 사고에 모두 있어요.", c["common"])
+        self.assertFalse([d for d in c["differences"] if "진로변경" in d or "차로변경" in d])
+
+    def test_no_signal_type_does_not_share_a_signal_situation(self):
+        c = self.run_case(21, "신호등이 있는 교차로에서 신호를 위반한 차량과 직진 차량이 충돌했다.")
+        self.assertNotIn("'신호' 상황이 판례와 내 사고에 모두 있어요.", c["common"])
+        self.assertIn("판례에는 '신호' 상황이 나오지만 내 사고 유형에는 없어요.", c["differences"])

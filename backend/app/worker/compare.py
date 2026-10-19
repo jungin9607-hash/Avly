@@ -12,9 +12,21 @@ MATCH_LABEL = {
 NOTE = "판례 요약문만 비교한 결과예요. 실제 사고와 같은 비율이 나온다는 뜻이 아니에요."
 MAX_ITEMS = 4
 
-# 판례 요약과 사고 유형 이름에서 서로 맞춰 볼 상황 단어
-KEYWORDS = ["후진", "전진", "출차", "직진", "좌회전", "우회전", "진로변경", "차로변경", "추돌", "정차", "주차",
-            "회전교차로", "교차로", "합류", "역주행", "중앙선", "추월", "급정지", "신호", "방향지시등"]
+# 판례 요약과 사고 유형 이름에서 서로 맞춰 볼 상황. (대표 이름, 같은 뜻으로 보는 표현들)
+CONCEPTS = [("후진", ["후진"]), ("전진", ["전진"]), ("출차", ["출차"]), ("직진", ["직진"]), ("좌회전", ["좌회전"]), ("우회전", ["우회전"]),
+            ("진로변경", ["진로변경", "차로변경", "차선변경"]), ("추돌", ["추돌"]), ("정차", ["정차"]), ("주차", ["주차"]),
+            ("회전교차로", ["회전교차로"]), ("교차로", ["교차로"]), ("합류", ["합류"]), ("역주행", ["역주행"]), ("중앙선", ["중앙선"]),
+            ("추월", ["추월"]), ("급정지", ["급정지"]), ("신호", ["신호"]), ("방향지시등", ["방향지시등"])]
+
+# 단어 안에 다른 뜻이 들어 있는 경우: 이 표현을 먼저 지우고 찾는다 ('회전교차로'는 '교차로'가 아니고, '신호등 없음'은 '신호'가 있다는 뜻이 아니다)
+_MASK = {"교차로": ["회전교차로"], "신호": ["신호등 없음", "신호등없음", "신호기 없음"]}
+
+
+def _has(text: str, concept: tuple[str, list[str]]) -> bool:
+    name, words = concept
+    for masked in _MASK.get(name, []):
+        text = text.replace(masked, "")
+    return any(word in text for word in words)
 
 
 def _dedupe(items: list[str]) -> list[str]:
@@ -40,8 +52,9 @@ def compare_case(case: dict, option: dict) -> dict:
         common += [f"판결 본문에서 '{c}' 조건이 확인돼요." for c in _matched_conditions(case.get("comparison_limit"))]
         if not common:
             common.append("교통사고 판결 본문에서 관련 조건이 확인된 판례예요.")
-    for word in KEYWORDS:
-        in_case, in_mine = word in summary, word in mine
+    for concept in CONCEPTS:
+        word = concept[0]
+        in_case, in_mine = _has(summary, concept), _has(mine, concept)
         if in_case and in_mine:
             common.append(f"'{word}' 상황이 판례와 내 사고에 모두 있어요.")
         elif in_case:
