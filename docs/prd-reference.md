@@ -173,7 +173,8 @@
 
 ## 11. 관련 문서
 
-- [API 명세 (구현 기준)](api.md), [v0.4 초안(보관)](archive/api-v0.4-draft.md), [v0.3(보관)](archive/api-v0.3.md)
-- [DB 설계 v0.4 제안](db/schema-v0.4-proposal.md), [스키마 초안](db/schema-v0.4-draft.sql)
+- [팀 검토 안내 (변경 내용과 검토할 것)](team-review.md)
+- [API 명세 (구현 기준)](api.md)
+- [DB 설계 배경](db/schema-v0.4-proposal.md), 실제 스키마는 `backend/migrations/`
 - [모델 패키지 설명](../backend/model/avly/README.md)
-- [프론트엔드 구조 안내](frontend-structure.md) (일부 내용이 현재 코드와 다름)
+- [프론트엔드 구조 안내](frontend-structure.md)
