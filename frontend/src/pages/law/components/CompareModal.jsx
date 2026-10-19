@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { COMPARE_REPORT } from "../lawContent";
+import { Quote } from "./CaseDetails";
 
 // 선택한 판례와 내 사고의 공통점·차이점 정밀 대조 팝업
 export default function CompareModal({ caseItem, onClose }) {
@@ -94,6 +95,7 @@ function CompareColumn({ tone, title, items }) {
             <p>
               <RichText parts={item.text} />
             </p>
+            <Quote text={item.quote} />
           </li>
         ))}
       </ul>

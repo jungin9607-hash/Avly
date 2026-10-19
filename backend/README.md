@@ -33,14 +33,35 @@ docker compose up --build
 | 상태 확인 | http://localhost:8000/health, /health/db |
 | 프론트 | http://localhost:5173 |
 
+## 데이터베이스: 공용 DB와 로컬 DB
+
+`backend/.env`의 `DATABASE_URL` 한 줄로 정합니다. `docker compose`도 이 값을 그대로 씁니다.
+
+| | 팀 공용 DB (Supabase) | 로컬 DB |
+| --- | --- | --- |
+| 주소 | `.env.example`의 주소에 `<비밀번호>`를 채운다 (비밀번호는 팀 채널) | `postgresql://postgres:avly@db:5432/avly` |
+| 데이터 | 팀원이 같이 본다: 판례 저장분, 판례 AI 비교 결과, 분석 결과 | 내 PC에만 쌓인다 |
+| 어울리는 일 | QA, 결과 공유, 평가 영상 결과 모으기 | 혼자 개발, **개인정보가 든 실제 영상**으로 시험 |
+| 스키마 | 이미 만들어져 있다. 자동으로 바꾸지 않는다 | 시작할 때 자동으로 만든다 |
+
+**여러 사람이 같은 DB를 써도 서로 방해하지 않게** 작업 대기열(`job`)에 이 PC의 이름표(`backend/uploads/.instance_id`)를 적습니다. worker는 자기 PC가 등록한 작업만 가져가고, 만료된 영상도 자기 PC 것만 정리합니다. (영상 파일은 각자의 PC에만 있기 때문입니다.) 새 칸이나 마이그레이션이 필요 없는 방식입니다.
+
+**마이그레이션(DB 구조 변경)** 은 공용 DB에서는 자동으로 적용하지 않습니다. 새 파일이 `migrations/`에 추가되면 한 사람이 팀에 알린 뒤 적용합니다.
+
+```bash
+docker compose exec backend python -m app.migrate           # 어느 DB에 연결되는지, 적용 안 된 파일이 무엇인지 보여 줌 (DB는 바뀌지 않음)
+docker compose exec backend python -m app.migrate --apply   # 대기 중인 파일을 적용
+```
+
 ## 환경변수 (`backend/.env`, 예시는 `.env.example`)
 
 | 이름 | 기본값 | 설명 |
 | --- | --- | --- |
-| `DATABASE_URL` | (필수) | PostgreSQL 주소. compose는 로컬 db로 덮어쓴다 (`DEV_DATABASE_URL`로 바꿀 수 있음) |
-| `AUTO_MIGRATE` | `false` | 시작할 때 `migrations/*.sql` 적용. **공용 DB 보호를 위해 기본은 끔.** compose의 로컬 db에서만 켠다 |
+| `DATABASE_URL` | (필수) | PostgreSQL 주소. compose도 이 값을 그대로 쓴다. 팀 공용 DB 또는 로컬 db(`postgresql://postgres:avly@db:5432/avly`) 중 고른다 |
+| `AUTO_MIGRATE` | (정하지 않음) | 시작할 때 `migrations/*.sql` 자동 적용. 정하지 않으면 **로컬 db(호스트 `db`)에서만 켜지고 공용 DB는 건드리지 않는다.** 공용 DB는 `python -m app.migrate`로 적용한다 |
 | `APP_SECRET` | 개발용 값 | 영상 서명 URL 비밀값. 운영에서는 반드시 바꾼다 |
 | `SESSION_TTL_HOURS` | `24` | 이 시간이 지나면 원본 영상을 삭제한다 |
+| `CASE_COMPARE` | `auto` | 판례 비교 방식. `auto`는 `ENGINE=avly`이고 `OPENAI_API_KEY`가 있으면 AI, 아니면 규칙. `ai`/`rule`로 고정할 수 있다 |
 | `UNSUPPORTED_RETENTION_HOURS` | `24` | 차대차가 아니라 분석하지 않은 영상(원본·비식별본)을 저장 동의와 상관없이 이 시간 뒤 삭제한다 |
 | `ENGINE` | `avly` | `fake`(키 없이 시험) / `replay`(저장 결과 재생) / `avly`(실제 분석) |
 | `REDACTION` | `yolo` | `yolo`(번호판·사람 탐지, 운영) / `dev_copy`(가리지 않고 복사만, **운영 금지**) |
@@ -84,8 +105,8 @@ backend/
     schemas.py, presenters.py, status.py, errors.py, deps.py
     routers/          accidents, analyses, catalog, media
     worker/           runner(작업 반복), engines(fake/replay/avly), finalize(결과 계산),
-                      cases·compare(판례 조회와 규칙 기반 비교), redaction, cleanup
-  migrations/         0001_initial.sql, 0002_job.sql (적용 기록: schema_migration 표)
+                      cases(판례 조회), compare(규칙 비교), ai_compare(AI 비교와 검증), redaction, cleanup
+  migrations/         0001_initial.sql, 0002_job.sql, 0003_case_ai.sql (적용 기록: schema_migration 표)
   plate/              번호판·사람 비식별화 (redact.py)
   model/avly/         분석 모델 패키지
   tests/              API, worker, 판례, 마이그레이션 테스트와 e2e_smoke.py

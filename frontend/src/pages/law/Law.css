@@ -1430,3 +1430,44 @@
   color: inherit;
   text-decoration: underline;
 }
+
+/* AI 가 정리한 판례 설명: 안내 문구, 판단 요지 목록, 판결문 인용 */
+.law-ai-badge {
+  margin: 0 0 4px;
+  color: var(--law-text);
+  opacity: 0.75;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.law-details-points {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.law-details-points p {
+  margin: 0;
+  color: var(--law-text);
+  font-size: 17px;
+  line-height: 1.7;
+}
+.law-details-law-easy {
+  opacity: 0.85;
+  font-size: 15.5px;
+}
+.law-quote {
+  margin: 6px 0 0;
+  padding-left: 10px;
+  border-left: 3px solid rgba(120, 140, 190, 0.45);
+  color: inherit;
+  opacity: 0.7;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.law-modal-col li p.law-quote {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: inherit;
+}

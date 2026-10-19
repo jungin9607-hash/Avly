@@ -182,11 +182,14 @@ POST /accidents (동의, session_id 받기)
 | `timeline[]` | 구간: `kind`, `actor`(`me`/`other`/`both`), `start_sec`, `end_sec`(**영상 시작 기준 초**), `description`, `certainty`, `evidence_text` |
 | `impact` | `{sec, contact, confirmed}`. **`confirmed`가 true일 때만** 충돌 시점을 기준으로 말한다 |
 | `related_cases[]` | 판례: `case_id`, `court`, `date`, `case_number`, `summary`, `comparison_limit`, `source_url`, `source_kind`, `source_label`, `verified`, `relevance_status`, `comparison` |
-| `related_cases[].comparison` | `match_level`(`same_type`/`partial`), `match_label`, `common[]`, `differences[]`, `note`. **퍼센트는 없다** |
+| `related_cases[].comparison` | `match_level`(`same_type`/`partial`), `match_label`, `source`(`ai`/`rule`), `common[]`, `differences[]`(문장만), `note`. `source`가 `ai`이면 `common_items[]`, `differences_items[]`(`label`, `text`, `quote` 판결문에서 가져온 구절)도 있다. **퍼센트는 없다** |
+| `related_cases[].digest` | AI가 판례 본문을 읽고 정리한 설명(`source`가 `ai`일 때만, 없으면 키가 없다): `overview`{`text`,`quote`}, `ruling_points[]`{`text`,`quote`}, `laws[]`(본문에 나온 도로교통법 조문과 쉬운 풀이). 모든 항목에 판결문 인용이 있다 |
 | `reference_candidates[]` | 분석 단계의 과실표 후보 (`unresolved`일 때 참고용으로 보여 준다) |
 | `notice` | 법적 효력이 없다는 고지 문구 |
 
 **판례 규칙:** 최대 3개를 보여 준다. 순서는 도표 등록 판례(`registered_chart_reference`) → 조건이 모두 맞는 API 판례 → 일부만 맞는 판례(`partial_reference`)이다. 일부 일치 판례는 `comparison_limit`에 몇 개 조건이 맞았는지 적고, 조건이 전혀 맞지 않는 판례로는 채우지 않으므로 3개보다 적거나 0개일 수 있다.
+
+**판례 비교 방식:** 판례 본문이 충분하면(법령 API로 가져온 판례) AI가 비교하고, 도표 등록 판례처럼 본문이 한 줄뿐이거나 AI를 쓸 수 없으면 규칙으로 비교한다(`comparison.source`로 구분). AI에는 글자만 보낸다(사고 상황 + 판례 본문, 이미지 없음). AI가 쓴 항목은 판결문 인용이 실제 본문에 있는지, 비율·승패 표현이 없는지 서버가 확인하고, 2차로 AI가 "인용이 주장을 뒷받침하는지" 다시 판정해 통과한 항목만 싣는다. 결과는 `case_ai` 표에 저장해 같은 입력에는 같은 설명을 쓴다. `CASE_COMPARE`(`auto`/`ai`/`rule`)로 고른다.
 
 **보여주지 않는 값:** 속도, G값, 감속, 차간거리, 방향지시등 확률, 충돌 시각의 확정, 판례 유사도 퍼센트는 서버가 만들지 않는다.
 

@@ -52,9 +52,17 @@ def _db_case(model_case: dict) -> tuple[dict, dict]:
     return case, link
 
 
+def source_text(row: dict) -> str:
+    """AI 비교에 쓰는 판례 본문: 판시사항, 판결요지, 판결 내용 앞부분. API 로 가져온 판례만 있고, 없으면 요약문이다."""
+    raw = row.get("raw") or {}
+    parts = [raw.get(k) for k in ("holding", "gist", "reasoning") if raw.get(k)]
+    return "\n".join(parts) if parts else (row.get("summary") or "")
+
+
 def view(row: dict) -> dict:
-    """DB 행을 화면용 판례로 바꾼다 (비교 내용은 결과를 만들 때 붙인다)."""
+    """DB 행을 화면용 판례로 바꾼다 (비교 내용은 결과를 만들 때 붙인다). `_text` 는 AI 비교용 본문이며 화면과 결과에는 싣지 않는다."""
     return {
+        "_text": source_text(row),
         "case_id": str(row["case_id"]), "court": row["court"],
         "date": row["decided_on"].isoformat() if row["decided_on"] else None,
         "case_number": row["case_number"], "title": row["title"], "summary": row["summary"],

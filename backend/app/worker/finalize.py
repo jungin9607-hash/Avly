@@ -1,4 +1,4 @@
-"""사용자가 확정한 사고 유형과 가감요소 답변으로 결과를 만든다. AI 를 호출하지 않는다.
+"""사용자가 확정한 사고 유형과 가감요소 답변으로 결과를 만든다. 이 모듈은 AI 를 호출하지 않는다 (판례 AI 비교는 ai_compare 가 미리 만들어 넘긴다).
 
 규칙 계산은 avly 의 evaluate_rule_input 을 그대로 쓰고, 설명 문장은 avly.explain 이 미리 써 둔 문장으로 조립한다.
 """
@@ -53,10 +53,19 @@ def _state(config_registered: bool, out: dict) -> str:
     return "base_only"   # 규칙표와 CSV 가 달라 가감을 적용하지 못한 경우
 
 
-def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict]) -> dict:
+def _with_comparison(case: dict, option: dict, ai: dict | None) -> dict:
+    """AI 비교가 있으면 그것을, 없으면 규칙 비교를 붙인다."""
+    if ai is None:
+        return {**case, "comparison": {**compare.compare_case(case, option), "source": "rule"}}
+    return {**case, "comparison": ai["comparison"], "digest": ai["digest"]}
+
+
+def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], comparisons: dict | None = None) -> dict:
     from avly.adjustments import evaluate_rule_input   # 무거운 모듈이라 worker 에서만 불러온다
 
     situation = snapshot["situation"]
+    comparisons = comparisons or {}
+    related_cases = [{k: v for k, v in c.items() if k != "_text"} for c in related_cases]   # AI 비교용 본문은 결과에 싣지 않는다
     common = {
         "summary": situation.get("summary"),
         "situation": {k: situation.get(k) for k in ("road_shape", "my_action", "other_action", "contact")},
@@ -74,7 +83,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict]) -> 
 
     row = catalog.get_row(type_id)
     option = catalog.orient(row, role)
-    common["related_cases"] = [{**c, "comparison": compare.compare_case(c, option)} for c in related_cases]
+    common["related_cases"] = [_with_comparison(c, option, comparisons.get(c.get("case_id"))) for c in related_cases]
     scenario = {
         "scenario_id": f"{type_id}:{role}:confirmed", "accident_type": type_id, "dashcam_table_role": role,
         "eligible_for_adjustment": True,   # 사용자가 유형과 역할을 확정했다

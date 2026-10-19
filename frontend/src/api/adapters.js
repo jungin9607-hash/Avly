@@ -80,7 +80,7 @@ export function toSteps(result) {
 
 const FACTOR_DESC = {
   final: (n) => (n > 0 ? `${n}가지 가감요소를 반영했어요. 어려운 법적 근거는 눌러서 볼 수 있어요.` : "반영할 가감요소가 없어서 기본 비율 그대로예요."),
-  partial: () => "확인한 가감요소만 반영했어요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요.",
+  partial: (n) => (n > 0 ? "확인한 가감요소만 반영했어요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요." : "적용된 가감요소가 없어서 기본 비율 그대로예요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요."),
   base_only: () => "이 사고 유형은 가감요소가 아직 등록되지 않아 기본 비율만 안내해요.",
 };
 
@@ -96,6 +96,7 @@ export function toReportModel(result, analysisId) {
       desc: result.summary ?? "블랙박스 영상을 분석해 산정한 과실 비율과 그 근거예요.",
       keywords: type ? [type.place, type.feature, `식별 코드 ${String(analysisId ?? "").slice(0, 8)}`] : [`식별 코드 ${String(analysisId ?? "").slice(0, 8)}`],
     },
+    appliedCount: applied,
     factorHeader: { kicker: "판단 근거", desc: (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) },
     statusText: result.explanation?.status ?? "",
     steps: state === "unresolved" ? [] : toSteps(result),
@@ -150,6 +151,21 @@ export function toMoments(result) {
 // ---------------------------------------------------------------- 유사 판례
 const SOURCE_LABEL = { knia_chart: "손해보험협회 도표 요약", law_api: "법령정보 API", manual: "직접 입력" };
 
+// 비교 항목: AI 가 만든 항목(제목·문장·판결문 인용)이 있으면 그것을, 없으면 규칙이 만든 문장을 "공통점 1" 같은 제목으로 보여 준다
+function toCompareItems(items, texts, prefix) {
+  if (items?.length) return items.map((i) => ({ label: i.label, text: [i.text], quote: i.quote ?? "" }));
+  return (texts ?? []).map((text, i) => ({ label: `${prefix} ${i + 1}`, text: [text], quote: "" }));
+}
+
+// AI 가 판례 본문을 읽고 정리한 설명. 없으면 null
+function toDigest(digest) {
+  if (!digest) return null;
+  const points = (digest.ruling_points ?? []).map((p) => ({ text: p.text, quote: p.quote }));
+  const laws = (digest.laws ?? []).map((l) => ({ label: l.label, name: l.name ?? "", easy: l.easy ?? "" }));
+  if (!digest.overview && points.length === 0 && laws.length === 0) return null;
+  return { overview: digest.overview ? { text: digest.overview.text, quote: digest.overview.quote } : null, points, laws };
+}
+
 // Law 화면 카드가 읽는 모양
 export function toCaseCards(relatedCases) {
   return (relatedCases ?? []).map((item, index) => ({
@@ -165,9 +181,11 @@ export function toCaseCards(relatedCases) {
     limit: item.comparison_limit ?? "",
     note: item.comparison?.note ?? "",
     factors: item.comparison?.common ?? [],
+    byAi: item.comparison?.source === "ai",
+    digest: toDigest(item.digest),
     comparison: {
-      common: (item.comparison?.common ?? []).map((text, i) => ({ label: `공통점 ${i + 1}`, text: [text] })),
-      differences: (item.comparison?.differences ?? []).map((text, i) => ({ label: `차이점 ${i + 1}`, text: [text] })),
+      common: toCompareItems(item.comparison?.common_items, item.comparison?.common, "공통점"),
+      differences: toCompareItems(item.comparison?.differences_items, item.comparison?.differences, "차이점"),
     },
   }));
 }
