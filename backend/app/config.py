@@ -32,6 +32,7 @@ class Settings:
     allowed_video_extensions: list[str]
     app_secret: str                 # 영상 서명 URL 에 쓰는 비밀값. 운영에서는 반드시 바꾼다.
     session_ttl_hours: int          # 이 시간이 지나면 원본 영상을 삭제한다 (accident.expires_at)
+    unsupported_retention_hours: int  # 차대차가 아니라 분석하지 않은 영상을 보관하는 시간 (저장 동의와 무관)
     media_url_ttl_seconds: int      # 영상 서명 URL 유효 시간
     auto_migrate: bool              # 시작할 때 migrations/*.sql 을 적용한다
     engine: str                     # fake | replay | avly  (worker 가 쓰는 분석 엔진)
@@ -58,6 +59,7 @@ def load_settings() -> Settings:
         allowed_video_extensions=[_extension(e) for e in _split(os.getenv("ALLOWED_VIDEO_EXTENSIONS", ".mp4,.mov,.avi"))],
         app_secret=os.getenv("APP_SECRET", "dev-only-secret-change-me"),
         session_ttl_hours=int(os.getenv("SESSION_TTL_HOURS", "24")),
+        unsupported_retention_hours=int(os.getenv("UNSUPPORTED_RETENTION_HOURS", "24")),
         media_url_ttl_seconds=int(os.getenv("MEDIA_URL_TTL_SECONDS", "600")),
         auto_migrate=os.getenv("AUTO_MIGRATE", "false").lower() in ("1", "true", "yes"),   # 공용 DB 를 실수로 바꾸지 않도록 기본은 끈다
         engine=os.getenv("ENGINE", "avly").lower(),

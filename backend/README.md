@@ -41,6 +41,7 @@ docker compose up --build
 | `AUTO_MIGRATE` | `false` | 시작할 때 `migrations/*.sql` 적용. **공용 DB 보호를 위해 기본은 끔.** compose의 로컬 db에서만 켠다 |
 | `APP_SECRET` | 개발용 값 | 영상 서명 URL 비밀값. 운영에서는 반드시 바꾼다 |
 | `SESSION_TTL_HOURS` | `24` | 이 시간이 지나면 원본 영상을 삭제한다 |
+| `UNSUPPORTED_RETENTION_HOURS` | `24` | 차대차가 아니라 분석하지 않은 영상(원본·비식별본)을 저장 동의와 상관없이 이 시간 뒤 삭제한다 |
 | `ENGINE` | `avly` | `fake`(키 없이 시험) / `replay`(저장 결과 재생) / `avly`(실제 분석) |
 | `REDACTION` | `yolo` | `yolo`(번호판·사람 탐지, 운영) / `dev_copy`(가리지 않고 복사만, **운영 금지**) |
 | `OPENAI_API_KEY` | | `ENGINE=avly`에 필요 |
@@ -90,7 +91,7 @@ backend/
   tests/              API, worker, 판례, 마이그레이션 테스트와 e2e_smoke.py
 ```
 
-DB 설계 배경은 [docs/db/schema-v0.4-proposal.md](../docs/db/schema-v0.4-proposal.md)입니다. 초안(`schema-v0.4-draft.sql`)이 `migrations/0001`이 되었고,
+DB 설계 배경은 [docs/db/schema-v0.4-proposal.md](../docs/db/schema-v0.4-proposal.md)입니다. 설계 초안이 `migrations/0001`이 되었고,
 작업 큐(`job` 표, `0002`)와 `finalize` 단계가 추가되었습니다.
 
 ## 아직 안 된 것

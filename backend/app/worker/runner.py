@@ -74,6 +74,8 @@ class Worker:
         except scope.UnsupportedAccident as exc:
             self.repo.update_analysis(analysis_id, status=st.UNSUPPORTED, stage=None, unsupported_reason=str(exc),
                                       finished_at=datetime.now(timezone.utc))
+            # 지원하지 않는 사고 영상은 저장 동의가 있어도 하루만 보관한다
+            self.repo.expire_accident_videos(accident["id"], settings.unsupported_retention_hours)
             return
         except scope.VideoTooLong as exc:
             self._fail(analysis_id, "VIDEO_TOO_LONG", str(exc))

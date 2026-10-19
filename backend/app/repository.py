@@ -119,6 +119,13 @@ class Repository:
         with self.engine.begin() as conn:
             conn.execute(text("UPDATE video SET deleted_at = now() WHERE id = :id"), {"id": video_id})
 
+    def expire_accident_videos(self, accident_id: UUID, hours: int) -> None:
+        """사고에 딸린 영상의 삭제 시각을 지금부터 hours 시간 뒤로 당긴다 (저장 동의와 상관없이)."""
+        with self.engine.begin() as conn:
+            conn.execute(text(
+                "UPDATE video SET expires_at = now() + make_interval(hours => :h) WHERE accident_id = :a AND deleted_at IS NULL"),
+                {"h": hours, "a": accident_id})
+
     def videos_to_delete(self, at: datetime | None = None) -> list[dict]:
         """만료 시각이 지났는데 아직 파일이 남아 있는 영상."""
         with self.engine.connect() as conn:

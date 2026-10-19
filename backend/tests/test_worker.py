@@ -99,6 +99,17 @@ class AnalyzeTests(WorkerTestCase):
         self.assertEqual((row["status"], row["unsupported_reason"]), (st.UNSUPPORTED, "차대보행자 사고는 지원하지 않습니다. 현재는 차대차 사고만 분석합니다."))
         self.assertEqual(self.repo.get_accident(accident["id"])["status"], "unsupported")
 
+    def test_unsupported_videos_expire_in_a_day_even_with_retention_consent(self):
+        accident, _, analysis = self.make_analysis(content="FAKE unsupported 차대보행자\n".encode(), retention=True)
+        self.worker(engine=FakeEngine(directory=FIXTURES)).run_once()
+        from datetime import datetime, timedelta, timezone
+        with self.engine.connect() as conn:
+            from sqlalchemy import text
+            rows = conn.execute(text("SELECT kind, expires_at FROM video WHERE accident_id = :a"), {"a": accident["id"]}).all()
+        self.assertEqual({r.kind for r in rows}, {"original", "masked"})
+        limit = datetime.now(timezone.utc) + timedelta(hours=24, minutes=1)
+        self.assertTrue(all(r.expires_at is not None and r.expires_at <= limit for r in rows), rows)
+
     def test_too_long_video_fails_with_a_clear_code(self):
         _, _, analysis = self.make_analysis(content=b"FAKE too_long 42.5\n")
         self.worker(engine=FakeEngine(directory=FIXTURES)).run_once()
