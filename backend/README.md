@@ -60,7 +60,7 @@ DB 테스트는 **실제 PostgreSQL**이 필요하고, 테스트마다 `public` 
 
 ```bash
 cd backend
-pip install -r requirements.txt -r requirements-dev.txt -r requirements-model.txt
+pip install -r requirements.txt -r requirements-worker.txt
 TEST_DATABASE_URL=postgresql://postgres:x@localhost:5432/postgres \
 PYTHONPATH=.:model python -m unittest discover -s tests -t . -v     # API, worker, 판례, 마이그레이션 등
 PYTHONPATH=.:model python -m unittest model.avly.test_explain       # 쉬운 말 설명

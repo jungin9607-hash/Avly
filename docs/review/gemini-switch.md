@@ -10,7 +10,7 @@
 | `backend/model/avly/video.py` `image_content()` | 이미지 입력 형식이 OpenAI 전용(`input_text`, `input_image`, `detail: high/low`). Gemini 형식으로 변환. `detail` 옵션은 없어서 해상도 조절 방식이 달라진다. | 작음 (함수 하나) |
 | `backend/model/avly/constants.py` | 모델 이름 `gpt-4.1`, `gpt-4.1-mini`를 Gemini 모델로 | 설정값 |
 | `backend/model/avly/config.py` | `OPENAI_API_KEY` 대신 `GEMINI_API_KEY` | 작음 |
-| `backend/requirements-model.txt` | `openai` 대신(또는 함께) `google-genai` | 작음 |
+| `backend/requirements-worker.txt` | `openai` 대신(또는 함께) `google-genai` | 작음 |
 | `backend/.env.example`, README | 키 이름, 안내 | 작음 |
 | `backend/app/worker/engines.py`, `runner.py` | `OPENAI_API_KEY` 문자열로 설정 오류를 판별하는 부분 | 작음 |
 | 동의 문구 | 외부 전송 대상을 OpenAI → Google로. 문구와 `CONSENT_VERSION` 변경 | 문구 |
