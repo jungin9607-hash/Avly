@@ -41,6 +41,7 @@ docker compose up --build
 | `AUTO_MIGRATE` | `false` | 시작할 때 `migrations/*.sql` 적용. **공용 DB 보호를 위해 기본은 끔.** compose의 로컬 db에서만 켠다 |
 | `APP_SECRET` | 개발용 값 | 영상 서명 URL 비밀값. 운영에서는 반드시 바꾼다 |
 | `SESSION_TTL_HOURS` | `24` | 이 시간이 지나면 원본 영상을 삭제한다 |
+| `CASE_COMPARE` | `auto` | 판례 비교 방식. `auto`는 `ENGINE=avly`이고 `OPENAI_API_KEY`가 있으면 AI, 아니면 규칙. `ai`/`rule`로 고정할 수 있다 |
 | `UNSUPPORTED_RETENTION_HOURS` | `24` | 차대차가 아니라 분석하지 않은 영상(원본·비식별본)을 저장 동의와 상관없이 이 시간 뒤 삭제한다 |
 | `ENGINE` | `avly` | `fake`(키 없이 시험) / `replay`(저장 결과 재생) / `avly`(실제 분석) |
 | `REDACTION` | `yolo` | `yolo`(번호판·사람 탐지, 운영) / `dev_copy`(가리지 않고 복사만, **운영 금지**) |
@@ -84,8 +85,8 @@ backend/
     schemas.py, presenters.py, status.py, errors.py, deps.py
     routers/          accidents, analyses, catalog, media
     worker/           runner(작업 반복), engines(fake/replay/avly), finalize(결과 계산),
-                      cases·compare(판례 조회와 규칙 기반 비교), redaction, cleanup
-  migrations/         0001_initial.sql, 0002_job.sql (적용 기록: schema_migration 표)
+                      cases(판례 조회), compare(규칙 비교), ai_compare(AI 비교와 검증), redaction, cleanup
+  migrations/         0001_initial.sql, 0002_job.sql, 0003_case_ai.sql (적용 기록: schema_migration 표)
   plate/              번호판·사람 비식별화 (redact.py)
   model/avly/         분석 모델 패키지
   tests/              API, worker, 판례, 마이그레이션 테스트와 e2e_smoke.py

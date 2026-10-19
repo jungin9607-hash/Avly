@@ -262,9 +262,22 @@ class Repository:
         with self.engine.connect() as conn:
             return _rows(conn.execute(text(
                 "SELECT c.id AS case_id, c.court, c.decided_on, c.case_number, c.title, c.summary, c.fault_ratio, c.source_kind,"
-                " c.source_url, c.verified, c.verified_at, l.relevance_status, l.comparison_limit"
+                " c.source_url, c.verified, c.verified_at, c.raw, l.relevance_status, l.comparison_limit"
                 " FROM case_accident_type l JOIN legal_case c ON c.id = l.case_id WHERE l.accident_type_id = :t"
                 " ORDER BY (l.relevance_status = 'partial_reference'), c.verified DESC, c.decided_on DESC NULLS LAST, c.case_number"), {"t": accident_type_id}))
+
+    def get_case_ai(self, cache_key: str) -> dict | None:
+        with self.engine.connect() as conn:
+            row = _one(conn.execute(text("SELECT payload FROM case_ai WHERE cache_key = :k"), {"k": cache_key}))
+        return row["payload"] if row else None
+
+    def put_case_ai(self, cache_key: str, case_id: UUID, model: str, prompt_version: str, payload: dict,
+                    input_tokens: int | None = None, output_tokens: int | None = None) -> None:
+        with self.engine.begin() as conn:
+            conn.execute(_q(
+                "INSERT INTO case_ai (cache_key, case_id, model, prompt_version, payload, input_tokens, output_tokens)"
+                " VALUES (:k, :c, :m, :p, :payload, :i, :o) ON CONFLICT (cache_key) DO NOTHING", "payload"),
+                {"k": cache_key, "c": case_id, "m": model, "p": prompt_version, "payload": payload, "i": input_tokens, "o": output_tokens})
 
     def get_case_lookup(self, accident_type_id: int) -> dict | None:
         with self.engine.connect() as conn:

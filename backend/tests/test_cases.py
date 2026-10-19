@@ -131,8 +131,9 @@ class CaseServiceTests(DbTestCase):
         s = self.service()
         s.seed_registered()
         v = s.related_for(126)[0]
-        self.assertEqual(set(v), {"case_id", "court", "date", "case_number", "title", "summary", "comparison_limit", "source_url",
-                                  "source_kind", "source_label", "verified", "relevance_status"})
+        self.assertEqual(set(v), {"_text", "case_id", "court", "date", "case_number", "title", "summary", "comparison_limit",
+                                  "source_url", "source_kind", "source_label", "verified", "relevance_status"})
+        self.assertTrue(v["_text"])   # AI 비교용 본문. 결과를 만들 때 빠진다 (등록 판례는 요약문)
         self.assertEqual(v["source_label"], "손해보험협회 도표에 소개된 판례 요약")
 
 

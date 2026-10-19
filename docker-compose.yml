@@ -50,6 +50,7 @@ services:
       AUTO_MIGRATE: ${AUTO_MIGRATE:-true}
       ENGINE: ${ENGINE:-fake}
       REDACTION: ${REDACTION:-dev_copy}
+      CASE_COMPARE: ${CASE_COMPARE:-auto}   # 판례 비교: auto(실제 엔진 + OpenAI 키가 있으면 AI) | ai | rule
     depends_on:
       db:
         condition: service_healthy

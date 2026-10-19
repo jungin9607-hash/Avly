@@ -41,6 +41,7 @@ class Settings:
     fault_table_path: Path
     replay_dir: Path
     avly_max_attempts: int
+    case_compare: str               # auto | ai | rule  (판례 비교 방식. auto 는 실제 엔진과 OpenAI 키가 있으면 ai)
 
     @property
     def max_upload_size_bytes(self) -> int:
@@ -68,6 +69,7 @@ def load_settings() -> Settings:
         fault_table_path=Path(os.getenv("FAULT_TABLE_PATH", str(BASE_DIR / "model" / "avly" / "data" / "fault_table_car_to_car.csv"))),
         replay_dir=Path(os.getenv("REPLAY_DIR", str(BASE_DIR / "tests" / "fixtures"))),
         avly_max_attempts=int(os.getenv("JOB_MAX_ATTEMPTS", "2")),
+        case_compare=os.getenv("CASE_COMPARE", "auto").lower(),
     )
 
 

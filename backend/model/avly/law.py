@@ -281,7 +281,7 @@ def match_case_body_v219(body, profile):
     if not number or not court or (not date):
         return None
     identifier = law_text(body.get('판례정보일련번호') or body.get('판례일련번호'))
-    return {'court': court, 'date': date, 'case_number': number, 'summary': excerpt, 'comparison_limit': '검색 일치 조건: ' + (' / '.join(matched) or '교통사고') + '; 신호·진행·접촉 위치·위반 사정이 실제 영상과 같은지는 별도 검토가 필요하며 비율을 자동 적용하지 않음.', 'source': 'https://www.law.go.kr/DRF/lawService.do?' + urlencode({'target': 'prec', 'ID': identifier, 'type': 'JSON'}), 'source_kind': '국가법령정보 공동활용 판례 본문에서 발췌; 키워드 기반 참고 후보', 'matched_terms': matched, 'relevance_status': 'keyword_reference', 'case_api_id': identifier, 'score': len(matched) * 2 + sum((2 for name, words in profile['groups'] if any((w in primary for w in words))))}
+    return {'court': court, 'date': date, 'case_number': number, 'summary': excerpt, 'holding': case_plain(body.get('판시사항', ''))[:1500], 'gist': case_plain(body.get('판결요지', ''))[:2500], 'reasoning': full[:4000], 'comparison_limit': '검색 일치 조건: ' + (' / '.join(matched) or '교통사고') + '; 신호·진행·접촉 위치·위반 사정이 실제 영상과 같은지는 별도 검토가 필요하며 비율을 자동 적용하지 않음.', 'source': 'https://www.law.go.kr/DRF/lawService.do?' + urlencode({'target': 'prec', 'ID': identifier, 'type': 'JSON'}), 'source_kind': '국가법령정보 공동활용 판례 본문에서 발췌; 키워드 기반 참고 후보', 'matched_terms': matched, 'relevance_status': 'keyword_reference', 'case_api_id': identifier, 'score': len(matched) * 2 + sum((2 for name, words in profile['groups'] if any((w in primary for w in words))))}
 
 def case_search_queries(profile):
     """사고 조건 단어를 한꺼번에 담은 검색어를 먼저, 단어 하나짜리 검색어를 나중에 쓴다. (한 단어만 검색하면 형사 사건이 대부분이다)"""

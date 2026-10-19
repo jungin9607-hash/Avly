@@ -12,6 +12,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from app import catalog
 from app import status as st
 from app import storage
 from app.config import settings
@@ -32,11 +33,12 @@ class NoCases:
 
 
 class Worker:
-    def __init__(self, repo: Repository, engine, redaction, cases=None):
+    def __init__(self, repo: Repository, engine, redaction, cases=None, comparer=None):
         self.repo = repo
         self.engine = engine
         self.redaction = redaction
         self.cases = cases or NoCases()
+        self.comparer = comparer   # 판례 AI 비교. None 이면 규칙 비교만 쓴다
         self._last_maintenance = 0.0
 
     # ------------------------------------------------------------ 한 건 처리
@@ -117,7 +119,11 @@ class Worker:
         try:
             type_id = confirmed.get("accident_type_id")
             related = self.cases.related_for(type_id) if type_id is not None else []
-            result = finalize.build_result(analysis["scene"], confirmed, related)
+            comparisons = None
+            if self.comparer is not None and related:
+                option = catalog.orient(catalog.get_row(type_id), confirmed.get("role"))
+                comparisons = self.comparer.compare_all(related, option, confirmed.get("answers", {}))
+            result = finalize.build_result(analysis["scene"], confirmed, related, comparisons)
         except Exception:
             logger.exception("결과 계산 실패: %s", analysis_id)
             self._fail(analysis_id, "FINALIZE_FAILED", "결과를 계산하는 중 오류가 발생했습니다. 다시 시도해 주세요.")

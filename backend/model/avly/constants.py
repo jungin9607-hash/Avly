@@ -11,6 +11,8 @@ VISION_MODEL = setting('AVLY_VISION_MODEL', 'gpt-4.1')
 
 MATCH_MODEL = setting('AVLY_MATCH_MODEL', 'gpt-4.1-mini')
 
+COMPARE_MODEL = setting('AVLY_COMPARE_MODEL', 'gpt-4.1-mini')   # 판례와 내 사고 비교 (텍스트만 보낸다)
+
 STEP_SECONDS = setting('AVLY_STEP_SECONDS', 1 / 3)
 
 OVERVIEW_MAX_IMAGES = setting('AVLY_OVERVIEW_MAX_IMAGES', 80)
