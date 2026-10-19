@@ -1,5 +1,4 @@
-# 모델(영상 분석)과 번호판·사람 비식별화에 필요한 패키지.
-# 서버 기본 requirements.txt 와 분리했다. ultralytics 가 PyTorch 를 함께 설치해 용량이 크다.
+# 분석(avly)과 비식별화 worker 에 필요한 패키지. 서버(api)의 requirements.txt 와 분리했다.
 #
 # ⚠️ 버전을 고정하지 않았다. 개발 PC 에서 설치하고 실행해 본 뒤 고정할 것.
 # 시스템 패키지로 ffmpeg 도 필요하다 (비식별 영상을 브라우저에서 재생되는 H.264 로 변환):
@@ -10,5 +9,3 @@ pydantic
 requests
 python-dotenv
 openai            # GPT 호출. Gemini 로 바꾸면 google-genai 로 교체한다.
-ultralytics       # 번호판·사람 탐지 (PyTorch 포함)
-huggingface_hub   # 번호판 탐지 모델 내려받기

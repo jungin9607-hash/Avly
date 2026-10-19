@@ -24,6 +24,11 @@ ANSWER_OPTIONS = list(ANSWER_TO_VALUE)
 WHO_KEY = {"내 차": "me", "상대 차": "other"}
 
 
+def _progress(name: str) -> str:
+    """CSV 의 오탈자('출자')를 모델(avly)과 같은 방식으로 고친다. 가감요소 규칙표가 고친 이름을 기준으로 쓰기 때문이다."""
+    return name.replace("출자", "출차") if "주차구역" in name else name
+
+
 @dataclass(frozen=True)
 class Row:
     id: int
@@ -47,8 +52,8 @@ def rows() -> dict[int, Row]:
                 place_code=int(r["accident_place"]),
                 place=r["accident_place_name"],
                 feature=r["accident_place_feature_name"],
-                a_progress=r["vehicle_a_progress_info_name"],
-                b_progress=r["vehicle_b_progress_info_name"],
+                a_progress=_progress(r["vehicle_a_progress_info_name"]),
+                b_progress=_progress(r["vehicle_b_progress_info_name"]),
                 negligence_a=int(r["negligence_a"]),
                 negligence_b=int(r["negligence_b"]),
                 note=r.get("extraction_note", ""),
