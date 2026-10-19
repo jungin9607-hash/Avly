@@ -1,7 +1,6 @@
--- Avly v0.4 PostgreSQL schema (초안)
+-- Avly v0.4 PostgreSQL schema
 --
--- v0.3 (schema.sql) 에서 바뀐 점은 schema-v0.4-proposal.md 에 이유와 함께 정리했다.
--- 기존 schema.sql 은 그대로 두었다. 팀이 합의하면 이 파일로 교체한다.
+-- 기존 v0.3 스키마에서 바뀐 이유는 docs/db/schema-v0.4-proposal.md 에 정리했다.
 --
 -- 전제
 --  * 서비스 범위: 차대차 사고만 지원한다. 그 외(보행자, 이륜차, 자전거)는 status = 'unsupported'.
