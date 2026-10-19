@@ -150,6 +150,21 @@ export function toMoments(result) {
 // ---------------------------------------------------------------- 유사 판례
 const SOURCE_LABEL = { knia_chart: "손해보험협회 도표 요약", law_api: "법령정보 API", manual: "직접 입력" };
 
+// 비교 항목: AI 가 만든 항목(제목·문장·판결문 인용)이 있으면 그것을, 없으면 규칙이 만든 문장을 "공통점 1" 같은 제목으로 보여 준다
+function toCompareItems(items, texts, prefix) {
+  if (items?.length) return items.map((i) => ({ label: i.label, text: [i.text], quote: i.quote ?? "" }));
+  return (texts ?? []).map((text, i) => ({ label: `${prefix} ${i + 1}`, text: [text], quote: "" }));
+}
+
+// AI 가 판례 본문을 읽고 정리한 설명. 없으면 null
+function toDigest(digest) {
+  if (!digest) return null;
+  const points = (digest.ruling_points ?? []).map((p) => ({ text: p.text, quote: p.quote }));
+  const laws = (digest.laws ?? []).map((l) => ({ label: l.label, name: l.name ?? "", easy: l.easy ?? "" }));
+  if (!digest.overview && points.length === 0 && laws.length === 0) return null;
+  return { overview: digest.overview ? { text: digest.overview.text, quote: digest.overview.quote } : null, points, laws };
+}
+
 // Law 화면 카드가 읽는 모양
 export function toCaseCards(relatedCases) {
   return (relatedCases ?? []).map((item, index) => ({
@@ -165,9 +180,11 @@ export function toCaseCards(relatedCases) {
     limit: item.comparison_limit ?? "",
     note: item.comparison?.note ?? "",
     factors: item.comparison?.common ?? [],
+    byAi: item.comparison?.source === "ai",
+    digest: toDigest(item.digest),
     comparison: {
-      common: (item.comparison?.common ?? []).map((text, i) => ({ label: `공통점 ${i + 1}`, text: [text] })),
-      differences: (item.comparison?.differences ?? []).map((text, i) => ({ label: `차이점 ${i + 1}`, text: [text] })),
+      common: toCompareItems(item.comparison?.common_items, item.comparison?.common, "공통점"),
+      differences: toCompareItems(item.comparison?.differences_items, item.comparison?.differences, "차이점"),
     },
   }));
 }

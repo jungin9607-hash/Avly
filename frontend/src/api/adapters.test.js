@@ -162,6 +162,32 @@ test("판례 카드: 퍼센트 없이 단계와 공통점·차이점을 보여 �
   for (const card of cards) assert.ok(!JSON.stringify({ ...card, sourceUrl: null }).includes("%"), "유사도 퍼센트를 만들지 않는다"); // 주소의 %EC 같은 인코딩은 제외
 });
 
+test("판례 카드: AI 비교는 제목·판결문 인용·판례 설명을 함께 보여 준다", () => {
+  const [card] = toCaseCards([{
+    case_id: "c1", court: "서울중앙지방법원", case_number: "2022나1", summary: "요약", source_kind: "law_api",
+    comparison: {
+      source: "ai", match_label: "조건 일부 일치", note: "AI가 비교했어요.", common: ["문장 하나"], differences: ["차이 하나"],
+      common_items: [{ label: "방향지시등", text: "신호 없이 차로를 바꿨어요.", quote: "방향지시등을 켜지 않은 채" }],
+      differences_items: [{ label: "내 사고만", text: "판례 본문에서는 확인되지 않아요.", quote: "" }],
+    },
+    digest: { overview: { text: "개요예요.", quote: "인용 구절" }, ruling_points: [{ text: "판단이에요.", quote: "판단 구절" }],
+              laws: [{ label: "도로교통법 제19조", name: "도로교통법 제19조 (안전거리 확보 등)", easy: "쉬운 풀이" }] },
+  }]);
+  assert.equal(card.byAi, true);
+  assert.deepEqual(card.comparison.common[0], { label: "방향지시등", text: ["신호 없이 차로를 바꿨어요."], quote: "방향지시등을 켜지 않은 채" });
+  assert.equal(card.comparison.differences[0].quote, "");
+  assert.equal(card.digest.overview.quote, "인용 구절");
+  assert.equal(card.digest.points.length, 1);
+  assert.equal(card.digest.laws[0].easy, "쉬운 풀이");
+});
+
+test("판례 카드: 규칙 비교는 공통점 1, 차이점 1 제목을 쓰고 판례 설명은 없다", () => {
+  const [card] = toCaseCards([{ case_id: "c1", court: "법원", case_number: "1", comparison: { source: "rule", common: ["a"], differences: ["b", "c"] } }]);
+  assert.equal(card.byAi, false);
+  assert.equal(card.digest, null);
+  assert.deepEqual(card.comparison.differences.map((d) => d.label), ["차이점 1", "차이점 2"]);
+});
+
 test("판례가 하나도 없어도 빈 목록", () => {
   assert.deepEqual(toCaseCards([]), []);
   assert.deepEqual(toCaseCards(undefined), []);
