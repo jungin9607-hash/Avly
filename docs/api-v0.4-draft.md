@@ -157,7 +157,7 @@ queued → processing → awaiting_confirmation → completed
 
 | `stage.index` | `label` | 내용 |
 | --- | --- | --- |
-| 1 | 번호판 비식별화 | `plate_masking` (영상 전체를 한 장씩 처리하므로 시간이 걸림) |
+| 1 | 번호판·사람 비식별화 | `plate_masking` (번호판은 검은 박스, 사람은 블러. 영상 전체를 한 장씩 처리하고 탐지 모델이 두 개라 시간이 걸림) |
 | 2 | 전체 흐름 분석 | 모델의 `1/3 전체 흐름 분석`. 끝나면 사고 대상(차대차 여부)을 확인함 |
 | 3 | 사고 전후 상세 확인 | 모델의 `2/3 사고 전후 상세 확인` (필요할 때만 실행됨. 건너뛰면 3을 지나 4로 감) |
 | 4 | 과실 유형 비교 | 모델의 `3/3 CSV 연결·과실 시나리오` |
@@ -310,7 +310,12 @@ queued → processing → awaiting_confirmation → completed
       "comparison_limit": "후진 출차 사례이며 현재 영상과 같은 비율을 적용하지 않음",
       "source_url": "https://…",
       "source_kind": "손해보험협회 도표의 판례 요약; 판결문 원문 조회 아님",
-      "relevance_status": "registered_chart_reference"
+      "relevance_status": "registered_chart_reference",
+      "comparison": {
+        "match_level": "same_type",
+        "common": ["같은 사고 유형(주차장, 통로 직진과 출차)의 도표에 소개된 판례입니다."],
+        "differences": ["후진 출차 사례이며, 현재 영상의 출차 방향은 확인되지 않았습니다."]
+      }
     }
   ],
   "report_text": "에블리 | 사고 분석 보고서 …",
@@ -383,3 +388,4 @@ queued → processing → awaiting_confirmation → completed
 8. **사고 대상 판단이 틀렸을 때.** 모델이 차대차를 보행자로 잘못 판단하면 정상 사고를 거부하게 됩니다. 그래서 불확실하면 계속 진행하도록 했지만, 사용자가 "아니요, 차대차예요"로 다시 시도할 수 있게 할지 정해야 합니다.
 9. **`session_id`를 어떻게 보낼지.** 헤더(`X-Session-Id`)로 보낼지, 쿠키로 보낼지. 쿠키는 공유 링크와 CORS 설정을 함께 정해야 합니다.
 10. **영상 길이 확인 시점.** 지금은 분석 시작 때 확인하므로 사용자가 올린 뒤에야 알게 됩니다. 업로드 직후(번호판 처리 전)나 프론트에서 재생 메타데이터로 미리 막을지 정해야 합니다.
+11. **판례 공통점·차이점은 규칙 기반으로 만듭니다(결정됨).** AI를 쓰지 않고, 사용자가 확정한 유형·장소·A/B 과정과 판례의 등록 유형·본문 일치 조건을 비교합니다. `match_level`은 퍼센트가 아니라 `same_type`(같은 유형)·`partial`(조건 일부 일치) 같은 단계 값입니다. 더 필요해지면 그때 바꿉니다.

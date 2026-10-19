@@ -60,9 +60,11 @@ CREATE TABLE video
     width                 INTEGER          NULL,
     height                INTEGER          NULL,
     thumbnail_key         TEXT             NULL,
-    plate_frames_total    INTEGER          NULL,     -- 비식별 처리 통계 (masked 에만)
+    redact_frames_total   INTEGER          NULL,     -- 비식별 처리 통계 (masked 에만)
     plate_frames_detected INTEGER          NULL,
     plate_detections      INTEGER          NULL,
+    person_frames_detected INTEGER         NULL,
+    person_detections     INTEGER          NULL,
     expires_at            TIMESTAMPTZ      NULL,     -- 원본은 세션 만료 시 삭제
     deleted_at            TIMESTAMPTZ      NULL,
     created_at            TIMESTAMPTZ      DEFAULT now() NOT NULL,
@@ -80,9 +82,11 @@ COMMENT ON COLUMN video.kind                  IS 'original(원본) / masked(번�
 COMMENT ON COLUMN video.source_video_id       IS 'masked 영상의 원본 video.id';
 COMMENT ON COLUMN video.storage_key           IS '객체 저장소 키 (만료되는 것은 키가 아니라 서명 URL)';
 COMMENT ON COLUMN video.sha256                IS '파일 해시. 같은 영상의 분석 캐시 키로 쓴다';
-COMMENT ON COLUMN video.plate_frames_total    IS '비식별 처리한 전체 프레임 수';
-COMMENT ON COLUMN video.plate_frames_detected IS '번호판이 탐지된 프레임 수';
+COMMENT ON COLUMN video.redact_frames_total   IS '비식별 처리한 전체 프레임 수';
+COMMENT ON COLUMN video.plate_frames_detected IS '번호판이 탐지된 프레임 수 (검은 박스로 가림)';
 COMMENT ON COLUMN video.plate_detections      IS '탐지된 번호판 총 개수';
+COMMENT ON COLUMN video.person_frames_detected IS '사람이 탐지된 프레임 수 (사람 전체를 블러)';
+COMMENT ON COLUMN video.person_detections     IS '탐지된 사람 총 수 (프레임별 합계)';
 COMMENT ON COLUMN video.expires_at            IS '삭제 예정 시각 (원본에만 설정)';
 COMMENT ON COLUMN video.deleted_at            IS '실제 삭제 시각. 행은 남기고 파일만 지운다';
 
