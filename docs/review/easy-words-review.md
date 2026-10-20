@@ -1,5 +1,7 @@
 # 쉬운 말 검수표
 
+> PDF에서 새로 들어온 가감요소 48개의 쉬운 말은 [pdf-adjustment-review.md](pdf-adjustment-review.md)에 따로 있습니다. 사고 유형 이름은 [accident-labels-review.md](accident-labels-review.md)입니다.
+
 사용자 화면에 나가는 가감요소 설명과 법령 풀이를 한눈에 보고 고치기 위한 표입니다. 이 파일은 `backend/model/avly/data/adjustment_explanations.json`에서 만들었습니다.
 
 ## 검수 방법

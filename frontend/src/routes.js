@@ -4,5 +4,6 @@ export const ROUTES = {
   report: (id) => `/analysis/${id}`,
   timeline: (id) => `/analysis/${id}/timeline`,
   law: (id) => `/analysis/${id}/law`,
+  document: (id) => `/analysis/${id}/report`, // 인쇄·PDF 저장용 보고서
   resume: (id) => `/upload?resume=${id}`,
 };

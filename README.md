@@ -151,3 +151,4 @@ docker compose down
 - 프론트 구조: [frontend/README.md](frontend/README.md), [docs/frontend-structure.md](docs/frontend-structure.md)
 - API 명세 (프론트 연동): [docs/api.md](docs/api.md)
 - 서비스 범위와 결정 사항 (PRD 참고): [docs/prd-reference.md](docs/prd-reference.md)
+- 날짜별 변경 정리: [docs/changes-2026-10-20.md](docs/changes-2026-10-20.md)

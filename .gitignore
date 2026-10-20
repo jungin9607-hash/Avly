@@ -37,3 +37,9 @@ backend/model/**/*.bak
 *.pth
 *.onnx
 *.safetensors
+
+# 팀원이 PDF 에서 뽑아 준 원본 자료 묶음(88MB 원문 JSON 포함). 저장소에 올리지 않는다. 합친 결과는 backend/model/avly/data 에 있다.
+backend/assets/
+
+# 정답 라벨 영상(50MB)과 정답 파일. 용량 때문에 저장소에 올리지 않는다. 평가는 tools/evaluate_labels.py
+backend/labels/

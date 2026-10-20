@@ -60,9 +60,11 @@ docker compose exec backend python -m app.migrate --apply   # 대기 중인 파�
 | `DATABASE_URL` | (필수) | PostgreSQL 주소. compose도 이 값을 그대로 쓴다. 팀 공용 DB 또는 로컬 db(`postgresql://postgres:avly@db:5432/avly`) 중 고른다 |
 | `AUTO_MIGRATE` | (정하지 않음) | 시작할 때 `migrations/*.sql` 자동 적용. 정하지 않으면 **로컬 db(호스트 `db`)에서만 켜지고 공용 DB는 건드리지 않는다.** 공용 DB는 `python -m app.migrate`로 적용한다 |
 | `APP_SECRET` | 개발용 값 | 영상 서명 URL 비밀값. 운영에서는 반드시 바꾼다 |
-| `SESSION_TTL_HOURS` | `24` | 이 시간이 지나면 원본 영상을 삭제한다 |
+| `SESSION_TTL_HOURS` | `2` | 세션 길이. 사고를 만든 때부터 이 시간이 지나면 사용자는 결과를 더 볼 수 없고(즉시 410), 원본 영상과 저장 동의 없는 비식별 영상, **저장 동의 없는 사용자의 분석 결과**를 삭제한다 |
+| `RETENTION_DAYS` | `90` | 영상 저장에 동의한 사용자의 비식별 영상과 분석 결과(AI 분석, 사용자가 확정한 값)를 보관하는 날 수. 세션이 끝난 뒤에는 화면에 보여 주지 않고 보관만 한다 |
 | `CASE_COMPARE` | `auto` | 판례 비교 방식. `auto`는 `ENGINE=avly`이고 `OPENAI_API_KEY`가 있으면 AI, 아니면 규칙. `ai`/`rule`로 고정할 수 있다 |
 | `UNSUPPORTED_RETENTION_HOURS` | `24` | 차대차가 아니라 분석하지 않은 영상(원본·비식별본)을 저장 동의와 상관없이 이 시간 뒤 삭제한다 |
+| `AVLY_REQUIRE_RULE_REVIEW` | `1` | `1`이면 사람이 확인한 가감요소 유형(`reviewed: true`)만 계산·질문에 쓴다. 개발에서 검수 전 유형도 전부 보려면 `0`. 현황은 `python -m app.review_status` |
 | `ENGINE` | `avly` | `fake`(키 없이 시험) / `replay`(저장 결과 재생) / `avly`(실제 분석) |
 | `REDACTION` | `yolo` | `yolo`(번호판·사람 탐지, 운영) / `dev_copy`(가리지 않고 복사만, **운영 금지**) |
 | `OPENAI_API_KEY` | | `ENGINE=avly`에 필요 |
@@ -117,6 +119,6 @@ DB 설계 배경은 [docs/db/schema-v0.4-proposal.md](../docs/db/schema-v0.4-pro
 
 ## 아직 안 된 것
 
-- 서버 PDF (`POST .../reports`는 501. PDF는 브라우저 인쇄)
+- 서버 PDF (`POST .../reports`는 501). PDF 저장은 결과 화면의 "보고서 보기·PDF 저장" → 보고서 화면(`/analysis/{id}/report`, A4 문서 형식)에서 브라우저 인쇄로 한다. 보기: [docs/review/report-sample.pdf](../docs/review/report-sample.pdf)(시험용 데이터)
 - 실제 OpenAI 분석, 판례·법령 API, worker 이미지의 실제 YOLO 모델은 키·영상이 없어 **end-to-end로 검증하지 못함**
-- 가감요소 등록은 133개 유형 중 7개
+- 가감요소는 133개 유형 중 122개를 등록했다(기존 7개 + PDF에서 뽑은 115개). 나머지 11개는 PDF와 CSV의 기본 비율·조건이 달라 일부러 뺐고, 새로 등록한 115개 유형의 규칙 888개는 **전부 사람 검수 전**이다. [docs/review/pdf-adjustment-review.md](../docs/review/pdf-adjustment-review.md)

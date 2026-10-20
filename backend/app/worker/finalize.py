@@ -70,6 +70,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
         "summary": situation.get("summary"),
         "situation": {k: situation.get(k) for k in ("road_shape", "my_action", "other_action", "contact")},
         "timeline": snapshot["timeline"],
+        "timeline_note": snapshot.get("timeline_note"),
         "impact": snapshot["impact"],
         "related_cases": related_cases,
         "reference_candidates": [c for c in situation.get("candidates", [])],
@@ -110,7 +111,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
     return {
         **common,
         "state": state,
-        "accident_type": {k: option[k] for k in ("accident_type_id", "role", "place", "feature", "my_progress", "other_progress")},
+        "accident_type": {k: option[k] for k in ("accident_type_id", "role", "place", "feature", "my_progress", "other_progress", "easy")},
         "fault": {"base": {"me": option["base_me"], "other": option["base_other"]}, "adjusted": _pair(out.get("adjusted_fault")),
                   "final": _pair(out.get("final_fault")), "bounds_applied": bool(out.get("bounds_applied"))},
         "steps": steps,

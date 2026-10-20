@@ -41,7 +41,8 @@ class RelatedCasesFillTests(unittest.TestCase):
         def detail(self, identifier):
             return self.bodies[int(identifier)]
 
-    ROW = {"accident_type": 107, "accident_place_name": "T자형 교차로", "accident_place_feature_name": "동일폭 도로",
+    ROW = {"accident_type": 130,   # 협회 도표 판례가 등록되지 않은 유형(등록된 유형은 검색 없이 등록 판례를 쓴다)
+            "accident_place_name": "T자형 교차로", "accident_place_feature_name": "동일폭 도로",
            "vehicle_a_progress_info_name": "왼쪽 도로에서 직진", "vehicle_b_progress_info_name": "오른쪽 도로에서 좌회전", "accident_object_name": "차대차"}
 
     def test_partial_cases_fill_up_to_three_best_first(self):

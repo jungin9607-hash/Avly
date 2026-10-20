@@ -60,6 +60,7 @@ POST /accidents (동의, session_id 받기)
 | GET | `/api/v1/catalog/accident-types` | 과실표 선택지 전체 (세션 불필요) | 200 |
 | POST | `/api/v1/accidents` | 사고 생성과 동의 기록, 세션 발급 | 201 |
 | GET | `/api/v1/accidents/{id}` | 사고 조회 | 200 |
+| DELETE | `/api/v1/accidents/{id}` | 결과 지우기: 분석 결과와 영상을 지금 삭제 | 204 |
 | POST | `/api/v1/accidents/{id}/videos` | 영상 업로드 (사고마다 하나) | 201 |
 | GET | `/api/v1/accidents/{id}/video-url` | 비식별 영상 재생 주소 | 200 |
 | POST | `/api/v1/accidents/{id}/analyses` | 분석 시작 | 202 |
@@ -96,6 +97,14 @@ POST /accidents (동의, session_id 받기)
 `available: false`이면 영상을 보관하지 않았거나(저장 동의 없음) 삭제된 것이다. 주소는 짧게(기본 10분) 유효하므로 화면에 들어올 때 받는다.
 `<video src>`는 헤더를 보낼 수 없어서 이 주소에 서명이 들어 있다. 앞에 서버 주소를 붙여 쓴다.
 
+### DELETE /api/v1/accidents/{id}
+
+"결과 지우기". 세션이 끝나기를 기다리지 않고 지금 지운다. 분석 결과(`scene`, `confirmed`, `result`, 과실비율)와 사고 제목은 저장 동의 여부와 상관없이 **바로** 지워지고, 영상은 저장 동의한 비식별 영상까지 모두 만료 처리되어 worker가 곧 파일을 삭제한다(동의를 거두는 것과 같다). 이후 이 사고·분석 조회는 `410 SESSION_EXPIRED`. 본문 없이 `204`.
+
+### 세션 만료
+
+사고를 만든 때부터 `SESSION_TTL_HOURS`(기본 2시간)가 지나면 `accident.expires_at` 이 지난 것이다. 이 사고와 분석에 대한 모든 요청은 worker의 정리 작업을 기다리지 않고 `410 SESSION_EXPIRED` 를 돌려준다(남의 사고는 만료 여부와 상관없이 `404`). 응답의 `expires_at` 으로 화면에서 남은 시간을 안내할 수 있다. 저장 동의한 사용자의 비식별 영상과 분석 결과(`scene`, `confirmed`, `result`)는 세션이 끝나도 `RETENTION_DAYS`(기본 90일) 동안 DB에 남지만 사용자에게는 제공하지 않는다(사고 제목은 지운다). 저장 동의가 없으면 결과도 세션이 끝날 때 지운다.
+
 ### POST /api/v1/accidents/{id}/analyses
 
 바로 202로 `{analysis_id, status, status_url}`를 돌려준다. 오류: `409 VIDEO_REQUIRED`, `409 ANALYSIS_IN_PROGRESS`(사고마다 진행 중인 분석은 하나).
@@ -130,13 +139,14 @@ POST /accidents (동의, session_id 받기)
 
 ### GET /api/v1/catalog/accident-types
 
-`{"count": 261, "items": [ {accident_type_id, role, place, feature, my_progress, other_progress, base_me, base_other} ]}`.
+`{"count": 261, "items": [ {accident_type_id, role, place, feature, my_progress, other_progress, easy, base_me, base_other} ]}`.
+`place`, `feature`, `my_progress`, `other_progress`는 과실표(손해보험협회 인정기준)의 **원래 이름**이고 선택의 기준(키)이다. `easy`는 같은 네 항목의 **쉬운 말**(`{place, feature, my_progress, other_progress}`)로, 화면에는 이것을 크게 보여 주고 원래 이름은 작게 함께 보여 준다. 쉬운 말이 없는 항목은 원래 이름과 같다. 결과의 `accident_type`과 `reference_candidates`에도 같은 `easy`가 들어 있다(예전에 저장된 결과에는 없을 수 있다).
 화면의 네 항목(장소, 사고 유형, 내 차의 움직임, 상대 차의 움직임)이 같은 것은 하나로 합쳐 두었으므로 **네 항목을 고르면 선택지가 하나로 정해진다.**
 프론트는 이 목록으로 앞 항목을 고를 때마다 뒤 항목의 보기를 좁힌다.
 
 ### GET /api/v1/analyses/{id}/adjustment-questions?accident_type_id=11&role=A
 
-고른 유형에 등록된 가감요소를 쉬운 말 질문으로 돌려준다. 등록되지 않은 유형은 `registered: false`, `questions: []`이고 기본 비율만 안내한다(**133개 유형 중 7개만 등록**).
+고른 유형에 등록된 가감요소를 쉬운 말 질문으로 돌려준다. 등록되지 않은 유형은 `registered: false`, `questions: []`이고 기본 비율만 안내한다(**133개 유형 중 122개 등록**, 나머지 11개는 PDF와 과실표의 기본 비율이 달라 뺐다).
 
 ```json
 { "accident_type_id": 11, "role": "A", "registered": true, "questions": [ {
@@ -179,7 +189,8 @@ POST /accidents (동의, session_id 받기)
 | `adjustments` | `registered`, `applied[]`, `not_applied[]`(이유 포함), `pending[]`(확인하지 못한 요소, `question` 포함) |
 | `laws[]` | 관련 도로교통법 조문: `article`, `label`, `name`, `easy`, `missing`(풀이를 아직 안 썼으면 true) |
 | `explanation` | `base`, `situation`, `status` (쉬운 말 문장, **AI 가 아니라 미리 쓴 문장**) |
-| `timeline[]` | 구간: `kind`, `actor`(`me`/`other`/`both`), `start_sec`, `end_sec`(**영상 시작 기준 초**), `description`, `certainty`, `evidence_text` |
+| `timeline[]` | 구간: `kind`, `actor`(`me`/`other`/`both`), `start_sec`, `end_sec`(**영상 시작 기준 초**), `description`, `certainty`, `evidence_text`, `stage`. `kind`가 `사고 흐름`인 이벤트는 AI가 쓴 사고 진행 단계(`stage`: 접근 / 사고 직전 / 접촉 / 접촉 이후, 최대 4개, `actor`는 `null`)이고, 장면 인용 검증과 판단 표현·수치·접촉 단정 검사를 통과한 것만 담는다. 없으면(예전 결과나 상세 확인을 하지 않은 영상) 내 차 움직임·상대 차 확인·접촉 근거 구간만 있다 |
+| `timeline_note` | 상대 차가 처음 보인 뒤 접촉(의심) 장면까지 **영상 속 시간 관계**를 말하는 한 문장(AI 없이 장면 시각 차이로 만듦). 속도·거리는 말하지 않는다. 상대 차가 구별되고 접촉 근거 장면이 있을 때만 있고 없으면 `null` |
 | `impact` | `{sec, contact, confirmed}`. **`confirmed`가 true일 때만** 충돌 시점을 기준으로 말한다 |
 | `related_cases[]` | 판례: `case_id`, `court`, `date`, `case_number`, `summary`, `comparison_limit`, `source_url`, `source_kind`, `source_label`, `verified`, `relevance_status`, `comparison` |
 | `related_cases[].comparison` | `match_level`(`same_type`/`partial`), `match_label`, `source`(`ai`/`rule`), `common[]`, `differences[]`(문장만), `note`. `source`가 `ai`이면 `common_items[]`, `differences_items[]`(`label`, `text`, `quote` 판결문에서 가져온 구절)도 있다. **퍼센트는 없다** |
@@ -207,6 +218,7 @@ POST /accidents (동의, session_id 받기)
 | 405 | `METHOD_NOT_ALLOWED` | |
 | 409 | `VIDEO_ALREADY_UPLOADED`, `VIDEO_REQUIRED`, `ANALYSIS_IN_PROGRESS` | 영상 규칙, 진행 중인 분석 |
 | 409 | `ANALYSIS_NOT_AWAITING`, `ANALYSIS_NOT_COMPLETED` | 확인 대기가 아닐 때 `confirm`, 완료 전 `reports` |
+| 410 | `SESSION_EXPIRED` | 세션이 끝나 결과가 삭제됨 (`expires_at` 이후의 모든 사고·분석 요청) |
 | 413 | `FILE_TOO_LARGE` | 업로드 용량 초과 |
 | 415 | `UNSUPPORTED_FILE_TYPE` | 허용하지 않는 확장자 |
 | 422 | `CONSENT_REQUIRED`, `ROLE_REQUIRED`, `INVALID_ANSWER`, `VALIDATION_ERROR` | 동의 없음, 역할 누락, 잘못된 답변, 요청 형식 오류(`details` 포함) |

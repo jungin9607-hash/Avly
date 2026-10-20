@@ -16,7 +16,7 @@
 | 비식별화 | `backend/plate/redact.py`: 번호판은 검은 박스, 사람은 전체 블러. 실패하면 영상을 만들지 않고 멈춤(fail-closed). 비식별된 영상만 저장·분석에 사용 | prd-reference §10 |
 | 판례 | DB 먼저, 없으면 API로 보충. 공통점·차이점은 규칙 기반(퍼센트 없음) | api.md |
 | 프론트 | 가짜 데이터 제거, 서버 연결. 사전 설문·퀴즈 동의·영상 증거·텔레메트리 제거 | [frontend/README.md](../frontend/README.md), [frontend-structure.md](frontend-structure.md) |
-| 개인정보 | 분석 동의(필수), 영상 저장·활용 동의(선택). 원본은 세션 종료(24시간)에 삭제. 차대차가 아닌 영상은 동의와 무관하게 24시간 뒤 삭제 | [review/consent-review.md](review/consent-review.md) |
+| 개인정보 | 분석 동의(필수), 영상 저장·활용 동의(선택). 분석 결과와 원본은 세션 종료(2시간)에 삭제, 저장 동의 영상은 90일 보관. 차대차가 아닌 영상은 동의와 무관하게 24시간 뒤 삭제 | [review/consent-review.md](review/consent-review.md) |
 
 문서 정리: v0.3·v0.4 초안 API 문서와 v0.3·v0.4 초안 SQL(`schema.sql`, `schema-v0.4-draft.sql`)은 구현으로 대체되어 삭제했습니다. 필요하면 git 기록에서 볼 수 있습니다.
 
@@ -42,11 +42,11 @@
 | 담당 | 볼 것 | 파일 |
 |---|---|---|
 | 법무·개인정보 | 동의 문구, 외부 AI 전송(국외 이전) 고지, 보관 기간 | [review/consent-review.md](review/consent-review.md) |
-| 문구 검수 | 가감요소 20개와 법령 풀이의 쉬운 말 (전부 검수 전, 법령 풀이 7개는 비어 있음) | [review/easy-words-review.md](review/easy-words-review.md) |
+| 문구 검수 | 가감요소 20개와 법령 풀이의 쉬운 말 (전부 검수 전, 법령 풀이 7개는 비어 있음), **사고 유형 이름 183개의 쉬운 말** ([accident-labels-review.md](review/accident-labels-review.md)) | [review/easy-words-review.md](review/easy-words-review.md) |
 | 모델 담당 | Gemini 전환 시 바뀌는 범위, 평가 영상 준비 | [review/gemini-switch.md](review/gemini-switch.md) |
 | 백엔드 | API·DB 구조, worker 방식(한 번에 한 작업), 마이그레이션 | api.md, backend/README.md |
 | 프론트 | 새 화면 흐름, 서버 오류 처리, 문구 | frontend-structure.md |
-| 기획 | 가감요소 확장(133개 중 7개 등록), PDF 필요 여부, 사고 유형 오판 시 되돌리기 | prd-reference.md §9 |
+| 기획 | 가감요소 PDF 규칙 검수와 막힌 11개 유형 처리(133개 중 122개 등록), PDF 필요 여부, 사고 유형 오판 시 되돌리기 | prd-reference.md §9 |
 
 ## 5. 머지 전에 알아둘 것
 - `SJI`에는 `main` 대비 커밋이 120개 쌓여 있고 변경 파일은 229개입니다. 모델 원본(`Avly.py`, 노트북, `results/`)이 포함돼 있어 크게 보입니다.
@@ -59,7 +59,7 @@
 1. 실제 영상으로 분석 품질 확인(프롬프트 조정 포함), 평가용 영상과 정답 라벨 준비
 2. 법무 검토 후 동의 문구 확정
 3. 쉬운 말 검수 반영, 법령 풀이 7개 작성
-4. 가감요소 규칙 확장 (7/133)
+4. 가감요소 PDF 규칙 검수(122/133 등록, 888개 검수 전)와 막힌 11개 유형·원문 이용 조건 확인
 5. Gemini 전환 여부 결정 (유료 키, 평가 영상 필요)
 6. 저장 동의 영상의 삭제 시점 정책
 7. 서버 PDF 여부, 원본 `Avly.py`·노트북·`results/` 정리

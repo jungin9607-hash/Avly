@@ -44,6 +44,14 @@ def now() -> datetime:
     return datetime.now(timezone.utc)
 
 
+# 세션이 끝났고, 저장 동의가 없거나 보관 중인 영상이 더는 없는 사고 (분석 결과를 지울 대상). 만료 시각이 없는 영상은 무기한 보관으로 본다.
+_ENDED_WITHOUT_KEPT_VIDEO = (
+    "SELECT ac.id FROM accident ac WHERE ac.expires_at IS NOT NULL AND ac.expires_at <= :t"
+    " AND (ac.retention_consent_at IS NULL OR NOT EXISTS ("
+    "SELECT 1 FROM video v WHERE v.accident_id = ac.id AND v.deleted_at IS NULL AND (v.expires_at IS NULL OR v.expires_at > :t)))"
+)
+
+
 class Repository:
     def __init__(self, engine=None, owner: str | None = None):
         self.engine = engine or get_engine()
@@ -129,11 +137,38 @@ class Repository:
             conn.execute(text("UPDATE video SET deleted_at = now() WHERE id = :id"), {"id": video_id})
 
     def expire_accident_videos(self, accident_id: UUID, hours: int) -> None:
-        """사고에 딸린 영상의 삭제 시각을 지금부터 hours 시간 뒤로 당긴다 (저장 동의와 상관없이)."""
+        """사고에 딸린 영상의 삭제 시각을 늦어도 지금부터 hours 시간 뒤로 당긴다 (저장 동의와 상관없이). 이미 더 빠르면 그대로 둔다."""
         with self.engine.begin() as conn:
             conn.execute(text(
-                "UPDATE video SET expires_at = now() + make_interval(hours => :h) WHERE accident_id = :a AND deleted_at IS NULL"),
+                "UPDATE video SET expires_at = LEAST(COALESCE(expires_at, now() + make_interval(hours => :h)), now() + make_interval(hours => :h))"
+                " WHERE accident_id = :a AND deleted_at IS NULL"),
                 {"h": hours, "a": accident_id})
+
+    def expire_accident_now(self, accident_id: UUID) -> None:
+        """결과 지우기: 사고의 세션과 모든 영상(저장 동의한 비식별 영상 포함)을 지금 만료시킨다."""
+        with self.engine.begin() as conn:
+            conn.execute(text("UPDATE accident SET expires_at = now() WHERE id = :a"), {"a": accident_id})
+            conn.execute(text("UPDATE video SET expires_at = now() WHERE accident_id = :a AND deleted_at IS NULL"), {"a": accident_id})
+
+    def scrub_expired(self, at: datetime | None = None) -> int:
+        """세션이 끝난 사고의 분석 결과와 사고 제목(파일 이름)을 지운다. 행과 AI 호출 기록(토큰 수)은 남긴다.
+
+        저장 동의한 사용자의 분석 결과(AI 분석, 사용자가 확정한 값)는 비식별 영상을 보관하는 동안 같이 남긴다.
+        세션이 끝나면 사용자에게는 보여 주지 않고 보관만 한다. '결과 지우기'는 영상을 바로 만료시키므로 결과도 함께 지워진다.
+        행을 남기는 이유: 저장 동의한 영상이 사고 행을 가리키고, 호출 기록은 비용 계산에 쓰인다. 여러 번 불러도 같은 결과다."""
+        with self.engine.begin() as conn:
+            cleared = conn.execute(text(
+                "UPDATE analysis SET scene = NULL, confirmed = NULL, fault_me = NULL, fault_other = NULL,"
+                " result = CASE WHEN status = 'completed' THEN '{}'::jsonb END,"   # 완료 상태는 result 가 비어 있을 수 없다 (CHECK)
+                " accident_type_id = NULL, unsupported_reason = NULL, error_message = NULL, video_sha256 = NULL"
+                " WHERE accident_id IN (" + _ENDED_WITHOUT_KEPT_VIDEO + ")"
+                " AND (scene IS NOT NULL OR confirmed IS NOT NULL OR (result IS NOT NULL AND result <> '{}'::jsonb) OR fault_me IS NOT NULL"
+                " OR fault_other IS NOT NULL OR accident_type_id IS NOT NULL OR unsupported_reason IS NOT NULL"
+                " OR error_message IS NOT NULL OR video_sha256 IS NOT NULL)"), {"t": at or now()}).rowcount
+            conn.execute(text(
+                "UPDATE accident SET title = '삭제됨' WHERE expires_at IS NOT NULL AND expires_at <= :t AND title <> '삭제됨'"),
+                {"t": at or now()})
+            return cleared
 
     def videos_to_delete(self, at: datetime | None = None) -> list[dict]:
         """만료 시각이 지났는데 아직 파일이 남아 있는 영상. 다른 PC 가 올린 영상(그 사고의 작업이 다른 소유자 것)은 파일이 여기에 없으므로 제외한다."""
@@ -164,7 +199,7 @@ class Repository:
             raise
 
     def get_analysis(self, analysis_id: UUID, session_id: UUID | None = None) -> dict | None:
-        sql = ("SELECT a.* FROM analysis a JOIN accident ac ON ac.id = a.accident_id WHERE a.id = :id"
+        sql = ("SELECT a.*, ac.expires_at AS session_expires_at FROM analysis a JOIN accident ac ON ac.id = a.accident_id WHERE a.id = :id"
                + (" AND ac.session_id = :sid" if session_id else ""))
         with self.engine.connect() as conn:
             return _one(conn.execute(text(sql), {"id": analysis_id, "sid": session_id}))

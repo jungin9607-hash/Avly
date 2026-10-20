@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { api } from "../../../api/client.js";
 import { CONSENT_VERSION } from "../../../api/config.js";
-import { getSession, rememberAnalysis } from "../../../api/session.js";
+import { expireAnalysis, getSession, rememberAnalysis } from "../../../api/session.js";
 
 // 영상 올리기 → 분석 → (사용자 확인) → 가감 질문 → 결과 계산까지 한 줄로 이어지는 흐름.
 // 화면은 phase 만 보고 어떤 팝업을 띄울지 정한다.
@@ -84,11 +84,17 @@ export default function useAnalysisFlow(resumeId) {
       const opts = { sessionId: accident.session_id, signal };
       await api.uploadVideo(accident.id, file, { ...opts, onProgress: (progress) => dispatch({ type: "progress", progress }) });
       const started = await api.startAnalysis(accident.id, opts);
-      rememberAnalysis(started.analysis_id, accident.id, accident.session_id);
+      rememberAnalysis(started.analysis_id, accident.id, accident.session_id, accident.expires_at);
       dispatch({ type: "analyzing", analysisId: started.analysis_id, accidentId: accident.id, sessionId: accident.session_id });
     } catch (error) {
       if (error.name !== "AbortError") dispatch({ type: "failed", error });
     }
+  }, []);
+
+  // 서버가 알려 준 오류로 실패 상태가 된다. 세션이 끝났다는 오류면 이 브라우저에 남은 접근 정보도 지운다.
+  const fail = useCallback((error, id) => {
+    if (error.code === "SESSION_EXPIRED" && id) expireAnalysis(id);
+    dispatch({ type: "failed", error });
   }, []);
 
   // 서버가 일하는 동안 상태를 주기적으로 확인한다
@@ -106,7 +112,7 @@ export default function useAnalysisFlow(resumeId) {
           timer = window.setTimeout(tick, POLL_MS);
         }
       } catch (error) {
-        if (!cancelled) dispatch({ type: "failed", error });
+        if (!cancelled) fail(error, analysisId);
       }
     };
     tick();
@@ -114,7 +120,7 @@ export default function useAnalysisFlow(resumeId) {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [phase, analysisId, sessionId]);
+  }, [phase, analysisId, sessionId, fail]);
 
   // 사고 상황을 확인하는 화면에 들어오면 과실표 선택지를 한 번 받아 둔다
   const hasCatalog = Boolean(state.catalog);
@@ -143,9 +149,9 @@ export default function useAnalysisFlow(resumeId) {
         { sessionId },
       );
     } catch (error) {
-      dispatch({ type: "failed", error });
+      fail(error, analysisId);
     }
-  }, [analysisId, sessionId]);
+  }, [analysisId, sessionId, fail]);
 
   // 사용자가 고른 사고 유형의 가감요소 질문을 받아 오고, 없으면 바로 결과 계산으로 넘어간다
   const choose = useCallback(async (option) => {
@@ -155,10 +161,10 @@ export default function useAnalysisFlow(resumeId) {
       if (body.questions.length === 0) return confirm(option, {});
       dispatch({ type: "adjusting", option, questions: body.questions });
     } catch (error) {
-      dispatch({ type: "failed", error });
+      fail(error, analysisId);
     }
     return undefined;
-  }, [analysisId, sessionId, confirm]);
+  }, [analysisId, sessionId, confirm, fail]);
 
   const reset = useCallback(() => {
     controller.current?.abort();

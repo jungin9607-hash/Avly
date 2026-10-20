@@ -1,4 +1,4 @@
-"""만료된 영상 삭제. 파일을 지우고 DB 에는 삭제 시각만 남긴다 (처리 이력은 남긴다)."""
+"""만료 정리. 영상은 파일을 지우고 DB 에는 삭제 시각만 남기며, 세션이 끝난 사고는 분석 결과를 지운다."""
 
 import logging
 from datetime import datetime
@@ -20,3 +20,8 @@ def delete_expired(repo: Repository, at: datetime | None = None) -> int:
         repo.mark_video_deleted(video["id"])
         count += 1
     return count
+
+
+def scrub_expired(repo: Repository, at: datetime | None = None) -> int:
+    """세션이 끝난 사고의 분석 결과를 지운다. 지운 분석 수를 돌려준다."""
+    return repo.scrub_expired(at)

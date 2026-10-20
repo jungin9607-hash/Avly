@@ -946,6 +946,38 @@
   border-color: var(--color-white);
   background: var(--color-white-a08);
 }
+/* 결과 지우기: 자동 삭제 시각 안내와 눈에 덜 띄는 텍스트 버튼 */
+.ar-erase {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px 12px;
+  margin-top: 10px;
+  font-size: var(--ar-font-small, 13px);
+  color: var(--color-white-a60);
+}
+.ar-erase p {
+  margin: 0;
+}
+.ar-erase-button {
+  padding: 4px 2px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.ar-erase-button:hover {
+  color: var(--color-white);
+}
+.ar-erase-button:focus-visible {
+  outline: 2px solid var(--color-white-a60);
+  outline-offset: 3px;
+}
 /* 마우스를 올리면 다운로드 아이콘만 살짝 아래로 */
 .ar-text-action-pdf:hover svg {
   transform: translateY(2px);

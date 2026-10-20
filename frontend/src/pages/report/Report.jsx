@@ -2,7 +2,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import TopNav from "../common/components/TopNav";
 import AnalysisGate from "../common/components/AnalysisGate";
 import useNavigationBackdrop from "../common/hooks/useNavigationBackdrop";
-import { toReportModel } from "../../api/adapters";
+import { useNavigate } from "react-router-dom";
+import { easyOf, toReportModel } from "../../api/adapters";
+import { api } from "../../api/client";
+import { expireAnalysis, getSession } from "../../api/session";
 import { ROUTES } from "../../routes";
 import ReportNotice from "./components/ReportNotice";
 import AdjustmentSteps from "./components/AdjustmentSteps";
@@ -56,7 +59,12 @@ function ReportFrame({ children }) {
 /* ---------- 결과 아래: 상태 안내 · 저장·공유 · 타임라인 바로가기 · 법적 고지 ---------- */
 function ActionsSection({ model, analysisId, summaryText, children }) {
   const [toast, setToast] = useState("");
+  const navigate = useNavigate();
   const sectionRef = useRef(null);
+  const session = getSession(analysisId);
+  const expiresText = session?.expiresAt
+    ? new Date(session.expiresAt).toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" })
+    : null;
   const [inView, setInView] = useState(false);
 
   // 이 구간이 화면 아래 40% 선 위로 올라오면 "사고 타임라인 바로가기"를 보여 줌 (위로 올라가면 다시 숨김)
@@ -87,6 +95,21 @@ function ActionsSection({ model, analysisId, summaryText, children }) {
     }
   };
 
+  // 세션이 끝나기를 기다리지 않고 서버의 분석 결과와 영상을 지금 지운다
+  const erase = async () => {
+    if (!session || !window.confirm(REPORT_ACTIONS.eraseConfirm)) return;
+    try {
+      await api.deleteAccident(session.accidentId, { sessionId: session.sessionId });
+    } catch (error) {
+      if (error.code !== "SESSION_EXPIRED" && error.status !== 404) {
+        setToast(error.message);
+        return;
+      }
+    }
+    expireAnalysis(analysisId);
+    navigate(ROUTES.home);
+  };
+
   return (
     <>
       <section ref={sectionRef} className="ar-section ar-report-page ar-evidence-page">
@@ -94,7 +117,7 @@ function ActionsSection({ model, analysisId, summaryText, children }) {
           {children}
           <StatusNotice text={model.statusText} pending={model.pending} />
           <div className="ar-evidence-head">
-            <ReportActions content={REPORT_ACTIONS} onShare={share} />
+            <ReportActions content={REPORT_ACTIONS} onShare={share} onSave={() => navigate(ROUTES.document(analysisId))} onErase={erase} expiresText={expiresText} />
           </div>
         </div>
         {/* 창 오른쪽 아래 구석에 고정, 이 구간에 들어오면 나타남 */}
@@ -158,10 +181,10 @@ function UnresolvedView({ model, analysisId }) {
               {model.candidates.map((c) => (
                 <li key={`${c.accident_type_id}-${c.role}`}>
                   <strong>
-                    {c.place} · {c.feature}
+                    {easyOf(c, "place")} · {easyOf(c, "feature")}
                   </strong>
                   <span>
-                    내 차 {c.my_progress} / 상대 차 {c.other_progress}
+                    내 차 {easyOf(c, "my_progress")} / 상대 차 {easyOf(c, "other_progress")}
                   </span>
                   <small>이 유형의 기본 비율은 내 차 {c.base_me}% : 상대 차 {c.base_other}%예요. 영상에 적용된다고 확정한 값은 아니에요.</small>
                 </li>

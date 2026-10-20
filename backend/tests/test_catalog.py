@@ -36,8 +36,33 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual((b["my_progress"], b["other_progress"]), ("선행 진로변경", "후행 직진"))
         self.assertEqual((b["base_me"], b["base_other"]), (70, 30))
 
+    def test_every_name_in_the_table_has_an_easy_label(self):
+        """과실표에 있는 모든 장소·특징·진행 이름에 쉬운 말이 있고, 쉬운 파일에 남는(없는 이름) 항목이 없다."""
+        rows = catalog.rows().values()
+        names = {
+            "places": {r.place for r in rows},
+            "features": {r.feature for r in rows},
+            "progress": {r.a_progress for r in rows} | {r.b_progress for r in rows},
+        }
+        for kind, expected in names.items():
+            entries = catalog.labels()[kind]
+            self.assertEqual(set(entries), expected, kind)
+            for name, entry in entries.items():
+                self.assertTrue(entry["easy"].strip(), name)
+                self.assertIn("reviewed", entry)
+
+    def test_orient_adds_easy_names_and_keeps_the_original_ones(self):
+        a = catalog.orient(catalog.get_row(11), "A")
+        self.assertEqual((a["feature"], a["my_progress"]), ("차로변경(진로변경)", "후행 직진"))   # 원래 이름은 그대로
+        self.assertEqual(a["easy"]["feature"], "차선 변경 사고")
+        self.assertEqual(a["easy"]["my_progress"], "뒤따르던 차가 직진")
+        self.assertEqual(a["easy"]["other_progress"], "앞서가던 차가 차선 변경")
+
+    def test_missing_easy_label_falls_back_to_the_original_name(self):
+        self.assertEqual(catalog.easy_label("feature", "없는 이름"), "없는 이름")
+
     def test_unregistered_type_has_no_questions(self):
-        self.assertEqual(catalog.adjustment_questions(0, "A"), [])
+        self.assertEqual(catalog.adjustment_questions(2, "A"), [])   # 2번은 PDF 와 기본 비율이 달라 규칙을 등록하지 않은 유형
 
     def test_registered_type_questions_follow_roles(self):
         # 유형 11: 표의 B(선행 진로변경)에 방향지시등 가감요소가 있다

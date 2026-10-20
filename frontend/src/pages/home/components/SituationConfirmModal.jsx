@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LEVEL_LABEL, cascade, normalizeSelection, resolveOption, selectionFrom } from "../../../api/adapters";
+import { LEVEL_LABEL, cascade, easyLabel, easyOf, normalizeSelection, resolveOption, selectionFrom } from "../../../api/adapters";
 import ModalShell from "./ModalShell";
 
 const LEVELS = ["place", "feature", "my_progress", "other_progress"];
@@ -16,7 +16,7 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
 
   if (!items) {
     return (
-      <ModalShell title="AI가 분석한 사고 상황이 맞나요?" progress={[3, 4]} onClose={onClose}>
+      <ModalShell title="AI가 분석한 사고 상황이 맞나요?" progress={[3, 4]} onClose={onClose} sticky>
         <div className="md-analysis" role="status">
           <span className="md-analysis-spinner" aria-hidden="true" />
           <p>선택지를 불러오는 중이에요.</p>
@@ -37,6 +37,7 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
       desc="영상에서 파악한 내용이에요. 다르면 아래에서 직접 고쳐 주세요."
       progress={[3, 4]}
       onClose={onClose}
+      sticky
     >
       <div className="md-body">
         {situation?.summary && (
@@ -66,7 +67,7 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
                   setSelection(selectionFrom(c));
                 }}
               >
-                {c.feature} · 내 차 {c.my_progress}
+                {easyOf(c, "feature")} · 내 차 {easyOf(c, "my_progress")}
               </button>
             ))}
           </div>
@@ -88,7 +89,7 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
                 <option value="">선택해 주세요</option>
                 {options[level].map((value) => (
                   <option key={value} value={value}>
-                    {value}
+                    {easyLabel(items, level, value)}
                   </option>
                 ))}
               </select>
@@ -99,6 +100,11 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
         {resolved && (
           <p className="md-base">
             이런 사고의 기본 책임은 <strong>내 차 {resolved.base_me}% : 상대 차 {resolved.base_other}%</strong>예요.
+          </p>
+        )}
+        {resolved && (
+          <p className="md-official">
+            손해보험협회 과실비율 인정기준의 표기: {resolved.place} · {resolved.feature} · 내 차 {resolved.my_progress} / 상대 차 {resolved.other_progress}
           </p>
         )}
 

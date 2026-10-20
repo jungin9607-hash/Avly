@@ -13,6 +13,15 @@ export const LEVEL_LABEL = {
 
 const unique = (values) => [...new Set(values)];
 
+// 사고 유형 이름: 서버가 쉬운 말(option.easy)을 함께 준다. 없으면(예전에 저장된 결과) 과실표의 원래 이름을 그대로 쓴다.
+export const easyOf = (option, level) => option?.easy?.[level] || option?.[level] || "";
+
+// 선택 목록의 값(원래 이름)에 보여 줄 쉬운 말
+export function easyLabel(items, level, value) {
+  const found = items.find((item) => item[level] === value);
+  return found ? easyOf(found, level) : value;
+}
+
 // selection 의 앞 항목들과 맞는 선택지만 남긴다.
 function matching(items, selection, upTo) {
   return items.filter((item) => LEVELS.slice(0, upTo).every((level) => item[level] === selection[level]));
@@ -94,7 +103,7 @@ export function toReportModel(result, analysisId) {
     header: {
       title: "과실 분석 결과",
       desc: result.summary ?? "블랙박스 영상을 분석해 산정한 과실 비율과 그 근거예요.",
-      keywords: type ? [type.place, type.feature, `식별 코드 ${String(analysisId ?? "").slice(0, 8)}`] : [`식별 코드 ${String(analysisId ?? "").slice(0, 8)}`],
+      keywords: type ? [easyOf(type, "place"), easyOf(type, "feature"), `식별 코드 ${String(analysisId ?? "").slice(0, 8)}`] : [`식별 코드 ${String(analysisId ?? "").slice(0, 8)}`],
     },
     appliedCount: applied,
     factorHeader: { kicker: "판단 근거", desc: (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) },
@@ -110,38 +119,130 @@ export function toReportModel(result, analysisId) {
 }
 
 // ---------------------------------------------------------------- 타임라인
+// 서버의 타임라인은 AI 가 기록한 관찰 구간(내 차의 움직임, 상대 차 확인, 접촉 근거)을 하나씩 담는다. 구간끼리 겹치고 시작 시각이 거의 같은 것이 많아서
+// 그대로 한 단계씩 보여 주면 같은 장면이 반복된다. 그래서 (1) 같은 상태가 끊겨서 이어지는 내 차의 움직임은 하나로 합치고
+// (2) 시작 시각이 비슷한 관찰은 한 단계로 묶는다. 문장은 AI 의 관찰을 그대로 옮기되 쉬운 말로 미리 정해 둔 것을 쓴다(AI 가 새로 쓰지 않는다).
 const KIND_LABEL = { "A 움직임": "내 차의 움직임", "B 확인 구간": "상대 차 확인", "접촉 근거 구간": "접촉 근거" };
+const KIND_ORDER = { "A 움직임": 0, "B 확인 구간": 1, "접촉 근거 구간": 2 };
+const MERGE_SEC = 0.5; // 이 시간(초) 안에서 이어지거나 함께 시작하는 관찰은 하나로 본다
+
+const SENTENCES = {
+  "A 움직임": {
+    "이동 추정": "내 차가 움직이고 있었어요.",
+    "정지 추정": "내 차가 멈춰 있었어요.",
+    default: "내 차가 움직였는지는 영상만으로 알기 어려워요.",
+  },
+  "B 확인 구간": {
+    구별됨: "상대 차가 화면에 보이는 구간이에요.",
+    default: "상대 차로 보이는 차가 화면에 나오는 구간이에요. 어느 차인지는 더 확인이 필요해요.",
+  },
+  "접촉 근거 구간": {
+    "접촉 관찰": "내 차와 상대 차가 부딪힌 장면으로 보여요.",
+    "충돌 정황 강함": "부딪혔을 가능성이 높은 장면이에요. 실제로 닿았는지는 확인이 필요해요.",
+    "접촉 추정": "부딪혔을 수 있는 장면이에요. 접촉 여부는 확인이 필요해요.",
+    "근접만 관찰": "두 차가 가까이 있었지만 부딪혔는지는 확인되지 않았어요.",
+    default: "접촉했는지 판단하기 어려운 장면이에요.",
+  },
+};
+// 화면의 작은 표시. AI 가 확정한 것이 아니라 추정인 것은 그렇게 보이게 한다.
+const TAG = {
+  "이동 추정": "AI 추정", "정지 추정": "AI 추정", 구별됨: "확인됨", "접촉 관찰": "접촉 관찰", "충돌 정황 강함": "충돌 의심",
+  "접촉 추정": "접촉 추정", "근접만 관찰": "근접만 관찰", "판단 불가": "판단 어려움",
+};
 
 const round1 = (value) => Math.round(value * 10) / 10;
 
+function sentenceOf(event) {
+  const table = SENTENCES[event.kind];
+  return table ? (table[event.certainty] ?? table.default) : (event.description ?? "");
+}
+
+// 같은 상태가 끊겨서 이어지는 내 차의 움직임(예: 이동 추정 두 구간)을 하나로 합친다
+function mergeMovement(events) {
+  const rest = events.filter((e) => e.kind !== "A 움직임");
+  const merged = [];
+  for (const event of events.filter((e) => e.kind === "A 움직임").sort((a, b) => a.start_sec - b.start_sec)) {
+    const last = merged[merged.length - 1];
+    if (last && last.certainty === event.certainty && event.start_sec - last.end_sec <= MERGE_SEC) last.end_sec = Math.max(last.end_sec, event.end_sec);
+    else merged.push({ ...event });
+  }
+  return [...rest, ...merged];
+}
+
+// 시작 시각이 비슷한 관찰을 한 묶음으로. 묶음 안에서는 내 차 → 상대 차 → 접촉 순서
+function groupByStart(events) {
+  const sorted = [...events].sort((a, b) => a.start_sec - b.start_sec || (KIND_ORDER[a.kind] ?? 9) - (KIND_ORDER[b.kind] ?? 9));
+  const groups = [];
+  for (const event of sorted) {
+    const group = groups[groups.length - 1];
+    if (group && event.start_sec - group[0].start_sec <= MERGE_SEC) group.push(event);
+    else groups.push([event]);
+  }
+  return groups;
+}
+
+function rangeText(start, end) {
+  const length = end - start;
+  if (length < 0.05) return `${round1(start)}초`;
+  return length >= 1 ? `${round1(start)}~${round1(end)}초 (약 ${Math.round(length)}초 동안)` : `${round1(start)}~${round1(end)}초`;
+}
+
 // Time 화면이 읽는 모양: { id, label, time, summary, tag, title, hud, tone }
 // impact.confirmed 일 때만 "충돌 N초 전"처럼 충돌 시점을 기준으로 말한다. 아니면 영상 시각만 보여 준다.
+const STAGE_ORDER = { 접근: 0, "사고 직전": 1, 접촉: 2, "접촉 이후": 3 };
+const SUPPORT_TAG = { 관찰: "관찰", 추정: "AI 추정", 미확인: "확인 필요" };
+
+// AI 가 영상에서 정리한 사고 흐름(접근 → 사고 직전 → 접촉 → 접촉 이후)을 단계로 보여 준다. 근거가 되는 내 차·상대 차 구간은 흐름 안에서 말하므로 따로 단계로 만들지 않는다.
+function flowMoments(flow) {
+  const steps = [...flow].sort((a, b) => (STAGE_ORDER[a.stage] ?? 9) - (STAGE_ORDER[b.stage] ?? 9) || a.start_sec - b.start_sec);
+  return steps.map((event, index) => ({
+    id: `e${index}`,
+    label: event.stage,
+    time: event.start_sec,
+    endTime: event.end_sec,
+    range: rangeText(event.start_sec, event.end_sec),
+    position: steps.length > 1 ? (index / (steps.length - 1)) * 100 : 0,
+    summary: `사고 흐름 ${index + 1} / ${steps.length}`,
+    tag: SUPPORT_TAG[event.certainty] ?? event.certainty ?? "",
+    title: event.description ?? "",
+    evidence: "",
+    hud: "CAM_FRONT",
+    tone: event.stage === "접촉" ? "impact" : undefined,
+  }));
+}
+
 export function toMoments(result) {
   const impact = result.impact ?? {};
-  const events = [...(result.timeline ?? [])].sort((a, b) => a.start_sec - b.start_sec);
-  return events.map((event, index) => {
-    const contact = event.kind === "접촉 근거 구간";
-    // 시간축 위치는 순서대로 고르게 나눈다. 구간 시작 시각이 서로 가까우면(같은 시각도 흔하다) 글자가 겹쳐서 읽을 수 없다.
-    const position = events.length > 1 ? (index / (events.length - 1)) * 100 : 0;
-    let label = `${round1(event.start_sec)}초`;
+  const flow = (result.timeline ?? []).filter((e) => e.kind === "사고 흐름");
+  if (flow.length > 0) return flowMoments(flow);
+  const groups = groupByStart(mergeMovement(result.timeline ?? []));
+  return groups.map((group, index) => {
+    const start = group[0].start_sec;
+    const end = Math.max(...group.map((e) => e.end_sec));
+    const contact = group.some((e) => e.kind === "접촉 근거 구간");
+    // 시간축 위치는 순서대로 고르게 나눈다. 구간 시작 시각이 서로 가까우면 글자가 겹쳐서 읽을 수 없다.
+    const position = groups.length > 1 ? (index / (groups.length - 1)) * 100 : 0;
+    let label = `${round1(start)}초`;
     if (impact.confirmed && impact.sec != null) {
-      const gap = round1(impact.sec - event.start_sec);
+      const gap = round1(impact.sec - start);
       if (contact) label = "충돌 시점";
       else if (gap > 0) label = `충돌 ${gap}초 전`;
       else if (gap < 0) label = `충돌 ${-gap}초 후`;
     } else if (contact) {
       label = "충돌 의심 구간";
     }
+    const lead = [...group].sort((a, b) => (KIND_ORDER[b.kind] ?? 0) - (KIND_ORDER[a.kind] ?? 0))[0]; // 접촉 > 상대 차 > 내 차
     return {
       id: `e${index}`,
       label,
-      time: event.start_sec,
-      endTime: event.end_sec,
+      time: start,
+      endTime: end,
+      range: rangeText(start, end),
       position,
-      summary: KIND_LABEL[event.kind] ?? event.kind,
-      tag: event.certainty ?? "",
-      title: event.description ?? "",
-      evidence: event.evidence_text ?? "",
+      summary: group.map((e) => KIND_LABEL[e.kind] ?? e.kind).join(" · "),
+      tag: TAG[lead.certainty] ?? lead.certainty ?? "",
+      title: group.map(sentenceOf).join(" "),
+      evidence: [...new Set(group.map((e) => e.evidence_text).filter(Boolean))].join(" / "),
       hud: "CAM_FRONT",
       tone: contact ? "impact" : undefined,
     };
@@ -192,12 +293,19 @@ export function toCaseCards(relatedCases) {
 
 export function myAccidentPoints(result) {
   const type = result.accident_type;
-  return type ? [type.feature, `내 차: ${type.my_progress}`, `상대 차: ${type.other_progress}`] : ["표에서 맞는 유형을 찾지 못한 사고"];
+  return type ? [easyOf(type, "feature"), `내 차: ${easyOf(type, "my_progress")}`, `상대 차: ${easyOf(type, "other_progress")}`] : ["표에서 맞는 유형을 찾지 못한 사고"];
 }
 
 // ---------------------------------------------------------------- 결과 화면에 들어가기 전 안내
 // 지금 상태에 맞는 안내 문구
-export function describeAnalysis({ session, analysis, error, loading, analysisId }) {
+export function describeAnalysis({ session, analysis, error, loading, analysisId, expired = false }) {
+  if (expired || error?.code === "SESSION_EXPIRED") {
+    return {
+      title: "보관 시간이 지나 결과가 삭제됐어요",
+      body: "개인정보를 지키려고 분석 결과와 영상은 일정 시간이 지나면 자동으로 삭제돼요. 새 영상으로 다시 분석해 주세요.",
+      link: { to: ROUTES.home, label: "새 영상 올리기" },
+    };
+  }
   if (!session) {
     return { title: "이 브라우저에서 만든 분석이 아니에요", body: "분석 결과는 영상을 올린 브라우저에서만 볼 수 있어요. 영상을 다시 올려 분석해 주세요." };
   }
@@ -210,7 +318,11 @@ export function describeAnalysis({ session, analysis, error, loading, analysisId
     case "awaiting_confirmation":
       return { title: "사고 상황을 확인해 주세요", body: "분석은 끝났어요. 사고 상황을 확인하면 결과를 볼 수 있어요.", link: { to: ROUTES.resume(analysisId), label: "이어서 확인하기" } };
     case "unsupported":
-      return { title: "지원하지 않는 사고예요", body: analysis.unsupported_reason };
+      return {
+        title: "분석할 수 없는 영상이에요",
+        body: `${analysis.unsupported_reason} 에블리는 차량끼리 부딪힌 사고(차대차)만 분석할 수 있어요. 올리신 영상은 하루 안에 삭제돼요.`,
+        link: { to: ROUTES.home, label: "다른 영상 올리기" },
+      };
     case "failed":
       return { title: "분석하지 못했어요", body: analysis.error?.message };
     default:

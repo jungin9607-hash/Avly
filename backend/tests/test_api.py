@@ -1,6 +1,8 @@
 import dataclasses
+import os
 import time
 import unittest
+from datetime import datetime, timedelta, timezone
 from unittest import mock
 from uuid import UUID, uuid4
 
@@ -178,7 +180,7 @@ class ConfirmTests(ApiTestCase):
         self.assertEqual((r.status_code, body["registered"]), (200, True))
         by = {q["key"]: q for q in body["questions"]}
         self.assertEqual(by["other.signal_delay"]["suggested"]["answer"], "예")
-        r = self.client.get(f"/api/v1/analyses/{analysis_id}/adjustment-questions", params={"accident_type_id": 0, "role": "A"}, headers=headers)
+        r = self.client.get(f"/api/v1/analyses/{analysis_id}/adjustment-questions", params={"accident_type_id": 2, "role": "A"}, headers=headers)
         self.assertEqual((r.json()["registered"], r.json()["questions"]), (False, []))
         r = self.client.get(f"/api/v1/analyses/{analysis_id}/adjustment-questions", params={"accident_type_id": 99999, "role": "A"}, headers=headers)
         self.assertEqual((r.status_code, r.json()["error"]["code"]), (404, "ACCIDENT_TYPE_NOT_FOUND"))
@@ -320,3 +322,67 @@ class JobTests(ApiTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SessionEndTests(ApiTestCase):
+    """세션이 끝나면 결과가 사라지고, '결과 지우기'로 바로 지울 수도 있다."""
+
+    def end_session(self, accident_id):
+        from sqlalchemy import text
+        with self.engine.begin() as conn:
+            conn.execute(text("UPDATE accident SET expires_at = now() - interval '1 minute' WHERE id = :a"), {"a": accident_id})
+
+    def test_results_are_hidden_after_the_session_ends_even_before_cleanup(self):
+        accident_id, headers, analysis_id = self.make_awaiting()
+        self.assertEqual(self.client.get(f"/api/v1/analyses/{analysis_id}", headers=headers).status_code, 200)
+        self.end_session(accident_id)
+        for path in (f"/api/v1/analyses/{analysis_id}", f"/api/v1/accidents/{accident_id}", f"/api/v1/accidents/{accident_id}/video-url",
+                     f"/api/v1/analyses/{analysis_id}/adjustment-questions?accident_type_id=1&role=A"):
+            r = self.client.get(path, headers=headers)
+            self.assertEqual((r.status_code, r.json()["error"]["code"]), (410, "SESSION_EXPIRED"), path)
+        r = self.client.post(f"/api/v1/analyses/{analysis_id}/confirm", headers=headers, json={"accident_type_id": None})
+        self.assertEqual((r.status_code, r.json()["error"]["code"]), (410, "SESSION_EXPIRED"))
+
+    def test_someone_elses_expired_result_is_still_not_found(self):
+        accident_id, _, analysis_id = self.make_awaiting()
+        self.end_session(accident_id)
+        r = self.client.get(f"/api/v1/analyses/{analysis_id}", headers={"X-Session-Id": str(uuid4())})
+        self.assertEqual(r.status_code, 404)   # 남의 분석은 만료 여부도 알려 주지 않는다
+
+    def test_expired_masked_video_cannot_be_played(self):
+        accident_id, headers = self.make_accident()
+        self.upload(accident_id, headers)
+        key = f"{accident_id}/masked-test.mp4"
+        (settings.upload_dir / accident_id).mkdir(parents=True, exist_ok=True)
+        storage.path_for(key).write_bytes(b"x" * 20)
+        self.repo.add_video(UUID(accident_id), "masked", key, size_bytes=20, source_video_id=self.repo.get_video(UUID(accident_id), "original")["id"])
+        from app.security import sign_media
+        token, _ = sign_media(UUID(accident_id), "masked")
+        self.assertEqual(self.client.get(f"/api/v1/media/{token}").status_code, 200)
+        self.end_session(accident_id)
+        self.assertEqual(self.client.get(f"/api/v1/media/{token}").status_code, 404)
+
+    def test_delete_clears_the_result_and_videos_at_once(self):
+        accident_id, headers, analysis_id = self.make_awaiting(situation={"summary": "비밀 요약", "candidates": [], "default_index": None})
+        self.repo.update_analysis(UUID(analysis_id), status=st.COMPLETED, result={"state": "final"}, fault_me=30, fault_other=70)
+        r = self.client.delete(f"/api/v1/accidents/{accident_id}", headers=headers)
+        self.assertEqual((r.status_code, r.content), (204, b""))
+        row = self.repo.get_analysis(UUID(analysis_id))
+        self.assertEqual([row["scene"], row["result"], row["fault_me"]], [None, {}, None])   # 정리 작업을 기다리지 않고 지운다
+        self.assertEqual(self.repo.get_accident(UUID(accident_id))["title"], "삭제됨")
+        self.assertEqual(self.client.get(f"/api/v1/analyses/{analysis_id}", headers=headers).status_code, 410)
+        video = self.repo.get_video(UUID(accident_id), "original")
+        self.assertLessEqual(video["expires_at"], datetime.now(timezone.utc))   # 영상 파일은 worker 가 곧 지운다
+
+    def test_delete_needs_the_owner_session(self):
+        accident_id, _ = self.make_accident()
+        self.assertEqual(self.client.delete(f"/api/v1/accidents/{accident_id}").status_code, 401)
+        self.assertEqual(self.client.delete(f"/api/v1/accidents/{accident_id}", headers={"X-Session-Id": str(uuid4())}).status_code, 404)
+
+    def test_defaults_are_two_hours_and_ninety_days(self):
+        from app.config import load_settings
+        with mock.patch.dict(os.environ):
+            os.environ.pop("SESSION_TTL_HOURS", None)
+            os.environ.pop("RETENTION_DAYS", None)
+            loaded = load_settings()
+        self.assertEqual((loaded.session_ttl_hours, loaded.retention_days), (2, 90))

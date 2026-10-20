@@ -586,9 +586,27 @@ input:focus-visible + .md-radio {
 .md-consent .md-item-title {
   font-weight: 700;
 }
+/* 전체 동의: 항목 목록 위에 한 줄 */
+.md-all-top {
+  margin-bottom: 4px;
+}
+.md-all-top small {
+  margin-left: 8px;
+  color: var(--muted);
+  font-size: var(--md-font-caption);
+  font-weight: 500;
+}
 .md-consent-list li + li {
   border-top: 0;
   margin-top: 10px;
+}
+/* 사고 유형 확인: 쉬운 말 아래에 과실표의 원래 표기를 작게 */
+.md-official {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: var(--md-font-caption);
+  line-height: 1.5;
+  word-break: keep-all;
 }
 .md-foot-sub {
   margin-top: 10px;

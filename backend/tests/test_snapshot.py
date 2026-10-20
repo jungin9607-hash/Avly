@@ -71,6 +71,18 @@ class SnapshotTests(unittest.TestCase):
             self.assertLessEqual(e["start_sec"], e["end_sec"])
             self.assertIn("kind", e)
 
+    def test_flow_stage_and_relation_note_are_kept(self):
+        data = load("lane_change")
+        data["timeline"].append({"kind": "사고 흐름", "stage": "접근", "actor": None, "start_sec": 1.0, "end_sec": 2.0, "description": "내 차가 직진해요.",
+                                 "certainty": "관찰", "evidence_text": ""})
+        data["timeline_relation"] = "상대 차는 처음 보인 뒤 약 2.0초 뒤에 접촉이 의심되는 장면이 나와요."
+        snap = snapshot.from_model_result(data, "replay")
+        flow = [e for e in snap["timeline"] if e["kind"] == "사고 흐름"]
+        self.assertEqual([(e["stage"], e["actor"]) for e in flow], [("접근", None)])
+        self.assertTrue(all(e["stage"] is None for e in snap["timeline"] if e["kind"] != "사고 흐름"))
+        self.assertIn("약 2.0초 뒤", snap["timeline_note"])
+        self.assertIsNone(snapshot.from_model_result(load("lane_change"), "replay")["timeline_note"])   # 예전 결과에는 없다
+
     def test_only_video_based_facts_become_suggestions(self):
         data = load("lane_change")
         data["rule_engine_input"]["factors"] = [

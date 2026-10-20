@@ -45,7 +45,8 @@ def explain_factor(factor_id, delta_pp, who):
     effect = templates['effect_up' if delta_pp > 0 else 'effect_down'].format(who=who, n=_number(delta_pp))
     entry = _data()['factors'].get(factor_id)
     if entry is None:
-        return {'factor': factor_id, 'title': FACTOR_LABELS.get(factor_id, factor_id), 'easy': None, 'question': None,
+        label = FACTOR_LABELS.get(factor_id, factor_id)
+        return {'factor': factor_id, 'title': label, 'easy': None, 'question': f"{who}에게 ‘{label}’에 해당하는 상황이 있었나요?",
                 'effect': effect, 'reviewed': False, 'missing': True}
     return {'factor': factor_id, 'title': entry['title'], 'easy': entry['easy'], 'question': entry['question'].format(who=who),
             'effect': effect, 'reviewed': entry['reviewed'], 'missing': False}

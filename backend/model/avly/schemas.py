@@ -112,6 +112,14 @@ class ParkingMotionPhase(BaseModel):
     fixed_background: str
     explanation: str
 
+class FlowStep(BaseModel):
+    stage: Literal['접근', '사고 직전', '접촉', '접촉 이후']
+    description: str
+    support: Literal['관찰', '추정', '미확인']
+    first_frame_id: str
+    last_frame_id: str
+    evidence_frame_ids: list[str]
+
 class AdjustmentObservation(BaseModel):
     actor: Literal['A', 'B']
     factor: Literal['round_entry_stop', 'round_entry_prior', 'round_entry_signal_delay', 'slow_or_stop', 'wide_right_turn', 'clear_prior_entry', 't_intersection_turn', 'slow_failure', 'opposite_arrow', 'protruding_wait_exit', 'signal_delay', 'prohibited_change', 'bus_lane_violation', 'passing_lane_change', 'gross_negligence', 'serious_negligence', 'low_speed_unjustified_stop', 'unjustified_sudden_stop', 'brake_light_fault', 'residential_area']
@@ -121,6 +129,7 @@ class AdjustmentObservation(BaseModel):
     explanation: str
 
 class Observation(BaseModel):
+    accident_flow: list[FlowStep] = Field(default_factory=list)
     road_shape_revision_reason: str = ''
     adjustment_observations: list[AdjustmentObservation] = Field(default_factory=list)
     parking_motion_phases: list[ParkingMotionPhase] = Field(default_factory=list)

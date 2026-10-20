@@ -1,4 +1,5 @@
 import mimetypes
+from datetime import datetime, timezone
 
 from fastapi import APIRouter
 from fastapi.responses import FileResponse
@@ -17,7 +18,11 @@ def media(token: str):
     accident_id, kind = verify_media(token)
     if kind != "masked":  # 원본은 서명이 있어도 제공하지 않는다
         raise AppError(403, "MEDIA_LINK_INVALID", "영상 주소가 올바르지 않거나 만료되었습니다.")
-    video = get_repo().get_video(accident_id, "masked")
+    repo = get_repo()
+    accident = repo.get_accident(accident_id)
+    if accident is None or (accident["expires_at"] is not None and accident["expires_at"] <= datetime.now(timezone.utc)):
+        raise AppError(404, "VIDEO_NOT_AVAILABLE", "재생할 수 있는 영상이 없습니다.")
+    video = repo.get_video(accident_id, "masked")
     if video is None:
         raise AppError(404, "VIDEO_NOT_AVAILABLE", "재생할 수 있는 영상이 없습니다.")
     path = storage.path_for(video["storage_key"])

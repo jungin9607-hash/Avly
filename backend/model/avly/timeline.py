@@ -4,6 +4,36 @@ from pathlib import Path
 from .constants import TIMELINE_NOTICE
 
 
+CONTACT_SCENE = {'접촉 관찰': '접촉한 장면', '충돌 정황 강함': '충돌한 것으로 보이는 장면', '접촉 추정': '접촉이 의심되는 장면', '근접만 관찰': '두 차가 가까워진 장면'}
+RELATION_NOTICE = '속도나 거리, 피할 수 있었는지는 영상만으로 알 수 없어요.'
+
+
+def relation_note(data, times):
+    """상대 차가 처음 보인 뒤 접촉(의심) 장면까지의 영상 속 시간 관계를 한 문장으로 만든다. AI 를 쓰지 않는다.
+
+    장면 시각의 차이만 쓰며 속도·거리는 말하지 않는다. 상대 차가 구별되고 접촉 근거 장면이 있을 때만 만든다.
+    """
+    scene_label = CONTACT_SCENE.get(data.get('contact'))
+    b_id = data.get('b_vehicle_id')
+    track = next((t for t in data.get('tracks', []) if b_id and t.get('vehicle_id') == b_id), None)
+    if not scene_label or data.get('b_identity') != '구별됨' or track is None:
+        return None
+    first = times.get(track.get('first_frame_id'))
+    contact = [times[i] for i in data.get('contact_frame_ids', []) if i in times]
+    if first is None or not contact:
+        return None
+    gap = min(contact) - first
+    if gap < 0.3:
+        return None
+    points = [p for p in data.get('b_screen_points', []) if p.get('visibility') == '차량 중심 식별 가능' and p.get('frame_id') in times]
+    side = None
+    if points:
+        x = min(points, key=lambda p: times[p['frame_id']])['x_center']
+        side = '왼쪽' if x < 0.33 else '오른쪽' if x > 0.67 else '가운데'
+    where = f'화면 {side}쪽에서 ' if side else ''
+    return f'상대 차는 {where}처음 보인 뒤 약 {gap:.1f}초 뒤에 {scene_label}이 나와요. ' + RELATION_NOTICE
+
+
 def build_timeline(scene, frames):
     data = scene.model_dump() if hasattr(scene, 'model_dump') else scene
     times = {}
@@ -55,13 +85,20 @@ def build_timeline(scene, frames):
         append_event('접촉 근거 구간', 'A/B' if data.get('b_identity') == '구별됨' and b_id else 'A/상대 후보', contact_ids, contact_descriptions.get(contact, contact_descriptions['판단 불가']), contact, data.get('contact_evidence', ''))
     elif data.get('impact_anchor_frame_id'):
         warnings.append('접촉 근거 구간: 직접 연결된 근거 프레임 없음. 분석 중심 시각은 충돌 시각으로 표시하지 않음')
+    for step in data.get('accident_flow', []):   # AI 가 쓴 사고 흐름 단계 (clean_accident_flow 를 거친 것)
+        start, end = times.get(step['first_frame_id']), times.get(step['last_frame_id'])
+        if start is None or end is None or start > end:
+            warnings.append(f"사고 흐름 {step['stage']}: 시간을 연결할 수 없어 표시하지 않음")
+            continue
+        evidence = sorted(dict.fromkeys(i for i in step['evidence_frame_ids'] if i in times), key=lambda i: times[i])
+        events.append({'kind': '사고 흐름', 'stage': step['stage'], 'actor': None, 'start_sec': start, 'end_sec': end, 'description': step['description'], 'certainty': step['support'], 'evidence_frame_ids': evidence, 'evidence_text': '', 'time_basis': '프레임 이미지의 sec', 'interval_meaning': 'AI 가 기록한 사고 진행 단계의 구간'})
     unique = {}
     for event in events:
         key = (event['kind'], event['start_sec'], event['end_sec'], event['description'])
         unique[key] = event
     events = sorted(unique.values(), key=lambda e: (e['start_sec'], e['end_sec'], e['kind']))
     frame_times = [{'id': i, 'sec': s} for i, s in sorted(times.items(), key=lambda p: (p[1], p[0]))]
-    return {'timeline': events, 'timeline_warnings': list(dict.fromkeys(warnings)), 'timeline_notice': TIMELINE_NOTICE, 'frame_times': frame_times}
+    return {'timeline': events, 'timeline_warnings': list(dict.fromkeys(warnings)), 'timeline_notice': TIMELINE_NOTICE, 'timeline_relation': relation_note(data, times), 'frame_times': frame_times}
 
 def timeline_lines(events):
     lines = []

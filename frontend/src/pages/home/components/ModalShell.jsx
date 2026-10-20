@@ -2,20 +2,23 @@ import { useEffect, useId, useRef } from "react";
 import "./Modal.css";
 
 /* 팝업 공통 틀: 맨 위 단계 막대 + 흰 머리말 + 흰 본문
- * progress: [현재 단계, 전체 단계] (예: [1, 2]) */
-export default function ModalShell({ badge, title, desc, progress, onClose, children }) {
+ * progress: [현재 단계, 전체 단계] (예: [1, 2])
+ * sticky: true 면 바깥 클릭과 Esc 로는 닫히지 않고 × 버튼으로만 닫힌다 (진행 중인 분석을 실수로 닫지 않게) */
+export default function ModalShell({ badge, title, desc, progress, onClose, sticky = false, children }) {
   const titleId = useId();
   const dialogRef = useRef(null);
 
   // 부모가 렌더마다 새 함수를 넘겨도 아래 효과가 다시 돌지 않도록 ref로 보관
   const closeRef = useRef(onClose);
+  const stickyRef = useRef(sticky);
   useEffect(() => {
     closeRef.current = onClose;
-  }, [onClose]);
+    stickyRef.current = sticky;
+  }, [onClose, sticky]);
 
   // Esc로 닫기, 뒤 화면 스크롤 잠금, 열리면 팝업에 포커스
   useEffect(() => {
-    const onKey = (e) => e.key === "Escape" && closeRef.current();
+    const onKey = (e) => e.key === "Escape" && !stickyRef.current && closeRef.current();
     window.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -27,7 +30,7 @@ export default function ModalShell({ badge, title, desc, progress, onClose, chil
   }, []);
 
   return (
-    <div className="md-backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+    <div className="md-backdrop" onMouseDown={(e) => e.target === e.currentTarget && !sticky && onClose()}>
       <div className="md" role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} ref={dialogRef}>
         {progress && (
           <ol className="md-progress" aria-label={`전체 ${progress[1]}단계 중 ${progress[0]}단계`}>

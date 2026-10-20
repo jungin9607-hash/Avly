@@ -5,6 +5,7 @@
 """
 
 import csv
+import json
 import sys
 from dataclasses import dataclass
 from functools import lru_cache
@@ -64,6 +65,22 @@ def rows() -> dict[int, Row]:
     return table
 
 
+LABELS_PATH = BASE_DIR / "app" / "data" / "accident_labels.json"
+LABEL_KINDS = {"place": "places", "feature": "features", "my_progress": "progress", "other_progress": "progress"}
+
+
+@lru_cache
+def labels() -> dict:
+    """과실표의 사고 장소·특징·진행 이름을 쉬운 말로 바꾼 표시용 이름. 원래 이름(과실표)은 그대로 둔다."""
+    return json.loads(LABELS_PATH.read_text(encoding="utf-8"))
+
+
+def easy_label(kind: str, original: str) -> str:
+    """kind: place | feature | my_progress | other_progress. 쉬운 말이 아직 없으면 원래 이름을 돌려준다."""
+    entry = labels().get(LABEL_KINDS[kind], {}).get(original)
+    return entry["easy"] if entry and entry.get("easy") else original
+
+
 def get_row(accident_type_id: int) -> Row | None:
     return rows().get(accident_type_id)
 
@@ -71,13 +88,22 @@ def get_row(accident_type_id: int) -> Row | None:
 def orient(row: Row, role: str) -> dict:
     """role 이 'A'이면 내 차가 표의 A, 'B'이면 내 차가 표의 B."""
     mine_is_a = role == "A"
+    my_progress = row.a_progress if mine_is_a else row.b_progress
+    other_progress = row.b_progress if mine_is_a else row.a_progress
     return {
         "accident_type_id": row.id,
         "role": role,
         "place": row.place,
         "feature": row.feature,
-        "my_progress": row.a_progress if mine_is_a else row.b_progress,
-        "other_progress": row.b_progress if mine_is_a else row.a_progress,
+        "my_progress": my_progress,
+        "other_progress": other_progress,
+        # 화면에는 쉬운 말을 크게 보여 주고, 위의 원래 이름(과실표 표기)은 작게 함께 보여 준다
+        "easy": {
+            "place": easy_label("place", row.place),
+            "feature": easy_label("feature", row.feature),
+            "my_progress": easy_label("my_progress", my_progress),
+            "other_progress": easy_label("other_progress", other_progress),
+        },
         "base_me": row.negligence_a if mine_is_a else row.negligence_b,
         "base_other": row.negligence_b if mine_is_a else row.negligence_a,
     }

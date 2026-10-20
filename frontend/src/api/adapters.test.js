@@ -132,7 +132,6 @@ test("타임라인: 접촉이 확실하면 충돌 시점을 기준으로 말한�
   const result = fixture("result_final.json");
   assert.equal(result.impact.confirmed, true);
   const moments = toMoments(result);
-  assert.equal(moments.length, result.timeline.length);
   const times = moments.map((m) => m.time);
   assert.deepEqual(times, [...times].sort((a, b) => a - b));
   const contact = moments.find((m) => m.tone === "impact");
@@ -141,12 +140,80 @@ test("타임라인: 접촉이 확실하면 충돌 시점을 기준으로 말한�
   for (const m of moments) assert.equal(m.hud, "CAM_FRONT");
 });
 
-test("타임라인: 시간축 위치는 시작 시각이 같아도 겹치지 않게 고르게 나뉜다", () => {
-  const same = { kind: "A 움직임", actor: "me", start_sec: 2.3, end_sec: 5, description: "d", certainty: "c" };
-  const moments = toMoments({ timeline: [same, { ...same, kind: "B 확인 구간" }, { ...same, start_sec: 5.9 }, { ...same, start_sec: 6 }], impact: {} });
+test("타임라인: 시간축 위치는 단계 수만큼 고르게 나뉜다", () => {
+  const event = (kind, start) => ({ kind, actor: "me", start_sec: start, end_sec: start + 0.2, description: "d", certainty: "c" });
+  const moments = toMoments({ timeline: [event("A 움직임", 1), event("B 확인 구간", 3), event("접촉 근거 구간", 5), event("A 움직임", 8)], impact: {} });
   const expected = [0, 100 / 3, 200 / 3, 100];
+  assert.equal(moments.length, 4);
   moments.forEach((m, i) => assert.ok(Math.abs(m.position - expected[i]) < 1e-9, `${i}번째 위치 ${m.position}`));
-  assert.deepEqual(toMoments({ timeline: [same], impact: {} }).map((m) => m.position), [0]);
+  assert.deepEqual(toMoments({ timeline: [event("A 움직임", 1)], impact: {} }).map((m) => m.position), [0]);
+});
+
+test("타임라인: 끊겨서 이어지는 같은 상태의 내 차 움직임은 하나로 합친다", () => {
+  const move = (start, end, certainty = "이동 추정") => ({ kind: "A 움직임", actor: "me", start_sec: start, end_sec: end, certainty });
+  const [only] = toMoments({ timeline: [move(2.33, 5.73), move(5.8, 6.4)], impact: {} });
+  assert.equal(toMoments({ timeline: [move(2.33, 5.73), move(5.8, 6.4)], impact: {} }).length, 1);
+  assert.equal(only.endTime, 6.4);
+  // 상태가 다르거나 간격이 넓으면 따로 둔다
+  assert.equal(toMoments({ timeline: [move(1, 3), move(3.1, 6, "정지 추정")], impact: {} }).length, 2);
+  assert.equal(toMoments({ timeline: [move(1, 3), move(5, 6)], impact: {} }).length, 2);
+});
+
+test("타임라인: 시작 시각이 비슷한 관찰은 한 단계로 묶고 같은 장면이 반복되지 않는다", () => {
+  const result = fixture("result_final.json"); // 내 차 2.33~5.73, 상대 차 2.33~6.93, 내 차 5.8~6.4, 접촉 5.87~6.47
+  const moments = toMoments(result);
+  assert.equal(moments.length, 2);
+  assert.equal(moments[0].summary, "내 차의 움직임 · 상대 차 확인");
+  assert.match(moments[0].title, /내 차가 움직이고 있었어요\. 상대 차가 화면에 보이는 구간이에요\./);
+  assert.equal(moments[0].tag, "확인됨");
+  assert.equal(moments[1].summary, "접촉 근거");
+  assert.equal(moments[1].tone, "impact");
+  assert.equal(new Set(moments.map((m) => m.title)).size, moments.length); // 문장이 서로 다르다
+  assert.ok(moments.every((m) => !m.title.includes("A(") && !m.title.includes("추정됨")), "모델 내부 표현이 남지 않는다");
+});
+
+test("타임라인: 사고 흐름이 있으면 접근 → 사고 직전 → 접촉 → 접촉 이후 단계로 보여 준다", () => {
+  const flow = (stage, start, end, description, certainty = "관찰") => ({ kind: "사고 흐름", stage, actor: null, start_sec: start, end_sec: end, description, certainty });
+  const result = {
+    timeline: [
+      { kind: "A 움직임", actor: "me", start_sec: 0, end_sec: 6, certainty: "이동 추정" },   // 사고 흐름이 있으면 따로 단계로 만들지 않는다
+      flow("접촉", 3, 4, "접촉이 의심되는 장면이에요.", "추정"),
+      flow("접근", 0, 2, "내 차가 직진하고 있어요."),
+      flow("사고 직전", 2, 3, "상대 차가 오른쪽에서 가까워져요."),
+    ],
+    impact: {},
+  };
+  const moments = toMoments(result);
+  assert.deepEqual(moments.map((m) => m.label), ["접근", "사고 직전", "접촉"]);
+  assert.deepEqual(moments.map((m) => m.position), [0, 50, 100]);
+  assert.equal(moments[2].tone, "impact");
+  assert.equal(moments[2].tag, "AI 추정");
+  assert.equal(moments[0].title, "내 차가 직진하고 있어요.");
+  assert.equal(moments[0].summary, "사고 흐름 1 / 3");
+  assert.equal(moments[0].range, "0~2초 (약 2초 동안)");
+});
+
+test("타임라인: 사고 흐름이 없는 예전 결과는 지금처럼 관찰 구간으로 보여 준다", () => {
+  const moments = toMoments({ timeline: [{ kind: "A 움직임", actor: "me", start_sec: 0, end_sec: 5, certainty: "이동 추정" }], impact: {} });
+  assert.equal(moments.length, 1);
+  assert.equal(moments[0].summary, "내 차의 움직임");
+});
+
+test("타임라인: 구간 길이를 쉬운 말로 알려 준다", () => {
+  const [moment] = toMoments({ timeline: [{ kind: "B 확인 구간", start_sec: 2.33, end_sec: 6.93, certainty: "구별됨" }], impact: {} });
+  assert.equal(moment.range, "2.3~6.9초 (약 5초 동안)");
+  const [instant] = toMoments({ timeline: [{ kind: "접촉 근거 구간", start_sec: 5, end_sec: 5, certainty: "접촉 추정" }], impact: {} });
+  assert.equal(instant.range, "5초");
+});
+
+test("사고 유형 이름: 쉬운 말이 있으면 그것을, 없으면 과실표의 원래 이름을 쓴다", async () => {
+  const { easyOf, easyLabel } = await import("./adapters.js");
+  const option = { feature: "차로변경(진로변경)", my_progress: "후행 직진", easy: { feature: "차선 변경 사고", my_progress: "뒤따르던 차가 직진" } };
+  assert.equal(easyOf(option, "feature"), "차선 변경 사고");
+  assert.equal(easyOf({ feature: "차로변경(진로변경)" }, "feature"), "차로변경(진로변경)"); // 예전에 저장된 결과
+  assert.equal(easyLabel([option], "my_progress", "후행 직진"), "뒤따르던 차가 직진");
+  assert.equal(easyLabel([option], "my_progress", "모르는 값"), "모르는 값");
+  assert.equal(easyOf(null, "feature"), "");
 });
 
 test("타임라인: 접촉이 확실하지 않으면 충돌 기준 표현을 쓰지 않는다", () => {
@@ -219,6 +286,18 @@ test("결과 화면에 들어가기 전 안내: 상태마다 알맞은 문구와
   assert.match(processing.body, /전체 흐름 분석/);
   const waiting = describeAnalysis({ session, analysis: { status: "awaiting_confirmation" }, analysisId: "abc" });
   assert.equal(waiting.link.to, "/upload?resume=abc");
-  assert.equal(describeAnalysis({ session, analysis: { status: "unsupported", unsupported_reason: "차대보행자 사고는 지원하지 않습니다." }, analysisId: "x" }).body, "차대보행자 사고는 지원하지 않습니다.");
+  const unsupported = describeAnalysis({ session, analysis: { status: "unsupported", unsupported_reason: "차대보행자 사고는 지원하지 않습니다." }, analysisId: "x" });
+  assert.equal(unsupported.title, "분석할 수 없는 영상이에요");
+  assert.match(unsupported.body, /^차대보행자 사고는 지원하지 않습니다\./);
+  assert.equal(unsupported.link.to, "/upload");
   assert.equal(describeAnalysis({ session, analysis: { status: "failed", error: { message: "실패했어요" } }, analysisId: "x" }).body, "실패했어요");
+});
+
+test("세션이 끝난 분석은 삭제됐다고 알리고 새 영상 올리기로 안내한다", async () => {
+  const { describeAnalysis } = await import("./adapters.js");
+  for (const input of [{ session: null, expired: true }, { session: { sessionId: "s" }, error: { code: "SESSION_EXPIRED" } }]) {
+    const notice = describeAnalysis({ analysis: null, analysisId: "x", ...input });
+    assert.match(notice.title, /삭제됐어요/);
+    assert.equal(notice.link.to, "/upload");
+  }
 });

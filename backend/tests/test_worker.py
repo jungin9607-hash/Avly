@@ -80,7 +80,11 @@ class AnalyzeTests(WorkerTestCase):
             accident, _, _ = self.make_analysis(retention=retention)
             self.worker().run_once()
             masked = self.repo.get_video(accident["id"], "masked")
-            self.assertEqual(masked["expires_at"], None if retention else accident["expires_at"])
+            if retention:   # 저장 동의: 세션이 끝나도 retention_days 일 동안 보관
+                expected = datetime.now(timezone.utc) + timedelta(days=90)
+                self.assertLess(abs(masked["expires_at"] - expected), timedelta(minutes=1))
+            else:
+                self.assertEqual(masked["expires_at"], accident["expires_at"])
             original = self.repo.get_video(accident["id"], "original")
             self.assertEqual(original["expires_at"], accident["expires_at"])   # 원본은 동의와 상관없이 세션이 끝나면 삭제
 
@@ -109,6 +113,14 @@ class AnalyzeTests(WorkerTestCase):
         self.assertEqual({r.kind for r in rows}, {"original", "masked"})
         limit = datetime.now(timezone.utc) + timedelta(hours=24, minutes=1)
         self.assertTrue(all(r.expires_at is not None and r.expires_at <= limit for r in rows), rows)
+
+    def test_unsupported_does_not_extend_a_shorter_session(self):
+        accident, _, _ = self.make_analysis(content="FAKE unsupported 차대보행자\n".encode())
+        self.worker(engine=FakeEngine(directory=FIXTURES)).run_once()
+        from sqlalchemy import text
+        with self.engine.connect() as conn:
+            rows = conn.execute(text("SELECT expires_at FROM video WHERE accident_id = :a"), {"a": accident["id"]}).all()
+        self.assertTrue(all(r.expires_at <= accident["expires_at"] for r in rows))   # 세션 끝보다 늦어지지 않는다
 
     def test_too_long_video_fails_with_a_clear_code(self):
         _, _, analysis = self.make_analysis(content=b"FAKE too_long 42.5\n")
@@ -218,11 +230,11 @@ class FinalizeTests(WorkerTestCase):
 
     def test_type_without_rules_gives_base_only(self):
         accident, analysis, w = self.awaiting()
-        self.confirm(analysis, 0, "A")
+        self.confirm(analysis, 2, "A")   # 2번은 PDF 와 기본 비율이 달라 가감 규칙을 등록하지 않은 유형
         w.run_once()
         r = self.analysis(analysis)["result"]
         self.assertEqual(r["state"], "base_only")
-        self.assertEqual(r["fault"], {"base": {"me": 80, "other": 20}, "adjusted": None, "final": None, "bounds_applied": False})
+        self.assertEqual(r["fault"], {"base": {"me": 0, "other": 100}, "adjusted": None, "final": None, "bounds_applied": False})
         self.assertFalse(r["adjustments"]["registered"])
         self.assertEqual(len(r["steps"]), 1)
 
@@ -289,22 +301,64 @@ class CleanupTests(WorkerTestCase):
         self.assertIsNotNone(row["deleted_at"])
         self.assertEqual(cleanup.delete_expired(self.repo, later), 0)   # 두 번 지우지 않는다
 
-    def test_videos_without_expiry_are_kept(self):
+    def test_retained_video_outlives_the_session_but_not_the_retention_period(self):
         accident, _, _ = self.make_analysis(retention=True)
         self.worker().run_once()
         masked = self.repo.get_video(accident["id"], "masked")
-        self.assertIsNone(masked["expires_at"])
-        cleanup.delete_expired(self.repo, datetime.now(timezone.utc) + timedelta(days=365))
-        self.assertTrue(storage.path_for(masked["storage_key"]).is_file())
-        self.assertIsNone(self.repo.get_video(accident["id"], "original"))   # 원본은 지워졌다
+        cleanup.delete_expired(self.repo, datetime.now(timezone.utc) + timedelta(days=30))
+        self.assertTrue(storage.path_for(masked["storage_key"]).is_file())   # 세션이 끝나도 90일 안에는 남는다
+        self.assertIsNone(self.repo.get_video(accident["id"], "original"))   # 원본은 세션이 끝나 지워졌다
+        cleanup.delete_expired(self.repo, datetime.now(timezone.utc) + timedelta(days=91))
+        self.assertFalse(storage.path_for(masked["storage_key"]).exists())
+
+    def test_consented_results_are_kept_as_long_as_the_video_then_removed(self):
+        accident, _, analysis = self.make_analysis(retention=True)
+        self.worker().run_once()
+        self.repo.update_analysis(analysis["id"], status=st.COMPLETED, result={"state": "final"}, confirmed={"accident_type_id": 1},
+                                  fault_me=30, fault_other=70, accident_type_id=1)
+        after_session = datetime.now(timezone.utc) + timedelta(hours=25)
+        self.assertEqual(cleanup.scrub_expired(self.repo, after_session), 0)   # 세션이 끝나도 90일 안에는 남긴다
+        row = self.analysis(analysis)
+        self.assertEqual((row["result"], row["confirmed"], row["fault_me"]), ({"state": "final"}, {"accident_type_id": 1}, 30))
+        self.assertEqual(self.repo.get_accident(accident["id"])["title"], "삭제됨")   # 사고 제목(파일 이름)은 세션이 끝나면 지운다
+        self.assertEqual(cleanup.scrub_expired(self.repo, datetime.now(timezone.utc) + timedelta(days=91)), 1)
+        self.assertEqual(self.analysis(analysis)["confirmed"], None)
+
+    def test_ending_a_consented_session_early_removes_the_results_too(self):
+        accident, _, analysis = self.make_analysis(retention=True)
+        self.worker().run_once()
+        self.repo.update_analysis(analysis["id"], status=st.COMPLETED, result={"state": "final"})
+        self.repo.expire_accident_now(accident["id"])   # 결과 지우기: 동의를 거둔 것과 같다
+        self.assertEqual(cleanup.scrub_expired(self.repo), 1)
+        self.assertEqual(self.analysis(analysis)["result"], {})
+
+    def test_scrub_removes_results_of_ended_sessions_and_keeps_the_log(self):
+        accident, _, analysis = self.make_analysis()
+        self.worker().run_once()
+        self.worker().run_once()
+        self.repo.update_analysis(analysis["id"], status=st.COMPLETED, result={"state": "final"}, fault_me=30, fault_other=70, accident_type_id=1)
+        self.assertEqual(cleanup.scrub_expired(self.repo), 0)   # 세션이 아직 끝나지 않았다
+        later = datetime.now(timezone.utc) + timedelta(hours=25)
+        self.assertEqual(cleanup.scrub_expired(self.repo, later), 1)
+        row = self.analysis(analysis)
+        self.assertEqual([row[k] for k in ("scene", "confirmed", "fault_me", "accident_type_id")], [None] * 4)
+        self.assertEqual(row["result"], {})   # 완료 상태는 result 가 비어 있을 수 없어서 빈 객체로 둔다
+        self.assertEqual(self.repo.get_accident(accident["id"], None)["title"], "삭제됨")
+        from sqlalchemy import text
+        with self.engine.connect() as conn:
+            logs = conn.execute(text("SELECT count(*) FROM analysis_stage_log WHERE analysis_id = :a"), {"a": analysis["id"]}).scalar()
+        self.assertGreaterEqual(logs, 1)   # 비용 계산에 쓰는 호출 기록은 남긴다
+        self.assertEqual(cleanup.scrub_expired(self.repo, later), 0)   # 두 번 해도 같다
 
     def test_maintenance_runs_cleanup_and_requeue(self):
         accident, original, _ = self.make_analysis()
         w = self.worker()
         w._last_maintenance = 0
-        with mock.patch.object(cleanup, "delete_expired", return_value=0) as deleted:
+        with mock.patch.object(cleanup, "delete_expired", return_value=0) as deleted, \
+                mock.patch.object(cleanup, "scrub_expired", return_value=0) as scrubbed:
             w.maintenance(interval=0)
         deleted.assert_called_once()
+        scrubbed.assert_called_once()
 
 
 class EngineTests(unittest.TestCase):
