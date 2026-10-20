@@ -132,7 +132,6 @@ test("타임라인: 접촉이 확실하면 충돌 시점을 기준으로 말한�
   const result = fixture("result_final.json");
   assert.equal(result.impact.confirmed, true);
   const moments = toMoments(result);
-  assert.equal(moments.length, result.timeline.length);
   const times = moments.map((m) => m.time);
   assert.deepEqual(times, [...times].sort((a, b) => a - b));
   const contact = moments.find((m) => m.tone === "impact");
@@ -141,12 +140,53 @@ test("타임라인: 접촉이 확실하면 충돌 시점을 기준으로 말한�
   for (const m of moments) assert.equal(m.hud, "CAM_FRONT");
 });
 
-test("타임라인: 시간축 위치는 시작 시각이 같아도 겹치지 않게 고르게 나뉜다", () => {
-  const same = { kind: "A 움직임", actor: "me", start_sec: 2.3, end_sec: 5, description: "d", certainty: "c" };
-  const moments = toMoments({ timeline: [same, { ...same, kind: "B 확인 구간" }, { ...same, start_sec: 5.9 }, { ...same, start_sec: 6 }], impact: {} });
+test("타임라인: 시간축 위치는 단계 수만큼 고르게 나뉜다", () => {
+  const event = (kind, start) => ({ kind, actor: "me", start_sec: start, end_sec: start + 0.2, description: "d", certainty: "c" });
+  const moments = toMoments({ timeline: [event("A 움직임", 1), event("B 확인 구간", 3), event("접촉 근거 구간", 5), event("A 움직임", 8)], impact: {} });
   const expected = [0, 100 / 3, 200 / 3, 100];
+  assert.equal(moments.length, 4);
   moments.forEach((m, i) => assert.ok(Math.abs(m.position - expected[i]) < 1e-9, `${i}번째 위치 ${m.position}`));
-  assert.deepEqual(toMoments({ timeline: [same], impact: {} }).map((m) => m.position), [0]);
+  assert.deepEqual(toMoments({ timeline: [event("A 움직임", 1)], impact: {} }).map((m) => m.position), [0]);
+});
+
+test("타임라인: 끊겨서 이어지는 같은 상태의 내 차 움직임은 하나로 합친다", () => {
+  const move = (start, end, certainty = "이동 추정") => ({ kind: "A 움직임", actor: "me", start_sec: start, end_sec: end, certainty });
+  const [only] = toMoments({ timeline: [move(2.33, 5.73), move(5.8, 6.4)], impact: {} });
+  assert.equal(toMoments({ timeline: [move(2.33, 5.73), move(5.8, 6.4)], impact: {} }).length, 1);
+  assert.equal(only.endTime, 6.4);
+  // 상태가 다르거나 간격이 넓으면 따로 둔다
+  assert.equal(toMoments({ timeline: [move(1, 3), move(3.1, 6, "정지 추정")], impact: {} }).length, 2);
+  assert.equal(toMoments({ timeline: [move(1, 3), move(5, 6)], impact: {} }).length, 2);
+});
+
+test("타임라인: 시작 시각이 비슷한 관찰은 한 단계로 묶고 같은 장면이 반복되지 않는다", () => {
+  const result = fixture("result_final.json"); // 내 차 2.33~5.73, 상대 차 2.33~6.93, 내 차 5.8~6.4, 접촉 5.87~6.47
+  const moments = toMoments(result);
+  assert.equal(moments.length, 2);
+  assert.equal(moments[0].summary, "내 차의 움직임 · 상대 차 확인");
+  assert.match(moments[0].title, /내 차가 움직이고 있었어요\. 상대 차가 화면에 보이는 구간이에요\./);
+  assert.equal(moments[0].tag, "확인됨");
+  assert.equal(moments[1].summary, "접촉 근거");
+  assert.equal(moments[1].tone, "impact");
+  assert.equal(new Set(moments.map((m) => m.title)).size, moments.length); // 문장이 서로 다르다
+  assert.ok(moments.every((m) => !m.title.includes("A(") && !m.title.includes("추정됨")), "모델 내부 표현이 남지 않는다");
+});
+
+test("타임라인: 구간 길이를 쉬운 말로 알려 준다", () => {
+  const [moment] = toMoments({ timeline: [{ kind: "B 확인 구간", start_sec: 2.33, end_sec: 6.93, certainty: "구별됨" }], impact: {} });
+  assert.equal(moment.range, "2.3~6.9초 (약 5초 동안)");
+  const [instant] = toMoments({ timeline: [{ kind: "접촉 근거 구간", start_sec: 5, end_sec: 5, certainty: "접촉 추정" }], impact: {} });
+  assert.equal(instant.range, "5초");
+});
+
+test("사고 유형 이름: 쉬운 말이 있으면 그것을, 없으면 과실표의 원래 이름을 쓴다", async () => {
+  const { easyOf, easyLabel } = await import("./adapters.js");
+  const option = { feature: "차로변경(진로변경)", my_progress: "후행 직진", easy: { feature: "차선 변경 사고", my_progress: "뒤따르던 차가 직진" } };
+  assert.equal(easyOf(option, "feature"), "차선 변경 사고");
+  assert.equal(easyOf({ feature: "차로변경(진로변경)" }, "feature"), "차로변경(진로변경)"); // 예전에 저장된 결과
+  assert.equal(easyLabel([option], "my_progress", "후행 직진"), "뒤따르던 차가 직진");
+  assert.equal(easyLabel([option], "my_progress", "모르는 값"), "모르는 값");
+  assert.equal(easyOf(null, "feature"), "");
 });
 
 test("타임라인: 접촉이 확실하지 않으면 충돌 기준 표현을 쓰지 않는다", () => {

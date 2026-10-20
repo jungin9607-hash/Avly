@@ -119,38 +119,106 @@ export function toReportModel(result, analysisId) {
 }
 
 // ---------------------------------------------------------------- 타임라인
+// 서버의 타임라인은 AI 가 기록한 관찰 구간(내 차의 움직임, 상대 차 확인, 접촉 근거)을 하나씩 담는다. 구간끼리 겹치고 시작 시각이 거의 같은 것이 많아서
+// 그대로 한 단계씩 보여 주면 같은 장면이 반복된다. 그래서 (1) 같은 상태가 끊겨서 이어지는 내 차의 움직임은 하나로 합치고
+// (2) 시작 시각이 비슷한 관찰은 한 단계로 묶는다. 문장은 AI 의 관찰을 그대로 옮기되 쉬운 말로 미리 정해 둔 것을 쓴다(AI 가 새로 쓰지 않는다).
 const KIND_LABEL = { "A 움직임": "내 차의 움직임", "B 확인 구간": "상대 차 확인", "접촉 근거 구간": "접촉 근거" };
+const KIND_ORDER = { "A 움직임": 0, "B 확인 구간": 1, "접촉 근거 구간": 2 };
+const MERGE_SEC = 0.5; // 이 시간(초) 안에서 이어지거나 함께 시작하는 관찰은 하나로 본다
+
+const SENTENCES = {
+  "A 움직임": {
+    "이동 추정": "내 차가 움직이고 있었어요.",
+    "정지 추정": "내 차가 멈춰 있었어요.",
+    default: "내 차가 움직였는지는 영상만으로 알기 어려워요.",
+  },
+  "B 확인 구간": {
+    구별됨: "상대 차가 화면에 보이는 구간이에요.",
+    default: "상대 차로 보이는 차가 화면에 나오는 구간이에요. 어느 차인지는 더 확인이 필요해요.",
+  },
+  "접촉 근거 구간": {
+    "접촉 관찰": "내 차와 상대 차가 부딪힌 장면으로 보여요.",
+    "충돌 정황 강함": "부딪혔을 가능성이 높은 장면이에요. 실제로 닿았는지는 확인이 필요해요.",
+    "접촉 추정": "부딪혔을 수 있는 장면이에요. 접촉 여부는 확인이 필요해요.",
+    "근접만 관찰": "두 차가 가까이 있었지만 부딪혔는지는 확인되지 않았어요.",
+    default: "접촉했는지 판단하기 어려운 장면이에요.",
+  },
+};
+// 화면의 작은 표시. AI 가 확정한 것이 아니라 추정인 것은 그렇게 보이게 한다.
+const TAG = {
+  "이동 추정": "AI 추정", "정지 추정": "AI 추정", 구별됨: "확인됨", "접촉 관찰": "접촉 관찰", "충돌 정황 강함": "충돌 의심",
+  "접촉 추정": "접촉 추정", "근접만 관찰": "근접만 관찰", "판단 불가": "판단 어려움",
+};
 
 const round1 = (value) => Math.round(value * 10) / 10;
+
+function sentenceOf(event) {
+  const table = SENTENCES[event.kind];
+  return table ? (table[event.certainty] ?? table.default) : (event.description ?? "");
+}
+
+// 같은 상태가 끊겨서 이어지는 내 차의 움직임(예: 이동 추정 두 구간)을 하나로 합친다
+function mergeMovement(events) {
+  const rest = events.filter((e) => e.kind !== "A 움직임");
+  const merged = [];
+  for (const event of events.filter((e) => e.kind === "A 움직임").sort((a, b) => a.start_sec - b.start_sec)) {
+    const last = merged[merged.length - 1];
+    if (last && last.certainty === event.certainty && event.start_sec - last.end_sec <= MERGE_SEC) last.end_sec = Math.max(last.end_sec, event.end_sec);
+    else merged.push({ ...event });
+  }
+  return [...rest, ...merged];
+}
+
+// 시작 시각이 비슷한 관찰을 한 묶음으로. 묶음 안에서는 내 차 → 상대 차 → 접촉 순서
+function groupByStart(events) {
+  const sorted = [...events].sort((a, b) => a.start_sec - b.start_sec || (KIND_ORDER[a.kind] ?? 9) - (KIND_ORDER[b.kind] ?? 9));
+  const groups = [];
+  for (const event of sorted) {
+    const group = groups[groups.length - 1];
+    if (group && event.start_sec - group[0].start_sec <= MERGE_SEC) group.push(event);
+    else groups.push([event]);
+  }
+  return groups;
+}
+
+function rangeText(start, end) {
+  const length = end - start;
+  if (length < 0.05) return `${round1(start)}초`;
+  return length >= 1 ? `${round1(start)}~${round1(end)}초 (약 ${Math.round(length)}초 동안)` : `${round1(start)}~${round1(end)}초`;
+}
 
 // Time 화면이 읽는 모양: { id, label, time, summary, tag, title, hud, tone }
 // impact.confirmed 일 때만 "충돌 N초 전"처럼 충돌 시점을 기준으로 말한다. 아니면 영상 시각만 보여 준다.
 export function toMoments(result) {
   const impact = result.impact ?? {};
-  const events = [...(result.timeline ?? [])].sort((a, b) => a.start_sec - b.start_sec);
-  return events.map((event, index) => {
-    const contact = event.kind === "접촉 근거 구간";
-    // 시간축 위치는 순서대로 고르게 나눈다. 구간 시작 시각이 서로 가까우면(같은 시각도 흔하다) 글자가 겹쳐서 읽을 수 없다.
-    const position = events.length > 1 ? (index / (events.length - 1)) * 100 : 0;
-    let label = `${round1(event.start_sec)}초`;
+  const groups = groupByStart(mergeMovement(result.timeline ?? []));
+  return groups.map((group, index) => {
+    const start = group[0].start_sec;
+    const end = Math.max(...group.map((e) => e.end_sec));
+    const contact = group.some((e) => e.kind === "접촉 근거 구간");
+    // 시간축 위치는 순서대로 고르게 나눈다. 구간 시작 시각이 서로 가까우면 글자가 겹쳐서 읽을 수 없다.
+    const position = groups.length > 1 ? (index / (groups.length - 1)) * 100 : 0;
+    let label = `${round1(start)}초`;
     if (impact.confirmed && impact.sec != null) {
-      const gap = round1(impact.sec - event.start_sec);
+      const gap = round1(impact.sec - start);
       if (contact) label = "충돌 시점";
       else if (gap > 0) label = `충돌 ${gap}초 전`;
       else if (gap < 0) label = `충돌 ${-gap}초 후`;
     } else if (contact) {
       label = "충돌 의심 구간";
     }
+    const lead = [...group].sort((a, b) => (KIND_ORDER[b.kind] ?? 0) - (KIND_ORDER[a.kind] ?? 0))[0]; // 접촉 > 상대 차 > 내 차
     return {
       id: `e${index}`,
       label,
-      time: event.start_sec,
-      endTime: event.end_sec,
+      time: start,
+      endTime: end,
+      range: rangeText(start, end),
       position,
-      summary: KIND_LABEL[event.kind] ?? event.kind,
-      tag: event.certainty ?? "",
-      title: event.description ?? "",
-      evidence: event.evidence_text ?? "",
+      summary: group.map((e) => KIND_LABEL[e.kind] ?? e.kind).join(" · "),
+      tag: TAG[lead.certainty] ?? lead.certainty ?? "",
+      title: group.map(sentenceOf).join(" "),
+      evidence: [...new Set(group.map((e) => e.evidence_text).filter(Boolean))].join(" / "),
       hud: "CAM_FRONT",
       tone: contact ? "impact" : undefined,
     };

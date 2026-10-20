@@ -26,10 +26,10 @@ export default function Time({ analysisId }) {
 function TimeView({ result, analysisId, session }) {
   const moments = useMemo(() => toMoments(result), [result]);
   if (moments.length === 0) return <EmptyTimeline analysisId={analysisId} />;
-  return <Moments moments={moments} analysisId={analysisId} session={session} />;
+  return <Moments moments={moments} summary={result.summary} analysisId={analysisId} session={session} />;
 }
 
-function Moments({ moments, analysisId, session }) {
+function Moments({ moments, summary, analysisId, session }) {
   const LAST = moments.length - 1;
   const stageRef = useRef(null);
   const [active, setActive] = useState(0);
@@ -64,6 +64,7 @@ function Moments({ moments, analysisId, session }) {
             <br />
             <span className="tl-h1-accent">타임라인</span>
           </h1>
+          {summary && <p className="tl-summary">{summary}</p>}
           <div className={`tl-now ${m.tone || ""}`}>
             <div className="tl-now-content" key={m.id} aria-live="polite">
               <p className="tl-now-step">
@@ -95,6 +96,7 @@ function Moments({ moments, analysisId, session }) {
               <p className="tl-when">
                 <span className="tl-mono">[{stamp(m.time)}]</span>
                 <span className="tl-tag">{m.tag}</span>
+                <span className="tl-range">{m.range}</span>
               </p>
               <h2>{m.title}</h2>
             </div>
