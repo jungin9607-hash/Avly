@@ -189,7 +189,8 @@ POST /accidents (동의, session_id 받기)
 | `adjustments` | `registered`, `applied[]`, `not_applied[]`(이유 포함), `pending[]`(확인하지 못한 요소, `question` 포함) |
 | `laws[]` | 관련 도로교통법 조문: `article`, `label`, `name`, `easy`, `missing`(풀이를 아직 안 썼으면 true) |
 | `explanation` | `base`, `situation`, `status` (쉬운 말 문장, **AI 가 아니라 미리 쓴 문장**) |
-| `timeline[]` | 구간: `kind`, `actor`(`me`/`other`/`both`), `start_sec`, `end_sec`(**영상 시작 기준 초**), `description`, `certainty`, `evidence_text` |
+| `timeline[]` | 구간: `kind`, `actor`(`me`/`other`/`both`), `start_sec`, `end_sec`(**영상 시작 기준 초**), `description`, `certainty`, `evidence_text`, `stage`. `kind`가 `사고 흐름`인 이벤트는 AI가 쓴 사고 진행 단계(`stage`: 접근 / 사고 직전 / 접촉 / 접촉 이후, 최대 4개, `actor`는 `null`)이고, 장면 인용 검증과 판단 표현·수치·접촉 단정 검사를 통과한 것만 담는다. 없으면(예전 결과나 상세 확인을 하지 않은 영상) 내 차 움직임·상대 차 확인·접촉 근거 구간만 있다 |
+| `timeline_note` | 상대 차가 처음 보인 뒤 접촉(의심) 장면까지 **영상 속 시간 관계**를 말하는 한 문장(AI 없이 장면 시각 차이로 만듦). 속도·거리는 말하지 않는다. 상대 차가 구별되고 접촉 근거 장면이 있을 때만 있고 없으면 `null` |
 | `impact` | `{sec, contact, confirmed}`. **`confirmed`가 true일 때만** 충돌 시점을 기준으로 말한다 |
 | `related_cases[]` | 판례: `case_id`, `court`, `date`, `case_number`, `summary`, `comparison_limit`, `source_url`, `source_kind`, `source_label`, `verified`, `relevance_status`, `comparison` |
 | `related_cases[].comparison` | `match_level`(`same_type`/`partial`), `match_label`, `source`(`ai`/`rule`), `common[]`, `differences[]`(문장만), `note`. `source`가 `ai`이면 `common_items[]`, `differences_items[]`(`label`, `text`, `quote` 판결문에서 가져온 구절)도 있다. **퍼센트는 없다** |

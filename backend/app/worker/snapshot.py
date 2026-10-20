@@ -2,7 +2,8 @@
 
 원본은 2MB 가 넘고 내부 용어가 많아서 DB 에 그대로 넣지 않는다. 스냅샷에는 화면에 필요한 것만 담는다.
 - situation: 사용자에게 보여줄 AI 의 사고 상황 판단과 과실표 후보
-- timeline: 사고 타임라인 (구간 단위)
+- timeline: 사고 타임라인 (구간 단위). kind 가 '사고 흐름'인 이벤트는 AI 가 쓴 사고 진행 단계다
+- timeline_note: 상대 차가 처음 보인 뒤 접촉 장면까지의 시간 관계 한 문장 (없으면 None)
 - impact: 충돌(접촉) 시점과 확실도
 - adjustment_facts: 영상에서 관찰·추정한 가감요소 (질문의 AI 제안에 쓴다)
 """
@@ -34,6 +35,7 @@ def _candidates(rule_input: dict) -> list[dict]:
 def _timeline(events: list[dict]) -> list[dict]:
     return [{
         "kind": e["kind"],
+        "stage": e.get("stage"),   # 사고 흐름 단계(접근/사고 직전/접촉/접촉 이후). 다른 종류의 이벤트는 None
         "actor": ACTOR.get(e.get("actor")),
         "start_sec": round(float(e["start_sec"]), 2),
         "end_sec": round(float(e["end_sec"]), 2),
@@ -69,6 +71,7 @@ def from_model_result(data: dict, engine: str) -> dict:
             "default_index": default_index,
         },
         "timeline": _timeline(data.get("timeline", [])),
+        "timeline_note": data.get("timeline_relation"),   # 상대 차가 처음 보인 뒤 접촉 장면까지의 영상 속 시간 관계(AI 없이 만든 한 문장)
         "impact": {"sec": frames.get(scene.get("impact_anchor_frame_id")), "contact": contact, "confirmed": confirmed_contact},
         "adjustment_facts": [
             {"actor": f["actor"], "factor": f["factor"], "value": f["value"], "status": f["status"], "reason": f.get("reason")}

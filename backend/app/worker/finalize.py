@@ -70,6 +70,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
         "summary": situation.get("summary"),
         "situation": {k: situation.get(k) for k in ("road_shape", "my_action", "other_action", "contact")},
         "timeline": snapshot["timeline"],
+        "timeline_note": snapshot.get("timeline_note"),
         "impact": snapshot["impact"],
         "related_cases": related_cases,
         "reference_candidates": [c for c in situation.get("candidates", [])],
