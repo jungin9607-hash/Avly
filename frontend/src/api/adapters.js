@@ -210,7 +210,11 @@ export function describeAnalysis({ session, analysis, error, loading, analysisId
     case "awaiting_confirmation":
       return { title: "사고 상황을 확인해 주세요", body: "분석은 끝났어요. 사고 상황을 확인하면 결과를 볼 수 있어요.", link: { to: ROUTES.resume(analysisId), label: "이어서 확인하기" } };
     case "unsupported":
-      return { title: "지원하지 않는 사고예요", body: analysis.unsupported_reason };
+      return {
+        title: "분석할 수 없는 영상이에요",
+        body: `${analysis.unsupported_reason} 에블리는 차량끼리 부딪힌 사고(차대차)만 분석할 수 있어요. 올리신 영상은 하루 안에 삭제돼요.`,
+        link: { to: ROUTES.home, label: "다른 영상 올리기" },
+      };
     case "failed":
       return { title: "분석하지 못했어요", body: analysis.error?.message };
     default:

@@ -30,9 +30,11 @@ export default function AnalysisGate({ analysisId, active, theme, children }) {
               {notice.link.label}
             </Link>
           )}
-          <Link className="ag-link" to={ROUTES.home}>
-            새 영상 분석하기
-          </Link>
+          {notice.link?.to !== ROUTES.home && (
+            <Link className="ag-link" to={ROUTES.home}>
+              새 영상 분석하기
+            </Link>
+          )}
         </div>
       </main>
     </div>

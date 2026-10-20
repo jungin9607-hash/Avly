@@ -219,6 +219,9 @@ test("결과 화면에 들어가기 전 안내: 상태마다 알맞은 문구와
   assert.match(processing.body, /전체 흐름 분석/);
   const waiting = describeAnalysis({ session, analysis: { status: "awaiting_confirmation" }, analysisId: "abc" });
   assert.equal(waiting.link.to, "/upload?resume=abc");
-  assert.equal(describeAnalysis({ session, analysis: { status: "unsupported", unsupported_reason: "차대보행자 사고는 지원하지 않습니다." }, analysisId: "x" }).body, "차대보행자 사고는 지원하지 않습니다.");
+  const unsupported = describeAnalysis({ session, analysis: { status: "unsupported", unsupported_reason: "차대보행자 사고는 지원하지 않습니다." }, analysisId: "x" });
+  assert.equal(unsupported.title, "분석할 수 없는 영상이에요");
+  assert.match(unsupported.body, /^차대보행자 사고는 지원하지 않습니다\./);
+  assert.equal(unsupported.link.to, "/upload");
   assert.equal(describeAnalysis({ session, analysis: { status: "failed", error: { message: "실패했어요" } }, analysisId: "x" }).body, "실패했어요");
 });

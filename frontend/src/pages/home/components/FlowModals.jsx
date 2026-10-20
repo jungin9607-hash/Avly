@@ -22,12 +22,12 @@ export default function FlowModals({ file, started, flow, onBegin, onClose, onPi
     case "unsupported":
       return (
         <NoticeModal
-          title="지원하지 않는 사고예요"
+          title="분석할 수 없는 영상이에요"
           desc={flow.unsupportedReason}
-          primary={{ label: "다른 영상 선택", onClick: onPickAnother }}
+          primary={{ label: "다른 영상 올리기", onClick: onPickAnother }}
           secondary={{ label: "닫기", onClick: onClose }}
         >
-          <p className="md-hint">에블리는 지금 차량끼리 부딪힌 사고(차대차)만 분석할 수 있어요. 보행자, 이륜차, 자전거 사고는 보험사나 전문가에게 상담해 주세요.</p>
+          <p className="md-hint">에블리는 지금 차량끼리 부딪힌 사고(차대차)만 분석할 수 있어요. 보행자, 이륜차, 자전거 사고는 보험사나 전문가에게 상담해 주세요. 올리신 영상은 저장에 동의하셨더라도 하루 안에 삭제돼요.</p>
         </NoticeModal>
       );
     case "failed":
