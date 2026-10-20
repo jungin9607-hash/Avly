@@ -64,6 +64,7 @@ docker compose exec backend python -m app.migrate --apply   # 대기 중인 파�
 | `RETENTION_DAYS` | `90` | 영상 저장에 동의한 사용자의 비식별 영상과 분석 결과(AI 분석, 사용자가 확정한 값)를 보관하는 날 수. 세션이 끝난 뒤에는 화면에 보여 주지 않고 보관만 한다 |
 | `CASE_COMPARE` | `auto` | 판례 비교 방식. `auto`는 `ENGINE=avly`이고 `OPENAI_API_KEY`가 있으면 AI, 아니면 규칙. `ai`/`rule`로 고정할 수 있다 |
 | `UNSUPPORTED_RETENTION_HOURS` | `24` | 차대차가 아니라 분석하지 않은 영상(원본·비식별본)을 저장 동의와 상관없이 이 시간 뒤 삭제한다 |
+| `AVLY_REQUIRE_RULE_REVIEW` | `1` | `1`이면 사람이 확인한 가감요소 유형(`reviewed: true`)만 계산·질문에 쓴다. 개발에서 검수 전 유형도 전부 보려면 `0`. 현황은 `python -m app.review_status` |
 | `ENGINE` | `avly` | `fake`(키 없이 시험) / `replay`(저장 결과 재생) / `avly`(실제 분석) |
 | `REDACTION` | `yolo` | `yolo`(번호판·사람 탐지, 운영) / `dev_copy`(가리지 않고 복사만, **운영 금지**) |
 | `OPENAI_API_KEY` | | `ENGINE=avly`에 필요 |

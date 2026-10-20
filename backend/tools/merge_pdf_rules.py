@@ -44,6 +44,8 @@ def check_against_csv(types: dict) -> None:
 def to_engine_type(t: dict) -> dict:
     """엔진이 읽는 모양으로 줄인다. 원문 추출에 쓴 부가 정보(source_csv_row 등)는 넣지 않는다."""
     merged = {k: t[k] for k in KEEP_TYPE_FIELDS if k in t}
+    merged["reviewed_by"] = ""   # 검수 완료로 바꿀 때 이름과 날짜를 적는다 (app/review_status.py 가 누가 얼마나 했는지 보여 준다)
+    merged["reviewed_at"] = ""
     merged["rules"] = [{k: r[k] for k in KEEP_RULE_FIELDS if k in r} | ({"requires_B_adjustment": True} if r.get("requires_B_adjustment") else {})
                        for r in t["rules"]]
     return merged

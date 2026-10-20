@@ -513,6 +513,8 @@
    "④ 비상점멸표시등 점등 -10"
   ],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "0_A_gross_negligence",
@@ -787,6 +789,8 @@
    "야간 +10"
   ],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "4_A_pdf_207cb0784a08df",
@@ -953,6 +957,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "5_A_gross_negligence",
@@ -1082,6 +1088,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "6_A_pdf_48eb37893b903e",
@@ -1409,6 +1417,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "7_A_gross_negligence",
@@ -1514,6 +1524,8 @@
    "③ 앞지르기 위험 장소 +10"
   ],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "8_A_pdf_06978cd9d46bcc",
@@ -1659,6 +1671,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "9_A_gross_negligence",
@@ -1778,6 +1792,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "10_A_gross_negligence",
@@ -1923,6 +1939,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "12_A_signal_delay",
@@ -2215,6 +2233,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "13_A_gross_negligence",
@@ -2314,6 +2334,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "14_A_gross_negligence",
@@ -2417,6 +2439,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "15_A_gross_negligence",
@@ -2541,6 +2565,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "16_A_gross_negligence",
@@ -2665,6 +2691,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "17_A_slow_failure",
@@ -2816,6 +2844,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "18_A_gross_negligence",
@@ -2989,6 +3019,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "19_A_gross_negligence",
@@ -3162,6 +3194,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "20_A_gross_negligence",
@@ -3269,6 +3303,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "22_A_gross_negligence",
@@ -3414,6 +3450,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "23_A_gross_negligence",
@@ -3559,6 +3597,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "24_A_gross_negligence",
@@ -3811,6 +3851,8 @@
    "B 중대한 과실 +10"
   ],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "25_A_slow_failure",
@@ -4074,6 +4116,8 @@
    "B 중대한 과실 +10"
   ],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "26_A_slow_failure",
@@ -4335,6 +4379,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "28_A_slow_failure",
@@ -4522,6 +4568,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "29_A_slow_failure",
@@ -4709,6 +4757,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "30_A_pdf_61fd7c2787fac9",
@@ -4888,6 +4938,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "31_A_gross_negligence",
@@ -5017,6 +5069,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "32_A_slow_failure",
@@ -5278,6 +5332,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "33_A_gross_negligence",
@@ -5407,6 +5463,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "34_A_gross_negligence",
@@ -5536,6 +5594,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "35_A_slow_failure",
@@ -5797,6 +5857,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "36_A_slow_failure",
@@ -6047,6 +6109,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "37_A_slow_failure",
@@ -6264,6 +6328,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "38_A_slow_failure",
@@ -6459,6 +6525,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "39_A_slow_failure",
@@ -6654,6 +6722,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "40_A_slow_failure",
@@ -6862,6 +6932,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "41_A_slow_failure",
@@ -7049,6 +7121,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "42_A_slow_failure",
@@ -7236,6 +7310,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "43_A_pdf_61fd7c2787fac9",
@@ -7465,6 +7541,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "44_A_gross_negligence",
@@ -7610,6 +7688,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "45_A_slow_failure",
@@ -7818,6 +7898,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "46_A_gross_negligence",
@@ -8026,6 +8108,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "47_A_gross_negligence",
@@ -8234,6 +8318,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "48_A_gross_negligence",
@@ -8379,6 +8465,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "49_A_slow_failure",
@@ -8566,6 +8654,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "50_A_pdf_61fd7c2787fac9",
@@ -8732,6 +8822,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "51_A_gross_negligence",
@@ -8871,6 +8963,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "52_A_signal_delay",
@@ -8974,6 +9068,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "53_A_gross_negligence",
@@ -9133,6 +9229,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "54_A_gross_negligence",
@@ -9292,6 +9390,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "58_A_gross_negligence",
@@ -9416,6 +9516,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "59_A_gross_negligence",
@@ -9611,6 +9713,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "60_A_gross_negligence",
@@ -9696,6 +9800,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "61_A_pdf_d08c44661840da",
@@ -9820,6 +9926,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "62_A_gross_negligence",
@@ -9923,6 +10031,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "63_A_pdf_b6314dc0478f37",
@@ -10026,6 +10136,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "64_A_pdf_d08c44661840da",
@@ -10234,6 +10346,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "65_A_gross_negligence",
@@ -10333,6 +10447,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "66_A_gross_negligence",
@@ -10436,6 +10552,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "67_A_pdf_d08c44661840da",
@@ -10644,6 +10762,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "68_A_pdf_d08c44661840da",
@@ -10852,6 +10972,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "69_A_pdf_d08c44661840da",
@@ -10981,6 +11103,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "70_A_gross_negligence",
@@ -11088,6 +11212,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "71_A_gross_negligence",
@@ -11191,6 +11317,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "72_A_pdf_d08c44661840da",
@@ -11399,6 +11527,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "73_A_gross_negligence",
@@ -11502,6 +11632,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "74_A_pdf_d08c44661840da",
@@ -11681,6 +11813,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "75_A_pdf_d08c44661840da",
@@ -11889,6 +12023,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "76_A_gross_negligence",
@@ -12013,6 +12149,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "77_A_gross_negligence",
@@ -12116,6 +12254,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "78_A_pdf_c3b1c2051f251f",
@@ -12355,6 +12495,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "80_A_clear_prior_entry",
@@ -12506,6 +12648,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "81_A_clear_prior_entry",
@@ -12657,6 +12801,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "82_A_clear_prior_entry",
@@ -12808,6 +12954,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "83_A_wide_right_turn",
@@ -13034,6 +13182,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "84_A_wide_right_turn",
@@ -13260,6 +13410,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "85_A_wide_right_turn",
@@ -13486,6 +13638,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "89_B_wide_right_turn",
@@ -13689,6 +13843,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "90_A_gross_negligence",
@@ -13840,6 +13996,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "91_A_pdf_1a656904f7367d",
@@ -13991,6 +14149,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "92_A_gross_negligence",
@@ -14120,6 +14280,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "93_A_pdf_296332703fcbcf",
@@ -14315,6 +14477,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "94_A_pdf_296332703fcbcf",
@@ -14510,6 +14674,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "95_A_pdf_b3ccef711a665d",
@@ -14669,6 +14835,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "96_A_pdf_b3ccef711a665d",
@@ -14828,6 +14996,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "97_A_gross_negligence",
@@ -14952,6 +15122,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "98_A_gross_negligence",
@@ -15055,6 +15227,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "99_A_gross_negligence",
@@ -15179,6 +15353,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "100_A_gross_negligence",
@@ -15282,6 +15458,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "101_A_gross_negligence",
@@ -15406,6 +15584,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "102_A_signal_delay",
@@ -15530,6 +15710,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "103_A_slow_failure",
@@ -15710,6 +15892,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "104_A_slow_failure",
@@ -15927,6 +16111,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "105_A_slow_failure",
@@ -16144,6 +16330,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "106_B_slow_failure",
@@ -16354,6 +16542,8 @@
    "B 중대한 과실 +10"
   ],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "107_A_slow_failure",
@@ -16617,6 +16807,8 @@
    "B 중대한 과실 +10"
   ],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "108_A_slow_failure",
@@ -16878,6 +17070,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "109_A_pdf_61fd7c2787fac9",
@@ -17057,6 +17251,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "110_A_slow_failure",
@@ -17318,6 +17514,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "111_B_slow_failure",
@@ -17535,6 +17733,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "112_A_slow_failure",
@@ -17796,6 +17996,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "113_A_slow_failure",
@@ -18046,6 +18248,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "114_A_pdf_61fd7c2787fac9",
@@ -18275,6 +18479,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "115_B_slow_failure",
@@ -18483,6 +18689,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "116_B_pdf_61fd7c2787fac9",
@@ -18712,6 +18920,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "117_A_slow_failure",
@@ -18920,6 +19130,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "118_B_gross_negligence",
@@ -19065,6 +19277,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "119_A_gross_negligence",
@@ -19273,6 +19487,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "121_A_slow_failure",
@@ -19460,6 +19676,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "122_A_pdf_61fd7c2787fac9",
@@ -19626,6 +19844,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "124_A_gross_negligence",
@@ -19765,6 +19985,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "125_A_gross_negligence",
@@ -19868,6 +20090,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "129_B_slow_failure",
@@ -20027,6 +20251,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "130_A_pdf_9c1d17a79f19b1",
@@ -20214,6 +20440,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "131_A_slow_failure",
@@ -20422,6 +20650,8 @@
   ],
   "source_review_pending": [],
   "reviewed": false,
+  "reviewed_by": "",
+  "reviewed_at": "",
   "rules": [
    {
     "id": "132_A_signal_delay",
