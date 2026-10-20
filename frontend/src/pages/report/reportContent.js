@@ -3,7 +3,7 @@
 // 리포트 저장·공유 + 사고 타임라인으로 이동
 export const REPORT_ACTIONS = {
   title: "분석 결과 활용하기",
-  pdf: "분석 결과 저장",
+  pdf: "보고서 보기·PDF 저장",
   share: "공유하기",
   erase: "결과 지우기",
   eraseConfirm: "분석 결과와 올린 영상을 지금 삭제할까요? 삭제하면 되돌릴 수 없어요.",

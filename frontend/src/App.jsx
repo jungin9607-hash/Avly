@@ -4,6 +4,7 @@ import Home from "./pages/home/Home";
 import Report from "./pages/report/Report";
 import Time from "./pages/time/Time";
 import Law from "./pages/law/Law";
+import ReportDoc from "./pages/reportdoc/ReportDoc";
 import { lastAnalysisId } from "./api/session";
 import { ROUTES } from "./routes";
 
@@ -29,6 +30,10 @@ function TimeRoute() {
   const { analysisId } = useParams();
   return <Time analysisId={analysisId} />;
 }
+function ReportDocRoute() {
+  const { analysisId } = useParams();
+  return <ReportDoc analysisId={analysisId} />;
+}
 function LawRoute() {
   const { analysisId } = useParams();
   return <Law analysisId={analysisId} />;
@@ -42,6 +47,7 @@ export default function App() {
         <Route path="/analysis/:analysisId" element={<ReportRoute />} />
         <Route path="/analysis/:analysisId/timeline" element={<TimeRoute />} />
         <Route path="/analysis/:analysisId/law" element={<LawRoute />} />
+        <Route path="/analysis/:analysisId/report" element={<ReportDocRoute />} />
         <Route path="/upload-test" element={<Navigate to={ROUTES.home} replace />} />
         <Route path="/analysis-test" element={<Legacy page="report" />} />
         <Route path="/timeline-test" element={<Legacy page="timeline" />} />

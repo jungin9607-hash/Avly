@@ -117,7 +117,7 @@ function ActionsSection({ model, analysisId, summaryText, children }) {
           {children}
           <StatusNotice text={model.statusText} pending={model.pending} />
           <div className="ar-evidence-head">
-            <ReportActions content={REPORT_ACTIONS} onShare={share} onErase={erase} expiresText={expiresText} />
+            <ReportActions content={REPORT_ACTIONS} onShare={share} onSave={() => navigate(ROUTES.document(analysisId))} onErase={erase} expiresText={expiresText} />
           </div>
         </div>
         {/* 창 오른쪽 아래 구석에 고정, 이 구간에 들어오면 나타남 */}
