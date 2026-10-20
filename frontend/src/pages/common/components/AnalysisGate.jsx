@@ -8,11 +8,11 @@ import "./AnalysisGate.css";
 // 결과 화면 세 개(분석 결과·타임라인·유사 판례)가 함께 쓰는 문지기.
 // 분석이 끝나서 결과가 있을 때만 children({ analysis, session }) 을 그리고, 아니면 사정에 맞는 안내를 보여 준다.
 export default function AnalysisGate({ analysisId, active, theme, children }) {
-  const { session, analysis, error, loading, retry } = useAnalysis(analysisId);
+  const { session, expired, analysis, error, loading, retry } = useAnalysis(analysisId);
 
   if (analysis?.status === "completed") return children({ analysis, session });
 
-  const notice = describeAnalysis({ session, analysis, error, loading, analysisId });
+  const notice = describeAnalysis({ session, analysis, error, loading, analysisId, expired });
   return (
     <div className="ag">
       <TopNav active={active} theme={theme} />

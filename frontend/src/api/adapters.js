@@ -197,7 +197,14 @@ export function myAccidentPoints(result) {
 
 // ---------------------------------------------------------------- 결과 화면에 들어가기 전 안내
 // 지금 상태에 맞는 안내 문구
-export function describeAnalysis({ session, analysis, error, loading, analysisId }) {
+export function describeAnalysis({ session, analysis, error, loading, analysisId, expired = false }) {
+  if (expired || error?.code === "SESSION_EXPIRED") {
+    return {
+      title: "보관 시간이 지나 결과가 삭제됐어요",
+      body: "개인정보를 지키려고 분석 결과와 영상은 일정 시간이 지나면 자동으로 삭제돼요. 새 영상으로 다시 분석해 주세요.",
+      link: { to: ROUTES.home, label: "새 영상 올리기" },
+    };
+  }
   if (!session) {
     return { title: "이 브라우저에서 만든 분석이 아니에요", body: "분석 결과는 영상을 올린 브라우저에서만 볼 수 있어요. 영상을 다시 올려 분석해 주세요." };
   }

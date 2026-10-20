@@ -27,7 +27,7 @@ async function request(path, { method = "GET", body, sessionId, signal } = {}) {
     if (error.name === "AbortError") throw error;
     throw new ApiError(0, "NETWORK_ERROR", "서버에 연결하지 못했어요. 인터넷 연결을 확인해 주세요.");
   }
-  const payload = await response.json().catch(() => null);
+  const payload = response.status === 204 ? null : await response.json().catch(() => null);
   if (!response.ok) throw toError(response.status, payload);
   return payload;
 }
@@ -59,6 +59,7 @@ function upload(path, file, { sessionId, onProgress, signal }) {
 }
 
 export const api = {
+  deleteAccident: (accidentId, opts) => request(`/api/v1/accidents/${accidentId}`, { method: "DELETE", ...opts }),
   catalog: (opts) => request("/api/v1/catalog/accident-types", opts),
   createAccident: (title, consent, opts) => request("/api/v1/accidents", { method: "POST", body: { title, consent }, ...opts }),
   uploadVideo: (accidentId, file, opts) => upload(`/api/v1/accidents/${accidentId}/videos`, file, opts),

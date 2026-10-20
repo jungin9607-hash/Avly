@@ -19,7 +19,8 @@ export function TimelineLink({ content, visible = true }) {
 
 // 증거 화면 맨 아래 오른쪽: 같은 크기 버튼 한 쌍
 // 왼쪽 "분석 결과 저장"(밝은 채움, 주 버튼) | 오른쪽 "공유하기"(투명 + 옅은 흰 테두리, 보조 버튼)
-export default function ReportActions({ content, onShare }) {
+// expiresText: "오후 3:20" 같은, 결과가 자동으로 삭제되는 시각 (없으면 안내를 생략)
+export default function ReportActions({ content, onShare, onErase, expiresText }) {
   return (
     <aside className="ar-actions-panel" aria-label={content.title}>
       <div className="ar-actions">
@@ -30,6 +31,12 @@ export default function ReportActions({ content, onShare }) {
         <button type="button" className="ar-text-action ar-text-action-share" onClick={onShare}>
           {content.share}
           <IconShare />
+        </button>
+      </div>
+      <div className="ar-erase">
+        {expiresText && <p>이 결과는 {expiresText}에 자동으로 삭제돼요.</p>}
+        <button type="button" className="ar-erase-button" onClick={onErase}>
+          {content.erase}
         </button>
       </div>
     </aside>

@@ -16,7 +16,7 @@
 | 비식별화 | `backend/plate/redact.py`: 번호판은 검은 박스, 사람은 전체 블러. 실패하면 영상을 만들지 않고 멈춤(fail-closed). 비식별된 영상만 저장·분석에 사용 | prd-reference §10 |
 | 판례 | DB 먼저, 없으면 API로 보충. 공통점·차이점은 규칙 기반(퍼센트 없음) | api.md |
 | 프론트 | 가짜 데이터 제거, 서버 연결. 사전 설문·퀴즈 동의·영상 증거·텔레메트리 제거 | [frontend/README.md](../frontend/README.md), [frontend-structure.md](frontend-structure.md) |
-| 개인정보 | 분석 동의(필수), 영상 저장·활용 동의(선택). 원본은 세션 종료(24시간)에 삭제. 차대차가 아닌 영상은 동의와 무관하게 24시간 뒤 삭제 | [review/consent-review.md](review/consent-review.md) |
+| 개인정보 | 분석 동의(필수), 영상 저장·활용 동의(선택). 분석 결과와 원본은 세션 종료(2시간)에 삭제, 저장 동의 영상은 90일 보관. 차대차가 아닌 영상은 동의와 무관하게 24시간 뒤 삭제 | [review/consent-review.md](review/consent-review.md) |
 
 문서 정리: v0.3·v0.4 초안 API 문서와 v0.3·v0.4 초안 SQL(`schema.sql`, `schema-v0.4-draft.sql`)은 구현으로 대체되어 삭제했습니다. 필요하면 git 기록에서 볼 수 있습니다.
 

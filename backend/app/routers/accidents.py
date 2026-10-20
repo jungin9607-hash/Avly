@@ -22,7 +22,8 @@ from app.security import sign_media
 
 router = APIRouter(prefix="/accidents", tags=["accidents"])
 
-NOT_FOUND = {404: {"model": ErrorResponse, "description": "ACCIDENT_NOT_FOUND"}}
+NOT_FOUND = {404: {"model": ErrorResponse, "description": "ACCIDENT_NOT_FOUND"},
+             410: {"model": ErrorResponse, "description": "SESSION_EXPIRED (세션이 끝나 결과가 삭제됨)"}}
 SESSION = {401: {"model": ErrorResponse, "description": "SESSION_REQUIRED, SESSION_INVALID"}}
 
 
@@ -41,6 +42,15 @@ def create_accident(body: AccidentCreate, repo: Repository = Depends(get_repo)):
 def get_accident(accident: dict = Depends(own_accident), repo: Repository = Depends(get_repo)):
     original = repo.get_video(accident["id"], "original")
     return {**accident, "video": original, "latest_analysis_id": repo.latest_analysis_id(accident["id"])}
+
+
+@router.delete("/{accident_id}", status_code=status.HTTP_204_NO_CONTENT, responses={**NOT_FOUND, **SESSION})
+def delete_accident(accident: dict = Depends(own_accident), repo: Repository = Depends(get_repo)):
+    """결과 지우기: 세션이 끝나기를 기다리지 않고 지금 분석 결과를 지우고 영상(저장 동의한 비식별 영상 포함)도 삭제하도록 한다.
+
+    분석 결과는 바로 지워져 조회할 수 없고, 영상 파일은 worker 가 곧 삭제한다."""
+    repo.expire_accident_now(accident["id"])
+    repo.scrub_expired()
 
 
 @router.post(

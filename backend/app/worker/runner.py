@@ -9,7 +9,7 @@
 
 import logging
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from app import catalog
@@ -106,8 +106,8 @@ class Worker:
         key = storage.key_for(accident["id"], "masked", ".mp4")
         destination = storage.path_for(key)
         stats = self.redaction.redact(source, destination)
-        # 저장 동의가 없으면 비식별 영상도 세션이 끝날 때 지운다. 동의했다면 계속 보관한다.
-        expires = None if accident["retention_consent_at"] else accident["expires_at"]
+        # 저장 동의가 없으면 비식별 영상도 세션이 끝날 때 지운다. 동의했다면 retention_days 일 동안 보관한다.
+        expires = (datetime.now(timezone.utc) + timedelta(days=settings.retention_days)) if accident["retention_consent_at"] else accident["expires_at"]
         masked = self.repo.add_video(accident["id"], "masked", key, size_bytes=destination.stat().st_size,
                                      source_video_id=original["id"], expires_at=expires, stats=stats)
         self.repo.update_analysis(analysis["id"], video_id=masked["id"])
@@ -146,6 +146,9 @@ class Worker:
         deleted = cleanup.delete_expired(self.repo)
         if deleted:
             logger.info("만료된 영상 %d개를 삭제했습니다.", deleted)
+        scrubbed = cleanup.scrub_expired(self.repo)
+        if scrubbed:
+            logger.info("세션이 끝난 분석 결과 %d건을 지웠습니다.", scrubbed)
 
     def loop(self) -> None:
         logger.info("worker 시작: engine=%s, redaction=%s", getattr(self.engine, "name", "?"), getattr(self.redaction, "name", "?"))

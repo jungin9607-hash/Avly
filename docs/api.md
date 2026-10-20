@@ -60,6 +60,7 @@ POST /accidents (동의, session_id 받기)
 | GET | `/api/v1/catalog/accident-types` | 과실표 선택지 전체 (세션 불필요) | 200 |
 | POST | `/api/v1/accidents` | 사고 생성과 동의 기록, 세션 발급 | 201 |
 | GET | `/api/v1/accidents/{id}` | 사고 조회 | 200 |
+| DELETE | `/api/v1/accidents/{id}` | 결과 지우기: 분석 결과와 영상을 지금 삭제 | 204 |
 | POST | `/api/v1/accidents/{id}/videos` | 영상 업로드 (사고마다 하나) | 201 |
 | GET | `/api/v1/accidents/{id}/video-url` | 비식별 영상 재생 주소 | 200 |
 | POST | `/api/v1/accidents/{id}/analyses` | 분석 시작 | 202 |
@@ -95,6 +96,14 @@ POST /accidents (동의, session_id 받기)
 `{"available": true, "url": "/api/v1/media/...", "expires_at": "..."}`. 번호판·사람을 가린 영상만 제공하고 **원본은 어떤 경우에도 제공하지 않는다**.
 `available: false`이면 영상을 보관하지 않았거나(저장 동의 없음) 삭제된 것이다. 주소는 짧게(기본 10분) 유효하므로 화면에 들어올 때 받는다.
 `<video src>`는 헤더를 보낼 수 없어서 이 주소에 서명이 들어 있다. 앞에 서버 주소를 붙여 쓴다.
+
+### DELETE /api/v1/accidents/{id}
+
+"결과 지우기". 세션이 끝나기를 기다리지 않고 지금 지운다. 분석 결과(`scene`, `confirmed`, `result`, 과실비율)와 사고 제목은 저장 동의 여부와 상관없이 **바로** 지워지고, 영상은 저장 동의한 비식별 영상까지 모두 만료 처리되어 worker가 곧 파일을 삭제한다(동의를 거두는 것과 같다). 이후 이 사고·분석 조회는 `410 SESSION_EXPIRED`. 본문 없이 `204`.
+
+### 세션 만료
+
+사고를 만든 때부터 `SESSION_TTL_HOURS`(기본 2시간)가 지나면 `accident.expires_at` 이 지난 것이다. 이 사고와 분석에 대한 모든 요청은 worker의 정리 작업을 기다리지 않고 `410 SESSION_EXPIRED` 를 돌려준다(남의 사고는 만료 여부와 상관없이 `404`). 응답의 `expires_at` 으로 화면에서 남은 시간을 안내할 수 있다. 저장 동의한 사용자의 비식별 영상과 분석 결과(`scene`, `confirmed`, `result`)는 세션이 끝나도 `RETENTION_DAYS`(기본 90일) 동안 DB에 남지만 사용자에게는 제공하지 않는다(사고 제목은 지운다). 저장 동의가 없으면 결과도 세션이 끝날 때 지운다.
 
 ### POST /api/v1/accidents/{id}/analyses
 
@@ -208,6 +217,7 @@ POST /accidents (동의, session_id 받기)
 | 409 | `VIDEO_ALREADY_UPLOADED`, `VIDEO_REQUIRED`, `ANALYSIS_IN_PROGRESS` | 영상 규칙, 진행 중인 분석 |
 | 409 | `ANALYSIS_NOT_AWAITING`, `ANALYSIS_NOT_COMPLETED` | 확인 대기가 아닐 때 `confirm`, 완료 전 `reports` |
 | 413 | `FILE_TOO_LARGE` | 업로드 용량 초과 |
+| 410 | `SESSION_EXPIRED` | 세션이 끝나 결과가 삭제됨 (`expires_at` 이후의 모든 사고·분석 요청) |
 | 415 | `UNSUPPORTED_FILE_TYPE` | 허용하지 않는 확장자 |
 | 422 | `CONSENT_REQUIRED`, `ROLE_REQUIRED`, `INVALID_ANSWER`, `VALIDATION_ERROR` | 동의 없음, 역할 누락, 잘못된 답변, 요청 형식 오류(`details` 포함) |
 | 500 / 501 / 503 | `INTERNAL_SERVER_ERROR` / `REPORT_NOT_IMPLEMENTED` / `DATABASE_UNAVAILABLE` | |

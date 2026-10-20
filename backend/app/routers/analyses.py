@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Query, status
 
 from app import catalog
 from app import status as st
-from app.deps import get_repo
+from app.deps import ensure_not_expired, get_repo
 from app.errors import AppError
 from app.presenters import analysis_view
 from app.repository import NotAwaitingConfirmation, Repository
@@ -14,7 +14,8 @@ from app.security import session_id
 
 router = APIRouter(prefix="/analyses", tags=["analyses"])
 
-NOT_FOUND = {404: {"model": ErrorResponse, "description": "ANALYSIS_NOT_FOUND"}}
+NOT_FOUND = {404: {"model": ErrorResponse, "description": "ANALYSIS_NOT_FOUND"},
+             410: {"model": ErrorResponse, "description": "SESSION_EXPIRED (세션이 끝나 결과가 삭제됨)"}}
 SESSION = {401: {"model": ErrorResponse, "description": "SESSION_REQUIRED, SESSION_INVALID"}}
 
 
@@ -22,6 +23,7 @@ def _own_analysis(analysis_id: UUID, sid: UUID, repo: Repository) -> dict:
     row = repo.get_analysis(analysis_id, sid)
     if row is None:
         raise AppError(404, "ANALYSIS_NOT_FOUND", "분석 정보를 찾을 수 없습니다.")
+    ensure_not_expired(row["session_expires_at"])
     return row
 
 
