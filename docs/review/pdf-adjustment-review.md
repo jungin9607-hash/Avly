@@ -5,11 +5,23 @@
 
 ## 검수 방법
 
-### 1. 규칙(숫자) 검수 — `backend/model/avly/data/adjustment_rules.json`
-1. VS Code에서 파일을 열고 Ctrl+F로 `"reviewed": false`를 찾습니다. 규칙마다 `pdf_source`가 있습니다. `chart`는 PDF 도표 번호, `raw_text`는 원문에서 뽑은 항목(예: `B 좌회전 금지 위반 +20`), `pdf_pages`는 PDF 쪽수입니다.
-2. 원문 PDF의 해당 도표와 맞는지 확인합니다: **누구에게(`actor` A/B), 얼마(`delta_pp`), 어떤 항목**인지, 같은 그룹(`group`)끼리 겹치는지.
-3. 맞으면 `reviewed`를 `true`로 바꿉니다. 틀리면 `delta_pp`, `actor`를 고치거나 규칙을 지웁니다. (`id`, `factor` 이름은 바꾸지 않습니다.)
-4. 규칙을 고친 뒤에는 `docker compose exec backend python -m unittest tests.test_pdf_rules`로 확인합니다.
+### 가장 쉬운 방법: 검수 페이지 (JSON을 열지 않아도 됩니다)
+1. **[review.html](review.html)을 더블클릭**해서 브라우저로 엽니다(인터넷 필요 없음). 위쪽에 이름을 적습니다.
+2. 카드를 열어 적힌 내용이 PDF 원문과 맞는지 보고 **맞아요 / 틀려요 / 모르겠어요**를 누릅니다. 쉬운 문장 탭에서는 문장을 바로 고칠 수도 있습니다. 중간에 닫아도 자동 저장됩니다.
+3. 다 하면 **내보내기**를 눌러 받은 파일(`검수결과_이름_날짜.json`)을 담당자에게 보냅니다.
+4. 담당자는 받은 파일을 한 폴더에 모아 `docker compose exec backend python tools/apply_review.py 파일1.json 파일2.json`을 실행합니다. 모두 맞다고 확인한 유형만 켜지고, 틀린 곳은 [review-issues.md](review-issues.md)에 모입니다. 두 사람의 결정이 다르면 반영하지 않고 이슈로 남깁니다.
+5. 얼마나 됐는지는 `docker compose exec backend python -m app.review_status`로 봅니다.
+6. 규칙이나 문장이 바뀌면 `docker compose exec -T backend python tools/make_review_page.py > docs/review/review.html`로 페이지를 다시 만듭니다.
+
+아래 "JSON을 직접 고치는 방법"은 위 방법을 쓰지 않을 때만 필요합니다.
+
+### 1. 규칙(숫자) 검수 — `backend/model/avly/data/adjustment_rules.json` (JSON을 직접 고치는 방법)
+**검수하는 단위는 규칙 하나하나가 아니라 유형 하나입니다.** 유형 하나의 규칙을 다 확인했으면 그 유형에 한 번만 표시하면 됩니다.
+1. VS Code에서 파일을 열고 확인할 유형 번호(예: `"60": {`)로 갑니다. 규칙마다 `pdf_source`가 있습니다. `chart`는 PDF 도표 번호, `raw_text`는 원문에서 뽑은 항목(예: `B 좌회전 금지 위반 +20`), `pdf_pages`는 PDF 쪽수입니다.
+2. 원문 PDF의 해당 도표와 맞는지 봅니다: **누구에게(`actor` A/B), 얼마(`delta_pp`), 어떤 항목**인지. 컴퓨터가 이미 규칙 838개의 원문 행·수치·A/B 대응이 추출본과 일치하는 것을 확인했으므로, 추출본 자체가 PDF와 맞는지만 보면 됩니다.
+3. 다 맞으면 유형 위쪽의 세 줄을 이렇게 바꿉니다. **이렇게 확인한 유형만 서비스에 켜집니다.** `"reviewed": true,` `"reviewed_by": "이름",` `"reviewed_at": "2026-10-21",`
+4. 틀린 규칙은 `delta_pp`, `actor`를 고치거나 규칙을 지웁니다. (`id`, `factor` 이름은 바꾸지 않습니다.)
+5. 누가 어디까지 했는지, 표시가 빠졌거나 어긋난 곳이 있는지는 `docker compose exec backend python -m app.review_status` 한 번으로 볼 수 있습니다. 개발 중에 검수 전 유형도 전부 켜서 보려면 `.env`에 `AVLY_REQUIRE_RULE_REVIEW=0`을 적습니다.
 
 ### 2. 쉬운 말 검수 — `backend/model/avly/data/adjustment_explanations.json`
 아래 표의 문장은 PDF 원문 해설을 읽고 쓴 초안입니다. 고칠 때는 JSON의 `title`, `easy`, `question`을 고치고 확인이 끝나면 `reviewed`를 `true`로 바꿉니다. 질문은 "예"라고 답하면 그 요소가 적용되도록, `{who}`(내 차/상대 차) 뒤에 `가`나 `는`이 자연스럽게 붙도록 씁니다. 설명에는 과실이 늘고 주는 방향을 쓰지 않습니다(방향은 +n%p/-n%p로 따로 붙습니다).

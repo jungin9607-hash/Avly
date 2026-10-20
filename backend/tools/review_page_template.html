@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>에블리 검수 페이지</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --line:#dfe3e8; --text:#1f2933; --muted:#667085; --ok:#12805c; --okbg:#e5f6ef; --bad:#c2371f; --badbg:#fdeeea; --warn:#9a6700; --warnbg:#fff6df; --accent:#2f5bea; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 system-ui,"Malgun Gothic","Apple SD Gothic Neo",sans-serif; }
+  header { position:sticky; top:0; z-index:5; background:#fff; border-bottom:1px solid var(--line); padding:12px 20px; }
+  .bar { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; max-width:1000px; margin:0 auto; }
+  h1 { font-size:18px; margin:0 12px 0 0; }
+  input[type=text], textarea { font:inherit; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--text); }
+  textarea { width:100%; min-height:64px; resize:vertical; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--text); padding:7px 14px; border-radius:8px; }
+  button:hover { background:#f0f3f7; }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:700; }
+  button.primary:hover { background:#244bc9; }
+  main { max-width:1000px; margin:0 auto; padding:16px 20px 80px; }
+  .help { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin-bottom:14px; }
+  .help ol { margin:6px 0 0; padding-left:20px; }
+  .tabs { display:flex; gap:8px; margin:0 0 12px; }
+  .tabs button.active { background:var(--text); color:#fff; border-color:var(--text); }
+  .tools { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; margin:0 0 12px; color:var(--muted); }
+  .progress { font-weight:700; color:var(--text); }
+  details.card, .card { background:var(--card); border:1px solid var(--line); border-radius:12px; margin:0 0 10px; }
+  details.card > summary { list-style:none; cursor:pointer; padding:12px 16px; display:flex; flex-wrap:wrap; gap:6px 12px; align-items:center; }
+  details.card > summary::-webkit-details-marker { display:none; }
+  .body { padding:4px 16px 14px; border-top:1px solid var(--line); }
+  .num { font-weight:800; }
+  .badge { font-size:12px; padding:2px 8px; border-radius:999px; background:#eef1f5; color:var(--muted); }
+  .badge.done { background:var(--okbg); color:var(--ok); } .badge.bad { background:var(--badbg); color:var(--bad); } .badge.part { background:var(--warnbg); color:var(--warn); }
+  .situation { background:#f9fafb; border-radius:8px; padding:10px 12px; margin:10px 0; }
+  .rule { border-top:1px dashed var(--line); padding:10px 0; display:grid; grid-template-columns:1fr auto; gap:6px 12px; align-items:start; }
+  .rule .who { display:inline-block; min-width:56px; font-weight:700; }
+  .delta { font-weight:700; } .delta.up { color:var(--bad); } .delta.down { color:var(--ok); }
+  .src { grid-column:1 / -1; font-size:13px; color:var(--muted); background:#f3f5f8; border-radius:6px; padding:4px 8px; }
+  .choice { display:flex; gap:6px; flex-wrap:wrap; }
+  .choice button.sel-ok { background:var(--okbg); border-color:var(--ok); color:var(--ok); font-weight:700; }
+  .choice button.sel-bad { background:var(--badbg); border-color:var(--bad); color:var(--bad); font-weight:700; }
+  .choice button.sel-unsure { background:var(--warnbg); border-color:var(--warn); color:var(--warn); font-weight:700; }
+  .note { grid-column:1 / -1; }
+  .muted { color:var(--muted); font-size:13px; }
+  .common { border-left:4px solid var(--accent); }
+  .row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; }
+  label.field { display:block; margin-top:8px; font-weight:700; font-size:13px; }
+  .preview { background:var(--warnbg); border-radius:8px; padding:6px 10px; margin-top:6px; font-size:13px; }
+  .hint { background:var(--warnbg); color:var(--warn); padding:6px 10px; border-radius:8px; margin-top:8px; font-size:13px; }
+  .empty { padding:30px; text-align:center; color:var(--muted); }
+  @media (max-width:640px) { .rule { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <h1>에블리 검수 페이지</h1>
+    <label>검수자 이름 <input type="text" id="reviewer" placeholder="예: 김검수" size="12"></label>
+    <span class="progress" id="progress"></span>
+    <button id="btn-import" title="전에 내보낸 파일로 이어서 하기">이어서 하기</button>
+    <button class="primary" id="btn-export">내보내기</button>
+    <input type="file" id="file-import" accept="application/json,.json" hidden>
+  </div>
+</header>
+<main>
+  <section class="help">
+    <strong>이렇게 하시면 돼요</strong>
+    <ol>
+      <li>위에 <b>이름</b>을 적어요. (결과에 이름이 들어가요)</li>
+      <li>아래 카드를 열어서, 적힌 내용이 <b>PDF 원문과 맞는지</b> 보고 <b>맞아요 / 틀려요 / 모르겠어요</b>를 눌러요. 틀리면 이유를 한 줄 적어 주세요.</li>
+      <li>하다가 닫아도 이 컴퓨터에 자동으로 저장돼요. 다 하면 <b>내보내기</b>를 눌러 받은 파일(.json)을 담당자에게 보내요.</li>
+    </ol>
+    <p class="muted">PDF는 「손해보험협회 과실비율 인정기준 2023.06」이에요. 카드의 <b>도표 번호</b>(예: 차43-2)와 <b>쪽수</b>로 찾으시면 돼요. 이 페이지는 인터넷 없이 열려요.</p>
+  </section>
+  <div class="tabs">
+    <button id="tab-rules" class="active">① 가감 숫자 확인 (유형별)</button>
+    <button id="tab-words">② 쉬운 문장 확인</button>
+  </div>
+  <div id="app"></div>
+</main>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+// ---- 계산(화면과 무관). 내보내기 형식은 tools/apply_review.py 가 읽는다 ----
+var COMMON_FACTORS = ["gross_negligence", "serious_negligence"];
+
+function ruleDecision(state, data, rule) {
+  if (rule.common) return state.common[rule.factor] || null;
+  return (state.types[rule.typeId] && state.types[rule.typeId].rules[rule.id]) || null;
+}
+
+function typeStatus(state, data, type) {
+  var decided = 0, ok = 0, bad = 0;
+  type.rules.forEach(function (r) {
+    var d = ruleDecision(state, data, r);
+    if (d && d.ok === true) { ok++; decided++; } else if (d && d.ok === false) { bad++; decided++; }
+  });
+  if (bad) return "bad";
+  if (ok === type.rules.length) return "done";
+  return decided ? "part" : "none";
+}
+
+function buildExport(data, state, reviewer, date) {
+  var out = { format: "avly-review-v1", reviewer: reviewer, date: date, types: {}, wording: {} };
+  data.types.forEach(function (t) {
+    var rules = {}, any = false, allOk = true;
+    var onlyCommon = t.rules.every(function (r) { return r.common; });
+    t.rules.forEach(function (r) {
+      var d = ruleDecision(state, data, r);
+      if (!d || d.ok === null || d.ok === undefined) { allOk = false; return; }
+      if (!r.common || onlyCommon) any = true;   // 공통 항목은 모든 유형에 자동으로 따라오므로, 사람이 이 유형에서 직접 누른 것이 있을 때만 내보낸다(공통 항목뿐인 유형은 공통 확인만으로 충분하다)
+      if (d.ok !== true) allOk = false;
+      rules[r.id] = { ok: d.ok === true, note: ((d.unsure ? "[모르겠어요] " : "") + (d.note || "")).trim() };
+    });
+    var st = state.types[t.id] || {};
+    if (!any && !st.note) { return; }
+    out.types[t.id] = { decision: allOk && Object.keys(rules).length === t.rules.length ? "ok" : "issue", note: st.note || "", rules: rules };
+  });
+  data.factors.forEach(function (f) {
+    var w = state.wording[f.key];
+    if (!w || !w.decision) return;
+    var rec = { decision: w.decision, note: w.note || "" };
+    if (w.decision === "edit") { rec.title = w.title; rec.easy = w.easy; rec.question = w.question; }
+    out.wording[f.key] = rec;
+  });
+  return out;
+}
+
+function progress(data, state) {
+  var typesDone = data.types.filter(function (t) { return typeStatus(state, data, t) === "done"; }).length;
+  var wordsDone = data.factors.filter(function (f) { var w = state.wording[f.key]; return w && (w.decision === "ok" || w.decision === "edit"); }).length;
+  return { typesDone: typesDone, typesTotal: data.types.length, wordsDone: wordsDone, wordsTotal: data.factors.length };
+}
+if (typeof module !== "undefined") { module.exports = { buildExport: buildExport, typeStatus: typeStatus, progress: progress }; }
+</script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById("data").textContent);
+  var KEY = "avly-review-v1";
+  var state = { reviewer: "", types: {}, wording: {}, common: {} };
+  try { var saved = JSON.parse(localStorage.getItem(KEY) || "null"); if (saved) state = Object.assign(state, saved); } catch (e) {}
+  var tab = "rules", filter = "all", query = "";
+  var app = document.getElementById("app");
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} updateProgress(); }
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === "text") e.textContent = attrs[k]; else if (k === "class") e.className = attrs[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), attrs[k]); else e.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function updateProgress() {
+    var p = progress(data, state);
+    document.getElementById("progress").textContent = "유형 " + p.typesDone + " / " + p.typesTotal + " · 쉬운 문장 " + p.wordsDone + " / " + p.wordsTotal;
+  }
+
+  // 공통 항목 정보와 규칙에 유형 번호·공통 여부를 붙인다
+  data.types.forEach(function (t) { t.rules.forEach(function (r) { r.typeId = t.id; r.common = COMMON_FACTORS.indexOf(r.factor) >= 0; }); });
+
+  function choice(current, onPick) {
+    var d = current || {};
+    var items = [["ok", "맞아요", "sel-ok", d.ok === true], ["bad", "틀려요", "sel-bad", d.ok === false && !d.unsure], ["unsure", "모르겠어요", "sel-unsure", d.ok === false && d.unsure]];
+    return el("div", { class: "choice" }, items.map(function (i) { return el("button", { class: i[3] ? i[2] : "", text: i[1], onclick: function () { onPick(i[0]); } }); }));
+  }
+  function setRule(rule, kind) {
+    var bucket;
+    if (rule.common) bucket = state.common; else { state.types[rule.typeId] = state.types[rule.typeId] || { rules: {}, note: "" }; bucket = state.types[rule.typeId].rules; }
+    var prev = bucket[rule.common ? rule.factor : rule.id] || {};
+    bucket[rule.common ? rule.factor : rule.id] = { ok: kind === "ok", unsure: kind === "unsure", note: prev.note || "" };
+    save(); render();
+  }
+  function setRuleNote(rule, text) {
+    var bucket = rule.common ? state.common : (state.types[rule.typeId] = state.types[rule.typeId] || { rules: {}, note: "" }).rules;
+    var k = rule.common ? rule.factor : rule.id;
+    bucket[k] = Object.assign({ ok: false }, bucket[k], { note: text }); save();
+  }
+
+  function ruleRow(t, r) {
+    var d = ruleDecision(state, data, r) || {};
+    var up = r.delta > 0;
+    var row = el("div", { class: "rule" });
+    var left = el("div", {}, [
+      el("span", { class: "who", text: "차량 " + r.actor }),
+      el("span", { text: " " + r.title + "  " }),
+      el("span", { class: "delta " + (up ? "up" : "down"), text: "→ 차량 " + r.actor + " 과실 " + (up ? "+" : "−") + Math.abs(r.delta) + "%p (" + (up ? "늘어요" : "줄어요") + ")" }),
+    ]);
+    row.appendChild(left);
+    if (r.common) {
+      row.appendChild(el("div", { class: "muted", text: "공통 항목 · 맨 위 칸에서 한 번에 확인" + (d.ok === true ? " ✔" : d.ok === false ? " ✘" : "") }));
+    } else {
+      row.appendChild(choice(d, function (k) { setRule(r, k); }));
+    }
+    row.appendChild(el("div", { class: "src", text: "PDF 원문: " + r.raw + "  ·  " + r.chart + (r.pages && r.pages.length ? "  ·  PDF " + r.pages[0] + (r.pages.length > 1 ? "~" + r.pages[r.pages.length - 1] : "") + "쪽" : "") }));
+    if (!r.common && d.ok === false) {
+      var ta = el("textarea", { class: "note", placeholder: "어디가 다른지 한 줄만 적어 주세요 (예: 원문은 +20 인데 +10 으로 되어 있어요)" });
+      ta.value = d.note || ""; ta.addEventListener("input", function () { setRuleNote(r, ta.value); });
+      row.appendChild(ta);
+    }
+    return row;
+  }
+
+  function typeCard(t) {
+    var st = typeStatus(state, data, t);
+    var label = { done: "모두 맞아요", bad: "틀린 곳 있음", part: "하는 중", none: "아직" }[st];
+    var det = el("details", { class: "card" });
+    if (t._open) det.open = true;
+    det.addEventListener("toggle", function () { t._open = det.open; });
+    det.appendChild(el("summary", {}, [el("span", { class: "num", text: "유형 " + t.id }), el("span", { text: t.place + " · " + t.feature }), el("span", { class: "badge " + st, text: label }), el("span", { class: "muted", text: "규칙 " + t.rules.length + "개" + (t.reviewed ? " · 이미 확인됨(" + (t.reviewed_by || "") + ")" : "") })]));
+    var body = el("div", { class: "body" });
+    body.appendChild(el("div", { class: "situation" }, [
+      el("div", { text: "차량 A: " + t.a }), el("div", { text: "차량 B: " + t.b }),
+      el("div", { class: "muted", text: "기본 비율 차량 A " + t.base_a + "% : 차량 B " + t.base_b + "%  ·  PDF 도표 " + t.chart }),
+    ]));
+    t.rules.forEach(function (r) { body.appendChild(ruleRow(t, r)); });
+    var row = el("div", { class: "row" }, [
+      el("button", { text: "이 유형 전부 맞아요", onclick: function () { t.rules.forEach(function (r) { if (!r.common) { state.types[t.id] = state.types[t.id] || { rules: {}, note: "" }; state.types[t.id].rules[r.id] = { ok: true, unsure: false, note: "" }; } }); save(); render(); } }),
+      el("button", { text: "표시 지우기", onclick: function () { delete state.types[t.id]; save(); render(); } }),
+    ]);
+    body.appendChild(row);
+    det.appendChild(body);
+    return det;
+  }
+
+  function commonCard() {
+    var items = {};
+    data.types.forEach(function (t) { t.rules.forEach(function (r) { if (r.common) items[r.factor] = items[r.factor] || r; }); });
+    var card = el("div", { class: "card common" }, [el("div", { class: "body", style: "border-top:0" }, [el("strong", { text: "먼저: 모든 유형에 공통인 항목" }), el("p", { class: "muted", text: "아래 두 항목은 모든 유형에 똑같이 들어 있어서 여기서 한 번만 확인하면 돼요. PDF의 「수정요소의 해설」(제3편 제2장 3)을 보세요." })])]);
+    Object.keys(items).forEach(function (f) {
+      var r = items[f], d = state.common[f] || {};
+      var row = el("div", { class: "rule" }, [el("div", {}, [el("span", { class: "who", text: r.title }), el("span", { class: "muted", text: "  " + r.easy })]), choice(d, function (k) { var prev = state.common[f] || {}; state.common[f] = { ok: k === "ok", unsure: k === "unsure", note: prev.note || "" }; save(); render(); })]);
+      row.appendChild(el("div", { class: "src", text: "+" + Math.abs(r.delta) + "%p (" + (r.actor === "A" ? "차량 A" : "차량 B") + " 기준 예시)" }));
+      card.firstChild.appendChild(row);
+      if (d.ok === false) { var ta = el("textarea", { placeholder: "어디가 다른지 한 줄만 적어 주세요" }); ta.value = d.note || ""; ta.addEventListener("input", function () { state.common[f] = Object.assign({}, state.common[f], { note: ta.value }); save(); }); card.firstChild.appendChild(ta); }
+    });
+    return card;
+  }
+
+  function wordCard(f) {
+    var w = state.wording[f.key] || {};
+    var det = el("details", { class: "card" });
+    if (f._open) det.open = true;
+    det.addEventListener("toggle", function () { f._open = det.open; });
+    var badge = w.decision === "ok" ? ["done", "괜찮아요"] : w.decision === "edit" ? ["done", "고쳤어요"] : w.decision === "issue" ? ["bad", "문제 있어요"] : ["", "아직"];
+    det.appendChild(el("summary", {}, [el("span", { class: "num", text: f.title }), el("span", { class: "badge " + badge[0], text: badge[1] }), el("span", { class: "muted", text: "PDF 이름: " + f.label })]));
+    var body = el("div", { class: "body" });
+    body.appendChild(el("div", { class: "muted", text: "쓰이는 유형 " + f.n_types + "개" + (f.types.length ? " (" + f.types.join(", ") + (f.n_types > f.types.length ? " …" : "") + ")" : "") + "  ·  값 " + f.deltas.join(" / ") + "%p" }));
+    if (f.note) body.appendChild(el("div", { class: "hint", text: "확인할 점: " + f.note }));
+    var title = el("input", { type: "text", style: "width:100%" }); title.value = w.title !== undefined ? w.title : f.title;
+    var easy = el("textarea", {}); easy.value = w.easy !== undefined ? w.easy : f.easy;
+    var q = el("textarea", {}); q.value = w.question !== undefined ? w.question : f.question;
+    var prev = el("div", { class: "preview" });
+    function refresh() { prev.textContent = "사용자에게는 이렇게 보여요: 「" + q.value.replace("{who}", "상대 차") + "」"; }
+    function keep() { var cur = state.wording[f.key] || {}; state.wording[f.key] = Object.assign(cur, { title: title.value, easy: easy.value, question: q.value }); save(); refresh(); }
+    [title, easy, q].forEach(function (x) { x.addEventListener("input", keep); });
+    body.appendChild(el("label", { class: "field", text: "쉬운 제목" })); body.appendChild(title);
+    body.appendChild(el("label", { class: "field", text: "쉬운 설명" })); body.appendChild(easy);
+    body.appendChild(el("label", { class: "field", text: "사용자에게 묻는 질문 ({who} 자리에 '내 차'/'상대 차'가 들어가요. {who}는 지우지 마세요)" })); body.appendChild(q); body.appendChild(prev); refresh();
+    var note = el("textarea", { placeholder: "메모 (문제가 있으면 이유를 적어 주세요)" }); note.value = w.note || ""; note.addEventListener("input", function () { state.wording[f.key] = Object.assign(state.wording[f.key] || {}, { note: note.value }); save(); });
+    function decide(kind) { keep(); state.wording[f.key].decision = kind; save(); render(); }
+    body.appendChild(el("div", { class: "row" }, [
+      el("button", { class: w.decision === "ok" ? "primary" : "", text: "이대로 괜찮아요", onclick: function () { var cur = state.wording[f.key] || {}; if ((title.value !== f.title) || (easy.value !== f.easy) || (q.value !== f.question)) { decide("edit"); } else { decide("ok"); } } }),
+      el("button", { text: "문제 있어요 / 모르겠어요", onclick: function () { decide("issue"); } }),
+      el("button", { text: "표시 지우기", onclick: function () { delete state.wording[f.key]; save(); render(); } }),
+    ]));
+    body.appendChild(note);
+    det.appendChild(body);
+    return det;
+  }
+
+  function matches(text) { return !query || text.toLowerCase().indexOf(query.toLowerCase()) >= 0; }
+
+  function render() {
+    app.textContent = "";
+    var tools = el("div", { class: "tools" });
+    var search = el("input", { type: "text", placeholder: "번호나 글자로 찾기 (예: 60, 좌회전)", size: "26" }); search.value = query;
+    search.addEventListener("input", function () { query = search.value; render2(); });
+    tools.appendChild(search);
+    [["all", "전체"], ["none", "아직"], ["part", "하는 중"], ["bad", "틀린 곳 있음"], ["done", "모두 맞아요"]].forEach(function (f) {
+      tools.appendChild(el("button", { class: filter === f[0] ? "primary" : "", text: f[1], onclick: function () { filter = f[0]; render(); } }));
+    });
+    app.appendChild(tools);
+    var list = el("div", { id: "list" }); app.appendChild(list);
+    render2();
+    updateProgress();
+  }
+  function render2() {
+    var list = document.getElementById("list"); list.textContent = "";
+    var shown = 0;
+    if (tab === "rules") {
+      list.appendChild(commonCard());
+      data.types.forEach(function (t) {
+        var st = typeStatus(state, data, t);
+        if (filter !== "all" && st !== filter) return;
+        if (!matches("유형 " + t.id + " " + t.place + " " + t.feature + " " + t.a + " " + t.b + " " + t.chart)) return;
+        list.appendChild(typeCard(t)); shown++;
+      });
+    } else {
+      data.factors.forEach(function (f) {
+        var w = state.wording[f.key] || {};
+        var st = w.decision === "ok" || w.decision === "edit" ? "done" : w.decision === "issue" ? "bad" : "none";
+        if (filter !== "all" && st !== filter && !(filter === "part" && false)) return;
+        if (!matches(f.title + " " + f.label + " " + f.easy)) return;
+        list.appendChild(wordCard(f)); shown++;
+      });
+    }
+    if (!shown) list.appendChild(el("div", { class: "empty", text: "보여 줄 항목이 없어요. 위의 필터나 검색어를 바꿔 보세요." }));
+  }
+
+  function setTab(t) { tab = t; filter = "all"; document.getElementById("tab-rules").className = t === "rules" ? "active" : ""; document.getElementById("tab-words").className = t === "words" ? "active" : ""; render(); }
+  document.getElementById("tab-rules").addEventListener("click", function () { setTab("rules"); });
+  document.getElementById("tab-words").addEventListener("click", function () { setTab("words"); });
+  var nameInput = document.getElementById("reviewer"); nameInput.value = state.reviewer || "";
+  nameInput.addEventListener("input", function () { state.reviewer = nameInput.value.trim(); save(); });
+
+  document.getElementById("btn-export").addEventListener("click", function () {
+    if (!state.reviewer) { alert("먼저 위에 검수자 이름을 적어 주세요."); nameInput.focus(); return; }
+    var d = new Date(), date = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+    var out = buildExport(data, state, state.reviewer, date);
+    if (!Object.keys(out.types).length && !Object.keys(out.wording).length) { alert("아직 표시한 항목이 없어요."); return; }
+    var blob = new Blob([JSON.stringify(out, null, 1)], { type: "application/json" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "검수결과_" + state.reviewer + "_" + date + ".json"; document.body.appendChild(a); a.click(); a.remove();
+  });
+  document.getElementById("btn-import").addEventListener("click", function () { document.getElementById("file-import").click(); });
+  document.getElementById("file-import").addEventListener("change", function (ev) {
+    var f = ev.target.files[0]; if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function () {
+      try {
+        var imp = JSON.parse(rd.result);
+        Object.keys(imp.types || {}).forEach(function (id) { var rules = {}; Object.keys(imp.types[id].rules || {}).forEach(function (rid) { var r = imp.types[id].rules[rid]; rules[rid] = { ok: r.ok === true, unsure: /^\[모르겠어요\]/.test(r.note || ""), note: (r.note || "").replace(/^\[모르겠어요\]\s*/, "") }; }); state.types[id] = { rules: rules, note: imp.types[id].note || "" }; });
+        Object.keys(imp.wording || {}).forEach(function (k) { state.wording[k] = Object.assign({}, imp.wording[k]); });
+        if (imp.reviewer) { state.reviewer = imp.reviewer; nameInput.value = imp.reviewer; }
+        save(); render();
+      } catch (e) { alert("파일을 읽지 못했어요. 이 페이지에서 내보낸 파일인지 확인해 주세요."); }
+    };
+    rd.readAsText(f); ev.target.value = "";
+  });
+  render();
+})();
+</script>
+</body>
+</html>
