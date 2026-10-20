@@ -122,6 +122,45 @@ def screen_direction(scene, frame_lookup):
         return '뚜렷한 좌우 이동 미확인'
     return '왼쪽→오른쪽' if delta > 0 else '오른쪽→왼쪽'
 
+FLOW_STAGE_ORDER = {'접근': 0, '사고 직전': 1, '접촉': 2, '접촉 이후': 3}
+FLOW_BANNED = re.compile(r'과실|책임|잘못|위반|가해|피해|\d+(?:\.\d+)?\s*(?:km|㎞|미터|m\b|초|%)')   # 판단 표현과 수치(속도·거리·시간)는 쓰지 않는다
+FLOW_CONTACT_CLAIM = re.compile(r'부딪혔|충돌했|접촉했|추돌했|들이받')
+FLOW_CONFIRMED_CONTACT = ('접촉 관찰', '충돌 정황 강함')
+
+
+def clean_accident_flow(scene, frames):
+    """AI 가 쓴 사고 흐름(accident_flow)에서 믿기 어려운 단계를 뺀다. 분석을 실패시키지 않고 단계만 버리고, 이유는 observation_issues 에 남긴다.
+
+    버리는 경우: 시간순이 아니거나 같은 단계가 반복됨 / 시작이 끝보다 늦음 / 판단 표현·수치가 들어 있음 /
+    직접 접촉이 확인되지 않았는데 부딪혔다고 단정함. 최대 4단계.
+    """
+    index = {f['id']: f['index'] for f in frames}
+    kept, dropped = [], []
+    last_index = -1
+    seen = set()
+    for step in sorted(scene.accident_flow, key=lambda s: (FLOW_STAGE_ORDER[s.stage], index.get(s.first_frame_id, 0))):
+        first, last = index.get(step.first_frame_id), index.get(step.last_frame_id)
+        reason = None
+        if step.stage in seen:
+            reason = '같은 단계 반복'
+        elif first is None or last is None or first > last:
+            reason = '시작·끝 장면 순서 오류'
+        elif first < last_index:
+            reason = '앞 단계보다 시간이 앞섬'
+        elif FLOW_BANNED.search(step.description):
+            reason = '판단 표현 또는 수치 포함'
+        elif FLOW_CONTACT_CLAIM.search(step.description) and scene.contact not in FLOW_CONFIRMED_CONTACT:
+            reason = '접촉이 확인되지 않았는데 접촉을 단정'
+        if reason:
+            dropped.append(f'사고 흐름 {step.stage} 단계 제외: {reason}')
+            continue
+        seen.add(step.stage)
+        last_index = first
+        kept.append(step)
+    scene.accident_flow = kept[:4]
+    scene.observation_issues = list(scene.observation_issues) + dropped[:4]
+    return len(scene.accident_flow)
+
 def ground_observation(scene, frames, anchor, cues, visual_frame_ids=None):
     lookup = {f['id']: f['index'] for f in frames}
     visual = set(lookup) if visual_frame_ids is None else set(visual_frame_ids)

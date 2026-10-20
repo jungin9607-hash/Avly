@@ -5,7 +5,7 @@ from typing import Literal
 
 VERSION = 'auto-three-stage-v2.21.0-identity-and-survey-recovery'
 
-CODE_VERSION = 'auto-three-stage-v2.21.1-parking-pattern-report'
+CODE_VERSION = 'auto-three-stage-v2.21.2-accident-flow'
 
 VISION_MODEL = setting('AVLY_VISION_MODEL', 'gpt-4.1')
 

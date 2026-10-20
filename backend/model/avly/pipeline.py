@@ -18,7 +18,7 @@ from .scope import check_duration, check_supported
 from .facts import collect_match_facts, mark_accident_input, parking_environment
 from .vision import call, digest_file
 from .video import background_cues, display_frames, get_frames, image_content, inspect_video, plan_review, review_high_ids, uniform_pick
-from .observation import adaptive_review_prompt, apply_user_road_context, compact_observation, ground_observation, inspect_lane_cause, needs_detail_review, parking_background_review, reconcile_road_context, scan_as_observation, validate, verify_routes
+from .observation import adaptive_review_prompt, clean_accident_flow, apply_user_road_context, compact_observation, ground_observation, inspect_lane_cause, needs_detail_review, parking_background_review, reconcile_road_context, scan_as_observation, validate, verify_routes
 from .matching import compare_all_csv_rows, conditional_candidates, link_match, matching_context, orientation_compatible, pack_catalog, prepare_matches, search_rows
 from .adjustments import law_rule_bundle, public_scenarios, reference_scenarios, uncertainty_details
 from .timeline import build_timeline, print_timeline, save_timeline_text
@@ -146,10 +146,12 @@ def run(settings):
                     review_prompt += prompt_text('detail_review_rule_09')
                     review_prompt += prompt_text('detail_review_rule_10')
                     review_prompt += prompt_text('detail_review_rule_11')
+                    review_prompt += prompt_text('accident_flow')
                     review_prompt += '\n배경 변화: ' + json.dumps(review_cues)
                     scene = call('2/3 사고 전후 상세 확인', VISION_MODEL, Observation, image_content(review_prompt, review_frames, high_ids=high_ids), 5000, validator=lambda s: validate(s, nearby_frames + review_frames))
                     check_supported(scene)
                     validate(scene, nearby_frames + review_frames)
+                    clean_accident_flow(scene, nearby_frames + review_frames)
                     raw_review_scene = scene.model_dump()
                     anchor = {f['id']: f['index'] for f in review_frames}.get(scene.impact_anchor_frame_id, anchor)
                     derived_screen_direction = ground_observation(scene, nearby_frames + review_frames, anchor, review_cues, [f['id'] for f in review_frames])
