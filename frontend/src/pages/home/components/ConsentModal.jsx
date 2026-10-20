@@ -24,6 +24,13 @@ export default function ConsentModal({ fileName, onStart, onClose, onPickAnother
   const [analysis, setAnalysis] = useState(false);
   const [involved, setInvolved] = useState(false);
   const [retention, setRetention] = useState(false);
+  // 전체 동의: 아래 세 항목을 한꺼번에 켜고 끈다. 항목은 각각 따로 바꿀 수 있고, 모두 켜져 있을 때만 전체 동의가 켜진다.
+  const all = analysis && involved && retention;
+  const setAll = (value) => {
+    setAnalysis(value);
+    setInvolved(value);
+    setRetention(value);
+  };
 
   return (
     <ModalShell title="블랙박스 영상 수집 동의" progress={[1, 4]} onClose={onClose}>
@@ -34,6 +41,14 @@ export default function ConsentModal({ fileName, onStart, onClose, onPickAnother
             <span>{fileName}</span>
           </p>
         )}
+
+        <label className={all ? "md-all md-all-top is-on" : "md-all md-all-top"}>
+          <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />
+          <span className="md-check" aria-hidden="true" />
+          <span>
+            전체 동의 <small>필수와 선택 항목을 모두 포함해요</small>
+          </span>
+        </label>
 
         <ul className="md-items md-consent-list">
           <li>
