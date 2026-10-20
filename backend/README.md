@@ -119,6 +119,6 @@ DB 설계 배경은 [docs/db/schema-v0.4-proposal.md](../docs/db/schema-v0.4-pro
 
 ## 아직 안 된 것
 
-- 서버 PDF (`POST .../reports`는 501. PDF는 브라우저 인쇄)
+- 서버 PDF (`POST .../reports`는 501). PDF 저장은 결과 화면의 "보고서 보기·PDF 저장" → 보고서 화면(`/analysis/{id}/report`, A4 문서 형식)에서 브라우저 인쇄로 한다. 보기: [docs/review/report-sample.pdf](../docs/review/report-sample.pdf)(시험용 데이터)
 - 실제 OpenAI 분석, 판례·법령 API, worker 이미지의 실제 YOLO 모델은 키·영상이 없어 **end-to-end로 검증하지 못함**
 - 가감요소는 133개 유형 중 122개를 등록했다(기존 7개 + PDF에서 뽑은 115개). 나머지 11개는 PDF와 CSV의 기본 비율·조건이 달라 일부러 뺐고, 새로 등록한 115개 유형의 규칙 888개는 **전부 사람 검수 전**이다. [docs/review/pdf-adjustment-review.md](../docs/review/pdf-adjustment-review.md)
