@@ -82,7 +82,7 @@ def render_pdf_adjustments() -> str:
          f"검수 전 규칙 {unreviewed_rules}개, 검수 전 쉬운 말 {unreviewed_text}개입니다. 숫자가 틀리면 과실비율이 틀리므로 서비스에 쓰기 전에 사람이 확인해야 합니다.", "",
          "## 검수 방법", "",
          "### 가장 쉬운 방법: 검수 페이지 (JSON을 열지 않아도 됩니다)",
-         "1. **[review.html](review.html)을 더블클릭**해서 브라우저로 엽니다(인터넷 필요 없음). 위쪽에 이름을 적습니다.",
+         "1. **프로젝트를 실행한 상태(`docker compose up`)에서 브라우저로 http://localhost:5173/review.html 을 엽니다**(가장 확실합니다). 파일 [review.html](review.html)을 직접 열 때는 Chrome이나 Edge 창에 파일을 끌어다 놓으세요. 더블클릭은 이 PC의 .html 기본 프로그램이 브라우저가 아니면 열리지 않습니다. 위쪽에 이름을 적습니다.",
          "2. 카드를 열어 적힌 내용이 PDF 원문과 맞는지 보고 **맞아요 / 틀려요 / 모르겠어요**를 누릅니다. 쉬운 문장 탭에서는 문장을 바로 고칠 수도 있습니다. 중간에 닫아도 자동 저장됩니다.",
          "3. 다 하면 **내보내기**를 눌러 받은 파일(`검수결과_이름_날짜.json`)을 담당자에게 보냅니다.",
          "4. 담당자는 받은 파일을 한 폴더에 모아 `docker compose exec backend python tools/apply_review.py 파일1.json 파일2.json`을 실행합니다. 모두 맞다고 확인한 유형만 켜지고, 틀린 곳은 [review-issues.md](review-issues.md)에 모입니다. 두 사람의 결정이 다르면 반영하지 않고 이슈로 남깁니다.",

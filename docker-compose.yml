@@ -60,6 +60,7 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+      - ./docs/review/review.html:/review/review.html:ro   # 검수 페이지를 http://localhost:5173/review.html 로 연다(개발 서버 전용)
     depends_on:
       - backend
 
