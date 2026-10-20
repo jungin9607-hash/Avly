@@ -180,7 +180,7 @@ class ConfirmTests(ApiTestCase):
         self.assertEqual((r.status_code, body["registered"]), (200, True))
         by = {q["key"]: q for q in body["questions"]}
         self.assertEqual(by["other.signal_delay"]["suggested"]["answer"], "예")
-        r = self.client.get(f"/api/v1/analyses/{analysis_id}/adjustment-questions", params={"accident_type_id": 0, "role": "A"}, headers=headers)
+        r = self.client.get(f"/api/v1/analyses/{analysis_id}/adjustment-questions", params={"accident_type_id": 2, "role": "A"}, headers=headers)
         self.assertEqual((r.json()["registered"], r.json()["questions"]), (False, []))
         r = self.client.get(f"/api/v1/analyses/{analysis_id}/adjustment-questions", params={"accident_type_id": 99999, "role": "A"}, headers=headers)
         self.assertEqual((r.status_code, r.json()["error"]["code"]), (404, "ACCIDENT_TYPE_NOT_FOUND"))

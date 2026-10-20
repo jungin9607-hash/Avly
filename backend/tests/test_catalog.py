@@ -62,7 +62,7 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(catalog.easy_label("feature", "없는 이름"), "없는 이름")
 
     def test_unregistered_type_has_no_questions(self):
-        self.assertEqual(catalog.adjustment_questions(0, "A"), [])
+        self.assertEqual(catalog.adjustment_questions(2, "A"), [])   # 2번은 PDF 와 기본 비율이 달라 규칙을 등록하지 않은 유형
 
     def test_registered_type_questions_follow_roles(self):
         # 유형 11: 표의 B(선행 진로변경)에 방향지시등 가감요소가 있다

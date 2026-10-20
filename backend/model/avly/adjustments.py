@@ -202,7 +202,7 @@ def evaluate_rule_input(payload):
         result['source'] = config['source']
         result['coverage'] = config['coverage']
         role = scenario.get('dashcam_table_role')
-        result['available_adjustments'] = [{'label': FACTOR_LABELS[r['factor']], 'delta_pp': r['delta_pp'], 'table_actor': r['actor']} for r in config['rules']]
+        result['available_adjustments'] = [{'label': FACTOR_LABELS.get(r['factor'], r['factor']), 'delta_pp': r['delta_pp'], 'table_actor': r['actor']} for r in config['rules']]
         if not scenario.get('eligible_for_adjustment'):
             result.update(status='유형·차량 역할 확인 필요', reason='장소 기반 참고 또는 진행·역할 미확정 시나리오에는 가감산을 적용하지 않습니다.')
             results.append(result)
@@ -216,10 +216,11 @@ def evaluate_rule_input(payload):
             continue
         facts = {(f['actor'], f['factor']): f for f in payload.get('factors', [])}
         selected = {}
+        confirmed_by_group = {}   # 사용자가 '있음'으로 확인한 항목을 그룹별로 모아 둔다 (서로 양립하지 않는 답을 찾는 데 쓴다)
         for rule in config['rules']:
             actor = mapping[rule['actor']]
             fact = facts.get((actor, rule['factor']), {'value': '미확인', 'status': 'unknown'})
-            item = {'rule_id': rule['id'], 'actor': actor, 'table_actor': rule['actor'], 'factor': rule['factor'], 'label': FACTOR_LABELS[rule['factor']], 'delta_pp': rule['delta_pp'], 'evidence': fact, 'source': config['source']}
+            item = {'rule_id': rule['id'], 'actor': actor, 'table_actor': rule['actor'], 'factor': rule['factor'], 'label': FACTOR_LABELS.get(rule['factor'], rule['factor']), 'delta_pp': rule['delta_pp'], 'evidence': fact, 'source': config['source']}
             accepted = fact.get('status') == 'user' or (fact.get('status') == 'observed' and (not rule.get('manual_only')))
             if fact.get('value') == '미확인' or not accepted:
                 result['pending'].append(item)
@@ -229,6 +230,7 @@ def evaluate_rule_input(payload):
                 continue
             if fact['value'] != '있음':
                 raise ValueError('가감 요소는 있음/없음/미확인으로 기록하세요.')
+            confirmed_by_group.setdefault(rule['group'], []).append(item)
             old = selected.get(rule['group'])
             if old and old['delta_pp'] >= item['delta_pp']:
                 result['not_applied'].append({**item, 'reason': '같은 과실 정도 그룹의 상위 항목 적용'})
@@ -236,6 +238,15 @@ def evaluate_rule_input(payload):
             if old:
                 result['not_applied'].append({**old, 'reason': '같은 과실 정도 그룹의 상위 항목 적용'})
             selected[rule['group']] = item
+        # 같은 exclusive 그룹(예: 서행 불이행 / 서행 또는 일시정지)에서 서로 다른 요소에 모두 '있음'이라고 답했으면 앞뒤가 맞지 않으므로
+        # 어느 쪽도 적용하지 않고 다시 확인하게 한다.
+        for group in config.get('exclusive_groups', []):
+            conflict = confirmed_by_group.get(group, [])
+            if len({x['factor'] for x in conflict}) > 1:
+                selected.pop(group, None)
+                ids = {x['rule_id'] for x in conflict}
+                result['not_applied'] = [x for x in result['not_applied'] if x['rule_id'] not in ids]
+                result['pending'].extend({**x, 'reason': '서로 양립하지 않는 답변이라 다시 확인이 필요합니다'} for x in conflict)
         if str(scenario['accident_type']) == '1':
             conditional_ids = {r['id'] for r in config['rules'] if r.get('requires_B_adjustment')}
             front_service_actor = mapping['B']
@@ -259,7 +270,10 @@ def evaluate_rule_input(payload):
         delta_a = sum((x['delta_pp'] if x['actor'] == 'A' else -x['delta_pp'] for x in applied))
         adjusted_a = max(0, min(100, base['A'] + delta_a))
         result.update(applied_adjustments=applied, adjusted_fault={'A': adjusted_a, 'B': 100 - adjusted_a}, raw_delta_A_pp=delta_a, bounds_applied=adjusted_a != base['A'] + delta_a)
-        if result['pending']:
+        result['source_review_pending'] = config.get('source_review_pending', [])   # 원문에서 역할·수치가 불분명해 계산에서 뺀 항목
+        if result['source_review_pending']:
+            result.update(status='확인된 요소만 반영 — 원문 항목 추가 검토 필요', reason='원문에서 역할이나 수치가 불분명한 항목은 계산에서 제외했으므로 최종 비율을 확정하지 않습니다.')
+        elif result['pending']:
             result.update(status='확인된 요소만 반영 — 추가 가감 미확인', reason='미확인 요소는 0으로 확정하지 않았습니다.')
         else:
             result.update(status='등록된 가감요소 평가 완료 — 조건부 계산값', final_fault=dict(result['adjusted_fault']), reason='해당 유형·사실·등록 규칙이 맞는 조건의 계산값입니다. 일방과실 예외는 별도 검토 대상입니다.')

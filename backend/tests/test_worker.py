@@ -230,11 +230,11 @@ class FinalizeTests(WorkerTestCase):
 
     def test_type_without_rules_gives_base_only(self):
         accident, analysis, w = self.awaiting()
-        self.confirm(analysis, 0, "A")
+        self.confirm(analysis, 2, "A")   # 2번은 PDF 와 기본 비율이 달라 가감 규칙을 등록하지 않은 유형
         w.run_once()
         r = self.analysis(analysis)["result"]
         self.assertEqual(r["state"], "base_only")
-        self.assertEqual(r["fault"], {"base": {"me": 80, "other": 20}, "adjusted": None, "final": None, "bounds_applied": False})
+        self.assertEqual(r["fault"], {"base": {"me": 0, "other": 100}, "adjusted": None, "final": None, "bounds_applied": False})
         self.assertFalse(r["adjustments"]["registered"])
         self.assertEqual(len(r["steps"]), 1)
 
