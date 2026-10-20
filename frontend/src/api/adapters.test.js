@@ -172,6 +172,33 @@ test("타임라인: 시작 시각이 비슷한 관찰은 한 단계로 묶고 �
   assert.ok(moments.every((m) => !m.title.includes("A(") && !m.title.includes("추정됨")), "모델 내부 표현이 남지 않는다");
 });
 
+test("타임라인: 사고 흐름이 있으면 접근 → 사고 직전 → 접촉 → 접촉 이후 단계로 보여 준다", () => {
+  const flow = (stage, start, end, description, certainty = "관찰") => ({ kind: "사고 흐름", stage, actor: null, start_sec: start, end_sec: end, description, certainty });
+  const result = {
+    timeline: [
+      { kind: "A 움직임", actor: "me", start_sec: 0, end_sec: 6, certainty: "이동 추정" },   // 사고 흐름이 있으면 따로 단계로 만들지 않는다
+      flow("접촉", 3, 4, "접촉이 의심되는 장면이에요.", "추정"),
+      flow("접근", 0, 2, "내 차가 직진하고 있어요."),
+      flow("사고 직전", 2, 3, "상대 차가 오른쪽에서 가까워져요."),
+    ],
+    impact: {},
+  };
+  const moments = toMoments(result);
+  assert.deepEqual(moments.map((m) => m.label), ["접근", "사고 직전", "접촉"]);
+  assert.deepEqual(moments.map((m) => m.position), [0, 50, 100]);
+  assert.equal(moments[2].tone, "impact");
+  assert.equal(moments[2].tag, "AI 추정");
+  assert.equal(moments[0].title, "내 차가 직진하고 있어요.");
+  assert.equal(moments[0].summary, "사고 흐름 1 / 3");
+  assert.equal(moments[0].range, "0~2초 (약 2초 동안)");
+});
+
+test("타임라인: 사고 흐름이 없는 예전 결과는 지금처럼 관찰 구간으로 보여 준다", () => {
+  const moments = toMoments({ timeline: [{ kind: "A 움직임", actor: "me", start_sec: 0, end_sec: 5, certainty: "이동 추정" }], impact: {} });
+  assert.equal(moments.length, 1);
+  assert.equal(moments[0].summary, "내 차의 움직임");
+});
+
 test("타임라인: 구간 길이를 쉬운 말로 알려 준다", () => {
   const [moment] = toMoments({ timeline: [{ kind: "B 확인 구간", start_sec: 2.33, end_sec: 6.93, certainty: "구별됨" }], impact: {} });
   assert.equal(moment.range, "2.3~6.9초 (약 5초 동안)");

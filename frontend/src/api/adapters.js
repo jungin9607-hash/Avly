@@ -189,8 +189,32 @@ function rangeText(start, end) {
 
 // Time 화면이 읽는 모양: { id, label, time, summary, tag, title, hud, tone }
 // impact.confirmed 일 때만 "충돌 N초 전"처럼 충돌 시점을 기준으로 말한다. 아니면 영상 시각만 보여 준다.
+const STAGE_ORDER = { 접근: 0, "사고 직전": 1, 접촉: 2, "접촉 이후": 3 };
+const SUPPORT_TAG = { 관찰: "관찰", 추정: "AI 추정", 미확인: "확인 필요" };
+
+// AI 가 영상에서 정리한 사고 흐름(접근 → 사고 직전 → 접촉 → 접촉 이후)을 단계로 보여 준다. 근거가 되는 내 차·상대 차 구간은 흐름 안에서 말하므로 따로 단계로 만들지 않는다.
+function flowMoments(flow) {
+  const steps = [...flow].sort((a, b) => (STAGE_ORDER[a.stage] ?? 9) - (STAGE_ORDER[b.stage] ?? 9) || a.start_sec - b.start_sec);
+  return steps.map((event, index) => ({
+    id: `e${index}`,
+    label: event.stage,
+    time: event.start_sec,
+    endTime: event.end_sec,
+    range: rangeText(event.start_sec, event.end_sec),
+    position: steps.length > 1 ? (index / (steps.length - 1)) * 100 : 0,
+    summary: `사고 흐름 ${index + 1} / ${steps.length}`,
+    tag: SUPPORT_TAG[event.certainty] ?? event.certainty ?? "",
+    title: event.description ?? "",
+    evidence: "",
+    hud: "CAM_FRONT",
+    tone: event.stage === "접촉" ? "impact" : undefined,
+  }));
+}
+
 export function toMoments(result) {
   const impact = result.impact ?? {};
+  const flow = (result.timeline ?? []).filter((e) => e.kind === "사고 흐름");
+  if (flow.length > 0) return flowMoments(flow);
   const groups = groupByStart(mergeMovement(result.timeline ?? []));
   return groups.map((group, index) => {
     const start = group[0].start_sec;

@@ -98,6 +98,11 @@
   line-height: 1.6;
   word-break: keep-all;
 }
+/* 상대 차가 처음 보인 뒤 접촉 장면까지의 시간 관계: 요약 바로 아래 */
+.tl-note {
+  margin-top: -6px;
+  color: var(--text);
+}
 /* 지금 보고 있는 시점: 바뀔 때마다 살짝 떠오름 */
 .tl-now {
   --now: var(--accent);
