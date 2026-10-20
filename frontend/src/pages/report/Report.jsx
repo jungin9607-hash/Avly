@@ -3,7 +3,7 @@ import TopNav from "../common/components/TopNav";
 import AnalysisGate from "../common/components/AnalysisGate";
 import useNavigationBackdrop from "../common/hooks/useNavigationBackdrop";
 import { useNavigate } from "react-router-dom";
-import { toReportModel } from "../../api/adapters";
+import { easyOf, toReportModel } from "../../api/adapters";
 import { api } from "../../api/client";
 import { expireAnalysis, getSession } from "../../api/session";
 import { ROUTES } from "../../routes";
@@ -181,10 +181,10 @@ function UnresolvedView({ model, analysisId }) {
               {model.candidates.map((c) => (
                 <li key={`${c.accident_type_id}-${c.role}`}>
                   <strong>
-                    {c.place} · {c.feature}
+                    {easyOf(c, "place")} · {easyOf(c, "feature")}
                   </strong>
                   <span>
-                    내 차 {c.my_progress} / 상대 차 {c.other_progress}
+                    내 차 {easyOf(c, "my_progress")} / 상대 차 {easyOf(c, "other_progress")}
                   </span>
                   <small>이 유형의 기본 비율은 내 차 {c.base_me}% : 상대 차 {c.base_other}%예요. 영상에 적용된다고 확정한 값은 아니에요.</small>
                 </li>

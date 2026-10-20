@@ -110,7 +110,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
     return {
         **common,
         "state": state,
-        "accident_type": {k: option[k] for k in ("accident_type_id", "role", "place", "feature", "my_progress", "other_progress")},
+        "accident_type": {k: option[k] for k in ("accident_type_id", "role", "place", "feature", "my_progress", "other_progress", "easy")},
         "fault": {"base": {"me": option["base_me"], "other": option["base_other"]}, "adjusted": _pair(out.get("adjusted_fault")),
                   "final": _pair(out.get("final_fault")), "bounds_applied": bool(out.get("bounds_applied"))},
         "steps": steps,

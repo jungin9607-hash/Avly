@@ -139,7 +139,8 @@ POST /accidents (동의, session_id 받기)
 
 ### GET /api/v1/catalog/accident-types
 
-`{"count": 261, "items": [ {accident_type_id, role, place, feature, my_progress, other_progress, base_me, base_other} ]}`.
+`{"count": 261, "items": [ {accident_type_id, role, place, feature, my_progress, other_progress, easy, base_me, base_other} ]}`.
+`place`, `feature`, `my_progress`, `other_progress`는 과실표(손해보험협회 인정기준)의 **원래 이름**이고 선택의 기준(키)이다. `easy`는 같은 네 항목의 **쉬운 말**(`{place, feature, my_progress, other_progress}`)로, 화면에는 이것을 크게 보여 주고 원래 이름은 작게 함께 보여 준다. 쉬운 말이 없는 항목은 원래 이름과 같다. 결과의 `accident_type`과 `reference_candidates`에도 같은 `easy`가 들어 있다(예전에 저장된 결과에는 없을 수 있다).
 화면의 네 항목(장소, 사고 유형, 내 차의 움직임, 상대 차의 움직임)이 같은 것은 하나로 합쳐 두었으므로 **네 항목을 고르면 선택지가 하나로 정해진다.**
 프론트는 이 목록으로 앞 항목을 고를 때마다 뒤 항목의 보기를 좁힌다.
 
@@ -216,8 +217,8 @@ POST /accidents (동의, session_id 받기)
 | 405 | `METHOD_NOT_ALLOWED` | |
 | 409 | `VIDEO_ALREADY_UPLOADED`, `VIDEO_REQUIRED`, `ANALYSIS_IN_PROGRESS` | 영상 규칙, 진행 중인 분석 |
 | 409 | `ANALYSIS_NOT_AWAITING`, `ANALYSIS_NOT_COMPLETED` | 확인 대기가 아닐 때 `confirm`, 완료 전 `reports` |
-| 413 | `FILE_TOO_LARGE` | 업로드 용량 초과 |
 | 410 | `SESSION_EXPIRED` | 세션이 끝나 결과가 삭제됨 (`expires_at` 이후의 모든 사고·분석 요청) |
+| 413 | `FILE_TOO_LARGE` | 업로드 용량 초과 |
 | 415 | `UNSUPPORTED_FILE_TYPE` | 허용하지 않는 확장자 |
 | 422 | `CONSENT_REQUIRED`, `ROLE_REQUIRED`, `INVALID_ANSWER`, `VALIDATION_ERROR` | 동의 없음, 역할 누락, 잘못된 답변, 요청 형식 오류(`details` 포함) |
 | 500 / 501 / 503 | `INTERNAL_SERVER_ERROR` / `REPORT_NOT_IMPLEMENTED` / `DATABASE_UNAVAILABLE` | |

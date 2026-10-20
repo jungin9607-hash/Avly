@@ -107,7 +107,7 @@
 | 담당 | 볼 것 | 문서 |
 | --- | --- | --- |
 | 법무·개인정보 | 동의 문구, 외부 AI 전송(국외 이전) 고지, 자동 비식별의 한계 고지, 보관 기간, 분석 결과 삭제 요청, 제3자(상대 운전자) 처리 | [consent-review.md](review/consent-review.md) |
-| 문구 검수 | 가감요소 20개 설명·질문, 법령 풀이(7개 비어 있음) | [easy-words-review.md](review/easy-words-review.md) |
+| 문구 검수 | 가감요소 20개 설명·질문, 법령 풀이(7개 비어 있음), 사고 유형 이름 183개의 쉬운 말([accident-labels-review.md](review/accident-labels-review.md)) | [easy-words-review.md](review/easy-words-review.md) |
 | 기획 | 가감요소 확장 범위와 공식 문서 이용 조건, 결과 4가지 상태, 서버 PDF, 공유, 사고 유형 오판 시 되돌리기 | [prd-reference.md](prd-reference.md) §9 |
 | 모델 | 평가 영상 10~20개와 정답 라벨, 실제 영상 품질 확인, Gemini 전환 여부(유료 키 필요) | [gemini-switch.md](review/gemini-switch.md) |
 | 판례 | AI 설명 표본 검수, 지시문(`INSTRUCTIONS`)과 금지 표현(`_BANNED`) 적정성, 무관한 판례 걸러내기 | [case-compare-review.md](review/case-compare-review.md) |

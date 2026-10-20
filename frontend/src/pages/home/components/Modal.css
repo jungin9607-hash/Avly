@@ -600,6 +600,14 @@ input:focus-visible + .md-radio {
   border-top: 0;
   margin-top: 10px;
 }
+/* 사고 유형 확인: 쉬운 말 아래에 과실표의 원래 표기를 작게 */
+.md-official {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: var(--md-font-caption);
+  line-height: 1.5;
+  word-break: keep-all;
+}
 .md-foot-sub {
   margin-top: 10px;
   justify-content: center;

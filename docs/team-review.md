@@ -42,7 +42,7 @@
 | 담당 | 볼 것 | 파일 |
 |---|---|---|
 | 법무·개인정보 | 동의 문구, 외부 AI 전송(국외 이전) 고지, 보관 기간 | [review/consent-review.md](review/consent-review.md) |
-| 문구 검수 | 가감요소 20개와 법령 풀이의 쉬운 말 (전부 검수 전, 법령 풀이 7개는 비어 있음) | [review/easy-words-review.md](review/easy-words-review.md) |
+| 문구 검수 | 가감요소 20개와 법령 풀이의 쉬운 말 (전부 검수 전, 법령 풀이 7개는 비어 있음), **사고 유형 이름 183개의 쉬운 말** ([accident-labels-review.md](review/accident-labels-review.md)) | [review/easy-words-review.md](review/easy-words-review.md) |
 | 모델 담당 | Gemini 전환 시 바뀌는 범위, 평가 영상 준비 | [review/gemini-switch.md](review/gemini-switch.md) |
 | 백엔드 | API·DB 구조, worker 방식(한 번에 한 작업), 마이그레이션 | api.md, backend/README.md |
 | 프론트 | 새 화면 흐름, 서버 오류 처리, 문구 | frontend-structure.md |

@@ -13,6 +13,15 @@ export const LEVEL_LABEL = {
 
 const unique = (values) => [...new Set(values)];
 
+// 사고 유형 이름: 서버가 쉬운 말(option.easy)을 함께 준다. 없으면(예전에 저장된 결과) 과실표의 원래 이름을 그대로 쓴다.
+export const easyOf = (option, level) => option?.easy?.[level] || option?.[level] || "";
+
+// 선택 목록의 값(원래 이름)에 보여 줄 쉬운 말
+export function easyLabel(items, level, value) {
+  const found = items.find((item) => item[level] === value);
+  return found ? easyOf(found, level) : value;
+}
+
 // selection 의 앞 항목들과 맞는 선택지만 남긴다.
 function matching(items, selection, upTo) {
   return items.filter((item) => LEVELS.slice(0, upTo).every((level) => item[level] === selection[level]));
@@ -94,7 +103,7 @@ export function toReportModel(result, analysisId) {
     header: {
       title: "과실 분석 결과",
       desc: result.summary ?? "블랙박스 영상을 분석해 산정한 과실 비율과 그 근거예요.",
-      keywords: type ? [type.place, type.feature, `식별 코드 ${String(analysisId ?? "").slice(0, 8)}`] : [`식별 코드 ${String(analysisId ?? "").slice(0, 8)}`],
+      keywords: type ? [easyOf(type, "place"), easyOf(type, "feature"), `식별 코드 ${String(analysisId ?? "").slice(0, 8)}`] : [`식별 코드 ${String(analysisId ?? "").slice(0, 8)}`],
     },
     appliedCount: applied,
     factorHeader: { kicker: "판단 근거", desc: (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) },
@@ -192,7 +201,7 @@ export function toCaseCards(relatedCases) {
 
 export function myAccidentPoints(result) {
   const type = result.accident_type;
-  return type ? [type.feature, `내 차: ${type.my_progress}`, `상대 차: ${type.other_progress}`] : ["표에서 맞는 유형을 찾지 못한 사고"];
+  return type ? [easyOf(type, "feature"), `내 차: ${easyOf(type, "my_progress")}`, `상대 차: ${easyOf(type, "other_progress")}`] : ["표에서 맞는 유형을 찾지 못한 사고"];
 }
 
 // ---------------------------------------------------------------- 결과 화면에 들어가기 전 안내
