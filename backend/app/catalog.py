@@ -17,6 +17,7 @@ if MODEL_DIR not in sys.path:
     sys.path.insert(0, MODEL_DIR)
 
 from avly import explain  # noqa: E402  (표준 라이브러리만 쓰는 모듈이라 서버에서도 가볍게 불러올 수 있다)
+from avly.pdf_rules import get_rule_config, rule_display
 from avly.tables import ADJUSTMENT_RULES  # noqa: E402
 
 ANSWER_TO_VALUE = {"예": "있음", "아니요": "없음", "잘 모르겠어요": "미확인"}
@@ -105,7 +106,7 @@ def adjustment_questions(accident_type_id: int, role: str, facts: list[dict] | N
     facts: 분석 단계에서 영상으로 관찰·추정한 가감요소 [{actor('A'=내 차, 'B'=상대 차), factor, value, status, reason}].
     있으면 질문마다 AI 제안(suggested)을 붙인다. 사용자의 최종 답이 우선한다.
     """
-    config = ADJUSTMENT_RULES.get(str(accident_type_id))
+    config = get_rule_config(accident_type_id, settings.fault_table_path)
     if config is None:
         return []
     by_key = {(f["actor"], f["factor"]): f for f in (facts or []) if f.get("status") in ("observed", "inferred")}
@@ -113,7 +114,7 @@ def adjustment_questions(accident_type_id: int, role: str, facts: list[dict] | N
     for rule in config["rules"]:
         who = "내 차" if rule["actor"] == role else "상대 차"
         dashcam_actor = "A" if who == "내 차" else "B"
-        e = explain.explain_factor(rule["factor"], rule["delta_pp"], who)
+        e = rule_display(rule, who)
         suggestion = None
         fact = by_key.get((dashcam_actor, rule["factor"]))
         if fact and fact.get("value") in ("있음", "없음"):
@@ -137,6 +138,9 @@ def adjustment_questions(accident_type_id: int, role: str, facts: list[dict] | N
             "options": ANSWER_OPTIONS,
             "suggested": suggestion,
             "reviewed": e["reviewed"],
+            "pdf_source": rule.get("pdf_source"),
+            "pdf_factor": e.get("pdf_factor"),
+            "registry_note": "원문에서 역할·수치가 불명확한 일부 항목은 계산에서 제외하고 확인 필요로 남깁니다." if config.get("source_review_pending") and not questions else None,
         })
     return questions
 

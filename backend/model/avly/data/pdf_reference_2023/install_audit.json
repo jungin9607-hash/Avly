@@ -1,0 +1,65 @@
+{
+  "added": [
+    {
+      "path": "/home/dkswnsgh/Avly/backend/model/data/pdf_reference_2023/reference.json",
+      "sha256": "c8b3d888a870705d595d188ba61c0da2c092c4e7607a166497d399a00385cd8d",
+      "bytes": 87966568
+    },
+    {
+      "path": "/home/dkswnsgh/Avly/backend/model/data/pdf_reference_2023/csv_pdf_links.json",
+      "sha256": "c325d7d4b95f8d34406793be3604761f7f550584db547732082ca688b98ea4a9",
+      "bytes": 9295
+    },
+    {
+      "path": "/home/dkswnsgh/Avly/backend/model/compare_pdf_reference.py",
+      "sha256": "1344a802cf212d45235d35f446b7991a4424e83c2321d7227be65ab66b19dd00",
+      "bytes": 17267
+    },
+    {
+      "path": "/home/dkswnsgh/Avly/backend/model/PDF_CSV_사용법.txt",
+      "sha256": "671c064d8f8bec5bc22e7e4cdbd6638be18e9e8c31388ecb696a84a3b1090ca5",
+      "bytes": 3605
+    }
+  ],
+  "existing_files_preserved": 36,
+  "existing_hashes": {
+    "Avly.py": "971e218268588406ad453d053c1ed40e366c848d5fa4860cee7914f31d2eca87",
+    "avly/cli.py": "195db31f42473738729fc3ff5e3022cad73e9ed8c4587fffb8720350f7759d3e",
+    "avly/textllm.py": "70a1b8ae2d7a414d80f05f530c7dfd540b0909fa57c61353d9026e27eb89fa0e",
+    "avly/report.py": "60f1e64b2759bddb676257403d77d7d1a2234bbb1a70a731d5c0c0a04a24915b",
+    "avly/video.py": "52271702f25cecdcbd3052a1f95fe94ff4f598485bfc87423c2358729165f1eb",
+    "avly/vision.py": "1714125add325bd92df46703791c7cf16e87f44ee3f8ebb8225da19697dd0379",
+    "avly/pipeline.py": "094d67287317a491c1f271a996a2e9a67c8770fe0b71850214e1aeb36bb6eb76",
+    "avly/config.py": "c73d5e528c8eb23ed0ec245caa9e973d2a07a4b1c459040ba0a61d7bafa3fb0a",
+    "avly/context.py": "e3dac41fafff7e89b7feb2654b72ff214cfc75abd096ae8344aeb7124dd13437",
+    "avly/observation.py": "7cf6e31b624ee0b79b6051356b1e46404cd54d49a2103e45e87efa083e3eb6ed",
+    "avly/facts.py": "2991a204eb8fe6cad06f588948ac1379d0e8a63659fc7658563a71612e98baa2",
+    "avly/explain.py": "e4de30126ba88430e6dbf7a663330ed50de95bc844dc527e6c23301cc9ad23e7",
+    "avly/tables.py": "ea7ac00d083dd70a3d267b21b28b482d4aafe94ddeef6c0fb9ab5f4239df7ded",
+    "avly/schemas.py": "1c239d0807f96afe79106468f80064c0e07742769dc113bcdf5315c04625f0d1",
+    "avly/adjustments.py": "958cf982c724a9afc1698a4e758b55007944459d0c1a7ac304374a9f058f6823",
+    "avly/dataio.py": "0fb90bb20fd2639f760ecfce8f3359646749cd4c43b8bd6f70919cd9bf36fc64",
+    "avly/test_explain.py": "8dddea72f784504867ef4bbecc12c19dcda679fc53a2ae7ad7577578d061c06f",
+    "avly/law.py": "cdf9ce3b00a236e37c6dd3172852d7a1c68b243e0f605fd2ef616884fb5e727d",
+    "avly/scope.py": "f669f3d9a1d9f9eafd3597aae01bdb3f5fb3a9d632bf2ad312c20c8c53230e21",
+    "avly/matching.py": "6cedbba5b219a2c399b129cb666654c1fee67254708181ad4043f2193354b574",
+    "avly/__init__.py": "d8a4241acf8990acf403a4832f9f7e6532ceb03040c5edc631afbb46c6f8f51e",
+    "avly/survey.py": "58e8979d17f01d5b31c243504c78d45144ebd5518b8e3d8520f953fd03a1a274",
+    "avly/constants.py": "36c835b3e49e098a6a2a6f427a7dd3974bef7b13ae44398028c16c972c526463",
+    "avly/timeline.py": "03d1b1969dc084fd22e5485a4946274e94a7602cb5229045cbb88486512f3687",
+    "avly/data/support_labels.json": "91cb42aa75b288c2fa7bcf4b072dfdc3a66f84cf97e109d34381f45386282d53",
+    "avly/data/factor_labels.json": "c6d4701a9b65bd0cc3bcf34b8f125ec518c6dccfec7c2a8f1c0a470ac149e8de",
+    "avly/data/verified_cases.json": "83561973314169adf310cbf86e05e77474865348f223672f771a0e5492e3c5af",
+    "avly/data/cause_questions.json": "5a5144aefba4622c750abdf33720a565d603b69551a3de7b808782129fe04feb",
+    "avly/data/law_articles.json": "5d1b1b20f7f31d72473d00e42da1595cbb007fcc14722d7441dd04634c1ec098",
+    "avly/data/adjustment_explanations.json": "541d92ec0efcde97c46fa381f0c68f4aeb13b9909f178671e3d30a3ae5c6228b",
+    "avly/data/adjustment_rules.json": "b67e9d28486084b639e4e7b81301ab6bccddc4154181bae9b2694e4093a69dbb",
+    "avly/data/special_labels.json": "fc0a38cc072072fcda1d55d52e515f382a41f349eca5b4ad82d9ca0bf4b30cf3",
+    "avly/data/survey_options.json": "601f59a144f7a4920f9aece25708971c350e09bb3cc0664de6628b13705f8c58",
+    "avly/dev/confirmed_contexts.json": "9a42f591a59f16138b3bcdc43a7a3afd0f73d6ffa3f6c34c491aeb082b041313",
+    "avly/data/fault_table_car_to_car.csv": "ef3aa8a15ae1426f211914c131a6f1f3b12b8f158948068bb0e69525e231c005",
+    "data/fault_table_car_to_car.csv": "ef3aa8a15ae1426f211914c131a6f1f3b12b8f158948068bb0e69525e231c005"
+  },
+  "model_pipeline_modified": false,
+  "external_api_calls": 0
+}

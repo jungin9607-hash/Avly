@@ -20,6 +20,7 @@ from pydantic import BaseModel
 from app.worker import compare
 from avly import explain, textllm
 from avly.constants import COMPARE_MODEL
+from avly.pdf_rules import factor_label
 from avly.tables import FACTOR_LABELS
 
 logger = logging.getLogger(__name__)
@@ -182,7 +183,7 @@ def situation_text(option: dict, answers: dict[str, str]) -> str:
              "내 차(블랙박스 차량)의 진행: " + str(option["my_progress"]), "상대 차의 진행: " + str(option["other_progress"])]
     for key, answer in sorted((answers or {}).items()):
         who, _, factor = key.partition(".")
-        lines.append(f"확인한 사항 - {'내 차' if who == 'me' else '상대 차'}: {FACTOR_LABELS.get(factor, factor)} → {answer}")
+        lines.append(f"확인한 사항 - {'내 차' if who == 'me' else '상대 차'}: {factor_label(factor)} → {answer}")
     return "\n".join(lines)
 
 

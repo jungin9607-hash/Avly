@@ -4,7 +4,9 @@ import re
 import time
 from .constants import CASE_API_ENABLED, CASE_TARGET_COUNT, LAW_ACCIDENT_DATE, LAW_API_ENABLED, RULE_ENGINE_VERSION
 from .tables import ADJUSTMENT_RULES, FACTOR_LABELS, LAW_ARTICLES_BY_TYPE, VERIFIED_CASES
+from .pdf_rules import get_rule_config, registered_types, rule_display
 from .context import ctx
+from .pdf_reference import attach_pdf_reference
 from .facts import accident_input_confirmed, action_support, original_frame_index, parking_environment, progress_actions, scene_missing_conditions, straight_audit
 from .matching import assess_row, assessment_sort_key, candidate_eligibility, context_requirements, csv_accident_type_details, matching_context, mechanism_compatible, orientation_compatible, place_compatible, strict_user_conflicts
 from .law import case_profile, legal_context_for_input, related_cases_for_row, sanitize_case_bundle
@@ -187,14 +189,14 @@ def reference_scenarios_v2151(scene, linked):
     _, row, options = min(ranked, key=lambda x: x[0])
     return [{'accident_type': row['accident_type'], 'title': csv_accident_type_details(row)['accident_type_display_name'], 'reference_only': True, 'basis': '관찰 장소·사고 대상에 따른 CSV 비교 시나리오; 적용 유형의 확정 또는 확률 예측 아님', 'ratio_options': [o for a, o in options]}]
 
-def evaluate_rule_input(payload):
+def evaluate_rule_input(payload, csv_path=None):
     results = []
     for scenario in payload.get('scenarios', []):
         base = scenario['base_fault']
         if any((not isinstance(base[k], int) or not 0 <= base[k] <= 100 for k in ('A', 'B'))) or base['A'] + base['B'] != 100:
             raise ValueError('기본과실은 0~100 정수이며 합계가 100이어야 합니다.')
         result = {'scenario_id': scenario['scenario_id'], 'accident_type': scenario['accident_type'], 'base_fault': dict(base), 'applied_adjustments': [], 'not_applied': [], 'pending': [], 'adjusted_fault': None, 'final_fault': None, 'source': None, 'available_adjustments': []}
-        config = ADJUSTMENT_RULES.get(str(scenario['accident_type']))
+        config = get_rule_config(scenario['accident_type'], csv_path or ctx.csv_path)
         if config is None:
             result.update(status='가감 규칙 미등록', reason='해당 유형은 기본과실만 지원합니다. 가감 규칙이 없다는 뜻은 아닙니다.')
             results.append(result)
@@ -202,7 +204,7 @@ def evaluate_rule_input(payload):
         result['source'] = config['source']
         result['coverage'] = config['coverage']
         role = scenario.get('dashcam_table_role')
-        result['available_adjustments'] = [{'label': FACTOR_LABELS[r['factor']], 'delta_pp': r['delta_pp'], 'table_actor': r['actor']} for r in config['rules']]
+        result['available_adjustments'] = [{'label': r.get('label', FACTOR_LABELS.get(r['factor'],r['factor'])), 'delta_pp': r['delta_pp'], 'table_actor': r['actor']} for r in config['rules']]
         if not scenario.get('eligible_for_adjustment'):
             result.update(status='유형·차량 역할 확인 필요', reason='장소 기반 참고 또는 진행·역할 미확정 시나리오에는 가감산을 적용하지 않습니다.')
             results.append(result)
@@ -216,10 +218,13 @@ def evaluate_rule_input(payload):
             continue
         facts = {(f['actor'], f['factor']): f for f in payload.get('factors', [])}
         selected = {}
+        confirmed_by_group = {}
         for rule in config['rules']:
             actor = mapping[rule['actor']]
             fact = facts.get((actor, rule['factor']), {'value': '미확인', 'status': 'unknown'})
-            item = {'rule_id': rule['id'], 'actor': actor, 'table_actor': rule['actor'], 'factor': rule['factor'], 'label': FACTOR_LABELS[rule['factor']], 'delta_pp': rule['delta_pp'], 'evidence': fact, 'source': config['source']}
+            item = {'rule_id': rule['id'], 'actor': actor, 'table_actor': rule['actor'], 'factor': rule['factor'], 'label': rule.get('label', FACTOR_LABELS.get(rule['factor'],rule['factor'])), 'delta_pp': rule['delta_pp'], 'evidence': fact, 'source': config['source']}
+            item['pdf_source'] = rule.get('pdf_source')
+            item['display'] = {who:rule_display(rule,who) for who in ('내 차','상대 차')}
             accepted = fact.get('status') == 'user' or (fact.get('status') == 'observed' and (not rule.get('manual_only')))
             if fact.get('value') == '미확인' or not accepted:
                 result['pending'].append(item)
@@ -229,6 +234,9 @@ def evaluate_rule_input(payload):
                 continue
             if fact['value'] != '있음':
                 raise ValueError('가감 요소는 있음/없음/미확인으로 기록하세요.')
+            item['pdf_source'] = rule.get('pdf_source')
+            item['display'] = {who:rule_display(rule,who) for who in ('내 차','상대 차')}
+            confirmed_by_group.setdefault(rule['group'], []).append(item)
             old = selected.get(rule['group'])
             if old and old['delta_pp'] >= item['delta_pp']:
                 result['not_applied'].append({**item, 'reason': '같은 과실 정도 그룹의 상위 항목 적용'})
@@ -236,6 +244,13 @@ def evaluate_rule_input(payload):
             if old:
                 result['not_applied'].append({**old, 'reason': '같은 과실 정도 그룹의 상위 항목 적용'})
             selected[rule['group']] = item
+        for group in config.get('exclusive_groups', []):
+            conflict = confirmed_by_group.get(group, [])
+            if len({x['factor'] for x in conflict}) > 1:
+                selected.pop(group, None)
+                ids = {x['rule_id'] for x in conflict}
+                result['not_applied'] = [x for x in result['not_applied'] if x['rule_id'] not in ids]
+                result['pending'].extend({**x, 'reason':'서행 불이행과 서행·정지 답변이 양립하지 않아 재확인 필요'} for x in conflict)
         if str(scenario['accident_type']) == '1':
             conditional_ids = {r['id'] for r in config['rules'] if r.get('requires_B_adjustment')}
             front_service_actor = mapping['B']
@@ -263,6 +278,11 @@ def evaluate_rule_input(payload):
             result.update(status='확인된 요소만 반영 — 추가 가감 미확인', reason='미확인 요소는 0으로 확정하지 않았습니다.')
         else:
             result.update(status='등록된 가감요소 평가 완료 — 조건부 계산값', final_fault=dict(result['adjusted_fault']), reason='해당 유형·사실·등록 규칙이 맞는 조건의 계산값입니다. 일방과실 예외는 별도 검토 대상입니다.')
+        result['pdf_rule_registry'] = config.get('registry_version')
+        result['source_review_pending'] = config.get('source_review_pending', [])
+        if result['source_review_pending']:
+            result.update(final_fault=None, status='확인된 요소 반영 — 원문 항목 추가 검토 필요',
+                          reason='역할 또는 수치가 불명확한 원문 항목은 계산에서 제외했습니다.')
         results.append(result)
     return {'engine_version': RULE_ENGINE_VERSION, 'results': results}
 
@@ -425,7 +445,7 @@ def law_rule_bundle_v217(scene, linked):
 
 def law_rule_bundle_v2172(scene, linked):
     bundle = law_rule_bundle_v217(scene, linked)
-    bundle['rule_engine_output']['registry_coverage'] = {'csv_type_count': len(ctx.table), 'adjustment_registered_types': sorted((int(x) for x in ADJUSTMENT_RULES)), 'case_seed_types': sorted(VERIFIED_CASES), 'dynamic_case_search': '전체 CSV 유형에 제공', 'all_adjustment_types_registered': len(ADJUSTMENT_RULES) == len(ctx.table)}
+    bundle['rule_engine_output']['registry_coverage'] = {'csv_type_count': len(ctx.table), 'adjustment_registered_types': registered_types(ctx.csv_path), 'case_seed_types': sorted(VERIFIED_CASES), 'dynamic_case_search': '전체 CSV 유형에 제공', 'all_adjustment_types_registered': len(registered_types(ctx.csv_path)) == len(ctx.table)}
     return bundle
 
 def reference_scenarios_v2173(scene, linked):
@@ -579,7 +599,7 @@ def law_rule_bundle_v218(scene, linked):
     for result in out['results']:
         scenario = byid[result['scenario_id']]
         result['conditional_projection'] = None
-        if not scenario.get('reference_only') or not ADJUSTMENT_RULES.get(str(result['accident_type'])):
+        if not scenario.get('reference_only') or not get_rule_config(result['accident_type'], ctx.csv_path):
             continue
         assumed = json.loads(json.dumps(scenario))
         assumed['eligible_for_adjustment'] = True
@@ -613,4 +633,5 @@ def reference_scenarios(scene, linked):
 law_rule_bundle_before_case_guard = law_rule_bundle
 
 def law_rule_bundle(scene,linked):
-    return sanitize_case_bundle(law_rule_bundle_before_case_guard(scene,linked))
+    bundle = sanitize_case_bundle(law_rule_bundle_before_case_guard(scene,linked))
+    return attach_pdf_reference(bundle, csv_path=ctx.csv_path)

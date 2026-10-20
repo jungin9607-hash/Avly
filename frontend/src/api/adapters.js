@@ -104,6 +104,7 @@ export function toReportModel(result, analysisId) {
     shown: state === "unresolved" ? null : result.steps[result.steps.length - 1],
     final: result.fault?.final ?? null,
     pending: result.adjustments?.pending ?? [],
+    pdfReference: result.pdf_reference ?? null,
     candidates: result.reference_candidates ?? [],
     notice: result.notice,
   };

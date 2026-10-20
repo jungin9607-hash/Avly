@@ -355,13 +355,55 @@ class EngineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             make_redaction("off")
 
-    def test_dev_copy_copies_and_reports_no_stats(self):
+    def test_dev_copy_transcodes_for_browser_and_reports_no_stats(self):
         import tempfile
+        from unittest import mock
+
         with tempfile.TemporaryDirectory() as d:
             src, dst = Path(d, "a.mp4"), Path(d, "sub", "b.mp4")
             src.write_bytes(b"abc")
-            self.assertEqual(DevCopyRedaction().redact(src, dst), {})
-            self.assertEqual(dst.read_bytes(), b"abc")
+            def transcode(command, capture_output):
+                self.assertEqual(command[1:3], ["-y", "-i"])
+                self.assertIn("libx264", command)
+                self.assertIn("yuv420p", command)
+                self.assertIn("+faststart", command)
+                dst.write_bytes(b"h264")
+                return mock.Mock(returncode=0)
+
+            with mock.patch("app.worker.redaction.shutil.which", return_value="ffmpeg"), \
+                    mock.patch("app.worker.redaction.subprocess.run", side_effect=transcode):
+                self.assertEqual(DevCopyRedaction().redact(src, dst), {})
+            self.assertEqual(dst.read_bytes(), b"h264")
+
+    def test_dev_copy_fails_explicitly_without_ffmpeg(self):
+        import tempfile
+        from unittest import mock
+
+        with tempfile.TemporaryDirectory() as d:
+            src, dst = Path(d, "a.mp4"), Path(d, "b.mp4")
+            src.write_bytes(b"abc")
+            with mock.patch("app.worker.redaction.shutil.which", return_value=None):
+                with self.assertRaisesRegex(RuntimeError, "ffmpeg"):
+                    DevCopyRedaction().redact(src, dst)
+            self.assertFalse(dst.exists())
+
+    def test_dev_copy_removes_partial_output_when_transcoding_fails(self):
+        import tempfile
+        from unittest import mock
+
+        with tempfile.TemporaryDirectory() as d:
+            src, dst = Path(d, "a.mp4"), Path(d, "b.mp4")
+            src.write_bytes(b"abc")
+
+            def fail_transcode(command, capture_output):
+                dst.write_bytes(b"partial")
+                return mock.Mock(returncode=1)
+
+            with mock.patch("app.worker.redaction.shutil.which", return_value="ffmpeg"), \
+                    mock.patch("app.worker.redaction.subprocess.run", side_effect=fail_transcode):
+                with self.assertRaisesRegex(RuntimeError, "H.264"):
+                    DevCopyRedaction().redact(src, dst)
+            self.assertFalse(dst.exists())
 
 
 class AvlyEngineTests(unittest.TestCase):

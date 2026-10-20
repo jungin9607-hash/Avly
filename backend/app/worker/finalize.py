@@ -6,6 +6,7 @@
 from app import catalog
 from app.worker import compare
 from avly import explain
+from avly.pdf_reference import web_pdf_reference
 from avly.constants import REPORT_NOTICE
 from avly.tables import LAW_ARTICLES_BY_TYPE
 
@@ -38,7 +39,7 @@ def _pair(fault: dict | None) -> dict | None:
 
 def _item(entry: dict, **extra) -> dict:
     who = WHO[entry["actor"]]
-    e = explain.explain_factor(entry["factor"], entry["delta_pp"], who)
+    e = entry.get("display", {}).get(who) or explain.explain_factor(entry["factor"], entry["delta_pp"], who)
     return {"factor": entry["factor"], "who": who, "title": e["title"], "easy": e["easy"], "effect": e["effect"],
             "delta_pp": entry["delta_pp"], "reviewed": e["reviewed"], **extra}
 
@@ -74,6 +75,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
         "related_cases": related_cases,
         "reference_candidates": [c for c in situation.get("candidates", [])],
         "notice": REPORT_NOTICE,
+        "pdf_reference": web_pdf_reference(confirmed.get("accident_type_id"), confirmed.get("role"), catalog.settings.fault_table_path),
     }
     type_id, role = confirmed.get("accident_type_id"), confirmed.get("role")
     if type_id is None:
@@ -90,7 +92,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
         "base_fault": {"A": option["base_me"], "B": option["base_other"]},   # 엔진은 내 차(A) 기준으로 읽는다
         "table_progress": {"A": row.a_progress, "B": row.b_progress},       # 표의 A/B 순서
     }
-    out = evaluate_rule_input({"scenarios": [scenario], "factors": catalog.answers_to_facts(confirmed.get("answers", {}))})["results"][0]
+    out = evaluate_rule_input({"scenarios": [scenario], "factors": catalog.answers_to_facts(confirmed.get("answers", {}))}, csv_path=catalog.settings.fault_table_path)["results"][0]
     registered = bool(out.get("source"))
     state = _state(registered, out)
 
@@ -117,7 +119,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
         "adjustments": {
             "registered": registered, "applied": applied,
             "not_applied": [_item(e, reason=e.get("reason")) for e in out["not_applied"]],
-            "pending": [_item(e, question=explain.explain_factor(e["factor"], e["delta_pp"], WHO[e["actor"]])["question"])
+            "pending": [_item(e, question=(e.get("display", {}).get(WHO[e["actor"]]) or explain.explain_factor(e["factor"], e["delta_pp"], WHO[e["actor"]]))["question"])
                         for e in out["pending"]],
         },
         "laws": _laws(type_id),

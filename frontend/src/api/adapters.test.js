@@ -222,3 +222,12 @@ test("결과 화면에 들어가기 전 안내: 상태마다 알맞은 문구와
   assert.equal(describeAnalysis({ session, analysis: { status: "unsupported", unsupported_reason: "차대보행자 사고는 지원하지 않습니다." }, analysisId: "x" }).body, "차대보행자 사고는 지원하지 않습니다.");
   assert.equal(describeAnalysis({ session, analysis: { status: "failed", error: { message: "실패했어요" } }, analysisId: "x" }).body, "실패했어요");
 });
+
+
+test("PDF 원문 연결 정보를 결과 화면에 전달하고 이전 결과도 지원한다", () => {
+  const result = fixture("result_final.json");
+  result.pdf_reference = { status: "document_link_checked", documents: [{ official_chart_id: "차43-2" }] };
+  assert.equal(toReportModel(result, "test").pdfReference, result.pdf_reference);
+  delete result.pdf_reference;
+  assert.equal(toReportModel(result, "test").pdfReference, null);
+});

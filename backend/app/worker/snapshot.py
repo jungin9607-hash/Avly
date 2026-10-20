@@ -76,6 +76,13 @@ def from_model_result(data: dict, engine: str) -> dict:
         ],
         "video_sha256": data.get("video_sha256"),
         "csv_sha256": data.get("csv_sha256"),
+        "pdf_reference": {
+            "status": data.get("pdf_reference_context", {}).get("status", "not_evaluated"),
+            "edition": data.get("pdf_reference_context", {}).get("edition"),
+            "entries": [{"csv_accident_type": e.get("csv_accident_type"), "status": e.get("status"),
+                         "source_document_link": e.get("source_document_link")}
+                        for e in data.get("pdf_reference_context", {}).get("entries", [])],
+        },
     }
 
 

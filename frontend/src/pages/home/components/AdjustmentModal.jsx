@@ -10,11 +10,16 @@ export default function AdjustmentModal({ option, questions, onSubmit, onBack, o
 
   return (
     <ModalShell
-      title="과실 비율에 영향을 주는 상황을 확인해 주세요"
+      title={questions.some((q) => q.pdf_source) ? "PDF 가감요소를 확인해 주세요" : "과실 비율에 영향을 주는 상황을 확인해 주세요"}
       desc={`기본 비율은 내 차 ${option.base_me}% : 상대 차 ${option.base_other}%예요. 아래 상황이 있었다면 비율이 달라져요. 모르는 항목은 '잘 모르겠어요'를 골라도 돼요.`}
       progress={[4, 4]}
       onClose={onClose}
     >
+      {questions.some((q) => q.pdf_source) && (
+        <p className="md-hint" style={{ padding: "0 30px" }}>
+          사고 유형별 원문 가감요소 · {[...new Set(questions.map((q) => q.pdf_source?.chart).filter(Boolean))].join(" / ")} · 2023.06 기준
+        </p>
+      )}
       <form onSubmit={(event) => { event.preventDefault(); send(); }}>
         <div className="md-body">
           <ol className="md-questions">
@@ -23,11 +28,18 @@ export default function AdjustmentModal({ option, questions, onSubmit, onBack, o
                 <fieldset>
                   <legend>
                     <span className="md-qnum">{index + 1}</span>
-                    {q.question}
+                    {q.pdf_source ? `${q.who} · ${q.pdf_factor || q.title}` : q.question}
                   </legend>
-                  <p className="md-q-easy">{q.easy}</p>
+                  {!q.pdf_source && <p className="md-q-easy">{q.easy}</p>}
+                  {q.registry_note && <p className="md-hint">{q.registry_note}</p>}
                   <p className="md-q-effect">예라면 → {q.effect}</p>
-                  {q.needs_user && <p className="md-hint">영상만으로는 알 수 없어서 직접 답해 주세요.</p>}
+                  {q.pdf_source && (
+                    <>
+                      <p className="md-hint">PDF 원문: {q.pdf_source.raw_text} · {q.pdf_source.chart}</p>
+                      <details className="md-hint"><summary>항목 설명</summary><p>{q.easy}</p></details>
+                    </>
+                  )}
+                  {q.needs_user && !q.pdf_source && <p className="md-hint">실제 사고에 해당한 상황인지 직접 확인해 주세요.</p>}
                   {q.suggested && (
                     <p className="md-suggest">
                       AI 제안: <b>{q.suggested.answer}</b> ({q.suggested.basis}

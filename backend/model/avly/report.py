@@ -9,6 +9,7 @@ from .schemas import Observation
 from .matching import csv_accident_type_details
 from .law import case_date, law_article_label, sanitize_case_bundle
 from .adjustments import compact_fault, law_rule_bundle
+from .pdf_reference import pdf_report_lines
 from .timeline import major_accident_timeline, save_timeline_text
 
 
@@ -269,6 +270,7 @@ def build_user_report(scene, timeline_payload, linked, survey, direction=None, b
         lines.append('※ 표시한 진행 조건이 실제와 일치하는 경우의 기본값입니다.')
 
     lines += ['', '3. 법령 및 가감요소']
+    lines.extend(pdf_report_lines(bundle.get('pdf_reference_context')))
     context = out.get('legal_context', {})
     articles = context.get('articles', [])
     if articles:

@@ -7,7 +7,7 @@ def parse_args():
     selector.add_argument('--video', help='영상 경로. 생략하면 영상 선택 메뉴 표시')
     selector.add_argument('--pick-video', action='store_true', help='파일 선택 창. GUI 미지원 시 터미널 메뉴')
     parser.add_argument('--backend', help='backend 폴더의 절대 경로. 기본값: 자동 탐색')
-    parser.add_argument('--csv', help='fault_table.csv 경로. 기본값: model/data 등 자동 탐색')
+    parser.add_argument('--csv', help='fault_table_car_to_car.csv 경로. 기본값: model/data 등 자동 탐색')
     parser.add_argument('--results', help='결과 폴더 경로. 기본값: model/results')
     parser.add_argument('--show-logs', action='store_true', help='단계별 처리 로그 표시')
     parser.add_argument('--no-cache', action='store_true', help='저장된 Vision 응답 대신 새 API 요청')
@@ -127,10 +127,10 @@ if __name__ == '__main__':
         if csv_value:
             csv_path=backend_path(csv_value,backend)
         else:
-            candidates=[model/'data/fault_table.csv',backend/'data/fault_table.csv',model/'fault_table.csv',backend.parent/'data/fault_table.csv']
+            candidates=[model/'data/fault_table_car_to_car.csv',backend/'data/fault_table_car_to_car.csv',model/'fault_table_car_to_car.csv',backend.parent/'data/fault_table.csv']
             csv_path=next((p.resolve() for p in candidates if p.is_file()),None)
         if csv_path is None or not csv_path.is_file():
-            raise FileNotFoundError('fault_table.csv를 backend/model/data에 넣거나 CSV_FILE에 정확한 경로를 지정하세요.')
+            raise FileNotFoundError('fault_table_car_to_car.csv를 backend/model/data에 넣거나 CSV_FILE에 정확한 경로를 지정하세요.')
         results=backend_path(settings['RESULTS_DIR'],backend) if settings.get('RESULTS_DIR') else model/'results'
         results.mkdir(parents=True,exist_ok=True)
         print('Python:',sys.executable)
@@ -1340,7 +1340,7 @@ if __name__ == '__main__':
         obj = str(row.get('accident_object_name', '')).strip()
         parts = [x for x in (place, feature) if x and x.lower() != 'nan']
         display_name = ' / '.join(dict.fromkeys(parts)) or '사고 유형 명칭 확인 필요'
-        return {'accident_type_id': row['accident_type'], 'accident_type_display_name': display_name, 'accident_type_title_kind': 'CSV 장소·특징으로 구성한 설명형 제목 (공식 유형명 아님)', 'accident_object': obj, 'accident_place': place, 'accident_place_feature': feature, 'dashcam_table_role': table_role, 'dashcam_progress_condition': a_progress, 'other_vehicle_progress_condition': b_progress, 'source': 'fault_table.csv'}
+        return {'accident_type_id': row['accident_type'], 'accident_type_display_name': display_name, 'accident_type_title_kind': 'CSV 장소·특징으로 구성한 설명형 제목 (공식 유형명 아님)', 'accident_object': obj, 'accident_place': place, 'accident_place_feature': feature, 'dashcam_table_role': table_role, 'dashcam_progress_condition': a_progress, 'other_vehicle_progress_condition': b_progress, 'source': 'fault_table_car_to_car.csv'}
 
     def link_match(candidate, row, scene):
         conditions = ['추가 가정(모델 제안, 영상 확인 아님): ' + text for text in candidate.assumed_conditions]

@@ -1,0 +1,11 @@
+{
+  "stage": "2/3 사고 전후 상세 확인",
+  "provider": "gemini",
+  "model": "gemini-3.8-flash",
+  "http_status": 400,
+  "api_status": "INVALID_ARGUMENT",
+  "request_attempt": 1,
+  "error": "Request contains an invalid argument.",
+  "usage": null,
+  "usage_note": "실패 응답의 사용량은 미확인. 0으로 확정하지 않습니다."
+}

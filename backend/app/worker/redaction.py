@@ -1,11 +1,12 @@
 """비식별화 단계. 분석과 저장에는 이 단계가 만든 영상만 쓴다.
 
 - yolo      : 번호판은 검은 박스, 사람은 전체 블러 (backend/plate/redact.py). 운영에서 쓴다.
-- dev_copy  : 개발용. 가리지 않고 복사만 한다. 운영에서는 쓰면 안 된다 (개인정보가 그대로 남는다).
+- dev_copy  : 개발용. 가리지 않고 H.264로 변환한다. 운영에서는 쓰면 안 된다 (개인정보가 그대로 남는다).
 """
 
 import logging
 import shutil
+import subprocess
 from pathlib import Path
 
 from app.config import settings
@@ -30,9 +31,24 @@ class DevCopyRedaction:
     name = "dev_copy"
 
     def redact(self, source: Path, destination: Path) -> dict:
-        logger.warning("REDACTION=dev_copy: 영상을 가리지 않고 복사합니다. 개발용입니다.")
+        logger.warning("REDACTION=dev_copy: 영상은 가리지 않으며, 브라우저 재생을 위해 H.264로 변환합니다. 개발용입니다.")
         destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, destination)
+        ffmpeg = shutil.which("ffmpeg")
+        if ffmpeg is None:
+            raise RuntimeError("REDACTION=dev_copy에서 브라우저 재생용 변환을 하려면 ffmpeg가 필요합니다.")
+        try:
+            result = subprocess.run(
+                [
+                    ffmpeg, "-y", "-i", str(source), "-c:v", "libx264", "-pix_fmt", "yuv420p",
+                    "-movflags", "+faststart", "-an", str(destination),
+                ],
+                capture_output=True,
+            )
+            if result.returncode != 0 or not destination.is_file() or destination.stat().st_size == 0:
+                raise RuntimeError("REDACTION=dev_copy 영상의 H.264 변환에 실패했습니다.")
+        except Exception:
+            destination.unlink(missing_ok=True)
+            raise
         return {}
 
 
