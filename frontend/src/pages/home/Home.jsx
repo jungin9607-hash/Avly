@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import TopNav from "../common/components/TopNav";
 import FlowModals from "./components/FlowModals";
+import NoticeModal from "./components/NoticeModal";
+import ResumeBanner from "./components/ResumeBanner";
 import GuideTiles from "./components/GuideTiles";
 import UploadDrop from "./components/UploadDrop";
 import { IconShield } from "./components/icons";
@@ -12,6 +14,16 @@ import "./Home.css";
 
 const ACCEPT_EXT = ["mp4", "mov", "avi"];
 const MAX_MB = 50;
+const IN_PROGRESS = ["uploading", "analyzing", "confirming", "adjusting", "finalizing"];
+
+// 나가려 할 때 단계별로 알려 줄 말
+const LEAVE_HINT = {
+  uploading: "지금 나가면 업로드가 멈춰요. 처음부터 다시 올려야 해요.",
+  analyzing: "분석은 서버에서 계속돼요. 끝나면 이 화면의 '진행 중인 분석'이나 상단 메뉴의 '분석 결과'에서 이어서 확인할 수 있어요.",
+  finalizing: "결과 계산은 서버에서 계속돼요. 끝나면 상단 메뉴의 '분석 결과'에서 볼 수 있어요.",
+  confirming: "분석은 이미 끝났어요. 나가면 고르던 내용은 사라지지만, '진행 중인 분석'에서 다시 이어서 확인할 수 있어요. 영상을 다시 분석하지는 않아요.",
+  adjusting: "분석은 이미 끝났어요. 나가면 답하던 내용은 사라지지만, '진행 중인 분석'에서 처음부터 다시 이어서 확인할 수 있어요. 영상을 다시 분석하지는 않아요.",
+};
 
 export default function Home() {
   const inputRef = useRef(null);
@@ -19,6 +31,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const [pending, setPending] = useState([]); // 동의 팝업을 기다리는 선택된 영상
   const [started, setStarted] = useState(false); // 동의하고 분석을 시작했는지
+  const [leaving, setLeaving] = useState(false); // 진행 중인 팝업을 닫으려 할 때 나가도 되는지 묻는 중
   const [params] = useSearchParams();
   const resumeId = params.get("resume"); // 결과 화면에서 "이어서 확인하기"로 들어온 분석 번호
   const { state: flow, start, choose, confirm, back, reset } = useAnalysisFlow(resumeId);
@@ -49,6 +62,17 @@ export default function Home() {
     setPending([]);
     setStarted(false);
     if (resumeId) navigate(ROUTES.home, { replace: true });
+  };
+
+  // 진행 중인 팝업은 바로 닫지 않고 먼저 물어본다. 닫아도 서버 분석은 계속되지만, 고르던 내용은 사라진다.
+  const requestClose = () => {
+    if (IN_PROGRESS.includes(flow.phase)) setLeaving(true);
+    else closeAll();
+  };
+
+  const leave = () => {
+    setLeaving(false);
+    closeAll();
   };
 
   const pickAnother = () => {
@@ -85,6 +109,7 @@ export default function Home() {
               MP4, MOV, AVI 포맷 지원 · 단일 파일 최대 <strong>{MAX_MB}MB</strong> 이내 권장
             </p>
 
+            {flow.phase === "idle" && pending.length === 0 && <ResumeBanner />}
             <UploadDrop inputRef={inputRef} error={error} onFiles={selectFiles} />
           </div>
 
@@ -107,13 +132,23 @@ export default function Home() {
       </main>
 
       {/* 영상 선택 → 수집 동의 → 업로드·분석 → 사고 상황 확인 → 가감요소 질문 → 결과 */}
-      {(pending.length > 0 || flow.phase !== "idle") && (
+      {leaving && (
+        <NoticeModal
+          title="창을 닫을까요?"
+          desc={LEAVE_HINT[flow.phase]}
+          primary={{ label: "계속 보기", onClick: () => setLeaving(false) }}
+          secondary={{ label: "나가기", onClick: leave }}
+          onClose={() => setLeaving(false)}
+          sticky
+        />
+      )}
+      {!leaving && (pending.length > 0 || flow.phase !== "idle") && (
         <FlowModals
           file={pending[0]}
           started={started || flow.phase !== "idle"}
           flow={flow}
           onBegin={begin}
-          onClose={closeAll}
+          onClose={requestClose}
           onPickAnother={pickAnother}
           onChoose={choose}
           onConfirm={confirm}

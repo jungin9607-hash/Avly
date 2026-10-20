@@ -16,7 +16,7 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
 
   if (!items) {
     return (
-      <ModalShell title="AI가 분석한 사고 상황이 맞나요?" progress={[3, 4]} onClose={onClose}>
+      <ModalShell title="AI가 분석한 사고 상황이 맞나요?" progress={[3, 4]} onClose={onClose} sticky>
         <div className="md-analysis" role="status">
           <span className="md-analysis-spinner" aria-hidden="true" />
           <p>선택지를 불러오는 중이에요.</p>
@@ -37,6 +37,7 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
       desc="영상에서 파악한 내용이에요. 다르면 아래에서 직접 고쳐 주세요."
       progress={[3, 4]}
       onClose={onClose}
+      sticky
     >
       <div className="md-body">
         {situation?.summary && (

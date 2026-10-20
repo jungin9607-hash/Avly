@@ -14,6 +14,7 @@ export default function AdjustmentModal({ option, questions, onSubmit, onBack, o
       desc={`기본 비율은 내 차 ${option.base_me}% : 상대 차 ${option.base_other}%예요. 아래 상황이 있었다면 비율이 달라져요. 모르는 항목은 '잘 모르겠어요'를 골라도 돼요.`}
       progress={[4, 4]}
       onClose={onClose}
+      sticky
     >
       <form onSubmit={(event) => { event.preventDefault(); send(); }}>
         <div className="md-body">

@@ -14,6 +14,7 @@ export default function AnalysisProgressModal({ phase, progress = 0, stage, onCl
       desc={phase === "analyzing" ? "번호판과 사람을 가린 뒤 사고 장면과 차량 움직임을 분석해요. 영상 길이에 따라 몇 분 걸릴 수 있어요." : undefined}
       progress={[2, 4]}
       onClose={onClose}
+      sticky
     >
       <div className="md-analysis" role="status" aria-live="polite">
         <span className="md-analysis-spinner" aria-hidden="true" />

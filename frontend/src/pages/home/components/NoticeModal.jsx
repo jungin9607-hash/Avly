@@ -1,9 +1,9 @@
 import ModalShell from "./ModalShell";
 
 // 안내 팝업: 제목과 설명, 버튼 한두 개 (지원하지 않는 사고, 실패 등)
-export default function NoticeModal({ title, desc, children, primary, secondary, onClose }) {
+export default function NoticeModal({ title, desc, children, primary, secondary, onClose, sticky }) {
   return (
-    <ModalShell title={title} desc={desc} onClose={onClose}>
+    <ModalShell title={title} desc={desc} onClose={onClose} sticky={sticky}>
       {children && <div className="md-body">{children}</div>}
       <footer className="md-foot md-foot-row">
         {primary && (
