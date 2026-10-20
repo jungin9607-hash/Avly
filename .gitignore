@@ -37,3 +37,6 @@ backend/model/**/*.bak
 *.pth
 *.onnx
 *.safetensors
+
+# 팀원이 PDF 에서 뽑아 준 원본 자료 묶음(88MB 원문 JSON 포함). 저장소에 올리지 않는다. 합친 결과는 backend/model/avly/data 에 있다.
+backend/assets/

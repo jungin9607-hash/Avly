@@ -146,7 +146,7 @@ POST /accidents (동의, session_id 받기)
 
 ### GET /api/v1/analyses/{id}/adjustment-questions?accident_type_id=11&role=A
 
-고른 유형에 등록된 가감요소를 쉬운 말 질문으로 돌려준다. 등록되지 않은 유형은 `registered: false`, `questions: []`이고 기본 비율만 안내한다(**133개 유형 중 7개만 등록**).
+고른 유형에 등록된 가감요소를 쉬운 말 질문으로 돌려준다. 등록되지 않은 유형은 `registered: false`, `questions: []`이고 기본 비율만 안내한다(**133개 유형 중 122개 등록**, 나머지 11개는 PDF와 과실표의 기본 비율이 달라 뺐다).
 
 ```json
 { "accident_type_id": 11, "role": "A", "registered": true, "questions": [ {
