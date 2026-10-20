@@ -33,7 +33,8 @@ def parse_date(value) -> str | None:
 
 def _db_case(model_case: dict) -> tuple[dict, dict]:
     """avly 가 만든 판례 dict 를 (legal_case 행, 연결 정보) 로 바꾼다."""
-    registered = bool(model_case.get("verified_date"))
+    registered = bool(model_case.get("verified_date"))          # 사람이 검수한 날짜가 적힌 등록 판례
+    from_chart = registered or bool(model_case.get("chart_reference"))   # 협회 도표에 실린 참고 판례(검수 전이어도 같은 사고 유형 자료다)
     decided = parse_date(model_case.get("date"))
     verified_at = None
     if registered:
@@ -41,13 +42,13 @@ def _db_case(model_case: dict) -> tuple[dict, dict]:
     case = {
         "court": model_case["court"], "decided_on": datetime.fromisoformat(decided).date() if decided else None,
         "case_number": model_case["case_number"], "title": model_case.get("case_name"), "summary": model_case["summary"],
-        "fault_ratio": None, "source_kind": "knia_chart" if registered else "law_api", "source_url": model_case.get("source"),
+        "fault_ratio": None, "source_kind": "knia_chart" if from_chart else "law_api", "source_url": model_case.get("source"),
         # 모델 데이터가 직접 적어 둔 검수 날짜(verified_date)를 그대로 따른다. API 로 가져온 판례는 검수 전이다.
         "verified": registered, "verified_by": "avly 데이터(verified_date)" if registered else None, "verified_at": verified_at,
         "raw": {k: v for k, v in model_case.items() if isinstance(v, (str, int, float, bool, list, dict, type(None)))},
-        "fetched_at": None if registered else datetime.now(timezone.utc),
+        "fetched_at": None if from_chart else datetime.now(timezone.utc),
     }
-    link = {"relevance_status": model_case.get("relevance_status") or ("registered_chart_reference" if registered else "civil_traffic_context_reference"),
+    link = {"relevance_status": model_case.get("relevance_status") or ("registered_chart_reference" if from_chart else "civil_traffic_context_reference"),
             "comparison_limit": model_case.get("comparison_limit")}
     return case, link
 
