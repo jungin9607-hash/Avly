@@ -5,14 +5,14 @@ import { easyOf, toCaseCards, toMoments } from "../../api/adapters.js";
 const HEADLINE = {
   final: "AI 예상 과실 비율",
   partial: "확인한 요소만 반영한 예상 비율",
-  base_only: "기본 비율 (가감요소가 등록되지 않은 유형)",
+  base_only: "기본 비율 (비율이 달라지는 사정이 등록되지 않은 유형)",
   unresolved: "과실 비율을 안내할 수 없어요",
 };
 
 const HEADLINE_NOTE = {
-  final: "등록된 가감요소를 모두 확인해서 계산한 예상 비율이에요. 실제 비율은 보험사 합의나 법원 판단에 따라 달라질 수 있어요.",
-  partial: "확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요.",
-  base_only: "이 사고 유형은 가감요소가 아직 등록되지 않아 기본 비율만 안내해요.",
+  final: "비율이 달라지는 사정을 모두 확인해서 계산한 예상 비율이에요. 실제 비율은 보험사 합의나 법원 판단에 따라 달라질 수 있어요.",
+  partial: "아직 확인하지 못한 사정이 있어서 실제 비율은 달라질 수 있어요.",
+  base_only: "이 사고 유형은 비율이 달라지는 사정이 아직 등록되지 않아 기본 비율만 안내해요.",
   unresolved: "과실표에서 맞는 사고 유형을 찾지 못했어요. 아래 상황 설명만 참고해 주세요.",
 };
 
@@ -66,6 +66,13 @@ function officialType(result) {
   return t ? `${t.place} · ${t.feature} · 내 차 ${t.my_progress} / 상대 차 ${t.other_progress}` : null;
 }
 
+// 맨 위 결론 박스의 한 줄 설명. 확정된 사고 유형이 있으면 그것으로 문장을 만들고, 없으면 서버가 준 요약(AI의 관찰 메모)을 쓴다.
+function oneLineOf(result) {
+  const t = result.accident_type;
+  if (t) return `${easyOf(t, "place")}에서 일어난 사고예요. 내 차는 ${easyOf(t, "my_progress")}, 상대 차는 ${easyOf(t, "other_progress")} 상황이에요.`;
+  return result.summary ?? "";
+}
+
 function candidateLines(result) {
   if (result.state !== "unresolved") return [];
   return (result.reference_candidates ?? []).slice(0, 3).map((c) => `${easyOf(c, "place")} · ${easyOf(c, "feature")} (내 차 ${easyOf(c, "my_progress")} / 상대 차 ${easyOf(c, "other_progress")})`);
@@ -97,7 +104,7 @@ export function toReportDocument(result, { analysisId, createdAt, expiresAt } = 
       expiresAt: formatDateTime(expiresAt),
     },
     notice: result.notice ?? "",
-    headline: headlineOf(result),
+    headline: { ...headlineOf(result), oneLine: oneLineOf(result) },
     summary: result.summary ?? "",
     situation: { rows: situationRows(result), official: officialType(result), candidates: candidateLines(result) },
     steps: state === "unresolved" ? [] : (result.steps ?? []).map((s) => ({

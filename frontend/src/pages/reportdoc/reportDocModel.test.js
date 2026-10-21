@@ -54,3 +54,10 @@ test("보고서: 사고 흐름이 있으면 타임라인 절에 단계로 들어
   assert.deepEqual(doc.timeline.rows.map((r) => r.label), ["접근"]);
   assert.match(doc.timeline.note, /약 2\.0초/);
 });
+
+test("보고서: 맨 위 한 줄 설명은 확정된 사고 유형으로 만들고, 유형이 없으면 서버 요약을 쓴다", () => {
+  const result = fixture("result_final.json");
+  assert.match(toReportDocument(result, meta).headline.oneLine, /사고예요\. 내 차는 .+, 상대 차는 .+ 상황이에요\./);
+  const unresolved = { ...fixture("result_unresolved.json"), summary: "AI가 본 장면 요약" };
+  assert.equal(toReportDocument(unresolved, meta).headline.oneLine, unresolved.accident_type ? toReportDocument(unresolved, meta).headline.oneLine : "AI가 본 장면 요약");
+});
