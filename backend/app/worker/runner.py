@@ -93,6 +93,8 @@ class Worker:
             else:
                 self._fail(analysis_id, "ANALYSIS_FAILED", "사고 분석 중 오류가 발생했습니다. 다시 시도해 주세요.")
             return
+        if place and isinstance(snapshot.get("situation"), dict):
+            snapshot["situation"]["place_hint"] = place   # 확인 화면이 사용자가 고른 장소로 보기를 좁힌다
         for log in logs:
             self.repo.add_stage_log(analysis_id, **log)
         self.repo.update_analysis(analysis_id, status=st.AWAITING_CONFIRMATION, stage=None, scene=snapshot,

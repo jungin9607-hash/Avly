@@ -138,9 +138,9 @@ class AnalysisStartTests(ApiTestCase):
     def test_place_is_kept_for_the_worker(self):
         accident_id, headers = self.make_accident()
         self.upload(accident_id, headers)
-        r = self.client.post(f"/api/v1/accidents/{accident_id}/analyses", json={"place": "주차장"}, headers=headers)
+        r = self.client.post(f"/api/v1/accidents/{accident_id}/analyses", json={"place": "주차장(또는 차도가 아닌 장소)"}, headers=headers)
         self.assertEqual(r.status_code, 202, r.text)
-        self.assertEqual(self.repo.claim_job()["payload"]["place"], "주차장")
+        self.assertEqual(self.repo.claim_job()["payload"]["place"], "주차장(또는 차도가 아닌 장소)")
 
     def test_unknown_place_is_rejected(self):
         accident_id, headers = self.make_accident()
@@ -298,7 +298,11 @@ class MediaTests(ApiTestCase):
 
 class CatalogAndHealthTests(ApiTestCase):
     def test_catalog(self):
-        body = self.client.get("/api/v1/catalog/accident-types").json()
+        first = self.client.get("/api/v1/catalog/accident-types")
+        self.assertEqual(first.headers["cache-control"], "no-cache")
+        again = self.client.get("/api/v1/catalog/accident-types", headers={"If-None-Match": first.headers["etag"]})
+        self.assertEqual((again.status_code, again.content), (304, b""))   # 같으면 본문 없이 확인만
+        body = first.json()
         self.assertEqual(body["count"], 261)
         self.assertEqual({i["role"] for i in body["items"]}, {"A", "B"})
 

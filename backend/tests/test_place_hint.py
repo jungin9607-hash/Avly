@@ -19,8 +19,8 @@ class PlaceHintTests(unittest.TestCase):
         for row in csv.DictReader(TABLE.open(encoding="utf-8-sig")):
             names.setdefault(int(row["accident_place"]), row["accident_place_name"])
         self.assertEqual(sorted(c for codes in PLACE_GROUPS.values() for c in codes), sorted(names))
-        self.assertIn("주차장", names[PLACE_GROUPS["주차장"][0]])
-        self.assertEqual(names[PLACE_GROUPS["차도와 차도가 아닌 장소"][0]], "차도와 차도가 아닌 장소")
+        for group, codes in PLACE_GROUPS.items():   # 이름이 과실표의 장소 이름과 같아야 화면이 장소를 찾는다
+            self.assertEqual([names[c] for c in codes], [group])
 
     def test_candidate_limit_grows_only_with_a_place(self):
         ctx.place_hint = False

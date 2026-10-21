@@ -111,8 +111,7 @@ def table(rows: list[dict]) -> str:
 
 def place_codes_for(category: str) -> list[int]:
     """라벨 영상의 종류(폴더 이름)를 사용자가 고른 장소로 보고 과실표 장소 번호로 바꾼다."""
-    from avly.constants import PLACE_GROUPS
-    return PLACE_GROUPS[category]
+    return {"사거리 교차로": [1, 2], "주차장": [5], "차도와 차도가 아닌 장소": [4]}[category]
 
 
 def main(argv=None):
