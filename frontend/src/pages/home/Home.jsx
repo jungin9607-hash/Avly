@@ -80,9 +80,9 @@ export default function Home() {
     inputRef.current.click();
   };
 
-  const begin = ({ retention }) => {
+  const begin = ({ retention, place }) => {
     setStarted(true);
-    start(pending[0], retention);
+    start(pending[0], retention, place);
   };
 
   // 결과가 나오면 결과 화면으로 이동한다

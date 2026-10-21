@@ -101,6 +101,10 @@ class AnswerIn(RequestSchema):
     answer: Literal["예", "아니요", "잘 모르겠어요"]
 
 
+class StartAnalysisRequest(RequestSchema):
+    place: str | None = Field(default=None, description="사고 장소 종류(선택). 고르면 그 장소의 유형만 비교한다. 예: 주차장, 사거리 교차로")
+
+
 class ConfirmRequest(RequestSchema):
     accident_type_id: int | None = Field(
         description="사용자가 확정한 과실표 유형 번호. 표에 맞는 유형이 없으면 null (결과는 '확정 불가'로 나온다)")

@@ -19,6 +19,7 @@ if MODEL_DIR not in sys.path:
 
 from avly import explain  # noqa: E402  (표준 라이브러리만 쓰는 모듈이라 서버에서도 가볍게 불러올 수 있다)
 from avly.tables import ADJUSTMENT_RULES  # noqa: E402
+from avly.constants import PLACE_GROUPS  # noqa: E402,F401
 
 ANSWER_TO_VALUE = {"예": "있음", "아니요": "없음", "잘 모르겠어요": "미확인"}
 ANSWER_OPTIONS = list(ANSWER_TO_VALUE)

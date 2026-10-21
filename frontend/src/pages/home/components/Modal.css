@@ -793,3 +793,9 @@ input:focus-visible + .md-radio {
   font-size: var(--md-font-caption);
   line-height: 1.5;
 }
+
+/* 사고 장소 선택 (동의 창) */
+.md-place { display: grid; gap: 6px; margin: 0 0 14px; }
+.md-place label { font-weight: 700; font-size: 14px; }
+.md-place small { font-weight: 400; color: #667085; margin-left: 6px; }
+.md-place select { font: inherit; padding: 10px 12px; border: 1px solid #dfe3e8; border-radius: 10px; background: #fff; }

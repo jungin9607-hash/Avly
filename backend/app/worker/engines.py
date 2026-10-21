@@ -42,7 +42,7 @@ class ReplayEngine:
             raise EngineNotConfigured(f"재생할 결과 파일이 없습니다: {path}")
         return json.loads(path.read_text(encoding="utf-8"))
 
-    def analyze(self, video_path, report, fixture: str | None = None):
+    def analyze(self, video_path, report, fixture: str | None = None, place: str | None = None):
         scope = _scope()
         data = self._load(fixture or self.fixture)
         report("overview")
@@ -73,7 +73,7 @@ class FakeEngine(ReplayEngine):
             head = f.readline(200).decode("utf-8", "ignore").strip()
         return head.split() if head.startswith("FAKE") else []
 
-    def analyze(self, video_path, report):
+    def analyze(self, video_path, report, place: str | None = None):
         scope = _scope()
         words = self._directive(video_path)
         for stage in ("overview", "detail_review"):
@@ -98,9 +98,10 @@ class AvlyEngine:
     def __init__(self, results_dir: Path | None = None):
         self.results_dir = Path(results_dir or settings.upload_dir / "_model_results")
 
-    def analyze(self, video_path, report):
+    def analyze(self, video_path, report, place: str | None = None):
         # 무거운 의존성(cv2, openai 등)은 실제로 쓸 때만 불러온다
         from avly import observation, pipeline
+        from avly.constants import PLACE_GROUPS
         from avly.context import ctx
 
         if not (os.environ.get("OPENAI_API_KEY") or "").strip():
@@ -129,6 +130,7 @@ class AvlyEngine:
                 "BACKEND_DIR": str(BASE_DIR), "VIDEO_FILE": str(video_path), "PICK_VIDEO": False,
                 "CSV_FILE": str(settings.fault_table_path), "RESULTS_DIR": str(self.results_dir),
                 "SHOW_PROCESS_LOGS": False, "USE_CACHE": True, "no_survey": True,
+                **({"PLACE_CODES": PLACE_GROUPS[place]} if place in PLACE_GROUPS else {}),
             })
             data = json.loads(Path(ctx.output_path).read_text(encoding="utf-8"))
         finally:

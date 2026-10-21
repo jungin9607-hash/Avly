@@ -135,6 +135,19 @@ class AnalysisStartTests(ApiTestCase):
         self.assertEqual((r.status_code, r.json()["error"]["code"]), (409, "ANALYSIS_IN_PROGRESS"))
         self.assertEqual(self.client.get(f"/api/v1/accidents/{accident_id}", headers=headers).json()["status"], "analyzing")
 
+    def test_place_is_kept_for_the_worker(self):
+        accident_id, headers = self.make_accident()
+        self.upload(accident_id, headers)
+        r = self.client.post(f"/api/v1/accidents/{accident_id}/analyses", json={"place": "주차장"}, headers=headers)
+        self.assertEqual(r.status_code, 202, r.text)
+        self.assertEqual(self.repo.claim_job()["payload"]["place"], "주차장")
+
+    def test_unknown_place_is_rejected(self):
+        accident_id, headers = self.make_accident()
+        self.upload(accident_id, headers)
+        r = self.client.post(f"/api/v1/accidents/{accident_id}/analyses", json={"place": "하늘"}, headers=headers)
+        self.assertEqual((r.status_code, r.json()["error"]["code"]), (422, "INVALID_PLACE"))
+
     def test_can_start_again_after_failure(self):
         accident_id, headers, analysis_id = self.make_analysis()
         self.repo.update_analysis(UUID(analysis_id), status=st.FAILED, error_code="X", error_message="실패")

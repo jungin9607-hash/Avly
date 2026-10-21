@@ -13,6 +13,8 @@ const INVOLVED = {
   title: "내 차가 사고에 직접 관여한 영상이에요",
   body: "블랙박스를 단 내 차가 사고 당사자(접촉했거나 사고 상황의 한쪽)인 영상만 분석할 수 있어요. 다른 차들의 사고를 지나가며 목격한 영상은 분석하지 못해요.",
 };
+// 사고가 난 장소 종류. 고르면 그 장소의 사고 유형만 비교해서 더 정확해진다. 모르겠으면 비워 둬도 된다.
+const PLACES = ["사거리 교차로", "T자형 교차로", "직선 도로", "회전교차로", "차도와 차도가 아닌 장소", "주차장"];
 const RETENTION = {
   title: "영상 저장과 서비스 개선 활용 동의",
   body: "번호판과 사람을 가린 영상과 분석 결과(AI가 분석한 내용과 직접 확인·수정한 사고 상황, 답변)를 90일 동안 저장하고, 서비스를 개선하고 새 기능을 만드는 데 활용하는 것에 동의합니다. 보관 기간이 지나면 삭제하며, 저장한 내용을 화면에서 다시 보여 드리지는 않아요. 이용 중에는 '결과 지우기'로 언제든 바로 삭제할 수 있어요. 동의하지 않아도 분석은 이용할 수 있으며, 이 경우 가린 영상과 분석 결과도 이용 2시간 뒤 삭제됩니다.",
@@ -24,6 +26,7 @@ export default function ConsentModal({ fileName, onStart, onClose, onPickAnother
   const [analysis, setAnalysis] = useState(false);
   const [involved, setInvolved] = useState(false);
   const [retention, setRetention] = useState(false);
+  const [place, setPlace] = useState("");
   // 전체 동의: 아래 세 항목을 한꺼번에 켜고 끈다. 항목은 각각 따로 바꿀 수 있고, 모두 켜져 있을 때만 전체 동의가 켜진다.
   const all = analysis && involved && retention;
   const setAll = (value) => {
@@ -41,6 +44,16 @@ export default function ConsentModal({ fileName, onStart, onClose, onPickAnother
             <span>{fileName}</span>
           </p>
         )}
+
+        <div className="md-place">
+          <label htmlFor="md-place-select">사고가 난 장소 <small>(선택) 알면 더 정확하게 분석해요</small></label>
+          <select id="md-place-select" value={place} onChange={(e) => setPlace(e.target.value)}>
+            <option value="">잘 모르겠어요</option>
+            {PLACES.map((name) => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
 
         <label className={all ? "md-all md-all-top is-on" : "md-all md-all-top"}>
           <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />
@@ -64,7 +77,7 @@ export default function ConsentModal({ fileName, onStart, onClose, onPickAnother
       </div>
 
       <footer className="md-foot">
-        <button type="button" className="md-btn md-btn-wide" disabled={!analysis || !involved} onClick={() => onStart({ retention })}>
+        <button type="button" className="md-btn md-btn-wide" disabled={!analysis || !involved} onClick={() => onStart({ retention, place: place || null })}>
           동의하고 영상 분석 시작하기
           <span aria-hidden="true">→</span>
         </button>

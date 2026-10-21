@@ -74,7 +74,7 @@ export default function useAnalysisFlow(resumeId) {
   const [state, dispatch] = useReducer(reducer, resumeId, initFrom);
   const controller = useRef(null);
 
-  const start = useCallback(async (file, retention) => {
+  const start = useCallback(async (file, retention, place) => {
     controller.current?.abort();
     controller.current = new AbortController();
     const signal = controller.current.signal;
@@ -83,7 +83,7 @@ export default function useAnalysisFlow(resumeId) {
       const accident = await api.createAccident(titleFrom(file), { version: CONSENT_VERSION, analysis: true, retention }, { signal });
       const opts = { sessionId: accident.session_id, signal };
       await api.uploadVideo(accident.id, file, { ...opts, onProgress: (progress) => dispatch({ type: "progress", progress }) });
-      const started = await api.startAnalysis(accident.id, opts);
+      const started = await api.startAnalysis(accident.id, place, opts);
       rememberAnalysis(started.analysis_id, accident.id, accident.session_id, accident.expires_at);
       dispatch({ type: "analyzing", analysisId: started.analysis_id, accidentId: accident.id, sessionId: accident.session_id });
     } catch (error) {

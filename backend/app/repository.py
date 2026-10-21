@@ -180,7 +180,7 @@ class Repository:
                 {"t": at or now(), "owner": self.owner}))
 
     # ------------------------------------------------------------ analysis
-    def create_analysis(self, accident_id: UUID, video_id: UUID) -> dict:
+    def create_analysis(self, accident_id: UUID, video_id: UUID, place: str | None = None) -> dict:
         """분석을 만들고 'analyze' 작업을 등록한다. 진행 중인 분석이 있으면 ActiveAnalysisExists."""
         analysis_id = uuid4()
         try:
@@ -190,7 +190,7 @@ class Repository:
                     " VALUES (:id, :a, :v, 'queued', (SELECT COALESCE(MAX(attempt), 0) + 1 FROM analysis WHERE accident_id = :a))"
                     " RETURNING *"), {"id": analysis_id, "a": accident_id, "v": video_id}))
                 conn.execute(_q("INSERT INTO job (analysis_id, kind, payload) VALUES (:id, 'analyze', :p)", "p"),
-                             {"id": analysis_id, "p": {"owner": self.owner}})
+                             {"id": analysis_id, "p": {"owner": self.owner, **({"place": place} if place else {})}})
                 conn.execute(text("UPDATE accident SET status = 'analyzing' WHERE id = :a"), {"a": accident_id})
                 return row
         except IntegrityError as exc:

@@ -3,6 +3,16 @@ from .dataio import prompt_text, setting
 from typing import Literal
 
 
+# 사용자가 고르는 장소 종류 -> 과실표의 장소 번호(accident_place)
+PLACE_GROUPS = {
+    '사거리 교차로': [1, 2],
+    'T자형 교차로': [3],
+    '직선 도로': [0],
+    '회전교차로': [6],
+    '차도와 차도가 아닌 장소': [4],
+    '주차장': [5],
+}
+
 VERSION = 'auto-three-stage-v2.21.0-identity-and-survey-recovery'
 
 CODE_VERSION = 'auto-three-stage-v2.21.2-accident-flow'

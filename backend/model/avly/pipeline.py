@@ -19,7 +19,7 @@ from .facts import collect_match_facts, mark_accident_input, parking_environment
 from .vision import call, digest_file
 from .video import background_cues, display_frames, get_frames, image_content, inspect_video, plan_review, review_high_ids, uniform_pick
 from .observation import adaptive_review_prompt, clean_accident_flow, apply_user_road_context, compact_observation, ground_observation, inspect_lane_cause, needs_detail_review, parking_background_review, reconcile_road_context, scan_as_observation, validate, verify_routes
-from .matching import compare_all_csv_rows, conditional_candidates, link_match, matching_context, orientation_compatible, pack_catalog, prepare_matches, search_rows
+from .matching import candidate_limit, compare_all_csv_rows, conditional_candidates, link_match, matching_context, orientation_compatible, pack_catalog, prepare_matches, search_rows
 from .adjustments import law_rule_bundle, public_scenarios, reference_scenarios, uncertainty_details
 from .timeline import build_timeline, print_timeline, save_timeline_text
 from .report import build_user_report, save_user_report
@@ -57,6 +57,12 @@ def run(settings):
             raise ValueError('CSV 과실 비율 오류')
     if not ctx.table or len({r['accident_type'] for r in ctx.table}) != len(ctx.table):
         raise ValueError('CSV가 비었거나 유형 ID가 중복됩니다.')
+    # 사용자가 장소 종류를 골랐으면 그 장소의 유형만 비교한다. (고르지 않았으면 전체)
+    ctx.place_hint = bool(settings.get('PLACE_CODES'))
+    if ctx.place_hint:
+        ctx.table = [r for r in ctx.table if r['accident_place'] in set(settings['PLACE_CODES'])]
+        if not ctx.table:
+            raise ValueError('고른 장소에 해당하는 과실표 유형이 없습니다.')
     ctx.places = {r['accident_place']: r['accident_place_name'] for r in ctx.table}
     ctx.video_hash = digest_file(ctx.VIDEO_PATH)
     ctx.csv_hash = digest_file(ctx.csv_path)
@@ -173,7 +179,7 @@ def run(settings):
                     for note in matching_notes:
                         print('[CSV 진행 해석]', note)
                 catalog = pack_catalog(rows)
-                prompt = prompt_text('csv_match') + json.dumps(compact_observation(match_context), ensure_ascii=False, separators=(',', ':')) + '\nCSV: ' + json.dumps(catalog, ensure_ascii=False, separators=(',', ':'))
+                prompt = prompt_text('csv_match').replace('후보 최대2개', f'후보 최대{candidate_limit()}개') + json.dumps(compact_observation(match_context), ensure_ascii=False, separators=(',', ':')) + '\nCSV: ' + json.dumps(catalog, ensure_ascii=False, separators=(',', ':'))
                 if catalog:
                     match = call('3/3 CSV 연결·과실 시나리오', MATCH_MODEL, Matches, [{'type': 'input_text', 'text': prompt}], 1800)
                 else:

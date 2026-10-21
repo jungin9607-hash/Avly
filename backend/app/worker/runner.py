@@ -49,7 +49,7 @@ class Worker:
             return False
         try:
             if job["kind"] == "analyze":
-                self.analyze(job["analysis_id"])
+                self.analyze(job["analysis_id"], (job.get("payload") or {}).get("place"))
             else:
                 self.finalize(job["analysis_id"])
             self.repo.finish_job(job["id"], True)
@@ -62,7 +62,7 @@ class Worker:
         self.repo.update_analysis(analysis_id, status=st.FAILED, stage=None, error_code=code, error_message=message,
                                   finished_at=datetime.now(timezone.utc))
 
-    def analyze(self, analysis_id) -> None:
+    def analyze(self, analysis_id, place: str | None = None) -> None:
         from avly import scope   # 예외 종류 (가벼운 모듈)
 
         analysis = self.repo.get_analysis(analysis_id)
@@ -72,7 +72,7 @@ class Worker:
             masked_path, stats = self._redact(analysis, accident)
             if stats.get("duration"):
                 scope.check_duration(stats["duration"])   # AI 를 부르기 전에 길이를 확인한다
-            snapshot, logs = self.engine.analyze(masked_path, lambda stage: self.repo.update_analysis(analysis_id, stage=stage))
+            snapshot, logs = self.engine.analyze(masked_path, lambda stage: self.repo.update_analysis(analysis_id, stage=stage), **({"place": place} if place else {}))
         except scope.UnsupportedAccident as exc:
             self.repo.update_analysis(analysis_id, status=st.UNSUPPORTED, stage=None, unsupported_reason=str(exc),
                                       finished_at=datetime.now(timezone.utc))
