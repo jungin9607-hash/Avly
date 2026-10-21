@@ -12,6 +12,7 @@ const here = path.dirname(fileURLToPath(import.meta.url))
 const REVIEW_PAGES = {
   '/review.html': ['/review/review.html', path.resolve(here, '../docs/review/review.html')],
   '/label-review.html': ['/review/label-review.html', path.resolve(here, '../docs/review/label-review.html')],
+  '/case-review.html': ['/review/case-review.html', path.resolve(here, '../docs/review/case-review.html')],
 }
 const reviewPage = {
   name: 'avly-review-page',
