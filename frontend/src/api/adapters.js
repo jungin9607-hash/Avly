@@ -22,15 +22,29 @@ export function easyLabel(items, level, value) {
   return found ? easyOf(found, level) : value;
 }
 
+// 과실표의 원래 이름은 다른데 쉬운 말이 같은 값("(마주보며) [적색신호] 직진"과 "[적색신호] 직진" 등)은 같은 보기로 본다.
+const sameValue = (items, level, item, value) => item[level] === value || (Boolean(value) && easyOf(item, level) === easyLabel(items, level, value));
+
 // selection 의 앞 항목들과 맞는 선택지만 남긴다.
-function matching(items, selection, upTo) {
-  return items.filter((item) => LEVELS.slice(0, upTo).every((level) => item[level] === selection[level]));
+export function matching(items, selection, upTo) {
+  return items.filter((item) => LEVELS.slice(0, upTo).every((level) => sameValue(items, level, item, selection[level])));
+}
+
+// 같은 쉬운 말은 한 번만 보여 준다(처음 나온 원래 이름을 값으로 쓴다).
+function uniqueByEasy(items, level, subset) {
+  const seen = new Set();
+  return unique(subset.map((item) => item[level])).filter((value) => {
+    const label = easyLabel(items, level, value);
+    if (seen.has(label)) return false;
+    seen.add(label);
+    return true;
+  });
 }
 
 // 각 항목에서 고를 수 있는 값. 앞 항목을 바꾸면 뒤 항목의 보기가 좁혀진다.
 export function cascade(items, selection) {
   return Object.fromEntries(
-    LEVELS.map((level, index) => [level, unique(matching(items, selection, index).map((item) => item[level]))]),
+    LEVELS.map((level, index) => [level, uniqueByEasy(items, level, matching(items, selection, index))]),
   );
 }
 
@@ -45,7 +59,7 @@ export function normalizeSelection(items, selection) {
   const next = { ...selection };
   const options = cascade(items, next);
   for (const level of LEVELS) {
-    if (next[level] && !options[level].includes(next[level])) {
+    if (next[level] && !options[level].some((value) => value === next[level] || easyLabel(items, level, value) === easyLabel(items, level, next[level]))) {
       for (const later of LEVELS.slice(LEVELS.indexOf(level))) next[later] = "";
       break;
     }

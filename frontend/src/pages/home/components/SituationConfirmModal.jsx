@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LEVEL_LABEL, cascade, easyLabel, easyOf, normalizeSelection, resolveOption, selectionFrom } from "../../../api/adapters";
+import { LEVEL_LABEL, cascade, easyLabel, easyOf, matching, normalizeSelection, resolveOption, selectionFrom } from "../../../api/adapters";
 import ModalShell from "./ModalShell";
 
 const LEVELS = ["place", "feature", "my_progress", "other_progress"];
@@ -8,11 +8,20 @@ const LEVELS = ["place", "feature", "my_progress", "other_progress"];
 //   장소 → 사고 유형 → 내 차의 움직임 → 상대 차의 움직임 순서로 고르며, 앞 항목을 바꾸면 뒤 항목의 보기가 좁혀진다.
 //   AI 가 확신한 후보가 있으면 미리 골라 둔다. 참고 후보만 있거나 후보가 없으면 비워 둔다.
 //   맞는 유형이 없다고 답할 수도 있다 (그러면 과실 비율 없이 결과를 보여 준다).
-export default function SituationConfirmModal({ situation, items, onChoose, onClose }) {
-  const candidates = situation?.candidates ?? [];
-  const preset = situation?.default_index != null ? candidates[situation.default_index] : null;
-  const [selection, setSelection] = useState(() => selectionFrom(preset));
+export default function SituationConfirmModal({ situation, items: allItems, onChoose, onClose }) {
+  // 동의 창에서 사고 장소를 골랐다면 그 장소의 유형만 보여 준다. 이미 고른 것을 다시 묻지 않는다.
+  const placeHint = situation?.place_hint;
+  const items = placeHint && allItems ? allItems.filter((item) => item.place.startsWith(placeHint)) : allItems;
+  const allCandidates = situation?.candidates ?? [];
+  const candidates = allCandidates.filter((c) => !placeHint || c.place.startsWith(placeHint));
+  const preset = situation?.default_index != null && candidates.includes(allCandidates[situation.default_index]) ? allCandidates[situation.default_index] : null;
+  const [selection, setSelection] = useState(() => {
+    const initial = selectionFrom(preset);
+    const places = [...new Set((items ?? []).map((item) => item.place))];
+    return !initial.place && places.length === 1 ? { ...initial, place: places[0] } : initial;   // 장소가 하나뿐이면 미리 골라 둔다
+  });
   const [none, setNone] = useState(false);
+  const [typeId, setTypeId] = useState(preset?.accident_type_id ?? null);
 
   if (!items) {
     return (
@@ -26,6 +35,11 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
   }
 
   const options = cascade(items, selection);
+  // 사고 유형 카드: 고른 장소·사고 유형 안의 유형 번호들. 한 유형은 내 차가 A인 경우와 B인 경우 두 가지다.
+  const scoped = matching(items, selection, 2);
+  const typeIds = [...new Set(scoped.map((item) => item.accident_type_id))];
+  const activeType = typeIds.includes(typeId) ? typeId : null;
+  const roleItems = activeType == null ? [] : scoped.filter((item) => item.accident_type_id === activeType);
   const resolved = none ? null : resolveOption(items, selection);
   const ready = none || resolved;
   const pick = (level, value) => setSelection((current) => normalizeSelection(items, { ...current, [level]: value }));
@@ -74,7 +88,7 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
         )}
 
         <div className="md-fields">
-          {LEVELS.map((level, index) => (
+          {LEVELS.slice(0, 2).map((level, index) => (
             <label key={level} className="md-field">
               <span>
                 <b>{index + 1}</b>
@@ -96,6 +110,44 @@ export default function SituationConfirmModal({ situation, items, onChoose, onCl
             </label>
           ))}
         </div>
+
+        {!none && selection.feature && (
+          <section className="md-types" aria-label="사고 유형 고르기">
+            <p className="md-types-title"><b>3</b>비슷한 사고 유형을 골라 주세요</p>
+            {typeIds.map((id) => {
+              const pair = scoped.find((item) => item.accident_type_id === id && item.role === "A") ?? scoped.find((item) => item.accident_type_id === id);
+              return (
+                <button key={id} type="button" className={id === activeType ? "md-type is-on" : "md-type"} onClick={() => { setTypeId(id); setSelection((current) => ({ ...current, my_progress: "", other_progress: "" })); }} aria-pressed={id === activeType}>
+                  <span className="md-type-id">유형 {id}</span>
+                  <span className="md-type-line"><em>A 차량</em>{easyOf(pair, "my_progress")}</span>
+                  <span className="md-type-line"><em>B 차량</em>{easyOf(pair, "other_progress")}</span>
+                </button>
+              );
+            })}
+          </section>
+        )}
+
+        {!none && activeType != null && (
+          <section className="md-roles" aria-label="내 차 고르기">
+            <p className="md-types-title"><b>4</b>내 차(블랙박스 차량)는 어느 쪽인가요?</p>
+            <div className="md-role-row">
+              {roleItems.map((item) => {
+                const on = resolved && resolved.accident_type_id === item.accident_type_id && resolved.role === item.role;
+                return (
+                  <button key={item.role} type="button" className={on ? "md-role is-on" : "md-role"} onClick={() => setSelection(selectionFrom(item))} aria-pressed={Boolean(on)}>
+                    <b>{item.role} 차량이 내 차</b>
+                    <span>내 차: {easyOf(item, "my_progress")}</span>
+                    <span>상대 차: {easyOf(item, "other_progress")}</span>
+                    <span className="md-role-ratio">기본 책임 내 차 {item.base_me}% : 상대 차 {item.base_other}%</span>
+                  </button>
+                );
+              })}
+            </div>
+            {roleItems.some((item) => /신호/.test(`${item.my_progress}${item.other_progress}`)) && (
+              <p className="md-note-text">신호 색(적색·녹색·황색)에 따라 비율이 크게 달라져요. 영상에서 확실하지 않다면 실제 신호를 떠올려서 골라 주세요.</p>
+            )}
+          </section>
+        )}
 
         {resolved && (
           <p className="md-base">

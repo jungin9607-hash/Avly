@@ -799,3 +799,89 @@ input:focus-visible + .md-radio {
 .md-place label { font-weight: 700; font-size: 14px; }
 .md-place small { font-weight: 400; color: #667085; margin-left: 6px; }
 .md-place select { font: inherit; padding: 10px 12px; border: 1px solid #dfe3e8; border-radius: 10px; background: #fff; }
+
+/* 사고 유형 카드와 내 차 고르기 (사고 상황 확인 창) */
+.md-types,
+.md-roles {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+}
+.md-types-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--md-font-caption);
+  font-weight: 700;
+}
+.md-types-title b {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--md-mid);
+  color: var(--md-navy);
+  font-size: 12px;
+}
+.md-type,
+.md-role {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  background: var(--color-white);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--md-font-body);
+  text-align: left;
+  cursor: pointer;
+}
+.md-type:hover,
+.md-role:hover {
+  border-color: var(--md-primary);
+}
+.md-type.is-on,
+.md-role.is-on {
+  border-color: var(--md-primary);
+  background: var(--md-soft);
+}
+.md-type-id {
+  color: var(--md-primary);
+  font-size: var(--md-font-caption);
+  font-weight: 700;
+}
+.md-type-line {
+  display: flex;
+  gap: 8px;
+  line-height: 1.45;
+}
+.md-type-line em {
+  flex: none;
+  width: 52px;
+  color: var(--muted);
+  font-size: var(--md-font-caption);
+  font-style: normal;
+}
+.md-role-row {
+  display: grid;
+  gap: 8px;
+}
+.md-role span {
+  color: var(--ink-2);
+  font-size: var(--md-font-caption);
+}
+.md-role .md-role-ratio {
+  color: var(--ink);
+  font-weight: 700;
+}
+.md-note-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--md-font-caption);
+  line-height: 1.5;
+}
