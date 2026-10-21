@@ -6,11 +6,26 @@
 
 import logging
 import shutil
+import subprocess
 from pathlib import Path
 
 from app.config import settings
 
 logger = logging.getLogger(__name__)
+
+
+def _to_h264(source: Path, destination: Path) -> bool:
+    """브라우저에서 재생되는 H.264 로 다시 인코딩한다. 블랙박스 영상은 mpeg4 코덱일 때가 있어 그대로는 재생되지 않는다.
+    ffmpeg 가 없거나 실패하면 False (그러면 그대로 복사한다)."""
+    ffmpeg = shutil.which("ffmpeg")
+    if ffmpeg is None:
+        return False
+    result = subprocess.run([ffmpeg, "-y", "-i", str(source), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", str(destination)],
+                            capture_output=True)
+    ok = result.returncode == 0 and destination.is_file() and destination.stat().st_size > 0
+    if not ok:
+        destination.unlink(missing_ok=True)
+    return ok
 
 
 class YoloRedaction:
@@ -32,7 +47,8 @@ class DevCopyRedaction:
     def redact(self, source: Path, destination: Path) -> dict:
         logger.warning("REDACTION=dev_copy: 영상을 가리지 않고 복사합니다. 개발용입니다.")
         destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, destination)
+        if not _to_h264(source, destination):
+            shutil.copyfile(source, destination)
         return {}
 
 

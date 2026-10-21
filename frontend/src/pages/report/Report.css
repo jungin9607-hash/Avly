@@ -1182,8 +1182,8 @@
   }
   .ar-result-page.is-pinned .ar-result-track {
     display: block;
-    /* 한 단계당 화면 높이 45%만큼 스크롤, 1 → 2는 50%·2 → 3은 30% 더 (useScrollStep.js의 STEP_EXTRA 합계) */
-    height: calc((var(--ar-step-count, 3) + 0.8) * 45svh);
+    /* 한 단계당 화면 높이 20%만큼 스크롤, 1 → 2는 50%·2 → 3은 30% 더 (useScrollStep.js의 STEP_EXTRA 합계) */
+    height: calc((var(--ar-step-count, 3) + 0.8) * 20svh);
   }
 }
 /* 좁은 화면: 작은 비율 박스를 목록 위에 두고 메뉴 바 아래에 붙여,

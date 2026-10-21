@@ -22,7 +22,7 @@ export default function CaseDetails({ item, open }) {
           <DetailSection title="출처">
             <p className="law-details-overview">
               {item.category}
-              {item.verified ? " · 검수됨" : " · 검수 전 (사람이 확인하지 않은 자료예요)"}
+              {!item.verified && " · 검수 전 (사람이 확인하지 않은 자료예요)"}
               {item.caseNumber && ` · 사건번호 ${item.caseNumber}`}
             </p>
             {item.sourceUrl && (

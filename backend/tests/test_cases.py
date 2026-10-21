@@ -45,18 +45,27 @@ class CaseServiceTests(DbTestCase):
         first = s.seed_registered()
         self.assertGreater(first, 0)
         self.assertEqual(s.seed_registered(), first)
-        rows = self.repo.cases_for_type(126)
+        rows = self.repo.cases_for_type(127)
         self.assertEqual(len(rows), 1)
         r = rows[0]
-        self.assertEqual((r["court"], r["case_number"], r["source_kind"], r["verified"]), ("서울중앙지방법원", "2015나37411", "knia_chart", True))
+        self.assertEqual((r["court"], r["case_number"], r["source_kind"], r["verified"]), ("서울중앙지방법원", "2015나37411", "knia_chart", False))   # 도표 요약은 사람의 검수 날짜가 없다
         self.assertEqual(r["decided_on"].isoformat(), "2015-12-18")
         self.assertEqual(r["relevance_status"], "registered_chart_reference")
-        self.assertIn("후진 출차", r["comparison_limit"])
+        self.assertIn("같은 비율을 적용하지 않습니다", r["comparison_limit"])
         with self.engine.connect() as conn:
             from sqlalchemy import text
             from avly.tables import VERIFIED_CASES
             distinct = {(c["court"], c["case_number"]) for v in VERIFIED_CASES.values() for c in v}
             self.assertEqual(conn.execute(text("SELECT count(*) FROM legal_case")).scalar(), len(distinct))   # 같은 판례를 두 번 넣지 않는다
+
+    def test_a_wrongly_linked_case_is_hidden(self):
+        # 126(직진 출차)에는 후진 출차 사례(2015나37411)가 붙어 있었다. DB 에 남은 연결은 화면에서 뺀다.
+        s = self.service(FakeFetcher([]))
+        s.seed_registered()
+        case_id = self.repo.cases_for_type(127)[0]["case_id"]
+        self.repo.link_case(126, case_id, relevance_status="registered_chart_reference", comparison_limit="")
+        self.assertEqual(s.related_for(126), [])
+        self.assertEqual([c["case_number"] for c in s.related_for(127)], ["2015나37411"])
 
     def test_enough_cases_in_the_db_means_no_api_call(self):
         s = self.service(FakeFetcher())
@@ -68,17 +77,16 @@ class CaseServiceTests(DbTestCase):
         fetcher = FakeFetcher([api_case("2020다1111"), api_case("2020다2222")])
         s = self.service(fetcher)
         s.seed_registered()
-        result = s.related_for(126)   # 등록 판례 1개 + API 2개
-        self.assertEqual(fetcher.calls, [126])
+        result = s.related_for(127)   # 등록 판례 1개 + API 2개
+        self.assertEqual(fetcher.calls, [127])
         self.assertEqual({c["case_number"] for c in result}, {"2015나37411", "2020다1111", "2020다2222"})
         fetched = next(c for c in result if c["case_number"] == "2020다1111")
         self.assertFalse(fetched["verified"])   # API 로 가져온 판례는 검수 전
         self.assertEqual((fetched["source_kind"], fetched["date"]), ("law_api", "2020-03-04"))
         self.assertEqual(fetched["source_label"], "법령정보 API의 판례")
-        self.assertEqual(self.repo.get_case_lookup(126)["status"], "found")
-        self.assertEqual(result[0]["case_number"], "2015나37411")   # 검수된 판례가 먼저
-        s.related_for(126)
-        self.assertEqual(fetcher.calls, [126])   # 쉬는 시간 안에는 다시 부르지 않는다
+        self.assertEqual(self.repo.get_case_lookup(127)["status"], "found")
+        s.related_for(127)
+        self.assertEqual(fetcher.calls, [127])   # 쉬는 시간 안에는 다시 부르지 않는다
 
     def test_empty_result_is_remembered_and_not_asked_again(self):
         fetcher = FakeFetcher([])
@@ -130,7 +138,7 @@ class CaseServiceTests(DbTestCase):
     def test_view_shape(self):
         s = self.service()
         s.seed_registered()
-        v = s.related_for(126)[0]
+        v = s.related_for(127)[0]
         self.assertEqual(set(v), {"_text", "case_id", "court", "date", "case_number", "title", "summary", "comparison_limit",
                                   "source_url", "source_kind", "source_label", "verified", "relevance_status"})
         self.assertTrue(v["_text"])   # AI 비교용 본문. 결과를 만들 때 빠진다 (등록 판례는 요약문)
@@ -146,10 +154,10 @@ class FetcherTests(unittest.TestCase):
             seen.update(row)
             return [api_case()], {"status": "ok"}
         with mock.patch.object(law, "related_cases_for_row", fake):
-            found, status = cases.AvlyCaseFetcher().fetch(126)
+            found, status = cases.AvlyCaseFetcher().fetch(127)
         self.assertEqual(status, "ok")
-        self.assertEqual((seen["accident_type"], seen["accident_object_name"]), (126, "차대차"))
-        self.assertEqual(seen["vehicle_b_progress_info_name"], "주차구역에서 직진 출차")
+        self.assertEqual((seen["accident_type"], seen["accident_object_name"]), (127, "차대차"))
+        self.assertEqual(seen["vehicle_b_progress_info_name"], "주차구역에서 후진 출차")
         self.assertEqual(len(found), 1)
 
     def test_without_an_api_key_the_fetcher_reports_unavailable_but_keeps_registered_cases(self):
@@ -158,7 +166,7 @@ class FetcherTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {}, clear=False):
             for name in ("law_api", "LAW_API_OC", "LAW_API_KEY"):
                 os.environ.pop(name, None)
-            found, status = cases.AvlyCaseFetcher().fetch(126)
+            found, status = cases.AvlyCaseFetcher().fetch(127)
         self.assertEqual(status, "unavailable")
         self.assertEqual([c["case_number"] for c in found], ["2015나37411"])   # 등록 자료만 돌려준다
 
