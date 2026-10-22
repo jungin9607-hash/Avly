@@ -78,13 +78,15 @@ function CaseCard({ item, index, selected, expanded, onToggle, onToggleDetails }
         {/* 핵심 수치: 작은 라벨 위 · 숫자 아래로 묶음 (두 숫자는 같은 크기) */}
         <dl className="law-case-metrics">
           <div>
-            <dt>비교</dt>
+            <dt>내 사고와</dt>
             <dd className="law-stat-sim">{item.matchLabel || "—"}</dd>
           </div>
-          <div>
-            <dt>검수</dt>
-            <dd>{item.verified ? "검수됨" : "검수 전"}</dd>
-          </div>
+          {!item.verified && (
+            <div>
+              <dt>자료</dt>
+              <dd>검수 전</dd>
+            </div>
+          )}
         </dl>
 
         {/* 선택 전에는 폭 0으로 접혀 빈칸이 남지 않고, 선택하면 폭이 열리며 버튼이 나타남 */}

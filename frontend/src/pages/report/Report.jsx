@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import TopNav from "../common/components/TopNav";
 import AnalysisGate from "../common/components/AnalysisGate";
+import SituationCheckNotice from "../common/components/SituationCheckNotice";
 import useNavigationBackdrop from "../common/hooks/useNavigationBackdrop";
 import { useNavigate } from "react-router-dom";
 import { easyOf, toReportModel } from "../../api/adapters";
@@ -115,6 +116,7 @@ function ActionsSection({ model, analysisId, summaryText, children }) {
       <section ref={sectionRef} className="ar-section ar-report-page ar-evidence-page">
         <div className="ar-evidence-layout">
           {children}
+          <SituationCheckNotice check={model.situationCheck} />
           <StatusNotice text={model.statusText} pending={model.pending} />
           <div className="ar-evidence-head">
             <ReportActions content={REPORT_ACTIONS} onShare={share} onSave={() => navigate(ROUTES.document(analysisId))} onErase={erase} expiresText={expiresText} />

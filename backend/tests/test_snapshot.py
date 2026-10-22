@@ -24,6 +24,17 @@ class SnapshotTests(unittest.TestCase):
         self.assertEqual(s["my_action"], "직진")
         self.assertEqual(s["other_action"], "진로변경")
 
+    def test_unverified_actions_are_passed_on_as_hints_only(self):
+        data = load("lane_change")
+        s = snapshot.from_model_result(data, "replay")["situation"]
+        self.assertEqual((s["my_action_hint"], s["other_action_hint"]), (None, None))   # 검증된 값이 있으면 힌트는 필요 없다
+        data["scene"]["a_action"] = "미확인"
+        data["scene"]["b_action"] = "미확인"
+        data["scene"]["maneuver_checks"] = [{"vehicle": "A", "action": "좌회전", "support": "관찰"}, {"vehicle": "B", "action": "직진", "support": "미확인"}]
+        s = snapshot.from_model_result(data, "replay")["situation"]
+        self.assertEqual((s["my_action"], s["my_action_hint"]), ("미확인", "좌회전"))
+        self.assertEqual((s["other_action"], s["other_action_hint"]), ("미확인", None))   # 근거가 '미확인'인 기록은 쓰지 않는다
+
     def test_impact_time_comes_from_the_anchor_frame(self):
         data = load("lane_change")
         snap = snapshot.from_model_result(data, "replay")

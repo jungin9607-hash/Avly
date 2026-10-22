@@ -3,18 +3,33 @@
 // 분석 결과는 세션이 끝나면 서버에서 지워진다. 끝난 분석은 접근 정보를 지우고 "끝났다"는 표시만 남겨서, 다시 열었을 때 "삭제됐어요"라고 알려 준다.
 const SESSIONS = "avly.sessions"; // { [analysisId]: { accidentId, sessionId, expiresAt } | { expired: true } }
 const LAST = "avly.lastAnalysis";
+// 저장소 읽기/쓰기가 차단되면 현재 탭의 메모리에 접근 정보를 유지한다.
+const memoryByWindow = new WeakMap();
+
+function memory() {
+  if (!memoryByWindow.has(window)) memoryByWindow.set(window, { values: new Map(), pending: new Set() });
+  return memoryByWindow.get(window);
+}
 
 function read(key) {
+  const cache = memory();
+  if (cache.pending.has(key)) return cache.values.get(key) ?? null;
   try {
-    return JSON.parse(window.localStorage.getItem(key) ?? "null");
+    const value = JSON.parse(window.localStorage.getItem(key) ?? "null");
+    cache.values.set(key, value);
+    return value;
   } catch {
-    return null;
+    return cache.values.get(key) ?? null;
   }
 }
 
 function write(key, value) {
+  const cache = memory();
+  cache.values.set(key, value);
+  cache.pending.add(key);
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
+    cache.pending.delete(key);
   } catch {
     // 저장하지 못해도 이번 화면에서는 계속 쓸 수 있다
   }

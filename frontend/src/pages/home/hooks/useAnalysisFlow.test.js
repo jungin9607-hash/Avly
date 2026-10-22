@@ -66,3 +66,12 @@ test("처음으로 돌아가기", () => {
 test("applyAnalysis 는 모르는 상태에서도 오류 없이 현재 상태를 돌려준다", () => {
   assert.deepEqual(applyAnalysis(analyzing, { status: "something_new", stage: null }), { ...analyzing, stage: null });
 });
+
+test("서버가 취소했다고 알려 주면(예: 이어서 보기로 들어온 경우) 실패 상태가 되고 오류 코드가 CANCELLED 로 남는다", () => {
+  const next = applyAnalysis(analyzing, { status: "failed", error: { code: "CANCELLED", message: "분석을 취소했어요." } });
+  assert.equal(next.phase, "failed");
+  assert.equal(next.error.code, "CANCELLED");
+  // 화면에서 취소하면 같은 모양의 실패 상태가 된다
+  const local = reducer(analyzing, { type: "failed", error: { code: "CANCELLED", message: "분석을 취소했어요." } });
+  assert.deepEqual([local.phase, local.error.code], ["failed", "CANCELLED"]);
+});

@@ -15,6 +15,10 @@ from app import status as st
 from app.db import get_engine
 
 
+CANCELLED_CODE = "CANCELLED"
+CANCELLED_MESSAGE = "분석을 취소했어요."
+
+
 class ActiveAnalysisExists(Exception):
     """사고에 이미 진행 중인 분석이 있다."""
 
@@ -180,7 +184,7 @@ class Repository:
                 {"t": at or now(), "owner": self.owner}))
 
     # ------------------------------------------------------------ analysis
-    def create_analysis(self, accident_id: UUID, video_id: UUID) -> dict:
+    def create_analysis(self, accident_id: UUID, video_id: UUID, place: str | None = None) -> dict:
         """분석을 만들고 'analyze' 작업을 등록한다. 진행 중인 분석이 있으면 ActiveAnalysisExists."""
         analysis_id = uuid4()
         try:
@@ -190,7 +194,7 @@ class Repository:
                     " VALUES (:id, :a, :v, 'queued', (SELECT COALESCE(MAX(attempt), 0) + 1 FROM analysis WHERE accident_id = :a))"
                     " RETURNING *"), {"id": analysis_id, "a": accident_id, "v": video_id}))
                 conn.execute(_q("INSERT INTO job (analysis_id, kind, payload) VALUES (:id, 'analyze', :p)", "p"),
-                             {"id": analysis_id, "p": {"owner": self.owner}})
+                             {"id": analysis_id, "p": {"owner": self.owner, **({"place": place} if place else {})}})
                 conn.execute(text("UPDATE accident SET status = 'analyzing' WHERE id = :a"), {"a": accident_id})
                 return row
         except IntegrityError as exc:
@@ -209,21 +213,46 @@ class Repository:
             row = conn.execute(text("SELECT id FROM analysis WHERE accident_id = :a ORDER BY created_at DESC LIMIT 1"), {"a": accident_id}).first()
             return row[0] if row else None
 
-    def update_analysis(self, analysis_id: UUID, **fields) -> None:
-        """분석 행을 고친다. scene, confirmed, result 는 JSON 으로 저장한다."""
+    def update_analysis(self, analysis_id: UUID, only_if_status: str | None = None, **fields) -> bool:
+        """분석 행을 고친다. scene, confirmed, result 는 JSON 으로 저장한다.
+
+        only_if_status 를 주면 분석이 그 상태일 때만 고친다. 고쳤으면 True, 아니면(이미 취소되는 등 상태가 달라졌으면) False.
+        """
         allowed = {"status", "stage", "video_id", "error_code", "error_message", "unsupported_reason", "accident_type_id",
                    "fault_me", "fault_other", "scene", "confirmed", "result", "pipeline_version", "video_sha256",
                    "csv_sha256", "started_at", "finished_at"}
         assert set(fields) <= allowed, set(fields) - allowed
         json_fields = tuple(f for f in ("scene", "confirmed", "result") if f in fields)
         sets = ", ".join(f"{k} = :{k}" for k in fields) + ", updated_at = now()"
+        guard = " AND status = :only_if_status" if only_if_status else ""
         with self.engine.begin() as conn:
-            conn.execute(_q(f"UPDATE analysis SET {sets} WHERE id = :id", *json_fields), {**fields, "id": analysis_id})
-            if "status" in fields:  # 사고의 상태도 함께 맞춘다
+            changed = conn.execute(_q(f"UPDATE analysis SET {sets} WHERE id = :id{guard}", *json_fields),
+                                   {**fields, "id": analysis_id, **({"only_if_status": only_if_status} if only_if_status else {})}).rowcount
+            if changed and "status" in fields:  # 사고의 상태도 함께 맞춘다
                 mapping = {st.COMPLETED: "completed", st.FAILED: "failed", st.UNSUPPORTED: "unsupported"}
                 accident_status = mapping.get(fields["status"], "analyzing")
                 conn.execute(text("UPDATE accident SET status = :s WHERE id = (SELECT accident_id FROM analysis WHERE id = :id)"),
                              {"s": accident_status, "id": analysis_id})
+            return bool(changed)
+
+    def cancel_analysis(self, analysis_id: UUID) -> str:
+        """대기 중이거나 진행 중인 분석을 취소한다. 'cancelled'(방금 취소함) | 'already'(이미 취소돼 있음) | 'not_cancellable'(이미 끝났거나 사용자 확인 단계).
+
+        DB 규칙이 'cancelled' 상태를 허용하지 않아서 failed + error_code CANCELLED 로 기록한다.
+        대기 중인 작업은 바로 지워서 worker 가 시작하지 못하게 하고, 진행 중인 작업은 worker 가 다음 단계에 들어가기 전에 알아채고 멈춘다.
+        """
+        with self.engine.begin() as conn:
+            accident_id = conn.execute(text(
+                "UPDATE analysis SET status = 'failed', stage = NULL, error_code = :code, error_message = :message,"
+                " finished_at = now(), updated_at = now() WHERE id = :id AND status IN ('queued', 'processing') RETURNING accident_id"),
+                {"id": analysis_id, "code": CANCELLED_CODE, "message": CANCELLED_MESSAGE}).scalar()
+            if accident_id is None:
+                row = conn.execute(text("SELECT status, error_code FROM analysis WHERE id = :id"), {"id": analysis_id}).first()
+                return "already" if row and row[0] == st.FAILED and row[1] == CANCELLED_CODE else "not_cancellable"
+            conn.execute(text("UPDATE job SET status = 'failed', finished_at = now(), error = '사용자가 분석을 취소함'"
+                              " WHERE analysis_id = :id AND status = 'queued'"), {"id": analysis_id})
+            conn.execute(text("UPDATE accident SET status = 'uploaded' WHERE id = :a"), {"a": accident_id})   # 같은 영상으로 다시 분석할 수 있다
+            return "cancelled"
 
     def request_confirm(self, analysis_id: UUID, confirmed: dict) -> dict:
         """사용자 확인 내용을 저장하고 'finalize' 작업을 등록한다. 확인 대기 상태가 아니면 NotAwaitingConfirmation."""
@@ -249,8 +278,22 @@ class Repository:
 
     def finish_job(self, job_id: int, ok: bool, error: str | None = None) -> None:
         with self.engine.begin() as conn:
-            conn.execute(text("UPDATE job SET status = :s, finished_at = now(), error = :e WHERE id = :id"),
-                         {"s": "done" if ok else "failed", "e": error, "id": job_id})
+            row = conn.execute(text("UPDATE job SET status = :s, finished_at = now(), error = :e WHERE id = :id RETURNING analysis_id"),
+                               {"s": "done" if ok else "failed", "e": error, "id": job_id}).first()
+            if not ok and row:
+                self._fail_active_analyses(conn, [row[0]], "WORKER_FAILED", "분석 작업 중 오류가 발생했습니다. 다시 시도해 주세요.")
+
+    @staticmethod
+    def _fail_active_analyses(conn, analysis_ids: list, code: str, message: str) -> None:
+        if not analysis_ids:
+            return
+        # 이미 완료되었거나 사용자 확인 중인 결과는 뒤늦은 작업 오류로 덮어쓰지 않는다.
+        accidents = conn.execute(text(
+            "UPDATE analysis SET status = 'failed', stage = NULL, error_code = :code, error_message = :message,"
+            " finished_at = now(), updated_at = now() WHERE id = ANY(:ids) AND status IN ('queued', 'processing')"
+            " RETURNING accident_id"), {"ids": analysis_ids, "code": code, "message": message}).scalars().all()
+        if accidents:
+            conn.execute(text("UPDATE accident SET status = 'failed' WHERE id = ANY(:ids)"), {"ids": accidents})
 
     def requeue_stale_jobs(self, max_age_seconds: int, max_attempts: int) -> tuple[int, int]:
         """worker 가 죽어서 오래 running 인 작업을 다시 대기열로 돌린다. 시도 횟수를 넘긴 것은 실패로 처리한다."""
@@ -263,9 +306,10 @@ class Repository:
             failed = conn.execute(text(
                 "UPDATE job SET status = 'failed', finished_at = now(), error = 'worker 가 응답하지 않아 중단됨'"
                 " WHERE status = 'running' AND locked_at < now() - make_interval(secs => :age) AND attempts >= :max"
-                " AND (payload->>'owner' IS NULL OR payload->>'owner' = :owner)"),
-                {"age": max_age_seconds, "max": max_attempts, "owner": self.owner}).rowcount
-            return requeued, failed
+                " AND (payload->>'owner' IS NULL OR payload->>'owner' = :owner) RETURNING analysis_id"),
+                {"age": max_age_seconds, "max": max_attempts, "owner": self.owner}).scalars().all()
+            self._fail_active_analyses(conn, failed, "WORKER_TIMEOUT", "분석 작업이 응답하지 않아 중단되었습니다. 다시 시도해 주세요.")
+            return requeued, len(failed)
 
     def add_stage_log(self, analysis_id: UUID, stage: str, provider: str | None = None, model: str | None = None,
                       input_tokens: int | None = None, output_tokens: int | None = None, cached: bool = False,

@@ -67,6 +67,7 @@ POST /accidents (동의, session_id 받기)
 | GET | `/api/v1/analyses/{id}` | 분석 상태와 결과 | 200 |
 | GET | `/api/v1/analyses/{id}/adjustment-questions` | 고른 유형의 가감요소 질문 | 200 |
 | POST | `/api/v1/analyses/{id}/confirm` | 사용자가 확정한 내용으로 결과 계산 | 202 |
+| POST | `/api/v1/analyses/{id}/cancel` | 대기 중이거나 분석 중인 분석을 취소 | 200 |
 | GET | `/api/v1/media/{token}` | 서명된 주소로 영상 재생 (Range 지원) | 200/206 |
 | POST | `/api/v1/analyses/{id}/reports` | 서버 PDF (미구현) | 501 |
 
@@ -175,6 +176,16 @@ POST /accidents (동의, session_id 받기)
 - 응답은 `status: processing`, `stage.id: finalize`인 분석이다. 이어서 `GET /analyses/{id}`를 조회해 `completed`를 기다린다.
 - 오류: `409 ANALYSIS_NOT_AWAITING`, `404 ACCIDENT_TYPE_NOT_FOUND`, `422 ROLE_REQUIRED`, `422 INVALID_ANSWER`(이 유형에서 묻지 않는 항목이나 같은 항목이 두 번 들어 있음)
 
+### POST /api/v1/analyses/{id}/cancel
+
+대기 중(`queued`)이거나 분석 중(`processing`)인 분석을 취소한다. 요청 본문은 없다.
+
+- 취소하면 `status: failed`, `error.code: CANCELLED`인 분석이 돌아온다. DB 상태 규칙에 `cancelled`가 없어서 실패로 기록하되 코드로 구분한다. 같은 사고(같은 영상)로 `POST /accidents/{id}/analyses`를 다시 호출해 새로 분석할 수 있다.
+- 대기 중인 분석은 작업을 바로 지워서 worker가 시작하지 않는다.
+- **분석 중인 분석은 worker가 지금 하던 단계(AI 호출 한 번 등)를 끝낸 뒤에 멈춘다.** 응답은 바로 취소로 돌아오지만, 그동안 worker는 다음 분석을 시작하지 못할 수 있다. 취소한 분석에는 결과를 저장하지 않는다.
+- 이미 취소한 분석에 다시 호출해도 같은 응답(200)을 돌려준다.
+- 오류: `409 ANALYSIS_NOT_CANCELLABLE`(이미 끝났거나 사용자 확인 단계이거나, 취소가 아닌 이유로 실패한 분석), `404 ANALYSIS_NOT_FOUND`, `401`.
+
 ## 결과 `result`
 
 `status`가 `completed`일 때 들어 있다.
@@ -226,7 +237,7 @@ POST /accidents (동의, session_id 받기)
 
 ## 개발·테스트
 
-worker 가 `ENGINE=fake`(기본 개발 설정)이면 영상 파일 **첫 줄**의 지시로 상황을 만들 수 있다. 실제 영상이 아니어도 된다.
+`backend/.env`에 명시적으로 `ENGINE=fake`, `REDACTION=dev_copy`를 지정하면 영상 파일 **첫 줄**의 지시로 상황을 만들 수 있다. 실제 영상이 아니어도 된다. 분석 조회 응답의 `engine`은 결과를 만든 엔진이며, `fake`/`replay`는 실제 영상 AI 분석이 아니다.
 
 | 첫 줄 | 결과 |
 | --- | --- |

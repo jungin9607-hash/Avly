@@ -1,7 +1,7 @@
 """모델 결과 JSON(avly 가 만든 것)을 서비스가 저장하는 '스냅샷'으로 줄인다.
 
 원본은 2MB 가 넘고 내부 용어가 많아서 DB 에 그대로 넣지 않는다. 스냅샷에는 화면에 필요한 것만 담는다.
-- situation: 사용자에게 보여줄 AI 의 사고 상황 판단과 과실표 후보
+- situation: 사용자에게 보여줄 AI 의 사고 상황 판단과 과실표 후보 (my/other_action_hint: 검증은 못 통과했지만 모델이 기록한 움직임)
 - timeline: 사고 타임라인 (구간 단위). kind 가 '사고 흐름'인 이벤트는 AI 가 쓴 사고 진행 단계다
 - timeline_note: 상대 차가 처음 보인 뒤 접촉 장면까지의 시간 관계 한 문장 (없으면 None)
 - impact: 충돌(접촉) 시점과 확실도
@@ -9,6 +9,7 @@
 """
 
 from app import catalog
+from avly.reference_rank import UNKNOWN, soft_actions
 
 CONTACT_CONFIRMED = ("접촉 관찰", "충돌 정황 강함")
 ACTOR = {"A": "me", "B": "other", "A/B": "both"}   # 모델의 A = 블랙박스 차량 = 내 차. A/B 는 두 차량의 접촉 구간
@@ -52,6 +53,7 @@ def from_model_result(data: dict, engine: str) -> dict:
     confirmed_contact = contact in CONTACT_CONFIRMED
     candidates = _candidates(data.get("rule_engine_input", {}))
     default_index = 0 if candidates and candidates[0]["source"] == "matched" else None
+    soft = soft_actions(scene.get("a_action"), scene.get("b_action"), scene.get("maneuver_checks"))
     needs_check = [] if confirmed_contact else ["직접 접촉 장면은 영상에서 확인되지 않았습니다."]
     if not candidates:
         needs_check.append("과실표에서 맞는 유형을 찾지 못했습니다. 아래에서 직접 골라 주세요.")
@@ -64,6 +66,9 @@ def from_model_result(data: dict, engine: str) -> dict:
             "road_shape": scene.get("road_shape"),
             "my_action": scene.get("a_action"),
             "other_action": scene.get("b_action"),
+            # 근거 검증을 통과하지 못해 '미확인'이 된 움직임도 모델이 기록한 값이 있으면 '추정'으로 알려 준다 (확정 값이 아니다)
+            "my_action_hint": soft["A"] if scene.get("a_action") in UNKNOWN else None,
+            "other_action_hint": soft["B"] if scene.get("b_action") in UNKNOWN else None,
             "contact": contact,
             "needs_check": needs_check,
             "technical_notes": list(scene.get("observation_issues", []))[:10],

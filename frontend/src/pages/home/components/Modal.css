@@ -425,6 +425,24 @@ input:focus-visible + .md-radio {
   line-height: 1.5;
   font-weight: 800;
 }
+.md-situation-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  font-size: var(--md-font-body);
+  line-height: 1.65;
+  word-break: keep-all;
+}
+.md-situation-list li {
+  display: flex;
+  gap: 10px;
+}
+.md-situation-list b {
+  flex: 0 0 4.2em;
+  color: var(--ink);
+  font-weight: 800;
+}
 .md-situation p:last-child {
   margin: 0;
   color: var(--ink-2);
@@ -504,6 +522,9 @@ input:focus-visible + .md-radio {
   word-break: keep-all;
   font-weight: 600;
   cursor: pointer;
+}
+.md-cancel {
+  margin-top: 14px;
 }
 .md-btn-ghost:hover {
   background: var(--color-surface-gray-hover);
@@ -790,6 +811,75 @@ input:focus-visible + .md-radio {
   border-radius: 4px;
   background: var(--md-soft);
   color: var(--md-navy);
+  font-size: var(--md-font-caption);
+  line-height: 1.5;
+}
+
+/* 사고 장소 선택 (동의 창) */
+.md-place { display: grid; gap: 6px; margin: 0 0 14px; }
+.md-place label { font-weight: 700; font-size: 14px; }
+.md-place small { font-weight: 400; color: #667085; margin-left: 6px; }
+.md-place select { font: inherit; padding: 10px 12px; border: 1px solid #dfe3e8; border-radius: 10px; background: #fff; }
+
+/* 내 차·상대 차의 움직임 고르기, 'AI 추정' 표시 (사고 상황 확인 창) */
+.md-field-head {
+  flex-wrap: wrap;
+}
+.md-ai-tag {
+  padding: 1px 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+}
+.md-ai-tag.is-ai {
+  border-color: var(--md-primary);
+  background: var(--md-soft);
+  color: var(--md-primary);
+}
+.md-choices {
+  display: grid;
+  gap: 8px;
+}
+.md-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  background: var(--color-white);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--md-font-body);
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+}
+.md-choice:hover {
+  border-color: var(--md-primary);
+}
+.md-choice.is-on {
+  border-color: var(--md-primary);
+  background: var(--md-soft);
+  font-weight: 700;
+}
+.md-signal-note {
+  margin-top: 14px;
+}
+.md-situation summary {
+  cursor: pointer;
+}
+.md-situation details[open] > summary {
+  margin-bottom: 7px;
+}
+.md-note-text {
+  margin: 0;
+  color: var(--muted);
   font-size: var(--md-font-caption);
   line-height: 1.5;
 }

@@ -6,6 +6,7 @@
 
 from dataclasses import dataclass
 from pathlib import Path
+import shutil
 from uuid import UUID, uuid4
 
 from fastapi import UploadFile
@@ -74,3 +75,10 @@ def delete(key: str) -> bool:
         path.unlink()
         return True
     return False
+
+
+def delete_model_artifacts(video_key: str) -> None:
+    """영상과 같은 사고 폴더의 분석 중간 파일을 지운다 (워커 강제 종료 잔여물 포함)."""
+    directory = path_for(str(Path(video_key).parent / "_model_results"))
+    if directory.exists():
+        shutil.rmtree(directory)

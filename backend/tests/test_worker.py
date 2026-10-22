@@ -55,6 +55,23 @@ class WorkerTestCase(DbTestCase):
 
 
 class AnalyzeTests(WorkerTestCase):
+    def test_uncaught_worker_failure_also_finishes_the_analysis(self):
+        accident, _, analysis = self.make_analysis()
+        w = self.worker()
+        with mock.patch.object(w, "analyze", side_effect=RuntimeError("internal detail")):
+            w.run_once()
+        row = self.analysis(analysis)
+        self.assertEqual((row["status"], row["stage"], row["error_code"]), (st.FAILED, None, "WORKER_FAILED"))
+        self.assertNotIn("internal detail", row["error_message"])
+        self.assertEqual(self.repo.get_accident(accident["id"])["status"], "failed")
+
+    def test_late_job_failure_does_not_overwrite_a_completed_analysis(self):
+        _, _, analysis = self.make_analysis()
+        job = self.repo.claim_job()
+        self.repo.update_analysis(analysis["id"], status=st.COMPLETED, result={"state": "base_only"})
+        self.repo.finish_job(job["id"], False, "late error")
+        self.assertEqual(self.analysis(analysis)["status"], st.COMPLETED)
+
     def test_analyze_reaches_awaiting_confirmation_with_a_masked_video(self):
         accident, original, analysis = self.make_analysis()
         redaction = StubRedaction(stats={"duration": 10.0, "fps": 30.0, "width": 1280, "height": 720, "frames": 300,
@@ -288,7 +305,39 @@ class FinalizeTests(WorkerTestCase):
         self.assertEqual(self.analysis(analysis2)["result"]["related_cases"], [])
 
 
+class CalculationStepsTests(unittest.TestCase):
+    def test_opposing_adjustments_preserve_the_total_after_a_display_bound(self):
+        from copy import deepcopy
+        from avly import adjustments
+        from avly.tables import ALL_ADJUSTMENT_RULES
+
+        config = deepcopy(ALL_ADJUSTMENT_RULES["11"])
+        config["rules"] = [config["rules"][0], config["rules"][2]]
+        for rule in config["rules"]:
+            rule["delta_pp"] = 80
+        snapshot, _ = ReplayEngine(directory=FIXTURES).analyze(Path("unused.mp4"), lambda stage: None)
+        for role, expected in (("A", [30, 100, 30]), ("B", [70, 0, 70])):
+            answers = {"me.gross_negligence": "예", "other.signal_delay": "예"} if role == "A" else {
+                "other.gross_negligence": "예", "me.signal_delay": "예"}
+            with self.subTest(role=role), mock.patch.dict(adjustments.ADJUSTMENT_RULES, {"11": config}):
+                result = finalize.build_result(snapshot, {"accident_type_id": 11, "role": role, "answers": answers}, [])
+                self.assertEqual([s["me"] for s in result["steps"]], expected)
+                self.assertEqual(result["steps"][-1]["me"], result["fault"]["final"]["me"])
+                self.assertTrue(all(s["me"] + s["other"] == 100 for s in result["steps"]))
+
+
 class CleanupTests(WorkerTestCase):
+    def test_crashed_run_artifacts_follow_masked_video_retention(self):
+        accident, _, _ = self.make_analysis(retention=True)
+        self.worker().run_once()
+        artifacts = storage.path_for(f"{accident['id']}/_model_results/analysis-crashed")
+        artifacts.mkdir(parents=True)
+        (artifacts / "observation.json").write_text("sensitive scene", encoding="utf-8")
+        cleanup.delete_expired(self.repo, datetime.now(timezone.utc) + timedelta(days=30))
+        self.assertTrue(artifacts.is_dir())
+        cleanup.delete_expired(self.repo, datetime.now(timezone.utc) + timedelta(days=91))
+        self.assertFalse(artifacts.exists())
+
     def test_expired_videos_are_deleted_but_their_rows_remain(self):
         accident, original, _ = self.make_analysis()
         path = storage.path_for(original["storage_key"])
@@ -421,6 +470,11 @@ class EngineTests(unittest.TestCase):
 class AvlyEngineTests(unittest.TestCase):
     """실제 AI 를 부르지 않고 avly 파이프라인을 가짜로 바꿔서 연결부(단계 알림, 결과 변환, 원래대로 되돌리기)를 확인한다."""
 
+    def test_missing_key_stops_real_analysis_instead_of_replaying_a_result(self):
+        with mock.patch.dict("os.environ", {"OPENAI_API_KEY": ""}):
+            with self.assertRaises(EngineNotConfigured):
+                AvlyEngine().analyze(Path("unused.mp4"), lambda stage: None)
+
     def run_engine(self, fake_run):
         import tempfile
         from avly import observation, pipeline
@@ -435,16 +489,24 @@ class AvlyEngineTests(unittest.TestCase):
             patched_calls = (pipeline.call, observation.call)
 
             def run(settings):
-                ctx.output_path = result
-                fake_run(settings, pipeline, observation)
+                temporary = Path(settings["RESULTS_DIR"])
+                ctx.result_dir = temporary
+                ctx.output_path = temporary / "analysis.json"
+                ctx.output_path.write_text(result.read_text(encoding="utf-8"), encoding="utf-8")
+                try:
+                    fake_run(settings, pipeline, observation)
+                finally:
+                    self.last_result_dir = temporary
 
             try:
-                with mock.patch.object(pipeline, "run", run):
+                with mock.patch.object(pipeline, "run", run), mock.patch.dict("os.environ", {"OPENAI_API_KEY": "test-key-no-api-call"}):
                     try:
                         outcome = AvlyEngine(results_dir=Path(d, "results")).analyze(Path(d, "x.mp4"), reported.append)
                     except Exception as exc:
                         outcome = exc
                 restored = (pipeline.call, observation.call) == patched_calls
+                self.assertFalse(self.last_result_dir.exists())
+                self.assertIsNone(ctx.result_dir)
             finally:
                 pipeline.call, observation.call = original_calls
         return outcome, reported, restored

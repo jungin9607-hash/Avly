@@ -8,6 +8,7 @@ from .context import ctx
 from .facts import accident_input_confirmed, action_support, original_frame_index, parking_environment, progress_actions, scene_missing_conditions, straight_audit
 from .matching import assess_row, assessment_sort_key, candidate_eligibility, context_requirements, csv_accident_type_details, matching_context, mechanism_compatible, orientation_compatible, place_compatible, strict_user_conflicts
 from .law import case_profile, legal_context_for_input, related_cases_for_row, sanitize_case_bundle
+from .reference_rank import order_references, soft_actions
 
 
 def public_scenarios(scene, linked):
@@ -161,7 +162,10 @@ def reference_scenarios_v2151(scene, linked):
             setattr(context, who.lower() + '_action', '미확인')
             if context._evidence_audit.get(who, {}).get('roundabout_position', {}).get('status') != 'user':
                 getattr(context, who.lower() + '_state').roundabout_position = '미확인'
-    ranked = []
+    candidates = []
+    soft = soft_actions(scene.a_action, scene.b_action, scene.maneuver_checks)   # 확정은 아니지만 AI 가 기록한 움직임: 후보 순서를 정하는 데만 쓴다
+    known_places = {r['accident_place'] for r in ctx.table}
+    preferred_places = {int(code) for code in scene.road_place_codes if code in known_places}   # AI 가 가리킨 장소. 표에 없는 번호는 버린다
     for row in ctx.table:
         if row['accident_object_name'] != scene.accident_object or not place_compatible(row, scene):
             continue
@@ -180,12 +184,8 @@ def reference_scenarios_v2151(scene, linked):
             option = {'dashcam_table_role': role, 'a_progress': row['vehicle_b_progress_info_name' if swap else 'vehicle_a_progress_info_name'], 'b_progress': row['vehicle_a_progress_info_name' if swap else 'vehicle_b_progress_info_name'], 'a_fault': row['negligence_b' if swap else 'negligence_a'], 'b_fault': row['negligence_a' if swap else 'negligence_b'], 'unconfirmed_conditions': list(dict.fromkeys(a['unresolved_conditions'] + caveats)), 'display_status': '장소 기반 가정별 참고 — 영상 진행과의 대응 미확정'}
             options.append((a, option))
         if options:
-            best = min((a for a, o in options), key=assessment_sort_key)
-            ranked.append((assessment_sort_key(best), row, options))
-    if not ranked:
-        return []
-    _, row, options = min(ranked, key=lambda x: x[0])
-    return [{'accident_type': row['accident_type'], 'title': csv_accident_type_details(row)['accident_type_display_name'], 'reference_only': True, 'basis': '관찰 장소·사고 대상에 따른 CSV 비교 시나리오; 적용 유형의 확정 또는 확률 예측 아님', 'ratio_options': [o for a, o in options]}]
+            candidates.append((row, options))
+    return [{'accident_type': row['accident_type'], 'title': csv_accident_type_details(row)['accident_type_display_name'], 'reference_only': True, 'basis': '관찰 장소·사고 대상에 따른 CSV 비교 시나리오; 적용 유형의 확정 또는 확률 예측 아님', 'ratio_options': chosen} for row, chosen in order_references(candidates, soft, progress_actions, preferred_places)]
 
 def evaluate_rule_input(payload):
     results = []

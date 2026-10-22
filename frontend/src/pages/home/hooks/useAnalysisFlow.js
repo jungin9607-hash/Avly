@@ -74,7 +74,7 @@ export default function useAnalysisFlow(resumeId) {
   const [state, dispatch] = useReducer(reducer, resumeId, initFrom);
   const controller = useRef(null);
 
-  const start = useCallback(async (file, retention) => {
+  const start = useCallback(async (file, retention, place) => {
     controller.current?.abort();
     controller.current = new AbortController();
     const signal = controller.current.signal;
@@ -83,7 +83,7 @@ export default function useAnalysisFlow(resumeId) {
       const accident = await api.createAccident(titleFrom(file), { version: CONSENT_VERSION, analysis: true, retention }, { signal });
       const opts = { sessionId: accident.session_id, signal };
       await api.uploadVideo(accident.id, file, { ...opts, onProgress: (progress) => dispatch({ type: "progress", progress }) });
-      const started = await api.startAnalysis(accident.id, opts);
+      const started = await api.startAnalysis(accident.id, place, opts);
       rememberAnalysis(started.analysis_id, accident.id, accident.session_id, accident.expires_at);
       dispatch({ type: "analyzing", analysisId: started.analysis_id, accidentId: accident.id, sessionId: accident.session_id });
     } catch (error) {
@@ -166,10 +166,21 @@ export default function useAnalysisFlow(resumeId) {
     return undefined;
   }, [analysisId, sessionId, confirm, fail]);
 
+  // 분석 중인 분석을 취소한다. 서버가 취소를 받아들이면 "취소했어요" 안내로 넘어간다.
+  // 그사이 분석이 끝났거나 사용자 확인 단계가 됐다면(409) 취소하지 못한 것이므로 상태 확인이 알아서 다음 화면으로 넘긴다.
+  const cancel = useCallback(async () => {
+    try {
+      await api.cancelAnalysis(analysisId, { sessionId });
+      dispatch({ type: "failed", error: { code: "CANCELLED", message: "분석을 취소했어요." } });
+    } catch (error) {
+      if (error.code !== "ANALYSIS_NOT_CANCELLABLE") fail(error, analysisId);
+    }
+  }, [analysisId, sessionId, fail]);
+
   const reset = useCallback(() => {
     controller.current?.abort();
     dispatch({ type: "reset" });
   }, []);
 
-  return { state, start, choose, confirm, back: () => dispatch({ type: "back" }), reset };
+  return { state, start, choose, confirm, cancel, back: () => dispatch({ type: "back" }), reset };
 }

@@ -54,3 +54,23 @@ test("보고서: 사고 흐름이 있으면 타임라인 절에 단계로 들어
   assert.deepEqual(doc.timeline.rows.map((r) => r.label), ["접근"]);
   assert.match(doc.timeline.note, /약 2\.0초/);
 });
+
+test("보고서: 맨 위 한 줄 설명은 확정된 사고 유형으로 만들고, 유형이 없으면 AI 관찰을 쉬운 말로 푼다", () => {
+  const result = fixture("result_final.json");
+  assert.match(toReportDocument(result, meta).headline.oneLine, /사고예요\. 내 차는 .+, 상대 차는 .+ 상황이에요\./);
+  const unresolved = fixture("result_unresolved.json");
+  const line = toReportDocument(unresolved, meta).headline.oneLine;
+  assert.match(line, /^AI가 영상에서 본 모습\(추정\) — 도로: 주차장 · 내 차: AI가 알아보지 못했어요 · 상대 차: 차로를 바꾸는 중/);
+  assert.ok(!line.includes("진행 후보"), "모델의 내부 요약 문장을 그대로 내지 않는다");
+  // 구조화된 값이 없는 예전 결과는 서버가 준 요약을 그대로 쓴다
+  const old = { ...unresolved, situation: undefined, summary: "AI가 본 장면 요약" };
+  assert.equal(toReportDocument(old, meta).headline.oneLine, "AI가 본 장면 요약");
+});
+
+test("보고서: 고른 상황이 AI 관찰과 어긋나면 타임라인 절에 한 줄로 알린다", () => {
+  const result = { ...fixture("result_final.json"), timeline_note: "접촉이 의심되는 장면이 나와요.", situation_check: { conflict: true, items: [{ who: "other", ai_action: "정지/대기", chosen: "앞차가 차로를 바꿈" }] } };
+  const note = toReportDocument(result, meta).timeline.note;
+  assert.match(note, /접촉이 의심되는 장면이 나와요\./);
+  assert.match(note, /고르신 상황이 AI가 영상에서 본 내용과 달라요/);
+  assert.equal(toReportDocument(fixture("result_final.json"), meta).timeline.note.includes("달라요"), false);
+});

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>에블리 라벨 영상 결과 검수</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --line:#dfe3e8; --text:#1f2933; --muted:#667085; --ok:#12805c; --okbg:#e5f6ef; --bad:#c2371f; --badbg:#fdeeea; --warn:#9a6700; --warnbg:#fff6df; --accent:#2f5bea; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 system-ui,"Malgun Gothic","Apple SD Gothic Neo",sans-serif; }
+  header { position:sticky; top:0; z-index:5; background:#fff; border-bottom:1px solid var(--line); padding:12px 20px; }
+  .bar { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; max-width:1100px; margin:0 auto; }
+  h1 { font-size:18px; margin:0 12px 0 0; }
+  input[type=text], textarea { font:inherit; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--text); }
+  textarea { width:100%; min-height:56px; resize:vertical; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--text); padding:7px 14px; border-radius:8px; }
+  button:hover { background:#f0f3f7; }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:700; }
+  main { max-width:1100px; margin:0 auto; padding:16px 20px 80px; }
+  .help { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin-bottom:14px; }
+  .help ol { margin:6px 0 0; padding-left:20px; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { border:1px solid var(--line); padding:6px 9px; vertical-align:top; text-align:left; font-size:14px; }
+  th { background:#f3f5f8; }
+  .summary { background:#fff; margin-bottom:14px; }
+  .summary td.c { text-align:center; white-space:nowrap; }
+  details.card { background:var(--card); border:1px solid var(--line); border-radius:12px; margin:0 0 12px; }
+  details.card > summary { list-style:none; cursor:pointer; padding:12px 16px; display:flex; flex-wrap:wrap; gap:6px 12px; align-items:center; }
+  details.card > summary::-webkit-details-marker { display:none; }
+  .body { padding:6px 16px 16px; border-top:1px solid var(--line); }
+  .num { font-weight:800; }
+  .badge { font-size:12px; padding:2px 8px; border-radius:999px; background:#eef1f5; color:var(--muted); }
+  .badge.ok { background:var(--okbg); color:var(--ok); } .badge.bad { background:var(--badbg); color:var(--bad); } .badge.warn { background:var(--warnbg); color:var(--warn); }
+  h3 { margin:16px 0 6px; font-size:15px; }
+  .muted { color:var(--muted); font-size:13px; }
+  .cmp td.m-ok { background:var(--okbg); } .cmp td.m-bad { background:var(--badbg); }
+  .cmp th.k { width:15%; }
+  .case { border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin:6px 0; }
+  .case p { margin:2px 0; }
+  .tag { font-size:11px; padding:1px 7px; border-radius:999px; background:#eef1f5; color:var(--muted); margin-left:6px; }
+  .choice { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 4px; }
+  .choice button.sel-ok { background:var(--okbg); border-color:var(--ok); color:var(--ok); font-weight:700; }
+  .choice button.sel-bad { background:var(--badbg); border-color:var(--bad); color:var(--bad); font-weight:700; }
+  .choice button.sel-warn { background:var(--warnbg); border-color:var(--warn); color:var(--warn); font-weight:700; }
+  .err { background:var(--badbg); color:var(--bad); padding:8px 12px; border-radius:8px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <h1>에블리 라벨 영상 결과 검수</h1>
+    <label>검수자 이름 <input type="text" id="reviewer" placeholder="예: 김검수" size="12"></label>
+    <span id="progress" style="font-weight:700"></span>
+    <button id="btn-import">이어서 하기</button>
+    <button class="primary" id="btn-export">내보내기</button>
+    <input type="file" id="file-import" accept="application/json,.json" hidden>
+  </div>
+</header>
+<main>
+  <section class="help">
+    <strong>이렇게 보세요</strong>
+    <ol>
+      <li>영상 하나가 카드 하나예요. 카드를 열면 <b>정답(라벨)과 AI 결과가 나란히</b> 보이고, 맞으면 초록, 다르면 빨강으로 표시돼요.</li>
+      <li>영상 파일은 카드에 적힌 경로(<code>backend/labels/…</code>)에서 열어 보고, <b>타임라인</b>과 <b>판례</b>가 알맞은지 각각 눌러 주세요.</li>
+      <li>자동 표시는 참고예요. AI와 정답의 문구가 달라도 같은 뜻일 수 있으니 <b>유형 판단</b>은 사람이 최종으로 눌러 주세요. 다 하면 <b>내보내기</b>로 파일(.json)을 받아 보내요.</li>
+    </ol>
+  </section>
+  <section id="summary"></section>
+  <div id="cards"></div>
+</main>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+// ---- 계산(화면과 무관) ----
+function videoDone(state, v) {
+  var s = state.videos[v.name] || {};
+  return !!(s.type && s.type.verdict && s.timeline && s.timeline.verdict && s.cases && s.cases.verdict);
+}
+function buildExport(data, state, reviewer, date) {
+  var out = { format: "avly-label-review-v1", reviewer: reviewer, date: date, source: data.generated_from, videos: {} };
+  data.videos.forEach(function (v) {
+    var s = state.videos[v.name];
+    if (!s) return;
+    var rec = { category: v.category, auto: v.auto || null, ai_top_type: v.ai && v.ai.top ? v.ai.top.id : null, label_type: v.label && v.label.type ? v.label.type.id : null };
+    ["type", "timeline", "cases"].forEach(function (k) { if (s[k] && s[k].verdict) rec[k] = { verdict: s[k].verdict, note: s[k].note || "" }; });
+    if (s.memo) rec.memo = s.memo;
+    if (s.blackbox) rec.blackbox_is = s.blackbox;
+    if (Object.keys(rec).length > 4 || s.blackbox) out.videos[v.name] = rec;
+  });
+  return out;
+}
+if (typeof module !== "undefined") { module.exports = { buildExport: buildExport, videoDone: videoDone }; }
+</script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById("data").textContent);
+  var KEY = "avly-label-review-v1";
+  var state = { reviewer: "", videos: {} };
+  try { var saved = JSON.parse(localStorage.getItem(KEY) || "null"); if (saved) state = Object.assign(state, saved); } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} updateProgress(); }
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { if (k === "text") e.textContent = attrs[k]; else if (k === "class") e.className = attrs[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), attrs[k]); else e.setAttribute(k, attrs[k]); });
+    (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function vs(name) { return state.videos[name] || (state.videos[name] = { type: {}, timeline: {}, cases: {}, memo: "" }); }
+  function updateProgress() { var done = data.videos.filter(function (v) { return videoDone(state, v); }).length; document.getElementById("progress").textContent = "확인 " + done + " / " + data.videos.length; }
+  var mark = function (ok) { return ok === null || ok === undefined ? "" : ok ? "m-ok" : "m-bad"; };
+
+  function choice(current, options, onPick) {
+    return el("div", { class: "choice" }, options.map(function (o) { return el("button", { class: current === o[0] ? "sel-" + o[2] : "", text: o[1], onclick: function () { onPick(o[0]); } }); }));
+  }
+  function verdictBlock(v, key, title, options) {
+    var s = vs(v.name)[key];
+    var wrap = el("div", {}, [el("div", { class: "muted", text: title }), choice(s.verdict, options, function (k) { vs(v.name)[key].verdict = k; save(); render(); })]);
+    var ta = el("textarea", { placeholder: "메모 (이상하면 이유를 한 줄로)" }); ta.value = s.note || ""; ta.addEventListener("input", function () { vs(v.name)[key].note = ta.value; save(); });
+    wrap.appendChild(ta);
+    return wrap;
+  }
+
+  function compareTable(v) {
+    var L = v.label, A = v.ai, au = v.auto;
+    var typeSame = au.top1_ok;
+    var rows = [
+      ["사고 유형 (번호만 비교)", L.type ? "유형 " + L.type.id + " · " + L.type.feature : "-", A.top ? "유형 " + A.top.id + " · " + A.top.feature + " (AI는 내 차를 " + A.top_role + "로 봄)" : "고른 유형 없음", typeSame],
+      ["장소", L.place, A.road_shape, au.place_ok],
+      ["라벨 A의 진행", L.a, "-", null],
+      ["라벨 B의 진행", L.b, "-", null],
+      ["AI: 내 차(블랙박스)의 행동", "-", A.a_action + (au.blackbox_is ? "  ·  라벨의 " + au.blackbox_is + "와 맞춤" : ""), au.a_ok],
+      ["AI: 상대 차의 행동", "-", A.b_action, au.b_ok],
+      ["접촉", "-", A.contact, null],
+    ];
+    var ratio = L.ratio_any != null ? "과실 " + L.ratio_any + " (원본에 차량 구분 없음)" : (L.ratio_a != null ? "차량 A " + L.ratio_a + "% : 차량 B " + L.ratio_b + "%" : "정답에 과실 비율 없음");
+    rows.splice(3, 0, ["정답의 과실비율(라벨 A:B)", ratio, "-", null]);
+    var t = el("table", { class: "cmp" }, [el("thead", {}, [el("tr", {}, [el("th", { text: "항목" }), el("th", { text: "정답 (라벨)" }), el("th", { text: "AI 결과" })])]), el("tbody", {}, rows.map(function (r) { return el("tr", {}, [el("th", { class: "k", text: r[0] }), el("td", { text: r[1] }), el("td", { class: mark(r[3]), text: r[2] })]); }))]);
+    return t;
+  }
+
+  function candidates(v) {
+    var A = v.ai, labelId = v.label.type ? v.label.type.id : null;
+    if (!A.candidates.length) return el("p", { class: "muted", text: "AI가 고른 후보가 없어요." + (A.no_match ? " 이유: " + A.no_match : "") });
+    return el("div", {}, [el("div", { class: "muted", text: "AI 후보 (정답 유형 번호면 ✔, A/B는 내 차의 역할)" }), el("ul", {}, A.candidates.map(function (c) { var hit = c.id === labelId; return el("li", { text: (hit ? "✔ " : "") + "유형 " + c.id + " (내 차 " + c.role + ") · " + c.feature + " — " + c.a + " / " + c.b }); }))]);
+  }
+
+  function timelineBlock(v) {
+    var T = v.timeline, wrap = el("div");
+    if (!T.events.length) wrap.appendChild(el("p", { class: "muted", text: "타임라인 구간이 없어요." }));
+    else {
+      var rows = T.events.map(function (e) { return el("tr", {}, [el("td", { text: e.stage || e.kind }), el("td", { text: e.start.toFixed(1) + " ~ " + e.end.toFixed(1) + "초" }), el("td", { text: e.text }), el("td", { text: e.certainty })]); });
+      wrap.appendChild(el("table", {}, [el("thead", {}, [el("tr", {}, ["구분", "영상 속 시간", "내용(AI가 쓴 그대로)", "확실도"].map(function (h) { return el("th", { text: h }); }))]), el("tbody", {}, rows)]));
+    }
+    var flow = T.events.filter(function (e) { return e.kind === "사고 흐름"; }).length;
+    wrap.appendChild(el("p", { class: "muted", text: "사고 흐름 단계 " + flow + "개 · 전체 구간 " + T.events.length + "개" + (T.flow_issues.length ? " · 버려진 단계: " + T.flow_issues.join(" / ") : "") }));
+    if (T.note) wrap.appendChild(el("p", { text: "시간 관계 문장: " + T.note }));
+    return wrap;
+  }
+
+  function caseList(title, list) {
+    var wrap = el("div", {}, [el("h3", { text: title })]);
+    if (!list || !list.length) { wrap.appendChild(el("p", { class: "muted", text: "연결된 판례가 없어요." })); return wrap; }
+    list.forEach(function (c) {
+      if (c.error) { wrap.appendChild(el("div", { class: "err", text: "판례를 읽지 못했어요: " + c.error })); return; }
+      wrap.appendChild(el("div", { class: "case" }, [el("p", {}, [el("b", { text: [c.court, c.date, c.case_number].filter(Boolean).join(" · ") }), el("span", { class: "tag", text: c.source }), c.verified ? null : el("span", { class: "tag", text: "검수 전" })]), el("p", { text: c.summary }), c.limit ? el("p", { class: "muted", text: c.limit }) : null]));
+    });
+    return wrap;
+  }
+
+  function card(v) {
+    var det = el("details", { class: "card" });
+    if (v._open) det.open = true;
+    det.addEventListener("toggle", function () { v._open = det.open; });
+    if (v.error) { det.appendChild(el("summary", {}, [el("span", { class: "num", text: v.name }), el("span", { class: "badge bad", text: "분석 실패" })])); det.appendChild(el("div", { class: "body" }, [el("div", { class: "err", text: v.error })])); return det; }
+    var s = vs(v.name), done = videoDone(state, v);
+    det.appendChild(el("summary", {}, [el("span", { class: "num", text: v.name }), el("span", { class: "muted", text: v.category }), el("span", { class: "badge " + (v.auto.top1_ok ? "ok" : v.auto.any_ok ? "warn" : "bad"), text: v.auto.top1_ok ? "유형 일치" : v.auto.any_ok ? "후보에 정답" : "유형 불일치" }), el("span", { class: "badge " + (done ? "ok" : ""), text: done ? "확인함" : "확인 전" })]));
+    var body = el("div", { class: "body" });
+    body.appendChild(el("p", { class: "muted", text: "영상 파일: " + v.file }));
+    body.appendChild(compareTable(v));
+    if (v.ai.summary) body.appendChild(el("p", { class: "muted", text: "AI 요약: " + v.ai.summary }));
+    body.appendChild(candidates(v));
+    var sb = vs(v.name);
+    body.appendChild(el("div", {}, [el("div", { class: "muted", text: "이 영상에서 블랙박스 차량은 라벨의 어느 쪽인가요? (영상을 보고 골라 주세요)" }), choice(sb.blackbox, [["A", "라벨 A", "ok"], ["B", "라벨 B", "ok"], ["?", "모르겠어요", "warn"]], function (k) { vs(v.name).blackbox = k; save(); render(); })]));
+    body.appendChild(verdictBlock(v, "type", "유형 판단은 어떤가요?", [["ok", "AI 판단이 맞아요", "ok"], ["bad", "AI 판단이 틀려요", "bad"], ["label", "정답 라벨이 이상해요", "warn"]]));
+    body.appendChild(el("h3", { text: "사고 흐름 · 타임라인" }));
+    body.appendChild(timelineBlock(v));
+    body.appendChild(verdictBlock(v, "timeline", "타임라인이 영상과 맞나요?", [["ok", "괜찮아요", "ok"], ["awkward", "어색해요", "warn"], ["empty", "비었어요", "bad"]]));
+    body.appendChild(caseList("판례 — 정답 유형 " + (v.label.type ? v.label.type.id : "") + "번", v.cases.label_type));
+    if (v.cases.ai_type) body.appendChild(caseList("판례 — AI가 고른 유형 " + v.cases.ai_type_id + "번 (정답과 다름)", v.cases.ai_type));
+    body.appendChild(verdictBlock(v, "cases", "판례가 이 사고에 알맞나요?", [["ok", "맞아요", "ok"], ["bad", "안 맞아요", "bad"], ["none", "없어요", "warn"]]));
+    var memo = el("textarea", { placeholder: "이 영상에 대한 전체 메모" }); memo.value = s.memo || ""; memo.addEventListener("input", function () { vs(v.name).memo = memo.value; save(); });
+    body.appendChild(memo);
+    det.appendChild(body);
+    return det;
+  }
+
+  function summary() {
+    var vids = data.videos.filter(function (v) { return !v.error; });
+    var t = function (f) { return vids.filter(f).length; };
+    var box = el("div", { class: "summary card" }, [el("div", { class: "body", style: "border-top:0" })]);
+    var b = box.firstChild;
+    b.appendChild(el("strong", { text: "전체 요약 (자동 계산)" }));
+    b.appendChild(el("p", { class: "muted", text: "영상 " + data.videos.length + "개 · 유형 1순위 일치 " + t(function (v) { return v.auto.top1_ok; }) + " · 후보에 정답 " + t(function (v) { return v.auto.any_ok; }) + " · 장소 일치 " + t(function (v) { return v.auto.place_ok; }) + " · 차대차 " + t(function (v) { return v.auto.object_ok; }) + " · 사고 흐름이 있는 영상 " + t(function (v) { return v.timeline.events.some(function (e) { return e.kind === "사고 흐름"; }); }) + " · 판례가 붙은 영상 " + t(function (v) { return (v.cases.label_type || []).some(function (c) { return !c.error; }); }) }));
+    var rows = data.videos.map(function (v) {
+      if (v.error) return el("tr", {}, [el("td", { text: v.name }), el("td", { text: v.category }), el("td", { colspan: "6", text: "분석 실패: " + v.error })]);
+      var flow = v.timeline.events.filter(function (e) { return e.kind === "사고 흐름"; }).length;
+      return el("tr", {}, [el("td", { text: v.name }), el("td", { text: v.category }), el("td", { class: "c", text: v.label.type ? String(v.label.type.id) : "-" }), el("td", { class: "c " + (v.auto.top1_ok ? "m-ok" : "m-bad"), text: v.ai.top ? String(v.ai.top.id) : "없음" }), el("td", { class: "c", text: v.auto.place_ok ? "O" : "X" }), el("td", { class: "c", text: flow + " / " + v.timeline.events.length }), el("td", { class: "c", text: String((v.cases.label_type || []).filter(function (c) { return !c.error; }).length) }), el("td", { class: "c", text: videoDone(state, v) ? "확인함" : "-" })]);
+    });
+    b.appendChild(el("table", { class: "cmp" }, [el("thead", {}, [el("tr", {}, ["영상", "종류", "정답 유형", "AI 1순위", "장소", "흐름/전체 구간", "판례 수", "내 확인"].map(function (h) { return el("th", { text: h }); }))]), el("tbody", {}, rows)]));
+    return box;
+  }
+
+  function render() {
+    var s = document.getElementById("summary"); s.textContent = ""; s.appendChild(summary());
+    var c = document.getElementById("cards"); c.textContent = ""; data.videos.forEach(function (v) { c.appendChild(card(v)); });
+    updateProgress();
+  }
+  var nameInput = document.getElementById("reviewer"); nameInput.value = state.reviewer || "";
+  nameInput.addEventListener("input", function () { state.reviewer = nameInput.value.trim(); save(); });
+  document.getElementById("btn-export").addEventListener("click", function () {
+    if (!state.reviewer) { alert("먼저 위에 검수자 이름을 적어 주세요."); nameInput.focus(); return; }
+    var d = new Date(), date = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+    var out = buildExport(data, state, state.reviewer, date);
+    if (!Object.keys(out.videos).length) { alert("아직 표시한 항목이 없어요."); return; }
+    var blob = new Blob([JSON.stringify(out, null, 1)], { type: "application/json" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "라벨검수결과_" + state.reviewer + "_" + date + ".json"; document.body.appendChild(a); a.click(); a.remove();
+  });
+  document.getElementById("btn-import").addEventListener("click", function () { document.getElementById("file-import").click(); });
+  document.getElementById("file-import").addEventListener("change", function (ev) {
+    var f = ev.target.files[0]; if (!f) return; var rd = new FileReader();
+    rd.onload = function () { try { var imp = JSON.parse(rd.result); Object.keys(imp.videos || {}).forEach(function (n) { var r = imp.videos[n]; state.videos[n] = { type: r.type || {}, timeline: r.timeline || {}, cases: r.cases || {}, memo: r.memo || "", blackbox: r.blackbox_is }; }); if (imp.reviewer) { state.reviewer = imp.reviewer; nameInput.value = imp.reviewer; } save(); render(); } catch (e) { alert("파일을 읽지 못했어요. 이 페이지에서 내보낸 파일인지 확인해 주세요."); } };
+    rd.readAsText(f); ev.target.value = "";
+  });
+  render();
+})();
+</script>
+</body>
+</html>

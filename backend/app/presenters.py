@@ -13,6 +13,7 @@ def analysis_view(row: dict) -> dict:
         "analysis_id": row["id"],
         "accident_id": row["accident_id"],
         "status": row["status"],
+        "engine": scene.get("engine"),
         "stage": st.stage_info(row["stage"]) if row["status"] == st.PROCESSING else None,
         "situation": scene.get("situation"),
         "result": row.get("result") if row["status"] == st.COMPLETED else None,

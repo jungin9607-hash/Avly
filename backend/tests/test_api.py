@@ -135,6 +135,19 @@ class AnalysisStartTests(ApiTestCase):
         self.assertEqual((r.status_code, r.json()["error"]["code"]), (409, "ANALYSIS_IN_PROGRESS"))
         self.assertEqual(self.client.get(f"/api/v1/accidents/{accident_id}", headers=headers).json()["status"], "analyzing")
 
+    def test_place_is_kept_for_the_worker(self):
+        accident_id, headers = self.make_accident()
+        self.upload(accident_id, headers)
+        r = self.client.post(f"/api/v1/accidents/{accident_id}/analyses", json={"place": "주차장(또는 차도가 아닌 장소)"}, headers=headers)
+        self.assertEqual(r.status_code, 202, r.text)
+        self.assertEqual(self.repo.claim_job()["payload"]["place"], "주차장(또는 차도가 아닌 장소)")
+
+    def test_unknown_place_is_rejected(self):
+        accident_id, headers = self.make_accident()
+        self.upload(accident_id, headers)
+        r = self.client.post(f"/api/v1/accidents/{accident_id}/analyses", json={"place": "하늘"}, headers=headers)
+        self.assertEqual((r.status_code, r.json()["error"]["code"]), (422, "INVALID_PLACE"))
+
     def test_can_start_again_after_failure(self):
         accident_id, headers, analysis_id = self.make_analysis()
         self.repo.update_analysis(UUID(analysis_id), status=st.FAILED, error_code="X", error_message="실패")
@@ -152,6 +165,12 @@ class AnalysisStartTests(ApiTestCase):
         self.repo.update_analysis(UUID(analysis_id), status=st.FAILED, error_code="VIDEO_TOO_LONG", error_message="영상이 깁니다")
         view = self.client.get(f"/api/v1/analyses/{analysis_id}", headers=headers).json()
         self.assertEqual((view["stage"], view["error"]), (None, {"code": "VIDEO_TOO_LONG", "message": "영상이 깁니다"}))
+
+    def test_view_identifies_the_engine_that_actually_created_the_result(self):
+        _, headers, analysis_id = self.make_analysis()
+        self.repo.update_analysis(UUID(analysis_id), status=st.AWAITING_CONFIRMATION, scene={"engine": "fake"})
+        view = self.client.get(f"/api/v1/analyses/{analysis_id}", headers=headers).json()
+        self.assertEqual(view["engine"], "fake")
 
     def test_unsupported_view_and_accident_status(self):
         accident_id, headers, analysis_id = self.make_analysis()
@@ -285,7 +304,11 @@ class MediaTests(ApiTestCase):
 
 class CatalogAndHealthTests(ApiTestCase):
     def test_catalog(self):
-        body = self.client.get("/api/v1/catalog/accident-types").json()
+        first = self.client.get("/api/v1/catalog/accident-types")
+        self.assertEqual(first.headers["cache-control"], "no-cache")
+        again = self.client.get("/api/v1/catalog/accident-types", headers={"If-None-Match": first.headers["etag"]})
+        self.assertEqual((again.status_code, again.content), (304, b""))   # 같으면 본문 없이 확인만
+        body = first.json()
         self.assertEqual(body["count"], 261)
         self.assertEqual({i["role"] for i in body["items"]}, {"A", "B"})
 
@@ -317,6 +340,9 @@ class JobTests(ApiTestCase):
         self.assertEqual((again["id"], again["attempts"]), (job["id"], 2))
         time.sleep(1.1)
         self.assertEqual(self.repo.requeue_stale_jobs(max_age_seconds=1, max_attempts=2), (0, 1))
+        row = self.repo.get_analysis(job["analysis_id"])
+        self.assertEqual((row["status"], row["stage"], row["error_code"]), ("failed", None, "WORKER_TIMEOUT"))
+        self.assertEqual(self.repo.get_accident(row["accident_id"])["status"], "failed")
         self.assertIsNone(self.repo.claim_job())
 
 

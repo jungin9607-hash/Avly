@@ -43,6 +43,10 @@ def matching_context(scene):
     context.observation_issues = list(dict.fromkeys(context.observation_issues + notes))
     return (context, notes)
 
+def candidate_limit():
+    # 장소를 사용자가 골라 후보 범위가 좁아졌으면 사용자가 확인할 수 있게 더 많이 보여 준다
+    return 4 if getattr(ctx, 'place_hint', False) else 2
+
 def conditional_candidates(rows, scene):
     if scene.b_vehicle_id is None or scene.b_identity != '구별됨' or len(scene.road_shape_evidence_frame_ids) < 2:
         return []
@@ -63,7 +67,7 @@ def conditional_candidates(rows, scene):
         role = roles[0] if len(roles) == 1 else '미확인'
         swap = role == 'B'
         candidates.append(Candidate(accident_type=row['accident_type'], dashcam_table_role=role, common_observed_facts=['두 차량의 진행 조건을 비교한 후보'], assumed_conditions=['사용자 사고 상황 확인 전 후보'], a_role_evidence='관찰·사용자 답변과 표 조건 비교', b_role_evidence='관찰·사용자 답변과 표 조건 비교', mapped_a_progress=row['vehicle_b_progress_info_name' if swap else 'vehicle_a_progress_info_name'], mapped_b_progress=row['vehicle_a_progress_info_name' if swap else 'vehicle_b_progress_info_name'], a_evidence_frame_ids=list(scene.a_pre_frame_ids), b_evidence_frame_ids=list(scene.b_pre_frame_ids), a_condition_status='가정', b_condition_status='가정', reason='두 차량 진행 및 핵심 조건과 양립하는 후보. 비율 표시 여부는 별도 검증.'))
-        if len(candidates) == 2:
+        if len(candidates) == candidate_limit():
             break
     return candidates
 
@@ -271,7 +275,7 @@ def prepare_matches_v292(match, rows, scene):
             rejected.append({'id': candidate.accident_type, 'reason': ' / '.join(reasons)})
             continue
         selected.append(candidate)
-        if len(selected) == 2:
+        if len(selected) == candidate_limit():
             break
     if not selected:
         selected = conditional_candidates(rows, scene)
@@ -638,6 +642,8 @@ def strict_user_conflicts(row, scene, role):
     return False
 
 def place_compatible(row, scene):
+    if getattr(ctx, 'place_hint', False):
+        return True   # 사용자가 장소를 골랐다: 표를 이미 그 장소로 좁혀 두었다
     if scene.road_shape == '주차장':
         scope = scene._evidence_audit.get('questionnaire', {}).get('answers', {}).get('parking_scope')
         name = str(row.get('accident_place_name', ''))

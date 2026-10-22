@@ -85,6 +85,21 @@ def confirm(analysis_id: UUID, body: ConfirmRequest, sid: UUID = Depends(session
     return analysis_view(updated)
 
 
+@router.post(
+    "/{analysis_id}/cancel", response_model=AnalysisResponse,
+    responses={**NOT_FOUND, **SESSION, 409: {"model": ErrorResponse, "description": "ANALYSIS_NOT_CANCELLABLE"}},
+)
+def cancel(analysis_id: UUID, sid: UUID = Depends(session_id), repo: Repository = Depends(get_repo)):
+    """대기 중이거나 분석 중인 분석을 취소한다. 취소하면 status 가 failed, error.code 가 CANCELLED 가 되어 같은 영상으로 다시 분석할 수 있다.
+
+    분석 중인 작업은 worker 가 지금 하던 단계를 끝낸 뒤에 멈춘다. 이미 취소했으면 같은 응답을 다시 돌려주고,
+    이미 끝났거나 사용자 확인 단계라면 409 ANALYSIS_NOT_CANCELLABLE 이다."""
+    _own_analysis(analysis_id, sid, repo)
+    if repo.cancel_analysis(analysis_id) == "not_cancellable":
+        raise AppError(409, "ANALYSIS_NOT_CANCELLABLE", "대기 중이거나 분석 중인 분석만 취소할 수 있습니다.")
+    return analysis_view(repo.get_analysis(analysis_id, sid))
+
+
 @router.post("/{analysis_id}/reports", status_code=501, responses={**NOT_FOUND, **SESSION})
 def create_report(analysis_id: UUID, sid: UUID = Depends(session_id), repo: Repository = Depends(get_repo)):
     """서버에서 만드는 PDF 는 아직 없다. 화면의 '분석 결과 저장'은 브라우저의 PDF 저장(인쇄)을 쓴다."""

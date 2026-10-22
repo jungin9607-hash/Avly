@@ -103,6 +103,12 @@
   margin-top: -6px;
   color: var(--text);
 }
+/* 고른 상황과 AI 관찰이 어긋날 때의 안내: 요약 아래 */
+.tl-situation-check {
+  width: min(100%, 420px);
+  margin: 0 0 18px;
+  font-size: var(--tl-font-body);
+}
 /* 지금 보고 있는 시점: 바뀔 때마다 살짝 떠오름 */
 .tl-now {
   --now: var(--accent);

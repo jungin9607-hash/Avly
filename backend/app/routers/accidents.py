@@ -4,7 +4,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, UploadFile, status
 
-from app import storage
+from app import catalog, storage
 from app.config import settings
 from app.deps import get_repo, own_accident
 from app.errors import AppError
@@ -14,6 +14,7 @@ from app.schemas import (
     AccidentCreated,
     AccidentDetailResponse,
     AnalysisStartResponse,
+    StartAnalysisRequest,
     ErrorResponse,
     VideoResponse,
     VideoUrlResponse,
@@ -95,13 +96,16 @@ def video_url(accident: dict = Depends(own_accident), repo: Repository = Depends
     "/{accident_id}/analyses", response_model=AnalysisStartResponse, status_code=status.HTTP_202_ACCEPTED,
     responses={**NOT_FOUND, **SESSION, 409: {"model": ErrorResponse, "description": "VIDEO_REQUIRED 또는 ANALYSIS_IN_PROGRESS"}},
 )
-def start_analysis(accident: dict = Depends(own_accident), repo: Repository = Depends(get_repo)):
+def start_analysis(body: StartAnalysisRequest | None = None, accident: dict = Depends(own_accident), repo: Repository = Depends(get_repo)):
     """분석을 시작하고 바로 202 를 돌려준다. 결과는 status_url 을 반복해서 조회해 확인한다."""
     original = repo.get_video(accident["id"], "original")
     if original is None:
         raise AppError(409, "VIDEO_REQUIRED", "분석하려면 먼저 사고 영상을 올려야 합니다.")
     try:
-        analysis = repo.create_analysis(accident["id"], original["id"])
+        place = body.place if body else None
+        if place is not None and place not in catalog.PLACE_GROUPS:
+            raise AppError(422, "INVALID_PLACE", "알 수 없는 사고 장소입니다.")
+        analysis = repo.create_analysis(accident["id"], original["id"], place)
     except ActiveAnalysisExists:
         raise AppError(409, "ANALYSIS_IN_PROGRESS", "이미 진행 중인 분석이 있습니다.") from None
     return {"analysis_id": analysis["id"], "status": analysis["status"], "status_url": f"/api/v1/analyses/{analysis['id']}"}

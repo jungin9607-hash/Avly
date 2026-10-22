@@ -22,15 +22,29 @@ export function easyLabel(items, level, value) {
   return found ? easyOf(found, level) : value;
 }
 
+// 과실표의 원래 이름은 다른데 쉬운 말이 같은 값("(마주보며) [적색신호] 직진"과 "[적색신호] 직진" 등)은 같은 보기로 본다.
+const sameValue = (items, level, item, value) => item[level] === value || (Boolean(value) && easyOf(item, level) === easyLabel(items, level, value));
+
 // selection 의 앞 항목들과 맞는 선택지만 남긴다.
-function matching(items, selection, upTo) {
-  return items.filter((item) => LEVELS.slice(0, upTo).every((level) => item[level] === selection[level]));
+export function matching(items, selection, upTo) {
+  return items.filter((item) => LEVELS.slice(0, upTo).every((level) => sameValue(items, level, item, selection[level])));
+}
+
+// 같은 쉬운 말은 한 번만 보여 준다(처음 나온 원래 이름을 값으로 쓴다).
+function uniqueByEasy(items, level, subset) {
+  const seen = new Set();
+  return unique(subset.map((item) => item[level])).filter((value) => {
+    const label = easyLabel(items, level, value);
+    if (seen.has(label)) return false;
+    seen.add(label);
+    return true;
+  });
 }
 
 // 각 항목에서 고를 수 있는 값. 앞 항목을 바꾸면 뒤 항목의 보기가 좁혀진다.
 export function cascade(items, selection) {
   return Object.fromEntries(
-    LEVELS.map((level, index) => [level, unique(matching(items, selection, index).map((item) => item[level]))]),
+    LEVELS.map((level, index) => [level, uniqueByEasy(items, level, matching(items, selection, index))]),
   );
 }
 
@@ -45,7 +59,7 @@ export function normalizeSelection(items, selection) {
   const next = { ...selection };
   const options = cascade(items, next);
   for (const level of LEVELS) {
-    if (next[level] && !options[level].includes(next[level])) {
+    if (next[level] && !options[level].some((value) => value === next[level] || easyLabel(items, level, value) === easyLabel(items, level, next[level]))) {
       for (const later of LEVELS.slice(LEVELS.indexOf(level))) next[later] = "";
       break;
     }
@@ -54,8 +68,86 @@ export function normalizeSelection(items, selection) {
   return next;
 }
 
+// 선택지가 하나뿐인 항목은 사용자가 고르지 않아도 정해진다. 앞 항목이 정해진 뒤에만 채운다. (selection 은 바꾸지 않고 새 값을 돌려준다)
+export function autoFill(items, selection) {
+  const next = { ...selection };
+  for (const [index, level] of LEVELS.entries()) {
+    if (next[level] || (index > 0 && !next[LEVELS[index - 1]])) continue;
+    const choices = cascade(items, next)[level];
+    if (choices.length === 1) next[level] = choices[0];
+  }
+  return next;
+}
+
+// 후보들이 모두 같은 장소(그리고 같은 사고 유형)를 가리키면 그것을 미리 고를 값으로 돌려준다. 후보가 없으면 null.
+// 움직임(내 차·상대 차)은 후보마다 다를 수 있어서 비워 둔다.
+export function commonSelection(candidates) {
+  if (!candidates?.length) return null;
+  const same = (level) => (candidates.every((c) => c[level] === candidates[0][level]) ? candidates[0][level] : "");
+  const place = same("place");
+  return { place, feature: place ? same("feature") : "", my_progress: "", other_progress: "" };
+}
+
 export function selectionFrom(option) {
   return option ? Object.fromEntries(LEVELS.map((level) => [level, option[level]])) : Object.fromEntries(LEVELS.map((level) => [level, ""]));
+}
+
+// ---------------------------------------------------------------- AI 가 본 상황 (확인 화면, 결과 화면, 타임라인 화면이 같은 문장을 쓴다)
+// 서버가 주는 모델의 요약 문장("도로 형태: …. 내 차: …")은 내부 표기라서 그대로 보여 주지 않는다.
+// 구조화된 값(도로, 내 차, 상대 차, 접촉)을 쉬운 말로 풀어 쓰고, AI 의 추정이라는 것이 드러나게 한다.
+const NOT_SURE = "AI가 알아보지 못했어요";
+const ACTION_EASY = {
+  "정지/대기": "멈춰 있거나 기다리는 중",
+  "주차 중": "주차해 있는 중",
+  후진: "후진하는 중",
+  "주차 출차": "주차구역에서 나오는 중",
+  출발: "출발하는 중",
+  직진: "직진하는 중",
+  "교차로 진입": "교차로에 들어서는 중",
+  "교차로 내 회전": "교차로 안에서 도는 중",
+  진출: "도로에서 빠져나가는 중",
+  좌회전: "좌회전하는 중",
+  우회전: "우회전하는 중",
+  진로변경: "차로를 바꾸는 중",
+};
+const UNKNOWN_VALUES = ["", "미확인", "기타"];
+
+const known = (value) => (value && !UNKNOWN_VALUES.includes(value) ? value : null);
+const actionText = (action) => (known(action) ? (ACTION_EASY[action] ?? action) : NOT_SURE);
+
+// 움직임 한 줄. 검증된 값이 없어도 모델이 기록한 추정(hint)이 있으면 "(추정)"을 붙여 보여 준다
+function actionRow(action, hint) {
+  if (known(action)) return actionText(action);
+  return known(hint) ? `${ACTION_EASY[hint] ?? hint} (추정)` : NOT_SURE;
+}
+
+// [{ label, text }] 도로·내 차·상대 차·접촉. 구조화된 값이 하나도 없으면(예전에 저장된 결과) null
+export function easySituation(situation) {
+  if (!situation || !["road_shape", "my_action", "other_action", "contact", "my_action_hint", "other_action_hint"].some((key) => situation[key])) return null;
+  const rows = [
+    { label: "도로", text: known(situation.road_shape) ?? NOT_SURE },
+    { label: "내 차", text: actionRow(situation.my_action, situation.my_action_hint) },
+    { label: "상대 차", text: actionRow(situation.other_action, situation.other_action_hint) },
+  ];
+  if (situation.contact) rows.push({ label: "접촉", text: SENTENCES["접촉 근거 구간"][situation.contact] ?? SENTENCES["접촉 근거 구간"].default });
+  return rows;
+}
+
+// 한 줄로 이어 붙인 문장(결과 화면과 타임라인 화면의 설명). 구조화된 값이 없으면 서버가 준 요약을 그대로 쓴다.
+export function easySituationLine(situation, fallback) {
+  const rows = easySituation(situation);
+  return rows ? `AI가 영상에서 본 모습(추정) — ${rows.map((row) => `${row.label}: ${row.text}`).join(" · ")}` : fallback;
+}
+
+// 사용자가 고른 상황이 AI 의 관찰과 어긋나면 알림 문구를, 아니면 null. (어긋남 판단은 서버가 한다)
+export function toSituationCheck(result) {
+  const check = result?.situation_check;
+  if (!check?.conflict || !check.items?.length) return null;
+  return {
+    title: "고르신 상황이 AI가 영상에서 본 내용과 달라요",
+    body: "아래 타임라인과 요약은 AI가 영상에서 본 그대로예요. 고르신 내용과 다를 수 있으니 참고용으로만 봐 주세요.",
+    lines: check.items.map((item) => `${item.who === "me" ? "내 차" : "상대 차"} — AI가 본 모습: ${actionText(item.ai_action)} / 고르신 내용: ${item.chosen}`),
+  };
 }
 
 // ---------------------------------------------------------------- 분석 진행 단계
@@ -102,9 +194,10 @@ export function toReportModel(result, analysisId) {
     state,
     header: {
       title: "과실 분석 결과",
-      desc: result.summary ?? "블랙박스 영상을 분석해 산정한 과실 비율과 그 근거예요.",
+      desc: easySituationLine(result.situation, result.summary) ?? "블랙박스 영상을 분석해 산정한 과실 비율과 그 근거예요.",
       keywords: type ? [easyOf(type, "place"), easyOf(type, "feature"), `식별 코드 ${String(analysisId ?? "").slice(0, 8)}`] : [`식별 코드 ${String(analysisId ?? "").slice(0, 8)}`],
     },
+    situationCheck: toSituationCheck(result),
     appliedCount: applied,
     factorHeader: { kicker: "판단 근거", desc: (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) },
     statusText: result.explanation?.status ?? "",
@@ -324,6 +417,7 @@ export function describeAnalysis({ session, analysis, error, loading, analysisId
         link: { to: ROUTES.home, label: "다른 영상 올리기" },
       };
     case "failed":
+      if (analysis.error?.code === "CANCELLED") return { title: "분석을 취소했어요", body: "이 분석은 취소돼서 결과가 없어요. 새 영상으로 다시 분석할 수 있어요.", link: { to: ROUTES.home, label: "새 영상 올리기" } };
       return { title: "분석하지 못했어요", body: analysis.error?.message };
     default:
       return { title: "결과를 볼 수 없어요" };

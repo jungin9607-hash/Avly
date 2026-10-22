@@ -11,6 +11,9 @@
   font-family: "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
   font-size: 13px;
   line-height: 1.65;
+  text-align: left;   /* 앱 전체 스타일의 가운데 정렬을 물려받지 않게 한다 */
+  word-break: keep-all;   /* 한글을 단어 단위로 줄바꿈한다 */
+  overflow-wrap: anywhere;
   padding-bottom: 40px;
 }
 .rd * { box-sizing: border-box; }
@@ -82,10 +85,8 @@
 .rd-table th, .rd-table td { border: 1px solid var(--rd-line); padding: 5px 8px; vertical-align: top; text-align: left; }
 .rd-table thead th { background: var(--rd-soft); font-size: 12px; }
 .rd-kv th { width: 28%; background: var(--rd-soft); font-weight: 700; }
-.rd-steps .is-base td { background: #fafbfd; }
 .rd-detail { font-size: 12px; color: var(--rd-muted); }
 .rd-num { white-space: nowrap; text-align: right; }
-.rd-steps th.rd-w { width: 58px; white-space: nowrap; text-align: right; }
 
 .rd-case { padding: 8px 10px; border: 1px solid var(--rd-line); border-radius: 4px; margin: 6px 0; }
 .rd-case p { margin: 3px 0; }
@@ -98,6 +99,36 @@
 .rd-closing li { margin: 2px 0; }
 .rd-foot { margin-top: 14px; padding-top: 6px; border-top: 1px solid var(--rd-line); color: var(--rd-muted); font-size: 11px; text-align: center; }
 
+.rd-section h3 { margin: 14px 0 4px; font-size: 13px; color: var(--rd-ink); }
+.rd-oneline { margin: 2px 0 8px; font-size: 15px; font-weight: 700; line-height: 1.55; }
+
+/* 2. 사고 진행: 세로 줄 위에 단계가 이어진다 */
+.rd-story { list-style: none; margin: 6px 0; padding: 0 0 0 14px; border-left: 3px solid var(--rd-line); }
+.rd-story li { position: relative; margin: 0 0 10px; padding-left: 12px; }
+.rd-story li::before { content: ""; position: absolute; left: -22px; top: 5px; width: 11px; height: 11px; border-radius: 50%; background: var(--rd-accent); border: 2px solid #fff; }
+.rd-story p { margin: 1px 0; }
+.rd-story-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.rd-time { color: var(--rd-muted); font-size: 12px; }
+
+/* 3. 비율 계산: 기본 비율에서 한 단계씩 */
+.rd-steps { list-style: none; margin: 6px 0; padding: 0; }
+.rd-steps li { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--rd-line); border-top-width: 0; }
+.rd-steps li:first-child { border-top-width: 1px; border-radius: 4px 4px 0 0; }
+.rd-steps li:last-child { border-radius: 0 0 4px 4px; }
+.rd-steps li.is-base { background: var(--rd-soft); }
+.rd-step-text p { margin: 2px 0 0; color: var(--rd-muted); font-size: 12px; }
+.rd-change { margin-left: 8px; padding: 1px 7px; border-radius: 999px; background: var(--rd-soft); border: 1px solid var(--rd-line); font-size: 12px; font-weight: 700; color: var(--rd-accent); }
+.rd-step-ratio { display: flex; gap: 12px; white-space: nowrap; font-size: 12px; color: var(--rd-muted); }
+.rd-step-ratio b { font-size: 15px; color: var(--rd-ink); }
+.rd-more { margin-top: 8px; }
+
+/* 4. 판례: 비슷한 점과 다른 점을 먼저 */
+.rd-case-summary { font-weight: 700; }
+.rd-pair { font-size: 12.5px; }
+.rd-same, .rd-diff { display: inline-block; min-width: 54px; margin-right: 6px; padding: 0 6px; border-radius: 4px; font-size: 11.5px; text-align: center; }
+.rd-same { background: #e3f1ea; color: #14633f; }
+.rd-diff { background: #f8e9e4; color: #8f3b25; }
+
 @media (max-width: 700px) {
   .rd-page { padding: 14px 12px; }
   .rd-table { font-size: 12px; }
@@ -109,10 +140,10 @@
   .rd { background: #fff; padding: 0; }
   .rd-toolbar { display: none; }
   .rd-page { width: auto; max-width: none; margin: 0; padding: 0 15mm; box-shadow: none; }
-  .rd-section, .rd-case, .rd-laws li { break-inside: avoid; }
+  .rd-section, .rd-case, .rd-laws li, .rd-steps li, .rd-story li { break-inside: avoid; }
   .rd-table tr { break-inside: avoid; }
   .rd-section h2 { break-after: avoid; }
-  .rd-bar, .rd-bar span, .rd-tag, .rd-table thead th, .rd-kv th, .rd-summary, .rd-notice {
+  .rd-bar, .rd-bar span, .rd-tag, .rd-same, .rd-diff, .rd-change, .rd-steps li.is-base, .rd-table thead th, .rd-kv th, .rd-summary, .rd-notice {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }

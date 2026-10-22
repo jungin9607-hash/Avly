@@ -534,3 +534,17 @@ def apply_user_road_context(scene, digest):
     scene.road_place_codes = list(dict.fromkeys((r['accident_place'] for r in ctx.table if r['accident_place_name'] == facts['road_shape'])))
     scene._evidence_audit.setdefault('road_context_consistency', {}).update(resolved_shape=scene.road_shape, status='user_context', model_detail_shape=before)
     return True
+
+
+def sanitize_signal_check(scene):
+    """신호 관찰에 근거 프레임이 2장 미만이면 신호등 유무·작동·색을 모두 미확인으로 되돌린다.
+
+    신호 값은 후보 선택에 크게 쓰인다(신호등 있음+정상 작동이면 '신호등 없음' 유형이 후보에서 빠진다). 그래서 다른 관찰처럼 근거가 있을 때만 쓴다.
+    """
+    sig = scene.signal_check
+    unknown = (sig.signal_present, sig.signal_operating, sig.a_signal, sig.b_signal) == ('미확인',) * 4
+    if unknown or len(set(sig.evidence_frame_ids)) >= 2:
+        return False
+    scene.observation_issues = list(dict.fromkeys(scene.observation_issues + ['신호 관찰의 근거 프레임이 2장 미만이라 신호등 유무·색을 미확인으로 처리']))
+    scene.signal_check = SignalCheck()
+    return True

@@ -34,7 +34,7 @@ export default function Home() {
   const [leaving, setLeaving] = useState(false); // 진행 중인 팝업을 닫으려 할 때 나가도 되는지 묻는 중
   const [params] = useSearchParams();
   const resumeId = params.get("resume"); // 결과 화면에서 "이어서 확인하기"로 들어온 분석 번호
-  const { state: flow, start, choose, confirm, back, reset } = useAnalysisFlow(resumeId);
+  const { state: flow, start, choose, confirm, cancel, back, reset } = useAnalysisFlow(resumeId);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -80,9 +80,9 @@ export default function Home() {
     inputRef.current.click();
   };
 
-  const begin = ({ retention }) => {
+  const begin = ({ retention, place }) => {
     setStarted(true);
-    start(pending[0], retention);
+    start(pending[0], retention, place);
   };
 
   // 결과가 나오면 결과 화면으로 이동한다
@@ -152,6 +152,7 @@ export default function Home() {
           onPickAnother={pickAnother}
           onChoose={choose}
           onConfirm={confirm}
+          onCancel={cancel}
           onBack={back}
         />
       )}

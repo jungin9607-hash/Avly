@@ -14,6 +14,10 @@ from app import catalog
 from app.config import settings
 from avly.constants import CASE_TARGET_COUNT
 
+# 이미 DB 에 연결돼 버린 잘못된 판례. 자료를 고쳐도 DB 의 연결은 남아서 화면에서만 뺀다.
+#   126(직진 출차)에 후진 출차 사례(2015나37411)가 붙어 있었다. 이 사례는 127(후진 출차)의 것이다.
+WRONG_LINKS = {126: ("2015나37411",)}
+
 logger = logging.getLogger(__name__)
 
 RETRY_AFTER = {"found": timedelta(days=7), "empty": timedelta(days=1), "error": timedelta(minutes=10)}
@@ -105,11 +109,15 @@ class CaseService:
         from avly.tables import VERIFIED_CASES
         return sum(self.save(type_id, cases) for type_id, cases in VERIFIED_CASES.items())
 
+    def _linked(self, accident_type_id: int) -> list[dict]:
+        wrong = WRONG_LINKS.get(accident_type_id, ())
+        return [r for r in self.repo.cases_for_type(accident_type_id) if r["case_number"] not in wrong]
+
     def related_for(self, accident_type_id: int) -> list[dict]:
-        rows = self.repo.cases_for_type(accident_type_id)
+        rows = self._linked(accident_type_id)
         if len(rows) < self.target and self._may_fetch(accident_type_id):
             self._fetch(accident_type_id)
-            rows = self.repo.cases_for_type(accident_type_id)
+            rows = self._linked(accident_type_id)
         return [view(r) for r in rows][: max(self.target, 1)]
 
     def _may_fetch(self, accident_type_id: int) -> bool:

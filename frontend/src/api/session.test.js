@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { beforeEach, test } from "node:test";
-import { expireAnalysis, getSession, lastAnalysisId, rememberAnalysis, wasExpired } from "./session.js";
+import { expireAnalysis, forgetAnalysis, getSession, lastAnalysisId, rememberAnalysis, wasExpired } from "./session.js";
 
 // 브라우저의 localStorage 를 흉내 낸다
 beforeEach(() => {
@@ -38,4 +38,33 @@ test("모르는 분석은 끝난 것이 아니라 없는 것이다", () => {
 test("만료 시각을 모르는 이전 기록도 그대로 쓴다", () => {
   rememberAnalysis("a1", "acc1", "sid1");
   assert.equal(getSession("a1").sessionId, "sid1");
+});
+
+test("저장소 읽기와 쓰기가 차단되어도 현재 탭에서 결과에 접근하고 삭제할 수 있다", () => {
+  window.localStorage = {
+    getItem() { throw new Error("blocked"); },
+    setItem() { throw new Error("blocked"); },
+  };
+  rememberAnalysis("a1", "acc1", "sid1", inHours(2));
+  assert.equal(getSession("a1").sessionId, "sid1");
+  assert.equal(lastAnalysisId(), "a1");
+  expireAnalysis("a1");
+  assert.equal(getSession("a1"), null);
+  assert.equal(wasExpired("a1"), true);
+  assert.equal(lastAnalysisId(), null);
+  forgetAnalysis("a1");
+  assert.equal(wasExpired("a1"), false);
+});
+
+test("쓰기만 차단된 저장소도 메모리의 최신 값과 만료 상태를 사용한다", () => {
+  rememberAnalysis("a1", "acc1", "old", inHours(2));
+  window.localStorage.setItem = () => { throw new Error("quota"); };
+  rememberAnalysis("a1", "acc1", "new", inHours(2));
+  assert.equal(getSession("a1").sessionId, "new");
+  expireAnalysis("a1");
+  assert.equal(getSession("a1"), null);
+  assert.equal(lastAnalysisId(), null);
+  rememberAnalysis("a2", "acc2", "sid2", inHours(-1));
+  assert.equal(getSession("a2"), null);
+  assert.equal(wasExpired("a2"), true);
 });

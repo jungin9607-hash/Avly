@@ -14,6 +14,8 @@ def delete_expired(repo: Repository, at: datetime | None = None) -> int:
     for video in repo.videos_to_delete(at):
         try:
             storage.delete(video["storage_key"])
+            if video["kind"] == "masked":
+                storage.delete_model_artifacts(video["storage_key"])
         except Exception:
             logger.exception("영상 삭제 실패: %s", video["id"])
             continue
