@@ -150,7 +150,7 @@ POST /accidents (동의, session_id 받기)
 고른 유형에 등록된 가감요소를 쉬운 말 질문으로 돌려준다. 등록되지 않은 유형은 `registered: false`, `questions: []`이고 기본 비율만 안내한다(**133개 유형 중 122개 등록**, 나머지 11개는 PDF와 과실표의 기본 비율이 달라 뺐다).
 
 ```json
-{ "accident_type_id": 11, "role": "A", "registered": true, "questions": [ {
+{ "accident_type_id": 11, "role": "A", "registered": true, "held_back": 6, "questions": [ {
   "key": "other.signal_delay", "factor": "signal_delay", "who": "상대 차", "group": "B_signal",
   "title": "방향지시등을 켜지 않았거나 너무 늦게 켰어요", "easy": "차선을 바꾸기 전에 …",
   "question": "상대 차가 방향지시등을 켜지 않았거나, 차선을 바꾸는 순간에야 켰나요?",
@@ -163,7 +163,8 @@ POST /accidents (동의, session_id 받기)
 - **`예`라고 답하면 그 가감요소가 적용되도록** 질문을 썼다. `key`는 `me.`(내 차) 또는 `other.`(상대 차)로 시작한다.
 - `suggested`는 영상에서 관찰·추정한 것이 있을 때만 있다 (사용자가 답하기 전의 AI 제안). 사용자의 답이 항상 우선한다.
 - `needs_user`: 영상만으로는 알 수 없는 항목 (예: 현저한 과실). 항상 사용자에게 묻는다.
-- `reviewed: false`는 쉬운 말 문장을 아직 사람이 검수하지 않았다는 뜻이다.
+- **쉬운 말 검수가 끝난 가감요소만 묻는다.** 규칙(숫자)을 확인한 유형이어도 쉬운 말(제목·설명·질문)이 검수 전인 가감요소는 질문에도 계산에도 쓰지 않는다. 쓰지 않은 가감요소 수는 `held_back`이다. 이 값이 0보다 크면 결과는 `state: partial`("확인한 요소만 반영")이고 `fault.final`은 `null`이다. 쓸 수 있는 가감요소가 하나도 없으면 `registered: false`, `questions: []`(기본 비율만 안내)이다. 어느 유형이 대상인지는 [supported-types.md](review/supported-types.md)에 있다.
+- 개발·시험에서 검수 전 가감요소까지 전부 보려면 서버 `.env`에 `AVLY_REQUIRE_WORDING_REVIEW=0`(규칙 검수 전 유형까지 보려면 `AVLY_REQUIRE_RULE_REVIEW=0`)을 적는다.
 
 ### POST /api/v1/analyses/{id}/confirm
 
@@ -197,7 +198,7 @@ POST /accidents (동의, session_id 받기)
 | `accident_type` | 확정한 유형 (`accident_type_id`, `role`, `place`, `feature`, `my_progress`, `other_progress`). `unresolved`면 `null` |
 | `fault` | `base`(기본), `adjusted`(반영한 값, `partial`도 있음), `final`(`final` 상태일 때만 값), `bounds_applied`. 각각 `{me, other}`. `unresolved`면 `null` |
 | `steps[]` | 화면의 단계 카드: `kind`(`base`/`adjustment`), `title`, `easy`, `effect`, `who`, `factor`, `delta_pp`, **그 단계까지 반영한 `me`, `other`** |
-| `adjustments` | `registered`, `applied[]`, `not_applied[]`(이유 포함), `pending[]`(확인하지 못한 요소, `question` 포함) |
+| `adjustments` | `registered`, `applied[]`, `not_applied[]`(이유 포함), `pending[]`(확인하지 못한 요소, `question` 포함), `held_back`(쉬운 말 검수 전이라 반영하지 않은 가감요소 수) |
 | `laws[]` | 관련 도로교통법 조문: `article`, `label`, `name`, `easy`, `missing`(풀이를 아직 안 썼으면 true) |
 | `explanation` | `base`, `situation`, `status` (쉬운 말 문장, **AI 가 아니라 미리 쓴 문장**) |
 | `timeline[]` | 구간: `kind`, `actor`(`me`/`other`/`both`), `start_sec`, `end_sec`(**영상 시작 기준 초**), `description`, `certainty`, `evidence_text`, `stage`. `kind`가 `사고 흐름`인 이벤트는 AI가 쓴 사고 진행 단계(`stage`: 접근 / 사고 직전 / 접촉 / 접촉 이후, 최대 4개, `actor`는 `null`)이고, 장면 인용 검증과 판단 표현·수치·접촉 단정 검사를 통과한 것만 담는다. 없으면(예전 결과나 상세 확인을 하지 않은 영상) 내 차 움직임·상대 차 확인·접촉 근거 구간만 있다 |

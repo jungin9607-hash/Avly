@@ -75,3 +75,10 @@ test("서버가 취소했다고 알려 주면(예: 이어서 보기로 들어온
   const local = reducer(analyzing, { type: "failed", error: { code: "CANCELLED", message: "분석을 취소했어요." } });
   assert.deepEqual([local.phase, local.error.code], ["failed", "CANCELLED"]);
 });
+
+test("가감요소 질문 화면은 검수 전이라 묻지 않은 항목 수를 가진다", () => {
+  const confirming = { ...analyzing, phase: "confirming" };
+  const option = { accident_type_id: 11, role: "A" };
+  assert.equal(reducer(confirming, { type: "adjusting", option, questions: [], heldBack: 4 }).heldBack, 4);
+  assert.equal(reducer(confirming, { type: "adjusting", option, questions: [] }).heldBack, 0);
+});

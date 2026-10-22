@@ -18,7 +18,7 @@ export default function FlowModals({ file, started, flow, onBegin, onClose, onPi
     case "confirming":
       return <SituationConfirmModal situation={flow.situation} items={flow.catalog} onChoose={onChoose} onClose={onClose} />;
     case "adjusting":
-      return <AdjustmentModal option={flow.option} questions={flow.questions} onSubmit={(answers) => onConfirm(flow.option, answers)} onBack={onBack} onClose={onClose} />;
+      return <AdjustmentModal option={flow.option} questions={flow.questions} heldBack={flow.heldBack} onSubmit={(answers) => onConfirm(flow.option, answers)} onBack={onBack} onClose={onClose} />;
     case "unsupported":
       return (
         <NoticeModal

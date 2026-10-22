@@ -8,12 +8,12 @@ from app.situation_check import situation_check
 from app.worker import compare
 from avly import explain
 from avly.constants import REPORT_NOTICE
-from avly.tables import LAW_ARTICLES_BY_TYPE
+from avly.tables import LAW_ARTICLES_BY_TYPE, WORDING_HELD_BACK
 
 STATUS_TEXT = {
     "final": "등록된 가감요소를 모두 확인해서 계산한 예상 비율이에요.",
     "partial": "확인된 가감요소만 반영했어요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요.",
-    "base_only": "이 사고 유형은 가감요소가 아직 등록되지 않아 기본 비율만 안내해요.",
+    "base_only": "이 사고 유형은 검수가 끝난 가감요소가 아직 없어서 기본 비율만 안내해요.",
     "unresolved": "과실표에서 맞는 사고 유형을 찾지 못해 과실비율을 안내할 수 없어요. 상황 설명만 참고해 주세요.",
 }
 WHO = {"A": "내 차", "B": "상대 차"}   # 규칙 엔진의 A = 블랙박스 차량 = 내 차
@@ -44,11 +44,12 @@ def _item(entry: dict, **extra) -> dict:
             "delta_pp": entry["delta_pp"], "reviewed": e["reviewed"], **extra}
 
 
-def _state(config_registered: bool, out: dict) -> str:
+def _state(config_registered: bool, out: dict, held_back: int = 0) -> str:
     if not config_registered:
         return "base_only"
     if out.get("final_fault") is not None:
-        return "final"
+        # 쉬운 말 검수가 끝나지 않아 반영하지 않은 가감요소가 있으면 '모두 확인한 비율'이라고 할 수 없다
+        return "partial" if held_back else "final"
     if out.get("adjusted_fault") is not None:
         return "partial"
     return "base_only"   # 규칙표와 CSV 가 달라 가감을 적용하지 못한 경우
@@ -96,7 +97,8 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
     }
     out = evaluate_rule_input({"scenarios": [scenario], "factors": catalog.answers_to_facts(confirmed.get("answers", {}))})["results"][0]
     registered = bool(out.get("source"))
-    state = _state(registered, out)
+    held_back = WORDING_HELD_BACK.get(str(type_id), 0)
+    state = _state(registered, out, held_back)
 
     base_text = explain.explain_base(option["base_me"], option["base_other"], option["place"],
                                      option["my_progress"], option["other_progress"])
@@ -119,10 +121,10 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
         "state": state,
         "accident_type": {k: option[k] for k in ("accident_type_id", "role", "place", "feature", "my_progress", "other_progress", "easy")},
         "fault": {"base": {"me": option["base_me"], "other": option["base_other"]}, "adjusted": _pair(out.get("adjusted_fault")),
-                  "final": _pair(out.get("final_fault")), "bounds_applied": bool(out.get("bounds_applied"))},
+                  "final": None if held_back else _pair(out.get("final_fault")), "bounds_applied": bool(out.get("bounds_applied"))},
         "steps": steps,
         "adjustments": {
-            "registered": registered, "applied": applied,
+            "registered": registered, "applied": applied, "held_back": held_back,   # held_back: 쉬운 말 검수 전이라 반영하지 않은 가감요소 수
             "not_applied": [_item(e, reason=e.get("reason")) for e in out["not_applied"]],
             "pending": [_item(e, question=explain.explain_factor(e["factor"], e["delta_pp"], WHO[e["actor"]])["question"])
                         for e in out["pending"]],

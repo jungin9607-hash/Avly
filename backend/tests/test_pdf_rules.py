@@ -9,6 +9,7 @@ from avly.adjustments import evaluate_rule_input
 from avly.tables import ADJUSTMENT_RULES, FACTOR_LABELS
 
 BLOCKED = {2, 55, 56, 57, 79, 86, 87, 88, 120, 123, 127}   # PDF 와 CSV 의 기본 비율·조건이 달라 일부러 등록하지 않은 유형
+DELETED = {38, 39, 41, 42, 89}   # 검수 결정(2026-10-22)으로 지운 유형: PDF 에 해당 가감요소가 없다. 38·39·41·42 는 이름에 선진입/후진입이 이미 들어 있는데 '명확한 선진입' 가감이 또 붙어 있었고, 89 는 가감 항목의 차량 대응이 맞지 않았다
 PENDING_REVIEW = {0, 4, 8, 25, 26, 107, 108}               # 원문에서 역할·수치가 불분명한 항목이 남은 유형
 
 
@@ -26,11 +27,11 @@ def evaluate(type_id, answers=(), role="A"):
 
 
 class DataTests(unittest.TestCase):
-    def test_coverage_grew_from_7_to_122_types_and_blocked_types_stay_out(self):
+    def test_coverage_grew_from_7_to_117_types_and_blocked_or_deleted_types_stay_out(self):
         registered = {int(k) for k in ADJUSTMENT_RULES}
-        self.assertEqual(len(registered), 122)
-        self.assertEqual(registered & BLOCKED, set())
-        self.assertEqual(registered | BLOCKED, set(range(133)))
+        self.assertEqual(len(registered), 117)
+        self.assertEqual(registered & (BLOCKED | DELETED), set())
+        self.assertEqual(registered | BLOCKED | DELETED, set(range(133)))
 
     def test_every_registered_type_matches_the_fault_table(self):
         for key, config in ADJUSTMENT_RULES.items():

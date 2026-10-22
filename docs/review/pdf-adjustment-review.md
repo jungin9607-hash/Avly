@@ -3,6 +3,15 @@
 손해보험협회 과실비율 인정기준(2023.06) PDF에서 팀원이 뽑은 가감요소를 기존 `adjustment_rules.json`에 합쳤습니다. 가감요소가 등록된 유형은 **7개에서 122개**(133개 중)가 되었고, 새로 들어온 규칙은 **838개**(유형 115개), 쉬운 말은 **48개**입니다.
 검수 전 규칙 838개, 검수 전 쉬운 말 48개입니다. 숫자가 틀리면 과실비율이 틀리므로 서비스에 쓰기 전에 사람이 확인해야 합니다.
 
+## 서비스에 켜지는 조건 (현재)
+
+가감요소는 **두 가지를 모두 사람이 확인한 것만** 서비스에 쓰입니다.
+1. 그 유형의 규칙(숫자)을 확인했다 (`adjustment_rules.json`의 `reviewed`)
+2. 그 가감요소의 쉬운 말(제목·설명·질문)을 확인했다 (`adjustment_explanations.json`의 `reviewed`)
+
+그래서 규칙을 확인한 유형이어도 쉬운 말이 검수 전인 가감요소는 묻지도 계산하지도 않고, 그 유형의 결과는 "확인한 요소만 반영한 비율"로 안내합니다.
+**지금 어떤 유형이 대상인지**는 [supported-types.md](supported-types.md), **아직 확인이 끝나지 않은 것**은 [pending-review-requests.md](pending-review-requests.md)에 있습니다.
+
 ## 검수 방법
 
 ### 가장 쉬운 방법: 검수 페이지 (JSON을 열지 않아도 됩니다)
@@ -10,8 +19,9 @@
 2. 카드를 열어 적힌 내용이 PDF 원문과 맞는지 보고 **맞아요 / 틀려요 / 모르겠어요**를 누릅니다. 쉬운 문장 탭에서는 문장을 바로 고칠 수도 있습니다. 중간에 닫아도 자동 저장됩니다.
 3. 다 하면 **내보내기**를 눌러 받은 파일(`검수결과_이름_날짜.json`)을 담당자에게 보냅니다.
 4. 담당자는 받은 파일을 한 폴더에 모아 `docker compose exec backend python tools/apply_review.py 파일1.json 파일2.json`을 실행합니다. 모두 맞다고 확인한 유형만 켜지고, 틀린 곳은 [review-issues.md](review-issues.md)에 모입니다. 두 사람의 결정이 다르면 반영하지 않고 이슈로 남깁니다.
-5. 얼마나 됐는지는 `docker compose exec backend python -m app.review_status`로 봅니다.
-6. 규칙이나 문장이 바뀌면 `docker compose exec -T backend python tools/make_review_page.py > docs/review/review.html`로 페이지를 다시 만듭니다.
+5. **받은 검수 파일을 읽기 쉽게 보려면** `python tools/make_review_results_page.py 파일1.json 파일2.json ...`을 실행하세요. 문제가 있는 유형은 PDF 원문과 우리 데이터를 나란히, 쉬운 문장은 사용자에게 보이는 모습으로 풀어서 `docs/review/review-results.html` 한 장으로 만들어 줍니다(데이터는 바꾸지 않습니다).
+6. 얼마나 됐는지는 `docker compose exec backend python -m app.review_status`로 봅니다.
+7. 규칙이나 문장이 바뀌면 `docker compose exec -T backend python tools/make_review_page.py > docs/review/review.html`로 페이지를 다시 만듭니다.
 
 아래 "JSON을 직접 고치는 방법"은 위 방법을 쓰지 않을 때만 필요합니다.
 
@@ -28,6 +38,8 @@
 
 ### 3. 다시 합치기
 팀원이 규칙 파일을 고쳐서 다시 주면 `python tools/merge_pdf_rules.py <규칙 파일>`로 새 유형만 합칩니다. 합치기 전에 과실표(CSV)와 기본 비율·진행 이름을 대조하고 하나라도 다르면 멈춥니다.
+
+> **2026-10-22 검수 결정**: 유형 38, 39, 41, 42, 89는 PDF에 해당 가감요소가 없어 규칙을 **삭제**했습니다(122개 → 117개 유형). 38·39·41·42는 이름에 이미 "선진입/후진입"이 들어 있는데 "명확한 선진입" 가감이 또 붙어 있었고, 89는 가감 항목의 차량 대응이 맞지 않았습니다. 106, 111, 115, 64, 94번은 양현진 님 10-22 제출을 기준으로 검수 완료로 처리했습니다. 남은 확인은 [pending-review-requests.md](pending-review-requests.md)에 있습니다. 위 "합쳤습니다"의 숫자(122개, 838개)는 합친 당시 기준입니다.
 
 ## 규칙을 넣지 않은 유형 (11개)
 

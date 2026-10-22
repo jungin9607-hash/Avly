@@ -41,11 +41,20 @@ class DataTests(unittest.TestCase):
         used = {str(article) for articles in LAW_ARTICLES_BY_TYPE.values() for article in articles}
         self.assertTrue(used <= set(self.data['laws']), used - set(self.data['laws']))
 
-    def test_nothing_is_marked_reviewed_before_a_person_checks_it(self):
+    def test_laws_are_not_marked_reviewed_before_a_person_checks_them(self):
         self.assertFalse(self.data['_meta']['reviewed'])
-        for section in ('factors', 'laws'):
-            for key, entry in self.data[section].items():
-                self.assertFalse(entry['reviewed'], (section, key))
+        for key, entry in self.data['laws'].items():
+            self.assertFalse(entry['reviewed'], key)
+
+    def test_a_factor_marked_reviewed_has_complete_wording(self):
+        # 가감요소 문장은 검수가 진행 중이다. 검수 완료 표시가 붙었다면 서비스가 그대로 쓰므로 제목·설명·질문이 빠짐없이 있어야 한다.
+        for key, entry in self.data['factors'].items():
+            if not entry['reviewed']:
+                continue
+            for field in ('title', 'easy', 'question'):
+                self.assertTrue(entry[field].strip(), (key, field))
+            self.assertIn('{who}', entry['question'], key)
+            self.assertTrue(entry['question'].strip().endswith('?'), key)
 
 
 class ExplainTests(unittest.TestCase):

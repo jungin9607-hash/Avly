@@ -4,7 +4,8 @@ import ModalShell from "./ModalShell";
 // 4단계: 고른 사고 유형에 등록된 가감요소를 쉬운 말 질문으로 묻는다.
 //   영상에서 관찰·추정한 것은 AI 제안을 보여 주고 미리 골라 둔다. 사용자의 답이 항상 우선한다.
 //   답하지 않은 항목은 '잘 모르겠어요'로 보내고, 서버는 이를 0으로 확정하지 않고 '미확인'으로 둔다.
-export default function AdjustmentModal({ option, questions, onSubmit, onBack, onClose }) {
+//   heldBack: 쉬운 말 검수가 끝나지 않아 묻지 않는 가감요소 수. 있으면 그 사실을 알려 준다.
+export default function AdjustmentModal({ option, questions, heldBack = 0, onSubmit, onBack, onClose }) {
   const [answers, setAnswers] = useState(() => Object.fromEntries(questions.filter((q) => q.suggested).map((q) => [q.key, q.suggested.answer])));
   const send = () => onSubmit(Object.fromEntries(questions.map((q) => [q.key, answers[q.key] ?? "잘 모르겠어요"])));
 
@@ -18,6 +19,11 @@ export default function AdjustmentModal({ option, questions, onSubmit, onBack, o
     >
       <form onSubmit={(event) => { event.preventDefault(); send(); }}>
         <div className="md-body">
+          {heldBack > 0 && (
+            <p className="md-hint" role="note">
+              지금은 전문가 검수가 끝난 항목만 물어봐요. 아직 검수 중인 가감요소 {heldBack}개는 반영하지 않아서 실제 비율과 다를 수 있어요.
+            </p>
+          )}
           <ol className="md-questions">
             {questions.map((q, index) => (
               <li key={q.key}>

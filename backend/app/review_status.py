@@ -6,13 +6,14 @@
 검수 표시 방법(가감요소): backend/model/avly/data/adjustment_rules.json 에서 유형 하나를 다 확인했으면 그 유형에
     "reviewed": true, "reviewed_by": "이름", "reviewed_at": "2026-10-21"
 을 적는다. 이렇게 확인한 유형만 서비스에 켜진다(기본값. 개발에서 전부 보려면 AVLY_REQUIRE_RULE_REVIEW=0).
+그중에서도 쉬운 말(adjustment_explanations.json 의 reviewed)까지 확인한 가감요소만 묻고 계산한다(개발에서 전부 보려면 AVLY_REQUIRE_WORDING_REVIEW=0).
 """
 import argparse
 import json
 import sys
 
 from app import catalog
-from avly.tables import active_rules, type_is_reviewed
+from avly.tables import active_rules, type_is_reviewed, wording_gate
 
 
 def summarize(all_rules: dict, factors: dict, labels: dict) -> dict:
@@ -38,10 +39,13 @@ def summarize(all_rules: dict, factors: dict, labels: dict) -> dict:
     text_done = [f for f, e in factors.items() if e.get("reviewed")]
     label_done = sum(1 for kind in ("places", "features", "progress") for e in labels.get(kind, {}).values() if e.get("reviewed"))
     label_total = sum(len(labels.get(kind, {})) for kind in ("places", "features", "progress"))
+    # 규칙을 확인한 유형 중, 쉬운 말까지 확인한 가감요소가 하나라도 있어서 서비스가 실제로 묻는 유형
+    asked, _ = wording_gate(active_rules(all_rules, True), set(text_done))
     return {
         "rules": {
             "types_total": len(all_rules), "pdf_types": len(pdf_types), "pdf_types_done": len(done), "partial": partial,
             "on_in_service": sorted(int(k) for k in active_rules(all_rules, True)), "by_person": by_person,
+            "asked_in_service": sorted(int(k) for k in asked),
         },
         "easy_words": {"total": len(factors), "done": len(text_done)},
         "accident_labels": {"total": label_total, "done": label_done},
@@ -54,7 +58,8 @@ def render(s: dict) -> str:
     pct = lambda a, b: f"{a * 100 // b}%" if b else "-"
     lines = ["가감요소 규칙 (PDF에서 합친 유형)",
              f"  확인 완료 {r['pdf_types_done']} / {r['pdf_types']}개 유형 ({pct(r['pdf_types_done'], r['pdf_types'])})  ← 이 유형만 서비스에 켜집니다",
-             f"  서비스에 켜진 유형: {len(r['on_in_service'])}개 / 133개 (기존 7개 + 확인 완료 {r['pdf_types_done']}개)"]
+             f"  서비스에 켜진 유형: {len(r['on_in_service'])}개 / 133개 (기존 7개 + 확인 완료 {r['pdf_types_done']}개)",
+             f"  그중 쉬운 말까지 확인돼서 가감요소를 실제로 묻는 유형: {len(r['asked_in_service'])}개 (나머지는 기본 비율만 안내)"]
     if r["partial"]:
         lines.append("  확인 중(일부 규칙만 표시): " + ", ".join(f"{k}번 {a}/{b}" for k, a, b in r["partial"]))
     if r["by_person"]:

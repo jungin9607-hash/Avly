@@ -112,8 +112,10 @@ class ReviewPageTests(unittest.TestCase):
     def test_the_page_data_covers_every_pdf_type_and_every_sentence(self):
         import make_review_page
         data = make_review_page.build_data()
-        self.assertEqual(len(data["types"]), 115)
-        self.assertEqual(sum(len(t["rules"]) for t in data["types"]), 838)
+        from avly.tables import ALL_ADJUSTMENT_RULES   # 지운 유형이 있어도 맞도록 숫자를 고정하지 않고 데이터와 비교한다
+        pdf = [t for t in ALL_ADJUSTMENT_RULES.values() if any("pdf_source" in r for r in t["rules"])]
+        self.assertEqual(len(data["types"]), len(pdf))
+        self.assertEqual(sum(len(t["rules"]) for t in data["types"]), sum(len(t["rules"]) for t in pdf))
         self.assertGreaterEqual(len(data["factors"]), 68)
         for t in data["types"]:
             for r in t["rules"]:

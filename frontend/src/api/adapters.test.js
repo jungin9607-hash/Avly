@@ -410,3 +410,15 @@ test("AI가 본 모습: 검증은 못 통과했지만 모델이 기록한 움직
   // 힌트만 있어도 구조화된 값이 있는 것으로 본다
   assert.ok(easySituation({ other_action_hint: "직진" }));
 });
+
+test("쉬운 말 검수 전이라 반영하지 않은 가감요소가 있으면 결과 화면이 그 사실을 알린다", () => {
+  const result = fixture("result_partial.json");
+  const plain = toReportModel(result, "abcdef12").factorHeader.desc;
+  assert.ok(!plain.includes("검수 중"));
+  const held = toReportModel({ ...result, adjustments: { ...result.adjustments, held_back: 3 } }, "abcdef12").factorHeader.desc;
+  assert.ok(held.endsWith("아직 검수 중인 가감요소 3개는 반영하지 않았어요."));
+  // 가감요소가 하나도 검수되지 않은 유형은 기본 비율만 안내하되, 등록이 아니라 검수가 끝나지 않은 것이라고 말한다
+  const base = toReportModel(fixture("result_base_only.json"), "abcdef12");
+  assert.match(base.factorHeader.desc, /검수가 끝난 가감요소가 아직 없어서 기본 비율만/);
+  assert.ok(!base.factorHeader.desc.includes("등록되지"));
+});

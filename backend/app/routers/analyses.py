@@ -46,12 +46,15 @@ def adjustment_questions(
     sid: UUID = Depends(session_id),
     repo: Repository = Depends(get_repo),
 ):
-    """고른 유형에 등록된 가감요소를 쉬운 말 질문으로 돌려준다. 등록되지 않은 유형은 빈 목록(기본 비율만 안내)이다."""
+    """고른 유형에 등록된 가감요소를 쉬운 말 질문으로 돌려준다. 등록되지 않은 유형은 빈 목록(기본 비율만 안내)이다.
+
+    쉬운 말 검수가 끝난 가감요소만 묻는다. 검수 전이라 묻지 않은 가감요소 수는 held_back 에 있다."""
     row = _own_analysis(analysis_id, sid, repo)
     _checked_type(accident_type_id, role)
     facts = (row.get("scene") or {}).get("adjustment_facts")
     questions = catalog.adjustment_questions(accident_type_id, role, facts)
-    return {"accident_type_id": accident_type_id, "role": role, "registered": bool(questions), "questions": questions}
+    return {"accident_type_id": accident_type_id, "role": role, "registered": bool(questions), "questions": questions,
+            "held_back": catalog.held_back_count(accident_type_id)}
 
 
 @router.post(
