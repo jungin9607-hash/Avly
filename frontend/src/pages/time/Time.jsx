@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import AnalysisGate from "../common/components/AnalysisGate";
 import TopNav from "../common/components/TopNav";
-import { toMoments } from "../../api/adapters";
+import { easySituationLine, toMoments, toSituationCheck } from "../../api/adapters";
+import SituationCheckNotice from "../common/components/SituationCheckNotice";
 import TimelineNotice from "./components/TimelineNotice";
 import TimelineAxis from "./components/TimelineAxis";
 import TimelineControls from "./components/TimelineControls";
@@ -26,10 +27,10 @@ export default function Time({ analysisId }) {
 function TimeView({ result, analysisId, session }) {
   const moments = useMemo(() => toMoments(result), [result]);
   if (moments.length === 0) return <EmptyTimeline analysisId={analysisId} />;
-  return <Moments moments={moments} summary={result.summary} note={result.timeline_note} analysisId={analysisId} session={session} />;
+  return <Moments moments={moments} summary={easySituationLine(result.situation, result.summary)} note={result.timeline_note} check={toSituationCheck(result)} analysisId={analysisId} session={session} />;
 }
 
-function Moments({ moments, summary, note, analysisId, session }) {
+function Moments({ moments, summary, note, check, analysisId, session }) {
   const LAST = moments.length - 1;
   const stageRef = useRef(null);
   const [active, setActive] = useState(0);
@@ -66,6 +67,7 @@ function Moments({ moments, summary, note, analysisId, session }) {
           </h1>
           {summary && <p className="tl-summary">{summary}</p>}
           {note && <p className="tl-summary tl-note">{note}</p>}
+          <SituationCheckNotice check={check} className="tl-situation-check" />
           <div className={`tl-now ${m.tone || ""}`}>
             <div className="tl-now-content" key={m.id} aria-live="polite">
               <p className="tl-now-step">

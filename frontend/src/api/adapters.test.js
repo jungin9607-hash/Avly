@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import {
-  cascade, myAccidentPoints, normalizeSelection, resolveOption, selectionFrom, stageIndex, toCaseCards, toMoments, toReportModel, toSteps,
+  autoFill, cascade, commonSelection, easySituation, myAccidentPoints, normalizeSelection, resolveOption, selectionFrom, stageIndex, toCaseCards, toMoments, toReportModel, toSteps,
 } from "./adapters.js";
 
 const fixture = (name) => JSON.parse(readFileSync(new URL(`./fixtures/${name}`, import.meta.url), "utf8"));
@@ -300,4 +300,103 @@ test("세션이 끝난 분석은 삭제됐다고 알리고 새 영상 올리기�
     assert.match(notice.title, /삭제됐어요/);
     assert.equal(notice.link.to, "/upload");
   }
+});
+
+test("AI가 본 상황: 내부 표기 대신 쉬운 말로 풀고, 모르는 값은 모른다고 말한다", async () => {
+  const { easySituation, easySituationLine } = await import("./adapters.js");
+  const rows = easySituation({ road_shape: "직선 도로", my_action: "직진", other_action: "정지/대기", contact: "충돌 정황 강함" });
+  assert.deepEqual(rows.map((r) => r.label), ["도로", "내 차", "상대 차", "접촉"]);
+  assert.equal(rows[1].text, "직진하는 중");
+  assert.equal(rows[2].text, "멈춰 있거나 기다리는 중");
+  assert.match(rows[3].text, /부딪혔을 가능성이 높은 장면/);
+  // 미확인·기타·빈 값은 미리 채운 것처럼 보이지 않게 한다
+  const unsure = easySituation({ road_shape: "", my_action: "미확인", other_action: "기타", contact: "판단 불가" });
+  assert.deepEqual(unsure.slice(0, 3).map((r) => r.text), ["AI가 알아보지 못했어요", "AI가 알아보지 못했어요", "AI가 알아보지 못했어요"]);
+  // 처음 보는 값은 원문을 그대로 보여 준다
+  assert.equal(easySituation({ my_action: "새로운동작" })[1].text, "새로운동작");
+  // 구조화된 값이 없는 예전 결과는 null, 한 줄 문장은 서버 요약으로 되돌아간다
+  assert.equal(easySituation(undefined), null);
+  assert.equal(easySituation({}), null);
+  assert.equal(easySituationLine({}, "서버 요약"), "서버 요약");
+  assert.match(easySituationLine({ my_action: "직진" }, "x"), /^AI가 영상에서 본 모습\(추정\) — 도로: AI가 알아보지 못했어요 · 내 차: 직진하는 중/);
+});
+
+test("결과 화면 문구는 모델의 내부 요약이 아니라 쉬운 말 문장을 쓴다", () => {
+  const result = fixture("result_final.json");
+  const desc = toReportModel(result, "abcdef12").header.desc;
+  assert.ok(desc.startsWith("AI가 영상에서 본 모습(추정)"));
+  assert.ok(!desc.includes("도로 형태:"));
+  assert.equal(toReportModel({ ...result, situation: undefined }, "abcdef12").header.desc, result.summary);
+});
+
+test("고른 상황이 AI 관찰과 어긋날 때만 안내하고, 어떤 점이 다른지 보여 준다", async () => {
+  const { toSituationCheck } = await import("./adapters.js");
+  assert.equal(toSituationCheck(fixture("result_final.json")), null);
+  assert.equal(toSituationCheck({ situation_check: { conflict: false, items: [] } }), null);
+  const check = toSituationCheck({ situation_check: { conflict: true, items: [{ who: "other", ai_action: "정지/대기", chosen: "앞차가 차로를 바꿈" }, { who: "me", ai_action: "미확인", chosen: "직진" }] } });
+  assert.match(check.title, /달라요/);
+  assert.match(check.body, /참고용으로만/);
+  assert.deepEqual(check.lines, [
+    "상대 차 — AI가 본 모습: 멈춰 있거나 기다리는 중 / 고르신 내용: 앞차가 차로를 바꿈",
+    "내 차 — AI가 본 모습: AI가 알아보지 못했어요 / 고르신 내용: 직진",
+  ]);
+  const model = toReportModel({ ...fixture("result_final.json"), situation_check: { conflict: true, items: [{ who: "me", ai_action: "직진", chosen: "좌회전" }] } }, "abcdef12");
+  assert.equal(model.situationCheck.lines.length, 1);
+  assert.equal(toReportModel(fixture("result_final.json"), "abcdef12").situationCheck, null);
+});
+
+test("선택지가 하나뿐인 항목은 앞 항목이 정해진 뒤에 자동으로 채운다", () => {
+  const empty = { place: "", feature: "", my_progress: "", other_progress: "" };
+  // 아무것도 안 골랐으면 장소는 여러 개라서 채우지 않는다
+  assert.deepEqual(autoFill(items, empty), empty);
+  const place = cascade(items, empty).place[0];
+  const feature = cascade(items, { ...empty, place }).feature[0];
+  const base = { ...empty, place, feature };
+  // 내 차 움직임까지 고른 뒤 상대 차 선택지가 하나면 상대 차는 정해진다
+  const my = cascade(items, base).my_progress.find((value) => cascade(items, { ...base, my_progress: value }).other_progress.length === 1);
+  assert.ok(my, "상대 차 선택지가 하나뿐인 경우가 있다");
+  const filled = autoFill(items, { ...base, my_progress: my });
+  assert.ok(filled.other_progress);
+  assert.ok(resolveOption(items, filled), "네 항목이 모두 정해져 유형과 내 차 역할이 나온다");
+  // 앞 항목이 비어 있으면 뒤 항목은 채우지 않는다 (선택을 바꿔 다시 비운 경우)
+  assert.equal(autoFill(items, { ...empty, place }).my_progress, "");
+  // 이미 고른 값은 건드리지 않고, 원래 selection 객체도 바꾸지 않는다
+  const chosen = { ...base, my_progress: my, other_progress: filled.other_progress };
+  assert.deepEqual(autoFill(items, chosen), chosen);
+  assert.equal(base.my_progress, "");
+  // 장소가 하나뿐이면 장소도 정해진다
+  const onePlace = items.filter((item) => item.place === place);
+  assert.equal(autoFill(onePlace, empty).place, place);
+});
+
+test("내 차의 움직임만 고르면 과실표의 A/B 역할은 사용자에게 묻지 않고도 정해진다", () => {
+  // 같은 장소·사고 유형에서 내 차 움직임이 서로 다르면 서로 다른 선택지(역할 포함)가 나온다
+  const empty = { place: "직선 도로", feature: "차로변경(진로변경)", my_progress: "", other_progress: "" };
+  const mine = cascade(items, empty).my_progress;
+  assert.ok(mine.length >= 2);
+  const picks = mine.map((value) => resolveOption(items, autoFill(items, { ...empty, my_progress: value })));
+  assert.ok(picks.every(Boolean), "내 차 움직임만 골라도 하나의 선택지로 정해진다");
+  assert.ok(picks.every((option) => option.role === "A" || option.role === "B"));
+});
+
+test("AI가 유형을 확정하지 못해도 후보들이 같은 장소를 가리키면 그 장소만 미리 고른다", () => {
+  const cand = (place, feature) => ({ place, feature, my_progress: "x", other_progress: "y" });
+  assert.equal(commonSelection([]), null);
+  assert.equal(commonSelection(undefined), null);
+  // 장소와 사고 유형이 모두 같으면 둘 다, 움직임은 비워 둔다
+  assert.deepEqual(commonSelection([cand("사거리 교차로(신호등 있음)", "a"), cand("사거리 교차로(신호등 있음)", "a")]), { place: "사거리 교차로(신호등 있음)", feature: "a", my_progress: "", other_progress: "" });
+  // 장소만 같으면 장소만
+  assert.deepEqual(commonSelection([cand("사거리 교차로(신호등 있음)", "a"), cand("사거리 교차로(신호등 있음)", "b")]), { place: "사거리 교차로(신호등 있음)", feature: "", my_progress: "", other_progress: "" });
+  // 장소가 다르면 아무것도 고르지 않는다 (사고 유형 이름이 같아도 장소가 다르면 다른 것이다)
+  assert.deepEqual(commonSelection([cand("직선 도로", "a"), cand("주차장(또는 차도가 아닌 장소)", "a")]), { place: "", feature: "", my_progress: "", other_progress: "" });
+});
+
+test("AI가 본 모습: 검증은 못 통과했지만 모델이 기록한 움직임은 '추정'으로 보여 준다", () => {
+  const rows = easySituation({ road_shape: "교차로", my_action: "미확인", other_action: "미확인", my_action_hint: "좌회전", other_action_hint: null, contact: "접촉 추정" });
+  assert.equal(rows[1].text, "좌회전하는 중 (추정)");
+  assert.equal(rows[2].text, "AI가 알아보지 못했어요");
+  // 검증된 값이 있으면 힌트와 상관없이 그 값을 쓴다
+  assert.equal(easySituation({ my_action: "직진", my_action_hint: "좌회전" })[1].text, "직진하는 중");
+  // 힌트만 있어도 구조화된 값이 있는 것으로 본다
+  assert.ok(easySituation({ other_action_hint: "직진" }));
 });

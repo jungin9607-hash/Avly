@@ -425,6 +425,24 @@ input:focus-visible + .md-radio {
   line-height: 1.5;
   font-weight: 800;
 }
+.md-situation-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  font-size: var(--md-font-body);
+  line-height: 1.65;
+  word-break: keep-all;
+}
+.md-situation-list li {
+  display: flex;
+  gap: 10px;
+}
+.md-situation-list b {
+  flex: 0 0 4.2em;
+  color: var(--ink);
+  font-weight: 800;
+}
 .md-situation p:last-child {
   margin: 0;
   color: var(--ink-2);
@@ -800,36 +818,33 @@ input:focus-visible + .md-radio {
 .md-place small { font-weight: 400; color: #667085; margin-left: 6px; }
 .md-place select { font: inherit; padding: 10px 12px; border: 1px solid #dfe3e8; border-radius: 10px; background: #fff; }
 
-/* 사고 유형 카드와 내 차 고르기 (사고 상황 확인 창) */
-.md-types,
-.md-roles {
-  display: grid;
-  gap: 8px;
-  margin: 16px 0 0;
+/* 내 차·상대 차의 움직임 고르기, 'AI 추정' 표시 (사고 상황 확인 창) */
+.md-field-head {
+  flex-wrap: wrap;
 }
-.md-types-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  color: var(--ink-2);
-  font-size: var(--md-font-caption);
+.md-ai-tag {
+  padding: 1px 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
   font-weight: 700;
 }
-.md-types-title b {
-  display: grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--md-mid);
-  color: var(--md-navy);
-  font-size: 12px;
+.md-ai-tag.is-ai {
+  border-color: var(--md-primary);
+  background: var(--md-soft);
+  color: var(--md-primary);
 }
-.md-type,
-.md-role {
+.md-choices {
   display: grid;
-  gap: 4px;
+  gap: 8px;
+}
+.md-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   width: 100%;
   padding: 11px 12px;
   border: 1.5px solid var(--line);
@@ -841,43 +856,23 @@ input:focus-visible + .md-radio {
   text-align: left;
   cursor: pointer;
 }
-.md-type:hover,
-.md-role:hover {
+  line-height: 1.45;
+.md-choice:hover {
   border-color: var(--md-primary);
 }
-.md-type.is-on,
-.md-role.is-on {
+.md-choice.is-on {
   border-color: var(--md-primary);
   background: var(--md-soft);
-}
-.md-type-id {
-  color: var(--md-primary);
-  font-size: var(--md-font-caption);
   font-weight: 700;
 }
-.md-type-line {
-  display: flex;
-  gap: 8px;
-  line-height: 1.45;
+.md-signal-note {
+  margin-top: 14px;
 }
-.md-type-line em {
-  flex: none;
-  width: 52px;
-  color: var(--muted);
-  font-size: var(--md-font-caption);
-  font-style: normal;
+.md-situation summary {
+  cursor: pointer;
 }
-.md-role-row {
-  display: grid;
-  gap: 8px;
-}
-.md-role span {
-  color: var(--ink-2);
-  font-size: var(--md-font-caption);
-}
-.md-role .md-role-ratio {
-  color: var(--ink);
-  font-weight: 700;
+.md-situation details[open] > summary {
+  margin-bottom: 7px;
 }
 .md-note-text {
   margin: 0;

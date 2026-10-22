@@ -1,6 +1,6 @@
 // 보고서(인쇄용 문서) 화면이 읽는 모양. 서버 결과(result)를 문서의 절(요약, 사고 상황, 산정 과정, 타임라인, 판례, 법령, 유의사항)로 바꾼다.
 // 서버가 주지 않은 값은 만들어 넣지 않는다. 값이 없는 절은 비워 두거나 "없어요"라고 말한다.
-import { easyOf, toCaseCards, toMoments } from "../../api/adapters.js";
+import { easyOf, easySituationLine, toCaseCards, toMoments, toSituationCheck } from "../../api/adapters.js";
 
 const HEADLINE = {
   final: "AI 예상 과실 비율",
@@ -70,7 +70,13 @@ function officialType(result) {
 function oneLineOf(result) {
   const t = result.accident_type;
   if (t) return `${easyOf(t, "place")}에서 일어난 사고예요. 내 차는 ${easyOf(t, "my_progress")}, 상대 차는 ${easyOf(t, "other_progress")} 상황이에요.`;
-  return result.summary ?? "";
+  return easySituationLine(result.situation, result.summary ?? "");
+}
+
+// 고른 상황이 AI 의 관찰과 어긋나면 타임라인 절에 한 줄로 알린다(타임라인은 AI 가 본 그대로이므로)
+function situationCheckNote(result) {
+  const check = toSituationCheck(result);
+  return check ? `${check.title}. ${check.body}` : "";
 }
 
 function candidateLines(result) {
@@ -105,7 +111,7 @@ export function toReportDocument(result, { analysisId, createdAt, expiresAt } = 
     },
     notice: result.notice ?? "",
     headline: { ...headlineOf(result), oneLine: oneLineOf(result) },
-    summary: result.summary ?? "",
+    summary: easySituationLine(result.situation, result.summary ?? ""),
     situation: { rows: situationRows(result), official: officialType(result), candidates: candidateLines(result) },
     steps: state === "unresolved" ? [] : (result.steps ?? []).map((s) => ({
       base: s.kind === "base",
@@ -119,7 +125,7 @@ export function toReportDocument(result, { analysisId, createdAt, expiresAt } = 
     // 사용자가 '아니요'로 답한 항목은 한 줄로 모으고, 그 밖의 이유로 적용하지 않은 항목만 이유와 함께 보여 준다
     answeredNo: (result.adjustments?.not_applied ?? []).filter((p) => p.reason === NO_REASON).map(withWho),
     notApplied: (result.adjustments?.not_applied ?? []).filter((p) => p.reason !== NO_REASON).map((p) => ({ title: withWho(p), reason: p.reason ?? "" })),
-    timeline: { rows: moments.map((m) => ({ label: m.label, range: m.range, title: m.title, tag: m.tag })), note: result.timeline_note ?? "" },
+    timeline: { rows: moments.map((m) => ({ label: m.label, range: m.range, title: m.title, tag: m.tag })), note: [result.timeline_note, situationCheckNote(result)].filter(Boolean).join(" ") },
     cases: cards.slice(0, 3).map(caseView),
     laws: (result.laws ?? []).map((l) => ({ name: l.name ?? l.label, easy: l.easy ?? LAW_FALLBACK })),
     sources: [...new Set(["손해보험협회 과실비율 인정기준(2023.06)", ...cards.map((c) => c.category).filter(Boolean)])],

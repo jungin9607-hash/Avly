@@ -4,6 +4,7 @@
 """
 
 from app import catalog
+from app.situation_check import situation_check
 from app.worker import compare
 from avly import explain
 from avly.constants import REPORT_NOTICE
@@ -86,6 +87,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
     option = catalog.orient(row, role)
     common["related_cases"] = [_with_comparison(c, option, comparisons.get(c.get("case_id"))) for c in related_cases]
     scenario = {
+    common["situation_check"] = situation_check(situation.get("my_action"), situation.get("other_action"), option)   # 타임라인과 요약은 AI 의 처음 관찰 그대로라서, 고른 내용과 어긋나면 화면이 알린다
         "scenario_id": f"{type_id}:{role}:confirmed", "accident_type": type_id, "dashcam_table_role": role,
         "eligible_for_adjustment": True,   # 사용자가 유형과 역할을 확정했다
         "base_fault": {"A": option["base_me"], "B": option["base_other"]},   # 엔진은 내 차(A) 기준으로 읽는다
