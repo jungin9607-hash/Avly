@@ -87,8 +87,8 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
     row = catalog.get_row(type_id)
     option = catalog.orient(row, role)
     common["related_cases"] = [_with_comparison(c, option, comparisons.get(c.get("case_id"))) for c in related_cases]
-    scenario = {
     common["situation_check"] = situation_check(situation.get("my_action"), situation.get("other_action"), option)   # 타임라인과 요약은 AI 의 처음 관찰 그대로라서, 고른 내용과 어긋나면 화면이 알린다
+    scenario = {
         "scenario_id": f"{type_id}:{role}:confirmed", "accident_type": type_id, "dashcam_table_role": role,
         "eligible_for_adjustment": True,   # 사용자가 유형과 역할을 확정했다
         "base_fault": {"A": option["base_me"], "B": option["base_other"]},   # 엔진은 내 차(A) 기준으로 읽는다
@@ -102,11 +102,14 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
                                      option["my_progress"], option["other_progress"])
     steps = [{"kind": "base", "title": base_text["text"], "easy": base_text["situation"], "effect": None, "who": None,
               "factor": None, "delta_pp": None, "me": option["base_me"], "other": option["base_other"]}]
-    me = option["base_me"]
+    raw_me = option["base_me"]
     applied = []
     for entry in out["applied_adjustments"]:
         item = _item(entry)
-        me = max(0, min(100, me + entry["delta_pp"] if entry["actor"] == "A" else me - entry["delta_pp"]))
+        # 규칙 엔진처럼 누적 가감값을 보존한다. 표시 범위 제한 때문에 다음
+        # 단계의 계산 기준이 바뀌면 마지막 단계와 실제 계산 결과가 달라진다.
+        raw_me += entry["delta_pp"] if entry["actor"] == "A" else -entry["delta_pp"]
+        me = max(0, min(100, raw_me))
         steps.append({"kind": "adjustment", "title": item["title"], "easy": item["easy"], "effect": item["effect"],
                       "who": item["who"], "factor": item["factor"], "delta_pp": item["delta_pp"], "me": me, "other": 100 - me})
         applied.append(item)

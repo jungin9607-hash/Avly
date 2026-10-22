@@ -278,8 +278,22 @@ class Repository:
 
     def finish_job(self, job_id: int, ok: bool, error: str | None = None) -> None:
         with self.engine.begin() as conn:
-            conn.execute(text("UPDATE job SET status = :s, finished_at = now(), error = :e WHERE id = :id"),
-                         {"s": "done" if ok else "failed", "e": error, "id": job_id})
+            row = conn.execute(text("UPDATE job SET status = :s, finished_at = now(), error = :e WHERE id = :id RETURNING analysis_id"),
+                               {"s": "done" if ok else "failed", "e": error, "id": job_id}).first()
+            if not ok and row:
+                self._fail_active_analyses(conn, [row[0]], "WORKER_FAILED", "분석 작업 중 오류가 발생했습니다. 다시 시도해 주세요.")
+
+    @staticmethod
+    def _fail_active_analyses(conn, analysis_ids: list, code: str, message: str) -> None:
+        if not analysis_ids:
+            return
+        # 이미 완료되었거나 사용자 확인 중인 결과는 뒤늦은 작업 오류로 덮어쓰지 않는다.
+        accidents = conn.execute(text(
+            "UPDATE analysis SET status = 'failed', stage = NULL, error_code = :code, error_message = :message,"
+            " finished_at = now(), updated_at = now() WHERE id = ANY(:ids) AND status IN ('queued', 'processing')"
+            " RETURNING accident_id"), {"ids": analysis_ids, "code": code, "message": message}).scalars().all()
+        if accidents:
+            conn.execute(text("UPDATE accident SET status = 'failed' WHERE id = ANY(:ids)"), {"ids": accidents})
 
     def requeue_stale_jobs(self, max_age_seconds: int, max_attempts: int) -> tuple[int, int]:
         """worker 가 죽어서 오래 running 인 작업을 다시 대기열로 돌린다. 시도 횟수를 넘긴 것은 실패로 처리한다."""
@@ -292,9 +306,10 @@ class Repository:
             failed = conn.execute(text(
                 "UPDATE job SET status = 'failed', finished_at = now(), error = 'worker 가 응답하지 않아 중단됨'"
                 " WHERE status = 'running' AND locked_at < now() - make_interval(secs => :age) AND attempts >= :max"
-                " AND (payload->>'owner' IS NULL OR payload->>'owner' = :owner)"),
-                {"age": max_age_seconds, "max": max_attempts, "owner": self.owner}).rowcount
-            return requeued, failed
+                " AND (payload->>'owner' IS NULL OR payload->>'owner' = :owner) RETURNING analysis_id"),
+                {"age": max_age_seconds, "max": max_attempts, "owner": self.owner}).scalars().all()
+            self._fail_active_analyses(conn, failed, "WORKER_TIMEOUT", "분석 작업이 응답하지 않아 중단되었습니다. 다시 시도해 주세요.")
+            return requeued, len(failed)
 
     def add_stage_log(self, analysis_id: UUID, stage: str, provider: str | None = None, model: str | None = None,
                       input_tokens: int | None = None, output_tokens: int | None = None, cached: bool = False,

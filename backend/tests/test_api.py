@@ -340,6 +340,9 @@ class JobTests(ApiTestCase):
         self.assertEqual((again["id"], again["attempts"]), (job["id"], 2))
         time.sleep(1.1)
         self.assertEqual(self.repo.requeue_stale_jobs(max_age_seconds=1, max_attempts=2), (0, 1))
+        row = self.repo.get_analysis(job["analysis_id"])
+        self.assertEqual((row["status"], row["stage"], row["error_code"]), ("failed", None, "WORKER_TIMEOUT"))
+        self.assertEqual(self.repo.get_accident(row["accident_id"])["status"], "failed")
         self.assertIsNone(self.repo.claim_job())
 
 

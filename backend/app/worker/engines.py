@@ -13,6 +13,7 @@ import logging
 import os
 import time
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from app.config import BASE_DIR, settings
 from app.worker import snapshot as snap
@@ -96,18 +97,19 @@ class AvlyEngine:
     STAGE_BY_PREFIX = (("2/3", "detail_review"), ("사고 전 차선", "detail_review"), ("3/3", "case_matching"))
 
     def __init__(self, results_dir: Path | None = None):
-        self.results_dir = Path(results_dir or settings.upload_dir / "_model_results")
+        self.results_dir = Path(results_dir) if results_dir is not None else None
 
     def analyze(self, video_path, report, place: str | None = None):
         # 무거운 의존성(cv2, openai 등)은 실제로 쓸 때만 불러온다
+        if not (os.environ.get("OPENAI_API_KEY") or "").strip():
+            raise EngineNotConfigured("실제 영상 분석에 필요한 OPENAI_API_KEY가 설정되지 않았습니다.")
         from avly import observation, pipeline
         from avly.constants import PLACE_GROUPS
         from avly.context import ctx
 
-        if not (os.environ.get("OPENAI_API_KEY") or "").strip():
-            # 같은 영상을 이미 분석한 응답 캐시가 있으면 키 없이도 되지만, 새 영상은 반드시 필요하다. 미리 알려 준다.
-            logger.warning("OPENAI_API_KEY 가 없습니다. 새 AI 요청이 필요하면 실패합니다.")
-        self.results_dir.mkdir(parents=True, exist_ok=True)
+        # 사고 폴더 안에 두어 프로세스 강제 종료로 남은 임시 파일도 영상 만료 때 정리한다.
+        results_dir = self.results_dir or Path(video_path).parent / "_model_results"
+        results_dir.mkdir(parents=True, exist_ok=True)
 
         def stage_for(name: str):
             return next((sid for prefix, sid in self.STAGE_BY_PREFIX if name.startswith(prefix)), None)
@@ -126,16 +128,21 @@ class AvlyEngine:
         for module, original in originals.items():
             module.call = wrap(original)
         try:
-            pipeline.run({
-                "BACKEND_DIR": str(BASE_DIR), "VIDEO_FILE": str(video_path), "PICK_VIDEO": False,
-                "CSV_FILE": str(settings.fault_table_path), "RESULTS_DIR": str(self.results_dir),
-                "SHOW_PROCESS_LOGS": False, "USE_CACHE": True, "no_survey": True,
-                **({"PLACE_CODES": PLACE_GROUPS[place]} if place in PLACE_GROUPS else {}),
-            })
-            data = json.loads(Path(ctx.output_path).read_text(encoding="utf-8"))
+            # DB 에 옮길 중간 산출물은 실행마다 분리한다. 보고서·관찰 응답·캐시는
+            # 성공/실패와 관계없이 지워서 세션 만료 후 디스크에 별도 사본이 남지 않게 한다.
+            with TemporaryDirectory(prefix="analysis-", dir=results_dir) as result_dir:
+                pipeline.run({
+                    "BACKEND_DIR": str(BASE_DIR), "VIDEO_FILE": str(video_path), "PICK_VIDEO": False,
+                    "CSV_FILE": str(settings.fault_table_path), "RESULTS_DIR": result_dir,
+                    "SHOW_PROCESS_LOGS": False, "USE_CACHE": True, "no_survey": True,
+                    **({"PLACE_CODES": PLACE_GROUPS[place]} if place in PLACE_GROUPS else {}),
+                })
+                data = json.loads(Path(ctx.output_path).read_text(encoding="utf-8"))
         finally:
             for module, original in originals.items():
                 module.call = original
+            # 뒤의 판례 조회가 이미 삭제된 임시 폴더를 다시 쓰지 않도록 한다.
+            ctx.result_dir = ctx.cache_dir = ctx.output_path = None
         return snap.from_model_result(data, self.name), snap.stage_logs(data)
 
 
