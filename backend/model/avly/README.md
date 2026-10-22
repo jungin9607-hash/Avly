@@ -49,7 +49,7 @@
 | `data/support_labels.json`, `special_labels.json` | 화면 표시용 라벨 |
 | `data/survey_options.json` | 설문 선택지 |
 | `data/cause_questions.json` | 사고 원인 질문 |
-| `prompts/*.txt` | AI에게 보내는 프롬프트 18개 (`role`, `accuracy_rules`, `overview_scan`, `detail_review_rule_01~11`, `csv_match` 등) |
+| `prompts/*.txt` | AI에게 보내는 프롬프트 19개 (`role`, `accuracy_rules`, `overview_scan`, `detail_review_rule_01~12`, `csv_match` 등). `detail_review_rule_12`는 신호등 유무·색과 "접촉 순간의 사고 장소"를 관찰하게 한다 |
 | `dev/confirmed_contexts.json` | 개발용: 특정 영상 결과를 사용자 확인값으로 덮어쓰는 설정 (**기본은 꺼짐**) |
 
 **프롬프트 파일 수정 시 주의:** 파일 앞뒤의 줄바꿈과 공백도 프롬프트의 일부입니다. 에디터가 끝에 줄바꿈을 자동으로 붙이지 않는지 확인하세요.

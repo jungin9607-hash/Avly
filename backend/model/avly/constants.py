@@ -16,7 +16,7 @@ PLACE_GROUPS = {
 
 VERSION = 'auto-three-stage-v2.21.0-identity-and-survey-recovery'
 
-CODE_VERSION = 'auto-three-stage-v2.21.2-accident-flow'
+CODE_VERSION = 'auto-three-stage-v2.22.0-signal-and-impact-place'
 
 VISION_MODEL = setting('AVLY_VISION_MODEL', 'gpt-4.1')
 
