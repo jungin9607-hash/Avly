@@ -512,9 +512,9 @@
    "추월차로 +10",
    "④ 비상점멸표시등 점등 -10"
   ],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "0_A_gross_negligence",
@@ -537,7 +537,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_A_serious_negligence",
@@ -560,7 +560,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_A_pdf_abfc8575b0fa11",
@@ -583,7 +583,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_B_pdf_1ef17e697ae7c8",
@@ -606,7 +606,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_B_pdf_389284de40859c",
@@ -629,7 +629,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_B_pdf_04c7d3da380cde",
@@ -652,7 +652,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_B_pdf_cc7db2f9b8473e",
@@ -675,7 +675,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_B_gross_negligence",
@@ -698,7 +698,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_B_serious_negligence",
@@ -721,7 +721,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_B_pdf_4b94fd955150bb",
@@ -744,7 +744,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "0_B_pdf_abfc8575b0fa11",
@@ -767,7 +767,7 @@
       360
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -788,9 +788,9 @@
   "source_review_pending": [
    "야간 +10"
   ],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "4_A_pdf_207cb0784a08df",
@@ -811,7 +811,7 @@
       435
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "4_A_gross_negligence",
@@ -832,7 +832,7 @@
       435
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "4_A_serious_negligence",
@@ -853,7 +853,7 @@
       435
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "4_B_pdf_ebd4c8a093d292",
@@ -874,7 +874,7 @@
       435
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "4_B_pdf_77cd4f70bda8d5",
@@ -895,7 +895,7 @@
       435
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "4_B_pdf_296332703fcbcf",
@@ -916,7 +916,7 @@
       435
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "4_B_pdf_bca4c4159afce6",
@@ -937,7 +937,7 @@
       435
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -956,9 +956,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "5_A_gross_negligence",
@@ -980,7 +980,7 @@
       331
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "5_A_serious_negligence",
@@ -1002,7 +1002,7 @@
       331
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "5_B_pdf_d2f015424a2a0b",
@@ -1024,7 +1024,7 @@
       331
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "5_B_gross_negligence",
@@ -1046,7 +1046,7 @@
       331
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "5_B_serious_negligence",
@@ -1068,7 +1068,7 @@
       331
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -1087,9 +1087,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "6_A_pdf_48eb37893b903e",
@@ -1111,7 +1111,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_A_pdf_b87ec0d44da1ba",
@@ -1133,7 +1133,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_A_gross_negligence",
@@ -1155,7 +1155,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_A_serious_negligence",
@@ -1177,7 +1177,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_A_pdf_46df021cd7f705",
@@ -1199,7 +1199,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_A_pdf_7a39039ca2ca3a",
@@ -1221,7 +1221,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_A_pdf_36ef7ada0ab2d0",
@@ -1243,7 +1243,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_B_pdf_48eb37893b903e",
@@ -1265,7 +1265,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_B_pdf_b87ec0d44da1ba",
@@ -1287,7 +1287,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_B_gross_negligence",
@@ -1309,7 +1309,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_B_serious_negligence",
@@ -1331,7 +1331,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_B_pdf_46df021cd7f705",
@@ -1353,7 +1353,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_B_pdf_7a39039ca2ca3a",
@@ -1375,7 +1375,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "6_B_pdf_36ef7ada0ab2d0",
@@ -1397,7 +1397,7 @@
       343
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -1416,9 +1416,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "7_A_gross_negligence",
@@ -1439,7 +1439,7 @@
       403
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "7_A_serious_negligence",
@@ -1460,7 +1460,7 @@
       403
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "7_B_gross_negligence",
@@ -1481,7 +1481,7 @@
       403
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "7_B_serious_negligence",
@@ -1502,7 +1502,7 @@
       403
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -1523,9 +1523,9 @@
   "source_review_pending": [
    "③ 앞지르기 위험 장소 +10"
   ],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "8_A_pdf_06978cd9d46bcc",
@@ -1546,7 +1546,7 @@
       408
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "8_A_pdf_8fea486561706e",
@@ -1567,7 +1567,7 @@
       408
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "8_A_gross_negligence",
@@ -1588,7 +1588,7 @@
       408
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "8_A_serious_negligence",
@@ -1609,7 +1609,7 @@
       408
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "8_B_gross_negligence",
@@ -1630,7 +1630,7 @@
       408
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "8_B_serious_negligence",
@@ -1651,7 +1651,7 @@
       408
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -1670,9 +1670,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "9_A_gross_negligence",
@@ -1692,7 +1692,7 @@
       405
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "9_A_serious_negligence",
@@ -1712,7 +1712,7 @@
       405
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "9_B_gross_negligence",
@@ -1732,7 +1732,7 @@
       405
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "9_B_serious_negligence",
@@ -1752,7 +1752,7 @@
       405
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "9_B_pdf_cc58f12ffa7ba0",
@@ -1772,7 +1772,7 @@
       405
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -1791,9 +1791,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "10_A_gross_negligence",
@@ -1814,7 +1814,7 @@
       411
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "10_A_serious_negligence",
@@ -1835,7 +1835,7 @@
       411
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "10_B_pdf_06978cd9d46bcc",
@@ -1856,7 +1856,7 @@
       411
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "10_B_pdf_8fea486561706e",
@@ -1877,7 +1877,7 @@
       411
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "10_B_gross_negligence",
@@ -1898,7 +1898,7 @@
       411
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "10_B_serious_negligence",
@@ -1919,7 +1919,7 @@
       411
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -1938,9 +1938,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "12_A_signal_delay",
@@ -1961,7 +1961,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_A_pdf_cc7db2f9b8473e",
@@ -1982,7 +1982,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_A_pdf_2c73c3aae3c025",
@@ -2003,7 +2003,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_A_prohibited_change",
@@ -2024,7 +2024,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_A_gross_negligence",
@@ -2045,7 +2045,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_A_serious_negligence",
@@ -2066,7 +2066,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_A_pdf_7555982baf2758",
@@ -2087,7 +2087,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_B_signal_delay",
@@ -2108,7 +2108,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_B_pdf_cc7db2f9b8473e",
@@ -2129,7 +2129,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_B_pdf_2c73c3aae3c025",
@@ -2150,7 +2150,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_B_prohibited_change",
@@ -2171,7 +2171,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_B_gross_negligence",
@@ -2192,7 +2192,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "12_B_serious_negligence",
@@ -2213,7 +2213,7 @@
       380
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -2232,9 +2232,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "13_A_gross_negligence",
@@ -2254,7 +2254,7 @@
       382
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "13_A_serious_negligence",
@@ -2274,7 +2274,7 @@
       382
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "13_B_gross_negligence",
@@ -2294,7 +2294,7 @@
       382
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "13_B_serious_negligence",
@@ -2314,7 +2314,7 @@
       382
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -2333,9 +2333,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "14_A_gross_negligence",
@@ -2356,7 +2356,7 @@
       391
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "14_A_serious_negligence",
@@ -2377,7 +2377,7 @@
       391
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "14_B_signal_delay",
@@ -2398,7 +2398,7 @@
       391
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "14_B_serious_negligence",
@@ -2419,7 +2419,7 @@
       391
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -2438,9 +2438,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "15_A_gross_negligence",
@@ -2461,7 +2461,7 @@
       391
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "15_A_serious_negligence",
@@ -2482,7 +2482,7 @@
       391
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "15_B_signal_delay",
@@ -2503,7 +2503,7 @@
       391
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "15_B_gross_negligence",
@@ -2524,7 +2524,7 @@
       391
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "15_B_serious_negligence",
@@ -2545,7 +2545,7 @@
       391
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -2564,9 +2564,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "16_A_gross_negligence",
@@ -2587,7 +2587,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "16_A_serious_negligence",
@@ -2608,7 +2608,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "16_B_signal_delay",
@@ -2629,7 +2629,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "16_B_gross_negligence",
@@ -2650,7 +2650,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "16_B_serious_negligence",
@@ -2671,7 +2671,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -2690,9 +2690,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "17_A_slow_failure",
@@ -2714,7 +2714,7 @@
       461
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "17_A_gross_negligence",
@@ -2736,7 +2736,7 @@
       461
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "17_A_serious_negligence",
@@ -2758,7 +2758,7 @@
       461
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "17_B_gross_negligence",
@@ -2780,7 +2780,7 @@
       461
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "17_B_serious_negligence",
@@ -2802,7 +2802,7 @@
       461
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "17_B_slow_or_stop",
@@ -2824,7 +2824,7 @@
       461
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -2843,9 +2843,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "18_A_gross_negligence",
@@ -2867,7 +2867,7 @@
       477
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "18_A_serious_negligence",
@@ -2889,7 +2889,7 @@
       477
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "18_A_slow_failure",
@@ -2911,7 +2911,7 @@
       477
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "18_B_gross_negligence",
@@ -2933,7 +2933,7 @@
       477
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "18_B_serious_negligence",
@@ -2955,7 +2955,7 @@
       477
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "18_B_slow_or_stop",
@@ -2977,7 +2977,7 @@
       477
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "18_B_pdf_48a52c9783f61e",
@@ -2999,7 +2999,7 @@
       477
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -3018,9 +3018,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "19_A_gross_negligence",
@@ -3042,7 +3042,7 @@
       473
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "19_A_serious_negligence",
@@ -3064,7 +3064,7 @@
       473
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "19_A_slow_failure",
@@ -3086,7 +3086,7 @@
       473
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "19_B_pdf_48a52c9783f61e",
@@ -3108,7 +3108,7 @@
       473
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "19_B_slow_or_stop",
@@ -3130,7 +3130,7 @@
       473
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "19_B_gross_negligence",
@@ -3152,7 +3152,7 @@
       473
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "19_B_serious_negligence",
@@ -3174,7 +3174,7 @@
       473
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -3193,9 +3193,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "20_A_gross_negligence",
@@ -3217,7 +3217,7 @@
       481
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "20_A_serious_negligence",
@@ -3239,7 +3239,7 @@
       481
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "20_B_gross_negligence",
@@ -3261,7 +3261,7 @@
       481
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "20_B_serious_negligence",
@@ -3283,7 +3283,7 @@
       481
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -3302,9 +3302,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "22_A_gross_negligence",
@@ -3325,7 +3325,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "22_A_serious_negligence",
@@ -3346,7 +3346,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "22_A_slow_or_stop",
@@ -3367,7 +3367,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "22_B_gross_negligence",
@@ -3388,7 +3388,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "22_B_serious_negligence",
@@ -3409,7 +3409,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "22_B_slow_or_stop",
@@ -3430,7 +3430,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -3449,9 +3449,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "23_A_gross_negligence",
@@ -3472,7 +3472,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "23_A_serious_negligence",
@@ -3493,7 +3493,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "23_A_slow_or_stop",
@@ -3514,7 +3514,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "23_B_gross_negligence",
@@ -3535,7 +3535,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "23_B_serious_negligence",
@@ -3556,7 +3556,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "23_B_slow_or_stop",
@@ -3577,7 +3577,7 @@
       270
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -3596,9 +3596,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "24_A_gross_negligence",
@@ -3619,7 +3619,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_A_serious_negligence",
@@ -3640,7 +3640,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_A_clear_prior_entry",
@@ -3661,7 +3661,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_B_pdf_389aecb1bd9c51",
@@ -3682,7 +3682,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_B_slow_failure",
@@ -3703,7 +3703,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_B_pdf_93fccfd7ed9162",
@@ -3724,7 +3724,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_B_pdf_296332703fcbcf",
@@ -3745,7 +3745,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_B_gross_negligence",
@@ -3766,7 +3766,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_B_serious_negligence",
@@ -3787,7 +3787,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_B_clear_prior_entry",
@@ -3808,7 +3808,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "24_B_pdf_cbe7e37a8b2994",
@@ -3829,7 +3829,7 @@
       293
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -3850,9 +3850,9 @@
   "source_review_pending": [
    "B 중대한 과실 +10"
   ],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "25_A_slow_failure",
@@ -3874,7 +3874,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_A_gross_negligence",
@@ -3896,7 +3896,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_A_serious_negligence",
@@ -3918,7 +3918,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_A_clear_prior_entry",
@@ -3940,7 +3940,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_B_pdf_389aecb1bd9c51",
@@ -3962,7 +3962,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_B_pdf_296332703fcbcf",
@@ -3984,7 +3984,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_B_slow_failure",
@@ -4006,7 +4006,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_B_pdf_ec94348268ebbc",
@@ -4028,7 +4028,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_B_gross_negligence",
@@ -4050,7 +4050,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_B_clear_prior_entry",
@@ -4072,7 +4072,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "25_B_pdf_cbe7e37a8b2994",
@@ -4094,7 +4094,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -4115,9 +4115,9 @@
   "source_review_pending": [
    "B 중대한 과실 +10"
   ],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "26_A_slow_failure",
@@ -4139,7 +4139,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_A_gross_negligence",
@@ -4161,7 +4161,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_A_serious_negligence",
@@ -4183,7 +4183,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_A_clear_prior_entry",
@@ -4205,7 +4205,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_B_pdf_389aecb1bd9c51",
@@ -4227,7 +4227,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_B_pdf_296332703fcbcf",
@@ -4249,7 +4249,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_B_slow_failure",
@@ -4271,7 +4271,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_B_pdf_ec94348268ebbc",
@@ -4293,7 +4293,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_B_gross_negligence",
@@ -4315,7 +4315,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_B_clear_prior_entry",
@@ -4337,7 +4337,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "26_B_pdf_cbe7e37a8b2994",
@@ -4359,7 +4359,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -4378,9 +4378,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "28_A_slow_failure",
@@ -4401,7 +4401,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "28_A_wide_right_turn",
@@ -4422,7 +4422,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "28_A_gross_negligence",
@@ -4443,7 +4443,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "28_A_serious_negligence",
@@ -4464,7 +4464,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "28_A_clear_prior_entry",
@@ -4485,7 +4485,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "28_B_slow_failure",
@@ -4506,7 +4506,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "28_B_gross_negligence",
@@ -4527,7 +4527,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "28_B_serious_negligence",
@@ -4548,7 +4548,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -4567,9 +4567,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "29_A_slow_failure",
@@ -4590,7 +4590,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "29_A_wide_right_turn",
@@ -4611,7 +4611,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "29_A_gross_negligence",
@@ -4632,7 +4632,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "29_A_serious_negligence",
@@ -4653,7 +4653,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "29_B_slow_failure",
@@ -4674,7 +4674,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "29_B_gross_negligence",
@@ -4695,7 +4695,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "29_B_serious_negligence",
@@ -4716,7 +4716,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "29_B_clear_prior_entry",
@@ -4737,7 +4737,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -4756,9 +4756,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "30_A_pdf_61fd7c2787fac9",
@@ -4778,7 +4778,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "30_A_pdf_ec94348268ebbc",
@@ -4798,7 +4798,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "30_A_gross_negligence",
@@ -4818,7 +4818,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "30_A_serious_negligence",
@@ -4838,7 +4838,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "30_B_pdf_61fd7c2787fac9",
@@ -4858,7 +4858,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "30_B_pdf_ec94348268ebbc",
@@ -4878,7 +4878,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "30_B_gross_negligence",
@@ -4898,7 +4898,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "30_B_serious_negligence",
@@ -4918,7 +4918,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -4937,9 +4937,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "31_A_gross_negligence",
@@ -4961,7 +4961,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "31_A_serious_negligence",
@@ -4983,7 +4983,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "31_A_slow_or_stop",
@@ -5005,7 +5005,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "31_B_gross_negligence",
@@ -5027,7 +5027,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "31_B_serious_negligence",
@@ -5049,7 +5049,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -5068,9 +5068,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "32_A_slow_failure",
@@ -5092,7 +5092,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_A_gross_negligence",
@@ -5114,7 +5114,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_A_serious_negligence",
@@ -5136,7 +5136,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_B_pdf_389aecb1bd9c51",
@@ -5158,7 +5158,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_B_pdf_296332703fcbcf",
@@ -5180,7 +5180,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_B_slow_failure",
@@ -5202,7 +5202,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_B_pdf_ec94348268ebbc",
@@ -5224,7 +5224,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_B_gross_negligence",
@@ -5246,7 +5246,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_B_serious_negligence",
@@ -5268,7 +5268,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_B_clear_prior_entry",
@@ -5290,7 +5290,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "32_B_pdf_cbe7e37a8b2994",
@@ -5312,7 +5312,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -5331,9 +5331,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "33_A_gross_negligence",
@@ -5355,7 +5355,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "33_A_serious_negligence",
@@ -5377,7 +5377,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "33_A_slow_or_stop",
@@ -5399,7 +5399,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "33_B_gross_negligence",
@@ -5421,7 +5421,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "33_B_serious_negligence",
@@ -5443,7 +5443,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -5462,9 +5462,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "34_A_gross_negligence",
@@ -5486,7 +5486,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "34_A_serious_negligence",
@@ -5508,7 +5508,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "34_A_slow_or_stop",
@@ -5530,7 +5530,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "34_B_gross_negligence",
@@ -5552,7 +5552,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "34_B_serious_negligence",
@@ -5574,7 +5574,7 @@
       274
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -5593,9 +5593,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "35_A_slow_failure",
@@ -5617,7 +5617,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_A_gross_negligence",
@@ -5639,7 +5639,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_A_serious_negligence",
@@ -5661,7 +5661,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_B_pdf_aac21fc28111da",
@@ -5683,7 +5683,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_B_pdf_296332703fcbcf",
@@ -5705,7 +5705,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_B_slow_failure",
@@ -5727,7 +5727,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_B_pdf_ec94348268ebbc",
@@ -5749,7 +5749,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_B_gross_negligence",
@@ -5771,7 +5771,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_B_serious_negligence",
@@ -5793,7 +5793,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_B_clear_prior_entry",
@@ -5815,7 +5815,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "35_B_pdf_cbe7e37a8b2994",
@@ -5837,7 +5837,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -5856,9 +5856,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "36_A_slow_failure",
@@ -5879,7 +5879,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_A_gross_negligence",
@@ -5900,7 +5900,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_A_serious_negligence",
@@ -5921,7 +5921,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_B_pdf_c3b1c2051f251f",
@@ -5942,7 +5942,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_B_pdf_296332703fcbcf",
@@ -5963,7 +5963,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_B_slow_failure",
@@ -5984,7 +5984,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_B_pdf_ec94348268ebbc",
@@ -6005,7 +6005,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_B_gross_negligence",
@@ -6026,7 +6026,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_B_serious_negligence",
@@ -6047,7 +6047,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_B_clear_prior_entry",
@@ -6068,7 +6068,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "36_B_pdf_cbe7e37a8b2994",
@@ -6089,7 +6089,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -6108,9 +6108,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "37_A_slow_failure",
@@ -6132,7 +6132,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "37_A_wide_right_turn",
@@ -6154,7 +6154,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "37_A_gross_negligence",
@@ -6176,7 +6176,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "37_A_serious_negligence",
@@ -6198,7 +6198,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "37_A_clear_prior_entry",
@@ -6220,7 +6220,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "37_B_slow_failure",
@@ -6242,7 +6242,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "37_B_gross_negligence",
@@ -6264,7 +6264,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "37_B_serious_negligence",
@@ -6286,7 +6286,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "37_B_clear_prior_entry",
@@ -6308,401 +6308,7 @@
       284
      ]
     },
-    "reviewed": false
-   }
-  ]
- },
- "38": {
-  "official_chart": "차13-3",
-  "source": "PDF 2023.06 차13-3",
-  "coverage": "PDF 표에서 역할·수치·분기가 식별된 항목. 적용 사실은 사용자 확인, 예외 판단은 별도.",
-  "expected_a_progress": "소로에서 우회전(후진입)",
-  "expected_b_progress": "대로에서 직진(선진입)",
-  "expected_base": [
-   80,
-   20
-  ],
-  "exclusive_groups": [
-   "A_speed_state",
-   "B_speed_state"
-  ],
-  "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
-  "rules": [
-   {
-    "id": "38_A_slow_failure",
-    "actor": "A",
-    "factor": "slow_failure",
-    "delta_pp": 10,
-    "group": "A_speed_state",
-    "manual_only": true,
-    "label": "서행 불이행",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "① A 서행불이행 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "38_A_wide_right_turn",
-    "actor": "A",
-    "factor": "wide_right_turn",
-    "delta_pp": 10,
-    "group": "A_wide_right_turn",
-    "manual_only": true,
-    "label": "대우회전",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "② A 대우회전 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "38_A_gross_negligence",
-    "actor": "A",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "A 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "38_A_serious_negligence",
-    "actor": "A",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "A 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "38_A_clear_prior_entry",
-    "actor": "A",
-    "factor": "clear_prior_entry",
-    "delta_pp": -20,
-    "group": "A_clear_prior_entry",
-    "manual_only": true,
-    "label": "명확한 선진입",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "④ A명확한 선진입 -20",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "38_B_slow_failure",
-    "actor": "B",
-    "factor": "slow_failure",
-    "delta_pp": 10,
-    "group": "B_speed_state",
-    "manual_only": true,
-    "label": "서행 불이행",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "① B 서행불이행 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "38_B_gross_negligence",
-    "actor": "B",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "B 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "38_B_serious_negligence",
-    "actor": "B",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "B 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   }
-  ]
- },
- "39": {
-  "official_chart": "차13-3",
-  "source": "PDF 2023.06 차13-3",
-  "coverage": "PDF 표에서 역할·수치·분기가 식별된 항목. 적용 사실은 사용자 확인, 예외 판단은 별도.",
-  "expected_a_progress": "소로에서 우회전(선진입)",
-  "expected_b_progress": "대로에서 직진(후진입)",
-  "expected_base": [
-   50,
-   50
-  ],
-  "exclusive_groups": [
-   "A_speed_state",
-   "B_speed_state"
-  ],
-  "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
-  "rules": [
-   {
-    "id": "39_A_slow_failure",
-    "actor": "A",
-    "factor": "slow_failure",
-    "delta_pp": 10,
-    "group": "A_speed_state",
-    "manual_only": true,
-    "label": "서행 불이행",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "① A 서행불이행 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "39_A_wide_right_turn",
-    "actor": "A",
-    "factor": "wide_right_turn",
-    "delta_pp": 10,
-    "group": "A_wide_right_turn",
-    "manual_only": true,
-    "label": "대우회전",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "② A 대우회전 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "39_A_gross_negligence",
-    "actor": "A",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "A 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "39_A_serious_negligence",
-    "actor": "A",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "A 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "39_B_slow_failure",
-    "actor": "B",
-    "factor": "slow_failure",
-    "delta_pp": 10,
-    "group": "B_speed_state",
-    "manual_only": true,
-    "label": "서행 불이행",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "① B 서행불이행 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "39_B_gross_negligence",
-    "actor": "B",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "B 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "39_B_serious_negligence",
-    "actor": "B",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "B 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "39_B_clear_prior_entry",
-    "actor": "B",
-    "factor": "clear_prior_entry",
-    "delta_pp": -10,
-    "group": "B_clear_prior_entry",
-    "manual_only": true,
-    "label": "명확한 선진입",
-    "pdf_source": {
-     "chart": "차13-3",
-     "raw_text": "B명확한 선진입 -10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      281,
-      282,
-      283,
-      284
-     ]
-    },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -6721,9 +6327,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "40_A_slow_failure",
@@ -6744,7 +6350,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "40_A_wide_right_turn",
@@ -6765,7 +6371,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "40_A_gross_negligence",
@@ -6786,7 +6392,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "40_A_serious_negligence",
@@ -6807,7 +6413,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "40_A_clear_prior_entry",
@@ -6828,7 +6434,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "40_B_slow_failure",
@@ -6849,7 +6455,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "40_B_gross_negligence",
@@ -6870,7 +6476,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "40_B_serious_negligence",
@@ -6891,7 +6497,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "40_B_clear_prior_entry",
@@ -6912,385 +6518,7 @@
       287
      ]
     },
-    "reviewed": false
-   }
-  ]
- },
- "41": {
-  "official_chart": "차13-4",
-  "source": "PDF 2023.06 차13-4",
-  "coverage": "PDF 표에서 역할·수치·분기가 식별된 항목. 적용 사실은 사용자 확인, 예외 판단은 별도.",
-  "expected_a_progress": "대로에서 우회전(후진입)",
-  "expected_b_progress": "소로에서 직진(선진입)",
-  "expected_base": [
-   60,
-   40
-  ],
-  "exclusive_groups": [
-   "A_speed_state",
-   "B_speed_state"
-  ],
-  "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
-  "rules": [
-   {
-    "id": "41_A_slow_failure",
-    "actor": "A",
-    "factor": "slow_failure",
-    "delta_pp": 10,
-    "group": "A_speed_state",
-    "manual_only": true,
-    "label": "서행 불이행",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "① A 서행불이행 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "41_A_wide_right_turn",
-    "actor": "A",
-    "factor": "wide_right_turn",
-    "delta_pp": 10,
-    "group": "A_wide_right_turn",
-    "manual_only": true,
-    "label": "대우회전",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "② A 대우회전 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "41_A_gross_negligence",
-    "actor": "A",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "A 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "41_A_serious_negligence",
-    "actor": "A",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "A 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "41_A_clear_prior_entry",
-    "actor": "A",
-    "factor": "clear_prior_entry",
-    "delta_pp": -10,
-    "group": "A_clear_prior_entry",
-    "manual_only": true,
-    "label": "명확한 선진입",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "A 명확한 선진입 -10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "41_B_slow_failure",
-    "actor": "B",
-    "factor": "slow_failure",
-    "delta_pp": 10,
-    "group": "B_speed_state",
-    "manual_only": true,
-    "label": "서행 불이행",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "① B 서행불이행 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "41_B_gross_negligence",
-    "actor": "B",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "B 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "41_B_serious_negligence",
-    "actor": "B",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "B 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   }
-  ]
- },
- "42": {
-  "official_chart": "차13-4",
-  "source": "PDF 2023.06 차13-4",
-  "coverage": "PDF 표에서 역할·수치·분기가 식별된 항목. 적용 사실은 사용자 확인, 예외 판단은 별도.",
-  "expected_a_progress": "대로에서 우회전(선진입)",
-  "expected_b_progress": "소로에서 직진(후진입)",
-  "expected_base": [
-   20,
-   80
-  ],
-  "exclusive_groups": [
-   "A_speed_state",
-   "B_speed_state"
-  ],
-  "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
-  "rules": [
-   {
-    "id": "42_A_slow_failure",
-    "actor": "A",
-    "factor": "slow_failure",
-    "delta_pp": 10,
-    "group": "A_speed_state",
-    "manual_only": true,
-    "label": "서행 불이행",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "① A 서행불이행 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "42_A_wide_right_turn",
-    "actor": "A",
-    "factor": "wide_right_turn",
-    "delta_pp": 10,
-    "group": "A_wide_right_turn",
-    "manual_only": true,
-    "label": "대우회전",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "② A 대우회전 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "42_A_gross_negligence",
-    "actor": "A",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "A 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "42_A_serious_negligence",
-    "actor": "A",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "A 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "42_B_slow_failure",
-    "actor": "B",
-    "factor": "slow_failure",
-    "delta_pp": 10,
-    "group": "B_speed_state",
-    "manual_only": true,
-    "label": "서행 불이행",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "① B 서행불이행 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "42_B_gross_negligence",
-    "actor": "B",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "B 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "42_B_serious_negligence",
-    "actor": "B",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "B 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "42_B_clear_prior_entry",
-    "actor": "B",
-    "factor": "clear_prior_entry",
-    "delta_pp": -30,
-    "group": "B_clear_prior_entry",
-    "manual_only": true,
-    "label": "명확한 선진입",
-    "pdf_source": {
-     "chart": "차13-4",
-     "raw_text": "④ B명확한 선진입 -30",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      285,
-      286,
-      287
-     ]
-    },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -7309,9 +6537,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "43_A_pdf_61fd7c2787fac9",
@@ -7332,7 +6560,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "43_A_pdf_ec94348268ebbc",
@@ -7353,7 +6581,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "43_A_gross_negligence",
@@ -7374,7 +6602,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "43_A_serious_negligence",
@@ -7395,7 +6623,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "43_A_clear_prior_entry",
@@ -7416,7 +6644,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "43_B_pdf_61fd7c2787fac9",
@@ -7437,7 +6665,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "43_B_pdf_ec94348268ebbc",
@@ -7458,7 +6686,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "43_B_gross_negligence",
@@ -7479,7 +6707,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "43_B_serious_negligence",
@@ -7500,7 +6728,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "43_B_clear_prior_entry",
@@ -7521,7 +6749,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -7540,9 +6768,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "44_A_gross_negligence",
@@ -7563,7 +6791,7 @@
       229
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "44_A_serious_negligence",
@@ -7584,7 +6812,7 @@
       229
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "44_A_clear_prior_entry",
@@ -7605,7 +6833,7 @@
       229
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "44_B_gross_negligence",
@@ -7626,7 +6854,7 @@
       229
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "44_B_serious_negligence",
@@ -7647,7 +6875,7 @@
       229
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "44_B_clear_prior_entry",
@@ -7668,7 +6896,7 @@
       229
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -7687,9 +6915,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "45_A_slow_failure",
@@ -7710,7 +6938,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "45_A_gross_negligence",
@@ -7731,7 +6959,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "45_A_serious_negligence",
@@ -7752,7 +6980,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "45_B_pdf_389aecb1bd9c51",
@@ -7773,7 +7001,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "45_B_pdf_ec94348268ebbc",
@@ -7794,7 +7022,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "45_B_gross_negligence",
@@ -7815,7 +7043,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "45_B_serious_negligence",
@@ -7836,7 +7064,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "45_B_clear_prior_entry",
@@ -7857,7 +7085,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "45_B_pdf_8b19670119ce77",
@@ -7878,7 +7106,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -7897,9 +7125,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "46_A_gross_negligence",
@@ -7920,7 +7148,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "46_A_serious_negligence",
@@ -7941,7 +7169,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "46_A_pdf_8b19670119ce77",
@@ -7962,7 +7190,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "46_B_pdf_389aecb1bd9c51",
@@ -7983,7 +7211,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "46_B_slow_failure",
@@ -8004,7 +7232,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "46_B_pdf_ec94348268ebbc",
@@ -8025,7 +7253,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "46_B_gross_negligence",
@@ -8046,7 +7274,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "46_B_serious_negligence",
@@ -8067,7 +7295,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "46_B_clear_prior_entry",
@@ -8088,7 +7316,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -8107,9 +7335,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "47_A_gross_negligence",
@@ -8130,7 +7358,7 @@
       240
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "47_A_serious_negligence",
@@ -8151,7 +7379,7 @@
       240
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "47_A_pdf_8b19670119ce77",
@@ -8172,7 +7400,7 @@
       240
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "47_B_pdf_389aecb1bd9c51",
@@ -8193,7 +7421,7 @@
       240
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "47_B_slow_failure",
@@ -8214,7 +7442,7 @@
       240
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "47_B_pdf_ec94348268ebbc",
@@ -8235,7 +7463,7 @@
       240
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "47_B_gross_negligence",
@@ -8256,7 +7484,7 @@
       240
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "47_B_serious_negligence",
@@ -8277,7 +7505,7 @@
       240
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "47_B_clear_prior_entry",
@@ -8298,7 +7526,7 @@
       240
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -8317,9 +7545,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "48_A_gross_negligence",
@@ -8340,7 +7568,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "48_A_serious_negligence",
@@ -8361,7 +7589,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "48_A_pdf_8b19670119ce77",
@@ -8382,7 +7610,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "48_B_slow_failure",
@@ -8403,7 +7631,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "48_B_gross_negligence",
@@ -8424,7 +7652,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "48_B_serious_negligence",
@@ -8445,7 +7673,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -8464,9 +7692,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "49_A_slow_failure",
@@ -8487,7 +7715,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "49_A_gross_negligence",
@@ -8508,7 +7736,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "49_A_serious_negligence",
@@ -8529,7 +7757,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "49_A_pdf_8b19670119ce77",
@@ -8550,7 +7778,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "49_B_slow_failure",
@@ -8571,7 +7799,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "49_B_gross_negligence",
@@ -8592,7 +7820,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "49_B_serious_negligence",
@@ -8613,7 +7841,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "49_B_clear_prior_entry",
@@ -8634,7 +7862,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -8653,9 +7881,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "50_A_pdf_61fd7c2787fac9",
@@ -8676,7 +7904,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "50_A_gross_negligence",
@@ -8697,7 +7925,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "50_A_serious_negligence",
@@ -8718,7 +7946,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "50_A_pdf_8b19670119ce77",
@@ -8739,7 +7967,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "50_B_pdf_61fd7c2787fac9",
@@ -8760,7 +7988,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "50_B_gross_negligence",
@@ -8781,7 +8009,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "50_B_serious_negligence",
@@ -8802,7 +8030,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -8821,9 +8049,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "51_A_gross_negligence",
@@ -8843,7 +8071,7 @@
       231
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "51_A_serious_negligence",
@@ -8863,7 +8091,7 @@
       231
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "51_A_clear_prior_entry",
@@ -8883,7 +8111,7 @@
       231
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "51_B_gross_negligence",
@@ -8903,7 +8131,7 @@
       231
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "51_B_serious_negligence",
@@ -8923,7 +8151,7 @@
       231
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "51_B_clear_prior_entry",
@@ -8943,7 +8171,7 @@
       231
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -8962,9 +8190,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "52_A_signal_delay",
@@ -8985,7 +8213,7 @@
       280
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "52_A_gross_negligence",
@@ -9006,7 +8234,7 @@
       280
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "52_A_serious_negligence",
@@ -9027,7 +8255,7 @@
       280
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "52_B_signal_delay",
@@ -9048,7 +8276,7 @@
       280
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -9067,9 +8295,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "53_A_gross_negligence",
@@ -9089,7 +8317,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "53_A_serious_negligence",
@@ -9109,7 +8337,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "53_B_slow_failure",
@@ -9129,7 +8357,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "53_B_signal_delay",
@@ -9149,7 +8377,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "53_B_pdf_dde09a232fa220",
@@ -9169,7 +8397,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "53_B_gross_negligence",
@@ -9189,7 +8417,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "53_B_serious_negligence",
@@ -9209,7 +8437,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -9228,9 +8456,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "54_A_gross_negligence",
@@ -9250,7 +8478,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "54_A_serious_negligence",
@@ -9270,7 +8498,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "54_B_slow_failure",
@@ -9290,7 +8518,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "54_B_signal_delay",
@@ -9310,7 +8538,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "54_B_pdf_dde09a232fa220",
@@ -9330,7 +8558,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "54_B_gross_negligence",
@@ -9350,7 +8578,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "54_B_serious_negligence",
@@ -9370,7 +8598,7 @@
       317
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -9389,9 +8617,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "58_A_gross_negligence",
@@ -9412,7 +8640,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "58_A_serious_negligence",
@@ -9433,7 +8661,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "58_B_signal_delay",
@@ -9454,7 +8682,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "58_B_gross_negligence",
@@ -9475,7 +8703,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "58_B_serious_negligence",
@@ -9496,7 +8724,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -9515,9 +8743,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "59_A_gross_negligence",
@@ -9539,7 +8767,7 @@
       469
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "59_A_serious_negligence",
@@ -9561,7 +8789,7 @@
       469
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "59_A_pdf_1470276fd6420b",
@@ -9583,7 +8811,7 @@
       469
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "59_A_slow_failure",
@@ -9605,7 +8833,7 @@
       469
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "59_B_gross_negligence",
@@ -9627,7 +8855,7 @@
       469
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "59_B_serious_negligence",
@@ -9649,7 +8877,7 @@
       469
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "59_B_slow_or_stop",
@@ -9671,7 +8899,7 @@
       469
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "59_B_clear_prior_entry",
@@ -9693,7 +8921,7 @@
       469
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -9712,9 +8940,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "60_A_gross_negligence",
@@ -9736,7 +8964,7 @@
       151
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "60_A_serious_negligence",
@@ -9758,7 +8986,7 @@
       151
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "60_B_serious_negligence",
@@ -9780,7 +9008,7 @@
       151
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -9799,9 +9027,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "61_A_pdf_d08c44661840da",
@@ -9822,7 +9050,7 @@
       154
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "61_A_gross_negligence",
@@ -9843,7 +9071,7 @@
       154
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "61_A_serious_negligence",
@@ -9864,7 +9092,7 @@
       154
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "61_B_gross_negligence",
@@ -9885,7 +9113,7 @@
       154
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "61_B_serious_negligence",
@@ -9906,7 +9134,7 @@
       154
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -9925,9 +9153,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "62_A_gross_negligence",
@@ -9948,7 +9176,7 @@
       154
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "62_A_serious_negligence",
@@ -9969,7 +9197,7 @@
       154
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "62_B_gross_negligence",
@@ -9990,7 +9218,7 @@
       154
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "62_B_serious_negligence",
@@ -10011,7 +9239,7 @@
       154
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -10030,9 +9258,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "63_A_pdf_b6314dc0478f37",
@@ -10053,7 +9281,7 @@
       157
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "63_A_gross_negligence",
@@ -10074,7 +9302,7 @@
       157
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "63_B_serious_negligence",
@@ -10095,7 +9323,7 @@
       157
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "63_B_gross_negligence",
@@ -10116,7 +9344,7 @@
       157
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -10135,9 +9363,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "64_A_pdf_d08c44661840da",
@@ -10158,7 +9386,7 @@
       191
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "64_A_gross_negligence",
@@ -10179,7 +9407,7 @@
       191
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "64_A_serious_negligence",
@@ -10200,7 +9428,7 @@
       191
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "64_B_pdf_389aecb1bd9c51",
@@ -10221,7 +9449,7 @@
       191
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "64_B_slow_failure",
@@ -10242,7 +9470,7 @@
       191
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "64_B_pdf_93fccfd7ed9162",
@@ -10263,7 +9491,7 @@
       191
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "64_B_gross_negligence",
@@ -10284,7 +9512,7 @@
       191
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "64_B_serious_negligence",
@@ -10305,7 +9533,7 @@
       191
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "64_B_pdf_cbe7e37a8b2994",
@@ -10326,7 +9554,7 @@
       191
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -10345,9 +9573,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "65_A_gross_negligence",
@@ -10367,7 +9595,7 @@
       159
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "65_A_serious_negligence",
@@ -10387,7 +9615,7 @@
       159
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "65_B_gross_negligence",
@@ -10407,7 +9635,7 @@
       159
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "65_B_serious_negligence",
@@ -10427,7 +9655,7 @@
       159
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -10446,9 +9674,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "66_A_gross_negligence",
@@ -10469,7 +9697,7 @@
       185
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "66_A_serious_negligence",
@@ -10490,7 +9718,7 @@
       185
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "66_B_gross_negligence",
@@ -10511,7 +9739,7 @@
       185
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "66_B_serious_negligence",
@@ -10532,7 +9760,7 @@
       185
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -10551,9 +9779,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "67_A_pdf_d08c44661840da",
@@ -10574,7 +9802,7 @@
       188
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "67_A_gross_negligence",
@@ -10595,7 +9823,7 @@
       188
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "67_A_serious_negligence",
@@ -10616,7 +9844,7 @@
       188
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "67_B_pdf_389aecb1bd9c51",
@@ -10637,7 +9865,7 @@
       188
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "67_B_slow_failure",
@@ -10658,7 +9886,7 @@
       188
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "67_B_pdf_93fccfd7ed9162",
@@ -10679,7 +9907,7 @@
       188
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "67_B_gross_negligence",
@@ -10700,7 +9928,7 @@
       188
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "67_B_serious_negligence",
@@ -10721,7 +9949,7 @@
       188
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "67_B_pdf_cbe7e37a8b2994",
@@ -10742,7 +9970,7 @@
       188
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -10761,9 +9989,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "68_A_pdf_d08c44661840da",
@@ -10784,7 +10012,7 @@
       194
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "68_A_gross_negligence",
@@ -10805,7 +10033,7 @@
       194
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "68_A_serious_negligence",
@@ -10826,7 +10054,7 @@
       194
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "68_B_pdf_389aecb1bd9c51",
@@ -10847,7 +10075,7 @@
       194
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "68_B_slow_failure",
@@ -10868,7 +10096,7 @@
       194
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "68_B_pdf_93fccfd7ed9162",
@@ -10889,7 +10117,7 @@
       194
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "68_B_gross_negligence",
@@ -10910,7 +10138,7 @@
       194
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "68_B_serious_negligence",
@@ -10931,7 +10159,7 @@
       194
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "68_B_pdf_cbe7e37a8b2994",
@@ -10952,7 +10180,7 @@
       194
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -10971,9 +10199,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "69_A_pdf_d08c44661840da",
@@ -10995,7 +10223,7 @@
       198
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "69_A_gross_negligence",
@@ -11017,7 +10245,7 @@
       198
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "69_A_serious_negligence",
@@ -11039,7 +10267,7 @@
       198
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "69_B_gross_negligence",
@@ -11061,7 +10289,7 @@
       198
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "69_B_serious_negligence",
@@ -11083,7 +10311,7 @@
       198
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -11102,9 +10330,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "70_A_gross_negligence",
@@ -11126,7 +10354,7 @@
       198
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "70_A_serious_negligence",
@@ -11148,7 +10376,7 @@
       198
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "70_B_gross_negligence",
@@ -11170,7 +10398,7 @@
       198
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "70_B_serious_negligence",
@@ -11192,7 +10420,7 @@
       198
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -11211,9 +10439,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "71_A_gross_negligence",
@@ -11234,7 +10462,7 @@
       166
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "71_A_serious_negligence",
@@ -11255,7 +10483,7 @@
       166
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "71_B_gross_negligence",
@@ -11276,7 +10504,7 @@
       166
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "71_B_serious_negligence",
@@ -11297,7 +10525,7 @@
       166
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -11316,9 +10544,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "72_A_pdf_d08c44661840da",
@@ -11339,7 +10567,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "72_A_gross_negligence",
@@ -11360,7 +10588,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "72_A_serious_negligence",
@@ -11381,7 +10609,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "72_B_pdf_389aecb1bd9c51",
@@ -11402,7 +10630,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "72_B_slow_failure",
@@ -11423,7 +10651,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "72_B_pdf_93fccfd7ed9162",
@@ -11444,7 +10672,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "72_B_gross_negligence",
@@ -11465,7 +10693,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "72_B_serious_negligence",
@@ -11486,7 +10714,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "72_B_pdf_cbe7e37a8b2994",
@@ -11507,7 +10735,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -11526,9 +10754,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "73_A_gross_negligence",
@@ -11549,7 +10777,7 @@
       169
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "73_A_serious_negligence",
@@ -11570,7 +10798,7 @@
       169
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "73_B_gross_negligence",
@@ -11591,7 +10819,7 @@
       169
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "73_B_serious_negligence",
@@ -11612,7 +10840,7 @@
       169
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -11631,9 +10859,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "74_A_pdf_d08c44661840da",
@@ -11653,7 +10881,7 @@
       171
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "74_A_gross_negligence",
@@ -11673,7 +10901,7 @@
       171
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "74_A_serious_negligence",
@@ -11693,7 +10921,7 @@
       171
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "74_B_pdf_389aecb1bd9c51",
@@ -11713,7 +10941,7 @@
       171
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "74_B_slow_failure",
@@ -11733,7 +10961,7 @@
       171
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "74_B_gross_negligence",
@@ -11753,7 +10981,7 @@
       171
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "74_B_serious_negligence",
@@ -11773,7 +11001,7 @@
       171
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "74_B_pdf_cbe7e37a8b2994",
@@ -11793,7 +11021,7 @@
       171
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -11812,9 +11040,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "75_A_pdf_d08c44661840da",
@@ -11835,7 +11063,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "75_A_gross_negligence",
@@ -11856,7 +11084,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "75_A_serious_negligence",
@@ -11877,7 +11105,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "75_B_pdf_389aecb1bd9c51",
@@ -11898,7 +11126,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "75_B_slow_failure",
@@ -11919,7 +11147,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "75_B_pdf_93fccfd7ed9162",
@@ -11940,7 +11168,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "75_B_gross_negligence",
@@ -11961,7 +11189,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "75_B_serious_negligence",
@@ -11982,7 +11210,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "75_B_pdf_cbe7e37a8b2994",
@@ -12003,7 +11231,7 @@
       174
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -12022,9 +11250,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "76_A_gross_negligence",
@@ -12045,7 +11273,7 @@
       177
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "76_A_serious_negligence",
@@ -12066,7 +11294,7 @@
       177
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "76_A_pdf_d08c44661840da",
@@ -12087,7 +11315,7 @@
       177
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "76_B_gross_negligence",
@@ -12108,7 +11336,7 @@
       177
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "76_B_serious_negligence",
@@ -12129,7 +11357,7 @@
       177
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -12148,9 +11376,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "77_A_gross_negligence",
@@ -12171,7 +11399,7 @@
       177
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "77_A_serious_negligence",
@@ -12192,7 +11420,7 @@
       177
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "77_B_gross_negligence",
@@ -12213,7 +11441,7 @@
       177
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "77_B_serious_negligence",
@@ -12234,7 +11462,7 @@
       177
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -12253,9 +11481,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "78_A_pdf_c3b1c2051f251f",
@@ -12277,7 +11505,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "78_A_pdf_d3c594e5752e17",
@@ -12299,7 +11527,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "78_A_gross_negligence",
@@ -12321,7 +11549,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "78_A_serious_negligence",
@@ -12343,7 +11571,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "78_B_wide_right_turn",
@@ -12365,7 +11593,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "78_B_pdf_0b73e506f281f7",
@@ -12387,7 +11615,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "78_B_gross_negligence",
@@ -12409,7 +11637,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "78_B_serious_negligence",
@@ -12431,7 +11659,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "78_B_clear_prior_entry",
@@ -12453,7 +11681,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "78_B_pdf_0ebeb478f33ddd",
@@ -12475,7 +11703,7 @@
       210
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -12494,9 +11722,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "80_A_clear_prior_entry",
@@ -12518,7 +11746,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "80_A_pdf_ebdce6333e16f4",
@@ -12540,7 +11768,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "80_A_gross_negligence",
@@ -12562,7 +11790,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "80_A_serious_negligence",
@@ -12584,7 +11812,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "80_B_gross_negligence",
@@ -12606,7 +11834,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "80_B_serious_negligence",
@@ -12628,7 +11856,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -12647,9 +11875,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "81_A_clear_prior_entry",
@@ -12671,7 +11899,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "81_A_pdf_ebdce6333e16f4",
@@ -12693,7 +11921,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "81_A_gross_negligence",
@@ -12715,7 +11943,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "81_A_serious_negligence",
@@ -12737,7 +11965,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "81_B_gross_negligence",
@@ -12759,7 +11987,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "81_B_serious_negligence",
@@ -12781,7 +12009,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -12800,9 +12028,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "82_A_clear_prior_entry",
@@ -12824,7 +12052,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "82_A_pdf_ebdce6333e16f4",
@@ -12846,7 +12074,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "82_A_gross_negligence",
@@ -12868,7 +12096,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "82_A_serious_negligence",
@@ -12890,7 +12118,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "82_B_gross_negligence",
@@ -12912,7 +12140,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "82_B_serious_negligence",
@@ -12934,7 +12162,7 @@
       226
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -12953,9 +12181,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "83_A_wide_right_turn",
@@ -12978,7 +12206,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "83_A_gross_negligence",
@@ -13001,7 +12229,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "83_A_serious_negligence",
@@ -13024,7 +12252,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "83_A_clear_prior_entry",
@@ -13047,7 +12275,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "83_A_pdf_0ebeb478f33ddd",
@@ -13070,7 +12298,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "83_B_pdf_860a5e70169ffc",
@@ -13093,7 +12321,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "83_B_signal_delay",
@@ -13116,7 +12344,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "83_B_gross_negligence",
@@ -13139,7 +12367,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "83_B_serious_negligence",
@@ -13162,7 +12390,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -13181,9 +12409,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "84_A_wide_right_turn",
@@ -13206,7 +12434,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "84_A_gross_negligence",
@@ -13229,7 +12457,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "84_A_serious_negligence",
@@ -13252,7 +12480,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "84_A_clear_prior_entry",
@@ -13275,7 +12503,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "84_A_pdf_0ebeb478f33ddd",
@@ -13298,7 +12526,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "84_B_pdf_860a5e70169ffc",
@@ -13321,7 +12549,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "84_B_signal_delay",
@@ -13344,7 +12572,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "84_B_gross_negligence",
@@ -13367,7 +12595,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "84_B_serious_negligence",
@@ -13390,7 +12618,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -13409,9 +12637,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "85_A_wide_right_turn",
@@ -13434,7 +12662,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "85_A_gross_negligence",
@@ -13457,7 +12685,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "85_A_serious_negligence",
@@ -13480,7 +12708,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "85_A_clear_prior_entry",
@@ -13503,7 +12731,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "85_A_pdf_0ebeb478f33ddd",
@@ -13526,7 +12754,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "85_B_pdf_860a5e70169ffc",
@@ -13549,7 +12777,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "85_B_signal_delay",
@@ -13572,7 +12800,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "85_B_gross_negligence",
@@ -13595,7 +12823,7 @@
       218
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "85_B_serious_negligence",
@@ -13618,212 +12846,7 @@
       218
      ]
     },
-    "reviewed": false
-   }
-  ]
- },
- "89": {
-  "official_chart": "차5-1",
-  "source": "PDF 2023.06 차5-1",
-  "coverage": "PDF 표에서 역할·수치·분기가 식별된 항목. 적용 사실은 사용자 확인, 예외 판단은 별도.",
-  "expected_a_progress": "[녹색신호] 직진(교차로내 진로 변경)",
-  "expected_b_progress": "우회전",
-  "expected_base": [
-   30,
-   70
-  ],
-  "exclusive_groups": [
-   "A_speed_state",
-   "B_speed_state"
-  ],
-  "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
-  "rules": [
-   {
-    "id": "89_B_wide_right_turn",
-    "actor": "B",
-    "factor": "wide_right_turn",
-    "delta_pp": 10,
-    "group": "B_wide_right_turn",
-    "manual_only": true,
-    "label": "대우회전",
-    "pdf_source": {
-     "chart": "차5-1",
-     "raw_text": "① A 대우회전 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      214,
-      215,
-      216,
-      217,
-      218
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "89_B_gross_negligence",
-    "actor": "B",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차5-1",
-     "raw_text": "A 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      214,
-      215,
-      216,
-      217,
-      218
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "89_B_serious_negligence",
-    "actor": "B",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "B_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차5-1",
-     "raw_text": "A 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      214,
-      215,
-      216,
-      217,
-      218
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "89_B_clear_prior_entry",
-    "actor": "B",
-    "factor": "clear_prior_entry",
-    "delta_pp": -10,
-    "group": "B_clear_prior_entry",
-    "manual_only": true,
-    "label": "명확한 선진입",
-    "pdf_source": {
-     "chart": "차5-1",
-     "raw_text": "A 명확한 선진입 -10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      214,
-      215,
-      216,
-      217,
-      218
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "89_B_pdf_0ebeb478f33ddd",
-    "actor": "B",
-    "factor": "pdf_0ebeb478f33ddd",
-    "delta_pp": 10,
-    "group": "B_pdf_0ebeb478f33ddd",
-    "manual_only": true,
-    "label": "일시정지위반",
-    "pdf_source": {
-     "chart": "차5-1",
-     "raw_text": "② A 일시정지위반 +10",
-     "edition": "2023-06",
-     "pdf_actor": "A",
-     "pdf_pages": [
-      214,
-      215,
-      216,
-      217,
-      218
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "89_A_signal_delay",
-    "actor": "A",
-    "factor": "signal_delay",
-    "delta_pp": 10,
-    "group": "A_signal_delay",
-    "manual_only": true,
-    "label": "진로변경 신호불이행·지연",
-    "pdf_source": {
-     "chart": "차5-1",
-     "raw_text": "③ B 진로변경 시 신호불이행·지연 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      214,
-      215,
-      216,
-      217,
-      218
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "89_A_gross_negligence",
-    "actor": "A",
-    "factor": "gross_negligence",
-    "delta_pp": 10,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "현저한 과실",
-    "pdf_source": {
-     "chart": "차5-1",
-     "raw_text": "B 현저한 과실 +10",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      214,
-      215,
-      216,
-      217,
-      218
-     ]
-    },
-    "reviewed": false
-   },
-   {
-    "id": "89_A_serious_negligence",
-    "actor": "A",
-    "factor": "serious_negligence",
-    "delta_pp": 20,
-    "group": "A_severity",
-    "manual_only": true,
-    "label": "중대한 과실",
-    "pdf_source": {
-     "chart": "차5-1",
-     "raw_text": "B 중대한 과실 +20",
-     "edition": "2023-06",
-     "pdf_actor": "B",
-     "pdf_pages": [
-      214,
-      215,
-      216,
-      217,
-      218
-     ]
-    },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -13842,9 +12865,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "90_A_gross_negligence",
@@ -13866,7 +12889,7 @@
       397
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "90_A_serious_negligence",
@@ -13888,7 +12911,7 @@
       397
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "90_B_signal_delay",
@@ -13910,7 +12933,7 @@
       397
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "90_B_pdf_b04bfcf1e23f41",
@@ -13932,7 +12955,7 @@
       397
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "90_B_gross_negligence",
@@ -13954,7 +12977,7 @@
       397
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "90_B_serious_negligence",
@@ -13976,7 +12999,7 @@
       397
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -13995,9 +13018,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "91_A_pdf_1a656904f7367d",
@@ -14019,7 +13042,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "91_A_gross_negligence",
@@ -14041,7 +13064,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "91_A_serious_negligence",
@@ -14063,7 +13086,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "91_B_pdf_296332703fcbcf",
@@ -14085,7 +13108,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "91_B_serious_negligence",
@@ -14107,7 +13130,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "91_B_pdf_684dccb69d21a1",
@@ -14129,7 +13152,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -14148,9 +13171,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "92_A_gross_negligence",
@@ -14172,7 +13195,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "92_A_serious_negligence",
@@ -14194,7 +13217,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "92_B_pdf_296332703fcbcf",
@@ -14216,7 +13239,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "92_B_gross_negligence",
@@ -14238,7 +13261,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "92_B_serious_negligence",
@@ -14260,7 +13283,7 @@
       347
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -14279,9 +13302,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "93_A_pdf_296332703fcbcf",
@@ -14303,7 +13326,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "93_A_pdf_9f16d904f0b3ae",
@@ -14325,7 +13348,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "93_A_wide_right_turn",
@@ -14347,7 +13370,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "93_A_gross_negligence",
@@ -14369,7 +13392,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "93_A_serious_negligence",
@@ -14391,7 +13414,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "93_B_gross_negligence",
@@ -14413,7 +13436,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "93_B_serious_negligence",
@@ -14435,7 +13458,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "93_B_pdf_8a94683077a50e",
@@ -14457,7 +13480,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -14476,9 +13499,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "94_A_pdf_296332703fcbcf",
@@ -14500,7 +13523,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "94_A_pdf_9f16d904f0b3ae",
@@ -14522,7 +13545,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "94_A_wide_right_turn",
@@ -14544,7 +13567,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "94_A_gross_negligence",
@@ -14566,7 +13589,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "94_A_serious_negligence",
@@ -14588,7 +13611,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "94_B_pdf_296332703fcbcf",
@@ -14610,7 +13633,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "94_B_gross_negligence",
@@ -14632,7 +13655,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "94_B_serious_negligence",
@@ -14654,7 +13677,7 @@
       351
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -14673,9 +13696,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "95_A_pdf_b3ccef711a665d",
@@ -14695,7 +13718,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "95_A_gross_negligence",
@@ -14715,7 +13738,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "95_A_serious_negligence",
@@ -14735,7 +13758,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "95_B_pdf_b3ccef711a665d",
@@ -14755,7 +13778,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "95_B_gross_negligence",
@@ -14775,7 +13798,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "95_B_serious_negligence",
@@ -14795,7 +13818,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "95_B_pdf_684dccb69d21a1",
@@ -14815,7 +13838,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -14834,9 +13857,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "96_A_pdf_b3ccef711a665d",
@@ -14856,7 +13879,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "96_A_gross_negligence",
@@ -14876,7 +13899,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "96_A_serious_negligence",
@@ -14896,7 +13919,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "96_B_pdf_b3ccef711a665d",
@@ -14916,7 +13939,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "96_B_gross_negligence",
@@ -14936,7 +13959,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "96_B_serious_negligence",
@@ -14956,7 +13979,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "96_B_pdf_684dccb69d21a1",
@@ -14976,7 +13999,7 @@
       413
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -14995,9 +14018,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "97_A_gross_negligence",
@@ -15018,7 +14041,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "97_A_serious_negligence",
@@ -15039,7 +14062,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "97_B_signal_delay",
@@ -15060,7 +14083,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "97_B_gross_negligence",
@@ -15081,7 +14104,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "97_B_serious_negligence",
@@ -15102,7 +14125,7 @@
       416
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -15121,9 +14144,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "98_A_gross_negligence",
@@ -15144,7 +14167,7 @@
       252
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "98_A_serious_negligence",
@@ -15165,7 +14188,7 @@
       252
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "98_B_signal_delay",
@@ -15186,7 +14209,7 @@
       252
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "98_B_serious_negligence",
@@ -15207,7 +14230,7 @@
       252
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -15226,9 +14249,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "99_A_gross_negligence",
@@ -15249,7 +14272,7 @@
       252
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "99_A_serious_negligence",
@@ -15270,7 +14293,7 @@
       252
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "99_B_signal_delay",
@@ -15291,7 +14314,7 @@
       252
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "99_B_gross_negligence",
@@ -15312,7 +14335,7 @@
       252
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "99_B_serious_negligence",
@@ -15333,7 +14356,7 @@
       252
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -15352,9 +14375,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "100_A_gross_negligence",
@@ -15375,7 +14398,7 @@
       255
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "100_A_serious_negligence",
@@ -15396,7 +14419,7 @@
       255
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "100_B_gross_negligence",
@@ -15417,7 +14440,7 @@
       255
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "100_B_serious_negligence",
@@ -15438,7 +14461,7 @@
       255
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -15457,9 +14480,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "101_A_gross_negligence",
@@ -15480,7 +14503,7 @@
       261
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "101_A_serious_negligence",
@@ -15501,7 +14524,7 @@
       261
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "101_B_pdf_06978cd9d46bcc",
@@ -15522,7 +14545,7 @@
       261
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "101_B_gross_negligence",
@@ -15543,7 +14566,7 @@
       261
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "101_B_serious_negligence",
@@ -15564,7 +14587,7 @@
       261
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -15583,9 +14606,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "102_A_signal_delay",
@@ -15606,7 +14629,7 @@
       264
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "102_A_gross_negligence",
@@ -15627,7 +14650,7 @@
       264
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "102_A_serious_negligence",
@@ -15648,7 +14671,7 @@
       264
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "102_B_gross_negligence",
@@ -15669,7 +14692,7 @@
       264
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "102_B_serious_negligence",
@@ -15690,7 +14713,7 @@
       264
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -15709,9 +14732,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "103_A_slow_failure",
@@ -15734,7 +14757,7 @@
       457
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "103_A_gross_negligence",
@@ -15757,7 +14780,7 @@
       457
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "103_A_serious_negligence",
@@ -15780,7 +14803,7 @@
       457
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "103_B_gross_negligence",
@@ -15803,7 +14826,7 @@
       457
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "103_B_serious_negligence",
@@ -15826,7 +14849,7 @@
       457
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "103_B_slow_or_stop",
@@ -15849,7 +14872,7 @@
       457
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "103_B_clear_prior_entry",
@@ -15872,7 +14895,7 @@
       457
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -15891,9 +14914,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "104_A_slow_failure",
@@ -15915,7 +14938,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "104_A_pdf_a5198b7240270f",
@@ -15937,7 +14960,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "104_A_gross_negligence",
@@ -15959,7 +14982,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "104_A_serious_negligence",
@@ -15981,7 +15004,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "104_A_pdf_1a656904f7367d",
@@ -16003,7 +15026,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "104_B_gross_negligence",
@@ -16025,7 +15048,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "104_B_serious_negligence",
@@ -16047,7 +15070,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "104_B_slow_or_stop",
@@ -16069,7 +15092,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "104_B_clear_prior_entry",
@@ -16091,7 +15114,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -16110,9 +15133,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "105_A_slow_failure",
@@ -16134,7 +15157,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "105_A_pdf_a5198b7240270f",
@@ -16156,7 +15179,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "105_A_gross_negligence",
@@ -16178,7 +15201,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "105_A_serious_negligence",
@@ -16200,7 +15223,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "105_A_pdf_1a656904f7367d",
@@ -16222,7 +15245,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "105_B_gross_negligence",
@@ -16244,7 +15267,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "105_B_serious_negligence",
@@ -16266,7 +15289,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "105_B_slow_or_stop",
@@ -16288,7 +15311,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "105_B_clear_prior_entry",
@@ -16310,7 +15333,7 @@
       465
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -16329,9 +15352,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "106_B_slow_failure",
@@ -16352,7 +15375,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "106_B_wide_right_turn",
@@ -16373,7 +15396,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "106_B_gross_negligence",
@@ -16394,7 +15417,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "106_B_serious_negligence",
@@ -16415,7 +15438,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "106_B_clear_prior_entry",
@@ -16436,7 +15459,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "106_A_slow_failure",
@@ -16457,7 +15480,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "106_A_gross_negligence",
@@ -16478,7 +15501,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "106_A_serious_negligence",
@@ -16499,7 +15522,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "106_A_clear_prior_entry",
@@ -16520,7 +15543,7 @@
       277
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -16541,9 +15564,9 @@
   "source_review_pending": [
    "B 중대한 과실 +10"
   ],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "107_A_slow_failure",
@@ -16565,7 +15588,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_A_gross_negligence",
@@ -16587,7 +15610,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_A_serious_negligence",
@@ -16609,7 +15632,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_A_clear_prior_entry",
@@ -16631,7 +15654,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_B_pdf_389aecb1bd9c51",
@@ -16653,7 +15676,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_B_pdf_296332703fcbcf",
@@ -16675,7 +15698,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_B_slow_failure",
@@ -16697,7 +15720,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_B_pdf_ec94348268ebbc",
@@ -16719,7 +15742,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_B_gross_negligence",
@@ -16741,7 +15764,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_B_clear_prior_entry",
@@ -16763,7 +15786,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "107_B_pdf_cbe7e37a8b2994",
@@ -16785,7 +15808,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -16806,9 +15829,9 @@
   "source_review_pending": [
    "B 중대한 과실 +10"
   ],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "108_A_slow_failure",
@@ -16830,7 +15853,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_A_gross_negligence",
@@ -16852,7 +15875,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_A_serious_negligence",
@@ -16874,7 +15897,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_A_clear_prior_entry",
@@ -16896,7 +15919,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_B_pdf_389aecb1bd9c51",
@@ -16918,7 +15941,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_B_pdf_296332703fcbcf",
@@ -16940,7 +15963,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_B_slow_failure",
@@ -16962,7 +15985,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_B_pdf_ec94348268ebbc",
@@ -16984,7 +16007,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_B_gross_negligence",
@@ -17006,7 +16029,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_B_clear_prior_entry",
@@ -17028,7 +16051,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "108_B_pdf_cbe7e37a8b2994",
@@ -17050,7 +16073,7 @@
       297
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -17069,9 +16092,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "109_A_pdf_61fd7c2787fac9",
@@ -17091,7 +16114,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "109_A_pdf_ec94348268ebbc",
@@ -17111,7 +16134,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "109_A_gross_negligence",
@@ -17131,7 +16154,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "109_A_serious_negligence",
@@ -17151,7 +16174,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "109_B_pdf_61fd7c2787fac9",
@@ -17171,7 +16194,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "109_B_pdf_ec94348268ebbc",
@@ -17191,7 +16214,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "109_B_gross_negligence",
@@ -17211,7 +16234,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "109_B_serious_negligence",
@@ -17231,7 +16254,7 @@
       306
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -17250,9 +16273,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "110_A_slow_failure",
@@ -17274,7 +16297,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_A_gross_negligence",
@@ -17296,7 +16319,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_A_serious_negligence",
@@ -17318,7 +16341,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_B_pdf_389aecb1bd9c51",
@@ -17340,7 +16363,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_B_pdf_296332703fcbcf",
@@ -17362,7 +16385,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_B_slow_failure",
@@ -17384,7 +16407,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_B_pdf_ec94348268ebbc",
@@ -17406,7 +16429,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_B_gross_negligence",
@@ -17428,7 +16451,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_B_serious_negligence",
@@ -17450,7 +16473,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_B_clear_prior_entry",
@@ -17472,7 +16495,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "110_B_pdf_cbe7e37a8b2994",
@@ -17494,7 +16517,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -17513,9 +16536,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "111_B_slow_failure",
@@ -17537,7 +16560,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "111_B_wide_right_turn",
@@ -17559,7 +16582,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "111_B_gross_negligence",
@@ -17581,7 +16604,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "111_B_serious_negligence",
@@ -17603,7 +16626,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "111_B_clear_prior_entry",
@@ -17625,7 +16648,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "111_A_slow_failure",
@@ -17647,7 +16670,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "111_A_gross_negligence",
@@ -17669,7 +16692,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "111_A_serious_negligence",
@@ -17691,7 +16714,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "111_A_clear_prior_entry",
@@ -17713,7 +16736,7 @@
       284
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -17732,9 +16755,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "112_A_slow_failure",
@@ -17756,7 +16779,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_A_gross_negligence",
@@ -17778,7 +16801,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_A_serious_negligence",
@@ -17800,7 +16823,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_B_pdf_aac21fc28111da",
@@ -17822,7 +16845,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_B_pdf_296332703fcbcf",
@@ -17844,7 +16867,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_B_slow_failure",
@@ -17866,7 +16889,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_B_pdf_ec94348268ebbc",
@@ -17888,7 +16911,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_B_gross_negligence",
@@ -17910,7 +16933,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_B_serious_negligence",
@@ -17932,7 +16955,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_B_clear_prior_entry",
@@ -17954,7 +16977,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "112_B_pdf_cbe7e37a8b2994",
@@ -17976,7 +16999,7 @@
       301
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -17995,9 +17018,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "113_A_slow_failure",
@@ -18018,7 +17041,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_A_gross_negligence",
@@ -18039,7 +17062,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_A_serious_negligence",
@@ -18060,7 +17083,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_B_pdf_c3b1c2051f251f",
@@ -18081,7 +17104,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_B_pdf_296332703fcbcf",
@@ -18102,7 +17125,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_B_slow_failure",
@@ -18123,7 +17146,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_B_pdf_ec94348268ebbc",
@@ -18144,7 +17167,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_B_gross_negligence",
@@ -18165,7 +17188,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_B_serious_negligence",
@@ -18186,7 +17209,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_B_clear_prior_entry",
@@ -18207,7 +17230,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "113_B_pdf_cbe7e37a8b2994",
@@ -18228,7 +17251,7 @@
       304
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -18247,9 +17270,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "114_A_pdf_61fd7c2787fac9",
@@ -18270,7 +17293,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "114_A_pdf_ec94348268ebbc",
@@ -18291,7 +17314,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "114_A_gross_negligence",
@@ -18312,7 +17335,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "114_A_serious_negligence",
@@ -18333,7 +17356,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "114_A_clear_prior_entry",
@@ -18354,7 +17377,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "114_B_pdf_61fd7c2787fac9",
@@ -18375,7 +17398,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "114_B_pdf_ec94348268ebbc",
@@ -18396,7 +17419,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "114_B_gross_negligence",
@@ -18417,7 +17440,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "114_B_serious_negligence",
@@ -18438,7 +17461,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "114_B_clear_prior_entry",
@@ -18459,7 +17482,7 @@
       309
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -18478,9 +17501,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "115_B_slow_failure",
@@ -18501,7 +17524,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "115_B_wide_right_turn",
@@ -18522,7 +17545,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "115_B_gross_negligence",
@@ -18543,7 +17566,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "115_B_serious_negligence",
@@ -18564,7 +17587,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "115_B_clear_prior_entry",
@@ -18585,7 +17608,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "115_A_slow_failure",
@@ -18606,7 +17629,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "115_A_gross_negligence",
@@ -18627,7 +17650,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "115_A_serious_negligence",
@@ -18648,7 +17671,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "115_A_clear_prior_entry",
@@ -18669,7 +17692,7 @@
       287
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -18919,9 +17942,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "117_A_slow_failure",
@@ -18942,7 +17965,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "117_A_gross_negligence",
@@ -18963,7 +17986,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "117_A_serious_negligence",
@@ -18984,7 +18007,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "117_B_pdf_389aecb1bd9c51",
@@ -19005,7 +18028,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "117_B_pdf_ec94348268ebbc",
@@ -19026,7 +18049,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "117_B_gross_negligence",
@@ -19047,7 +18070,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "117_B_serious_negligence",
@@ -19068,7 +18091,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "117_B_clear_prior_entry",
@@ -19089,7 +18112,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "117_B_pdf_8b19670119ce77",
@@ -19110,7 +18133,7 @@
       234
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -19129,9 +18152,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "118_B_gross_negligence",
@@ -19152,7 +18175,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "118_B_serious_negligence",
@@ -19173,7 +18196,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "118_B_pdf_8b19670119ce77",
@@ -19194,7 +18217,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "118_A_slow_failure",
@@ -19215,7 +18238,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "118_A_gross_negligence",
@@ -19236,7 +18259,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "118_A_serious_negligence",
@@ -19257,7 +18280,7 @@
       243
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -19276,9 +18299,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "119_A_gross_negligence",
@@ -19299,7 +18322,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "119_A_serious_negligence",
@@ -19320,7 +18343,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "119_A_pdf_8b19670119ce77",
@@ -19341,7 +18364,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "119_B_pdf_389aecb1bd9c51",
@@ -19362,7 +18385,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "119_B_slow_failure",
@@ -19383,7 +18406,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "119_B_pdf_ec94348268ebbc",
@@ -19404,7 +18427,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "119_B_gross_negligence",
@@ -19425,7 +18448,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "119_B_serious_negligence",
@@ -19446,7 +18469,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "119_B_clear_prior_entry",
@@ -19467,7 +18490,7 @@
       237
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -19486,9 +18509,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "121_A_slow_failure",
@@ -19509,7 +18532,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "121_A_gross_negligence",
@@ -19530,7 +18553,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "121_A_serious_negligence",
@@ -19551,7 +18574,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "121_A_pdf_8b19670119ce77",
@@ -19572,7 +18595,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "121_B_slow_failure",
@@ -19593,7 +18616,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "121_B_gross_negligence",
@@ -19614,7 +18637,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "121_B_serious_negligence",
@@ -19635,7 +18658,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "121_B_clear_prior_entry",
@@ -19656,7 +18679,7 @@
       246
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -19675,9 +18698,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "122_A_pdf_61fd7c2787fac9",
@@ -19698,7 +18721,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "122_A_gross_negligence",
@@ -19719,7 +18742,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "122_A_serious_negligence",
@@ -19740,7 +18763,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "122_A_pdf_8b19670119ce77",
@@ -19761,7 +18784,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "122_B_pdf_61fd7c2787fac9",
@@ -19782,7 +18805,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "122_B_gross_negligence",
@@ -19803,7 +18826,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "122_B_serious_negligence",
@@ -19824,7 +18847,7 @@
       249
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -19843,9 +18866,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "124_A_gross_negligence",
@@ -19865,7 +18888,7 @@
       393
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "124_A_serious_negligence",
@@ -19885,7 +18908,7 @@
       393
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "124_B_slow_failure",
@@ -19905,7 +18928,7 @@
       393
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "124_B_gross_negligence",
@@ -19925,7 +18948,7 @@
       393
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "124_B_serious_negligence",
@@ -19945,7 +18968,7 @@
       393
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "124_B_protruding_wait_exit",
@@ -19965,7 +18988,7 @@
       393
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -19984,9 +19007,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "125_A_gross_negligence",
@@ -20007,7 +19030,7 @@
       336
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "125_A_serious_negligence",
@@ -20028,7 +19051,7 @@
       336
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "125_B_gross_negligence",
@@ -20049,7 +19072,7 @@
       336
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "125_B_serious_negligence",
@@ -20070,7 +19093,7 @@
       336
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -20089,9 +19112,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "129_B_slow_failure",
@@ -20111,7 +19134,7 @@
       449
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "129_B_gross_negligence",
@@ -20131,7 +19154,7 @@
       449
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "129_B_serious_negligence",
@@ -20151,7 +19174,7 @@
       449
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "129_B_signal_delay",
@@ -20171,7 +19194,7 @@
       449
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "129_A_slow_failure",
@@ -20191,7 +19214,7 @@
       449
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "129_A_gross_negligence",
@@ -20211,7 +19234,7 @@
       449
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "129_A_serious_negligence",
@@ -20231,7 +19254,7 @@
       449
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -20250,9 +19273,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "130_A_pdf_9c1d17a79f19b1",
@@ -20273,7 +19296,7 @@
       452
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "130_A_gross_negligence",
@@ -20294,7 +19317,7 @@
       452
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "130_A_serious_negligence",
@@ -20315,7 +19338,7 @@
       452
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "130_A_round_entry_stop",
@@ -20336,7 +19359,7 @@
       452
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "130_B_pdf_9c1d17a79f19b1",
@@ -20357,7 +19380,7 @@
       452
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "130_B_gross_negligence",
@@ -20378,7 +19401,7 @@
       452
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "130_B_serious_negligence",
@@ -20399,7 +19422,7 @@
       452
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "130_B_round_entry_stop",
@@ -20420,7 +19443,7 @@
       452
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -20439,9 +19462,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "131_A_slow_failure",
@@ -20462,7 +19485,7 @@
       444
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "131_A_gross_negligence",
@@ -20483,7 +19506,7 @@
       444
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "131_A_serious_negligence",
@@ -20504,7 +19527,7 @@
       444
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "131_B_slow_failure",
@@ -20525,7 +19548,7 @@
       444
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "131_B_gross_negligence",
@@ -20546,7 +19569,7 @@
       444
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "131_B_serious_negligence",
@@ -20567,7 +19590,7 @@
       444
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "131_B_round_entry_stop",
@@ -20588,7 +19611,7 @@
       444
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "131_B_round_entry_prior",
@@ -20609,7 +19632,7 @@
       444
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "131_B_round_entry_signal_delay",
@@ -20630,7 +19653,7 @@
       444
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  },
@@ -20649,9 +19672,9 @@
    "B_speed_state"
   ],
   "source_review_pending": [],
-  "reviewed": false,
-  "reviewed_by": "",
-  "reviewed_at": "",
+  "reviewed": true,
+  "reviewed_by": "양현진",
+  "reviewed_at": "2026-10-22",
   "rules": [
    {
     "id": "132_A_signal_delay",
@@ -20672,7 +19695,7 @@
       447
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "132_A_gross_negligence",
@@ -20693,7 +19716,7 @@
       447
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "132_A_serious_negligence",
@@ -20714,7 +19737,7 @@
       447
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "132_B_gross_negligence",
@@ -20735,7 +19758,7 @@
       447
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "132_B_serious_negligence",
@@ -20756,7 +19779,7 @@
       447
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "132_B_round_entry_stop",
@@ -20777,7 +19800,7 @@
       447
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "132_B_round_entry_prior",
@@ -20798,7 +19821,7 @@
       447
      ]
     },
-    "reviewed": false
+    "reviewed": true
    },
    {
     "id": "132_B_round_entry_signal_delay",
@@ -20819,7 +19842,7 @@
       447
      ]
     },
-    "reviewed": false
+    "reviewed": true
    }
   ]
  }
