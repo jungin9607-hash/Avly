@@ -293,6 +293,16 @@ test("결과 화면에 들어가기 전 안내: 상태마다 알맞은 문구와
   assert.equal(describeAnalysis({ session, analysis: { status: "failed", error: { message: "실패했어요" } }, analysisId: "x" }).body, "실패했어요");
 });
 
+test("취소한 분석은 실패가 아니라 취소했다고 알리고 새 영상 올리기로 안내한다", async () => {
+  const { describeAnalysis } = await import("./adapters.js");
+  const session = { sessionId: "s", accidentId: "a" };
+  const cancelled = describeAnalysis({ session, analysis: { status: "failed", error: { code: "CANCELLED", message: "분석을 취소했어요." } }, analysisId: "x" });
+  assert.equal(cancelled.title, "분석을 취소했어요");
+  assert.equal(cancelled.link.to, "/upload");
+  const failed = describeAnalysis({ session, analysis: { status: "failed", error: { code: "ANALYSIS_FAILED", message: "실패했어요" } }, analysisId: "x" });
+  assert.equal(failed.title, "분석하지 못했어요");
+});
+
 test("세션이 끝난 분석은 삭제됐다고 알리고 새 영상 올리기로 안내한다", async () => {
   const { describeAnalysis } = await import("./adapters.js");
   for (const input of [{ session: null, expired: true }, { session: { sessionId: "s" }, error: { code: "SESSION_EXPIRED" } }]) {

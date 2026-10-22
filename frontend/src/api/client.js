@@ -65,6 +65,7 @@ export const api = {
   uploadVideo: (accidentId, file, opts) => upload(`/api/v1/accidents/${accidentId}/videos`, file, opts),
   startAnalysis: (accidentId, place, opts) => request(`/api/v1/accidents/${accidentId}/analyses`, { method: "POST", body: place ? { place } : {}, ...opts }),
   getAnalysis: (analysisId, opts) => request(`/api/v1/analyses/${analysisId}`, opts),
+  cancelAnalysis: (analysisId, opts) => request(`/api/v1/analyses/${analysisId}/cancel`, { method: "POST", ...opts }),
   adjustmentQuestions: (analysisId, typeId, role, opts) =>
     request(`/api/v1/analyses/${analysisId}/adjustment-questions?accident_type_id=${typeId}&role=${role}`, opts),
   confirm: (analysisId, body, opts) => request(`/api/v1/analyses/${analysisId}/confirm`, { method: "POST", body, ...opts }),

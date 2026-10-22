@@ -417,6 +417,7 @@ export function describeAnalysis({ session, analysis, error, loading, analysisId
         link: { to: ROUTES.home, label: "다른 영상 올리기" },
       };
     case "failed":
+      if (analysis.error?.code === "CANCELLED") return { title: "분석을 취소했어요", body: "이 분석은 취소돼서 결과가 없어요. 새 영상으로 다시 분석할 수 있어요.", link: { to: ROUTES.home, label: "새 영상 올리기" } };
       return { title: "분석하지 못했어요", body: analysis.error?.message };
     default:
       return { title: "결과를 볼 수 없어요" };

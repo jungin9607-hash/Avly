@@ -523,6 +523,9 @@ input:focus-visible + .md-radio {
   font-weight: 600;
   cursor: pointer;
 }
+.md-cancel {
+  margin-top: 14px;
+}
 .md-btn-ghost:hover {
   background: var(--color-surface-gray-hover);
 }

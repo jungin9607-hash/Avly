@@ -166,10 +166,21 @@ export default function useAnalysisFlow(resumeId) {
     return undefined;
   }, [analysisId, sessionId, confirm, fail]);
 
+  // 분석 중인 분석을 취소한다. 서버가 취소를 받아들이면 "취소했어요" 안내로 넘어간다.
+  // 그사이 분석이 끝났거나 사용자 확인 단계가 됐다면(409) 취소하지 못한 것이므로 상태 확인이 알아서 다음 화면으로 넘긴다.
+  const cancel = useCallback(async () => {
+    try {
+      await api.cancelAnalysis(analysisId, { sessionId });
+      dispatch({ type: "failed", error: { code: "CANCELLED", message: "분석을 취소했어요." } });
+    } catch (error) {
+      if (error.code !== "ANALYSIS_NOT_CANCELLABLE") fail(error, analysisId);
+    }
+  }, [analysisId, sessionId, fail]);
+
   const reset = useCallback(() => {
     controller.current?.abort();
     dispatch({ type: "reset" });
   }, []);
 
-  return { state, start, choose, confirm, back: () => dispatch({ type: "back" }), reset };
+  return { state, start, choose, confirm, cancel, back: () => dispatch({ type: "back" }), reset };
 }

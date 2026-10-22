@@ -15,6 +15,10 @@ from app import status as st
 from app.db import get_engine
 
 
+CANCELLED_CODE = "CANCELLED"
+CANCELLED_MESSAGE = "분석을 취소했어요."
+
+
 class ActiveAnalysisExists(Exception):
     """사고에 이미 진행 중인 분석이 있다."""
 
@@ -209,21 +213,46 @@ class Repository:
             row = conn.execute(text("SELECT id FROM analysis WHERE accident_id = :a ORDER BY created_at DESC LIMIT 1"), {"a": accident_id}).first()
             return row[0] if row else None
 
-    def update_analysis(self, analysis_id: UUID, **fields) -> None:
-        """분석 행을 고친다. scene, confirmed, result 는 JSON 으로 저장한다."""
+    def update_analysis(self, analysis_id: UUID, only_if_status: str | None = None, **fields) -> bool:
+        """분석 행을 고친다. scene, confirmed, result 는 JSON 으로 저장한다.
+
+        only_if_status 를 주면 분석이 그 상태일 때만 고친다. 고쳤으면 True, 아니면(이미 취소되는 등 상태가 달라졌으면) False.
+        """
         allowed = {"status", "stage", "video_id", "error_code", "error_message", "unsupported_reason", "accident_type_id",
                    "fault_me", "fault_other", "scene", "confirmed", "result", "pipeline_version", "video_sha256",
                    "csv_sha256", "started_at", "finished_at"}
         assert set(fields) <= allowed, set(fields) - allowed
         json_fields = tuple(f for f in ("scene", "confirmed", "result") if f in fields)
         sets = ", ".join(f"{k} = :{k}" for k in fields) + ", updated_at = now()"
+        guard = " AND status = :only_if_status" if only_if_status else ""
         with self.engine.begin() as conn:
-            conn.execute(_q(f"UPDATE analysis SET {sets} WHERE id = :id", *json_fields), {**fields, "id": analysis_id})
-            if "status" in fields:  # 사고의 상태도 함께 맞춘다
+            changed = conn.execute(_q(f"UPDATE analysis SET {sets} WHERE id = :id{guard}", *json_fields),
+                                   {**fields, "id": analysis_id, **({"only_if_status": only_if_status} if only_if_status else {})}).rowcount
+            if changed and "status" in fields:  # 사고의 상태도 함께 맞춘다
                 mapping = {st.COMPLETED: "completed", st.FAILED: "failed", st.UNSUPPORTED: "unsupported"}
                 accident_status = mapping.get(fields["status"], "analyzing")
                 conn.execute(text("UPDATE accident SET status = :s WHERE id = (SELECT accident_id FROM analysis WHERE id = :id)"),
                              {"s": accident_status, "id": analysis_id})
+            return bool(changed)
+
+    def cancel_analysis(self, analysis_id: UUID) -> str:
+        """대기 중이거나 진행 중인 분석을 취소한다. 'cancelled'(방금 취소함) | 'already'(이미 취소돼 있음) | 'not_cancellable'(이미 끝났거나 사용자 확인 단계).
+
+        DB 규칙이 'cancelled' 상태를 허용하지 않아서 failed + error_code CANCELLED 로 기록한다.
+        대기 중인 작업은 바로 지워서 worker 가 시작하지 못하게 하고, 진행 중인 작업은 worker 가 다음 단계에 들어가기 전에 알아채고 멈춘다.
+        """
+        with self.engine.begin() as conn:
+            accident_id = conn.execute(text(
+                "UPDATE analysis SET status = 'failed', stage = NULL, error_code = :code, error_message = :message,"
+                " finished_at = now(), updated_at = now() WHERE id = :id AND status IN ('queued', 'processing') RETURNING accident_id"),
+                {"id": analysis_id, "code": CANCELLED_CODE, "message": CANCELLED_MESSAGE}).scalar()
+            if accident_id is None:
+                row = conn.execute(text("SELECT status, error_code FROM analysis WHERE id = :id"), {"id": analysis_id}).first()
+                return "already" if row and row[0] == st.FAILED and row[1] == CANCELLED_CODE else "not_cancellable"
+            conn.execute(text("UPDATE job SET status = 'failed', finished_at = now(), error = '사용자가 분석을 취소함'"
+                              " WHERE analysis_id = :id AND status = 'queued'"), {"id": analysis_id})
+            conn.execute(text("UPDATE accident SET status = 'uploaded' WHERE id = :a"), {"a": accident_id})   # 같은 영상으로 다시 분석할 수 있다
+            return "cancelled"
 
     def request_confirm(self, analysis_id: UUID, confirmed: dict) -> dict:
         """사용자 확인 내용을 저장하고 'finalize' 작업을 등록한다. 확인 대기 상태가 아니면 NotAwaitingConfirmation."""

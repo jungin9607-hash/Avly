@@ -25,6 +25,10 @@ logger = logging.getLogger(__name__)
 STALE_JOB_SECONDS = 30 * 60
 
 
+class AnalysisCancelled(Exception):
+    """사용자가 분석을 취소했다. worker 는 이 분석을 더 진행하지 않는다."""
+
+
 class NoCases:
     """판례 조회가 없는 기본값 (테스트용)."""
 
@@ -59,22 +63,36 @@ class Worker:
         return True
 
     def _fail(self, analysis_id, code: str, message: str) -> None:
-        self.repo.update_analysis(analysis_id, status=st.FAILED, stage=None, error_code=code, error_message=message,
-                                  finished_at=datetime.now(timezone.utc))
+        # 처리 중일 때만 실패로 바꾼다. 그사이 사용자가 취소했다면 취소 기록을 덮어쓰지 않는다.
+        self.repo.update_analysis(analysis_id, only_if_status=st.PROCESSING, status=st.FAILED, stage=None, error_code=code,
+                                  error_message=message, finished_at=datetime.now(timezone.utc))
 
     def analyze(self, analysis_id, place: str | None = None) -> None:
         from avly import scope   # 예외 종류 (가벼운 모듈)
 
         analysis = self.repo.get_analysis(analysis_id)
+        if analysis["status"] != st.QUEUED:   # 작업을 가져오기 직전에 취소된 분석
+            logger.info("대기 중이 아니라서 분석을 시작하지 않습니다: %s (%s)", analysis_id, analysis["status"])
+            return
         accident = self.repo.get_accident(analysis["accident_id"])
-        self.repo.update_analysis(analysis_id, status=st.PROCESSING, stage="plate_masking", started_at=datetime.now(timezone.utc))
+        if not self.repo.update_analysis(analysis_id, only_if_status=st.QUEUED, status=st.PROCESSING, stage="plate_masking", started_at=datetime.now(timezone.utc)):
+            return
+
+        def report(stage):
+            # 단계가 바뀔 때마다 알린다. 그 사이에 분석이 취소됐으면(상태가 더는 processing 이 아니면) 여기서 멈춘다.
+            if not self.repo.update_analysis(analysis_id, only_if_status=st.PROCESSING, stage=stage):
+                raise AnalysisCancelled
+
         try:
             masked_path, stats = self._redact(analysis, accident)
             if stats.get("duration"):
                 scope.check_duration(stats["duration"])   # AI 를 부르기 전에 길이를 확인한다
-            snapshot, logs = self.engine.analyze(masked_path, lambda stage: self.repo.update_analysis(analysis_id, stage=stage), **({"place": place} if place else {}))
+            snapshot, logs = self.engine.analyze(masked_path, report, **({"place": place} if place else {}))
+        except AnalysisCancelled:
+            logger.info("사용자가 취소해서 분석을 멈췄습니다: %s", analysis_id)
+            return
         except scope.UnsupportedAccident as exc:
-            self.repo.update_analysis(analysis_id, status=st.UNSUPPORTED, stage=None, unsupported_reason=str(exc),
+            self.repo.update_analysis(analysis_id, only_if_status=st.PROCESSING, status=st.UNSUPPORTED, stage=None, unsupported_reason=str(exc),
                                       finished_at=datetime.now(timezone.utc))
             # 지원하지 않는 사고 영상은 저장 동의가 있어도 하루만 보관한다
             self.repo.expire_accident_videos(accident["id"], settings.unsupported_retention_hours)
@@ -97,9 +115,10 @@ class Worker:
             snapshot["situation"]["place_hint"] = place   # 확인 화면이 사용자가 고른 장소로 보기를 좁힌다
         for log in logs:
             self.repo.add_stage_log(analysis_id, **log)
-        self.repo.update_analysis(analysis_id, status=st.AWAITING_CONFIRMATION, stage=None, scene=snapshot,
-                                  pipeline_version=snapshot.get("model_version"), video_sha256=snapshot.get("video_sha256"),
-                                  csv_sha256=snapshot.get("csv_sha256"))
+        if not self.repo.update_analysis(analysis_id, only_if_status=st.PROCESSING, status=st.AWAITING_CONFIRMATION, stage=None, scene=snapshot,
+                                         pipeline_version=snapshot.get("model_version"), video_sha256=snapshot.get("video_sha256"),
+                                         csv_sha256=snapshot.get("csv_sha256")):
+            logger.info("분석이 끝났지만 그사이 취소돼서 결과를 저장하지 않습니다: %s", analysis_id)
 
     def _redact(self, analysis, accident) -> tuple[Path, dict]:
         """원본을 가려서 비식별 영상을 만들고 DB 에 올린다. 이후 분석은 이 영상만 쓴다."""
