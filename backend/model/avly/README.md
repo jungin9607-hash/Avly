@@ -70,6 +70,8 @@
 | `AVLY_PRE_SECONDS` / `AVLY_POST_SECONDS` | `4.0` / `2.0` |
 | `AVLY_MAX_VIDEO_SECONDS` | `20.0` (영상 길이 상한) |
 | `AVLY_DEV_OVERRIDES` | (없음) 개발용 확인값 파일 경로 |
+| `AVLY_REQUIRE_RULE_REVIEW` | `1` (가감요소 규칙을 사람이 확인한 유형만 씀. `0`이면 검수 전 유형도 씀) |
+| `AVLY_REQUIRE_WORDING_REVIEW` | `1` (쉬운 말까지 사람이 확인한 가감요소만 씀. `0`이면 검수 전 가감요소도 씀) |
 
 ## 서비스 범위: 차대차 사고, 15초 내외 영상 하나
 

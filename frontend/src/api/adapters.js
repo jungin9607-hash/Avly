@@ -182,8 +182,11 @@ export function toSteps(result) {
 const FACTOR_DESC = {
   final: (n) => (n > 0 ? `${n}가지 가감요소를 반영했어요. 어려운 법적 근거는 눌러서 볼 수 있어요.` : "반영할 가감요소가 없어서 기본 비율 그대로예요."),
   partial: (n) => (n > 0 ? "확인한 가감요소만 반영했어요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요." : "적용된 가감요소가 없어서 기본 비율 그대로예요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요."),
-  base_only: () => "이 사고 유형은 가감요소가 아직 등록되지 않아 기본 비율만 안내해요.",
+  base_only: () => "이 사고 유형은 검수가 끝난 가감요소가 아직 없어서 기본 비율만 안내해요.",
 };
+
+// 쉬운 말 검수가 끝나지 않아 반영하지 않은 가감요소가 있으면 그 사실을 덧붙인다
+const heldBackNote = (count) => (count > 0 && count !== undefined ? ` 아직 검수 중인 가감요소 ${count}개는 반영하지 않았어요.` : "");
 
 // 결과 화면 맨 위 문구와 상태별 안내
 export function toReportModel(result, analysisId) {
@@ -199,7 +202,7 @@ export function toReportModel(result, analysisId) {
     },
     situationCheck: toSituationCheck(result),
     appliedCount: applied,
-    factorHeader: { kicker: "판단 근거", desc: (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) },
+    factorHeader: { kicker: "판단 근거", desc: (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) + heldBackNote(result.adjustments?.held_back) },
     statusText: result.explanation?.status ?? "",
     steps: state === "unresolved" ? [] : toSteps(result),
     // 맨 위 큰 비율에 보여 줄 값: 확정이면 최종, 아니면 지금까지 반영한 값 (마지막 단계)

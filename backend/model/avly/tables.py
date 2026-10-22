@@ -26,12 +26,38 @@ def active_rules(all_rules, require_review):
     return {k: v for k, v in all_rules.items() if not require_review or type_is_reviewed(v)}
 
 
+def wording_gate(rules, reviewed_factors):
+    """쉬운 말까지 검수가 끝난 가감요소만 남긴다. 사용자에게 보이는 질문과 설명이 검수 전 문장이 되지 않게 하기 위해서다.
+
+    반환: (남긴 규칙, {유형 번호: 빠진 규칙 수}). 남은 규칙이 하나도 없는 유형은 '미등록'(기본 비율만 안내)이 된다.
+    빠진 규칙이 있는 유형은 결과를 '확정'이라고 하지 않아야 하므로 빠진 수를 따로 돌려준다.
+    """
+    kept, held_back = {}, {}
+    for key, config in rules.items():
+        usable = [r for r in config['rules'] if r['factor'] in reviewed_factors]
+        if len(usable) != len(config['rules']):
+            held_back[key] = len(config['rules']) - len(usable)
+        if usable:
+            kept[key] = {**config, 'rules': usable}
+    return kept, held_back
+
+
 ALL_ADJUSTMENT_RULES = load_json('adjustment_rules.json')   # 확인 여부와 상관없이 파일에 있는 전부 (검수 도구가 쓴다)
+
+# 쉬운 말(제목·설명·질문)을 사람이 확인한 가감요소
+REVIEWED_FACTOR_WORDING = {f for f, e in load_json('adjustment_explanations.json')['factors'].items() if e.get('reviewed')}
 
 # 기본은 확인한 유형만 켠다. 개발·시험에서 전부 보려면 환경변수 AVLY_REQUIRE_RULE_REVIEW=0
 REQUIRE_RULE_REVIEW = bool(setting('AVLY_REQUIRE_RULE_REVIEW', 1))
 
-ADJUSTMENT_RULES = active_rules(ALL_ADJUSTMENT_RULES, REQUIRE_RULE_REVIEW)
+# 기본은 쉬운 말까지 확인한 가감요소만 쓴다. 개발·시험에서 전부 보려면 환경변수 AVLY_REQUIRE_WORDING_REVIEW=0
+REQUIRE_WORDING_REVIEW = bool(setting('AVLY_REQUIRE_WORDING_REVIEW', 1))
+
+_reviewed_types = active_rules(ALL_ADJUSTMENT_RULES, REQUIRE_RULE_REVIEW)
+if REQUIRE_WORDING_REVIEW:
+    ADJUSTMENT_RULES, WORDING_HELD_BACK = wording_gate(_reviewed_types, REVIEWED_FACTOR_WORDING)
+else:
+    ADJUSTMENT_RULES, WORDING_HELD_BACK = _reviewed_types, {}
 
 LAW_ARTICLES_BY_TYPE = {int(k): v for k, v in load_json('law_articles.json').items()}
 

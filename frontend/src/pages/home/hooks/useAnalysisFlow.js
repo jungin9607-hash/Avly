@@ -56,7 +56,7 @@ export function reducer(state, action) {
     case "catalog":
       return { ...state, catalog: action.items };
     case "adjusting":
-      return { ...state, phase: "adjusting", option: action.option, questions: action.questions };
+      return { ...state, phase: "adjusting", option: action.option, questions: action.questions, heldBack: action.heldBack ?? 0 };
     case "back":
       return state.phase === "adjusting" ? { ...state, phase: "confirming" } : state;
     case "finalizing":
@@ -159,7 +159,7 @@ export default function useAnalysisFlow(resumeId) {
     try {
       const body = await api.adjustmentQuestions(analysisId, option.accident_type_id, option.role, { sessionId });
       if (body.questions.length === 0) return confirm(option, {});
-      dispatch({ type: "adjusting", option, questions: body.questions });
+      dispatch({ type: "adjusting", option, questions: body.questions, heldBack: body.held_back ?? 0 });
     } catch (error) {
       fail(error, analysisId);
     }

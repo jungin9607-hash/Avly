@@ -18,7 +18,7 @@ if MODEL_DIR not in sys.path:
     sys.path.insert(0, MODEL_DIR)
 
 from avly import explain  # noqa: E402  (표준 라이브러리만 쓰는 모듈이라 서버에서도 가볍게 불러올 수 있다)
-from avly.tables import ADJUSTMENT_RULES  # noqa: E402
+from avly.tables import ADJUSTMENT_RULES, WORDING_HELD_BACK  # noqa: E402
 from avly.constants import PLACE_GROUPS  # noqa: E402,F401
 
 ANSWER_TO_VALUE = {"예": "있음", "아니요": "없음", "잘 모르겠어요": "미확인"}
@@ -124,6 +124,11 @@ def options() -> list[dict]:
             key = (option["place"], option["feature"], option["my_progress"], option["other_progress"])
             seen.setdefault(key, option)
     return list(seen.values())
+
+
+def held_back_count(accident_type_id: int) -> int:
+    """쉬운 말 검수가 끝나지 않아 질문하지 않는(결과에도 반영하지 않는) 가감요소 수."""
+    return WORDING_HELD_BACK.get(str(accident_type_id), 0)
 
 
 def adjustment_questions(accident_type_id: int, role: str, facts: list[dict] | None = None) -> list[dict]:
