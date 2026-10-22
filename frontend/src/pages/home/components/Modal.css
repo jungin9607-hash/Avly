@@ -856,10 +856,10 @@ input:focus-visible + .md-radio {
   color: var(--ink);
   font: inherit;
   font-size: var(--md-font-body);
+  line-height: 1.45;
   text-align: left;
   cursor: pointer;
 }
-  line-height: 1.45;
 .md-choice:hover {
   border-color: var(--md-primary);
 }
