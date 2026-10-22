@@ -166,6 +166,12 @@ class AnalysisStartTests(ApiTestCase):
         view = self.client.get(f"/api/v1/analyses/{analysis_id}", headers=headers).json()
         self.assertEqual((view["stage"], view["error"]), (None, {"code": "VIDEO_TOO_LONG", "message": "영상이 깁니다"}))
 
+    def test_view_identifies_the_engine_that_actually_created_the_result(self):
+        _, headers, analysis_id = self.make_analysis()
+        self.repo.update_analysis(UUID(analysis_id), status=st.AWAITING_CONFIRMATION, scene={"engine": "fake"})
+        view = self.client.get(f"/api/v1/analyses/{analysis_id}", headers=headers).json()
+        self.assertEqual(view["engine"], "fake")
+
     def test_unsupported_view_and_accident_status(self):
         accident_id, headers, analysis_id = self.make_analysis()
         self.repo.update_analysis(UUID(analysis_id), status=st.UNSUPPORTED, unsupported_reason="차대보행자 사고는 지원하지 않습니다.")

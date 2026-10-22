@@ -68,6 +68,7 @@ def build_result(snapshot: dict, confirmed: dict, related_cases: list[dict], com
     comparisons = comparisons or {}
     related_cases = [{k: v for k, v in c.items() if k != "_text"} for c in related_cases]   # AI 비교용 본문은 결과에 싣지 않는다
     common = {
+        "analysis_engine": snapshot.get("engine"),
         "summary": situation.get("summary"),
         "situation": {k: situation.get(k) for k in ("road_shape", "my_action", "other_action", "contact")},
         "timeline": snapshot["timeline"],

@@ -10,7 +10,17 @@ import "./AnalysisGate.css";
 export default function AnalysisGate({ analysisId, active, theme, children }) {
   const { session, expired, analysis, error, loading, retry } = useAnalysis(analysisId);
 
-  if (analysis?.status === "completed") return children({ analysis, session });
+  if (analysis?.status === "completed") {
+    const engine = analysis.engine ?? analysis.result?.analysis_engine;
+    return (
+      <>
+        {["fake", "replay"].includes(engine) && (
+          <p className="ag-test-notice" role="status">시험용 결과입니다. 업로드한 영상을 AI로 분석한 내용이 아닙니다. 실제 분석 모드에서 새로 분석해 주세요.</p>
+        )}
+        {children({ analysis, session })}
+      </>
+    );
+  }
 
   const notice = describeAnalysis({ session, analysis, error, loading, analysisId, expired });
   return (

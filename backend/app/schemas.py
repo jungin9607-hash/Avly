@@ -87,6 +87,7 @@ class AnalysisResponse(ResponseSchema):
     analysis_id: UUID
     accident_id: UUID
     status: Literal["queued", "processing", "awaiting_confirmation", "completed", "failed", "unsupported"]
+    engine: Literal["avly", "fake", "replay"] | None = Field(default=None, description="이 분석을 실제로 처리한 엔진. fake/replay 는 영상 AI 분석이 아닌 시험 결과")
     stage: StageInfo | None
     situation: dict[str, Any] | None = Field(description="status 가 awaiting_confirmation 이후일 때: AI 가 파악한 사고 상황과 후보")
     result: dict[str, Any] | None = Field(description="status 가 completed 일 때만 값이 있음")

@@ -3,7 +3,8 @@
 실제 브라우저로 업로드부터 결과·타임라인·유사 판례까지 눌러 봅니다. 서버(api, worker, DB)와 프론트가 떠 있어야 합니다.
 
 ```bash
-cd ~/Avly && docker compose up -d --build        # worker 는 기본으로 가짜 엔진(ENGINE=fake)이라 AI 키가 필요 없습니다
+# 먼저 backend/.env 에 ENGINE=fake, REDACTION=dev_copy 를 명시한다 (이 테스트 전용).
+cd ~/Avly && docker compose up -d --build
 
 # 브라우저가 들어 있는 이미지로 실행 (처음에는 이미지를 내려받는다, 약 3GB)
 docker run --rm --network host -v "$PWD/frontend/e2e:/e2e:ro" -v "$PWD/frontend/e2e/shots:/shots" \

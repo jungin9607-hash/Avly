@@ -237,7 +237,7 @@ POST /accidents (동의, session_id 받기)
 
 ## 개발·테스트
 
-worker 가 `ENGINE=fake`(기본 개발 설정)이면 영상 파일 **첫 줄**의 지시로 상황을 만들 수 있다. 실제 영상이 아니어도 된다.
+`backend/.env`에 명시적으로 `ENGINE=fake`, `REDACTION=dev_copy`를 지정하면 영상 파일 **첫 줄**의 지시로 상황을 만들 수 있다. 실제 영상이 아니어도 된다. 분석 조회 응답의 `engine`은 결과를 만든 엔진이며, `fake`/`replay`는 실제 영상 AI 분석이 아니다.
 
 | 첫 줄 | 결과 |
 | --- | --- |

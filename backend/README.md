@@ -24,8 +24,8 @@ API 서버는 분석을 직접 하지 않고 DB의 `job` 표에 일을 넣습니
 docker compose up --build
 ```
 
-기본 설정은 **키 없이 전체 흐름을 시험하는 개발 모드**입니다 (`ENGINE=fake`, `REDACTION=dev_copy`, 로컬 db 사용, 마이그레이션 자동 적용).
-이 모드에서는 실제 AI 분석도, 실제 비식별화도 하지 않습니다.
+분석 모드는 **`backend/.env`의 `ENGINE`, `REDACTION`, `CASE_COMPARE`**를 그대로 사용합니다. 예제 설정은 실제 분석(`avly`, `yolo`)입니다.
+키 없이 화면 흐름만 시험하려면 `.env`에 `ENGINE=fake`, `REDACTION=dev_copy`를 명시하세요. 이 모드에서는 실제 AI 분석도, 실제 비식별화도 하지 않습니다.
 
 | 용도 | 주소 |
 | --- | --- |
@@ -74,6 +74,13 @@ docker compose exec backend python -m app.migrate --apply   # 대기 중인 파�
 **실제 분석으로 돌리려면:** `backend/.env`에 `OPENAI_API_KEY`, `law_api`를 넣고 `ENGINE=avly`, `REDACTION=yolo`로 바꾼 뒤
 worker 이미지를 YOLO 포함으로 빌드한다: `INSTALL_YOLO=true docker compose up --build worker`.
 (이 조합은 아직 실제 영상으로 끝까지 검증하지 못했다.)
+
+설정을 바꾼 뒤에는 `docker compose up -d --force-recreate worker`로 worker 컨테이너를 다시 만드세요 (`restart`만으로는 환경변수가 바뀌지 않습니다).
+적용 모드는 `docker compose exec worker python -c 'from app.config import settings; print(settings.engine, settings.redaction)'`로 확인할 수 있습니다.
+분석 조회 응답의 `engine`은 해당 결과를 만든 엔진입니다. `fake`/`replay` 결과는 화면에도 시험용으로 표시하며, 설정을 바꿔도 이전 결과가 실제 분석으로 바뀌지는 않습니다.
+
+실제 분석의 JSON·보고서·관찰 캐시는 사고 폴더의 임시 디렉터리에서 만들고 DB에 결과를 옮긴 뒤 삭제합니다. 실패 시에도 삭제하며, 강제 종료로 남은 파일은 비식별 영상 만료 시 정리합니다.
+변경 전에 공용 `uploads/_model_results` 폴더에 생성된 기존 파일에는 이 삭제 정책이 소급 적용되지 않습니다. 기존 보관 자료인지 확인한 뒤 별도로 정리해야 합니다.
 
 개발 중 `ENGINE=fake`에서는 영상 파일 첫 줄의 지시로 상황을 만들 수 있다. 목록은 [docs/api.md](../docs/api.md#개발테스트).
 
