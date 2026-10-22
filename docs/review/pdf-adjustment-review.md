@@ -19,8 +19,9 @@
 2. 카드를 열어 적힌 내용이 PDF 원문과 맞는지 보고 **맞아요 / 틀려요 / 모르겠어요**를 누릅니다. 쉬운 문장 탭에서는 문장을 바로 고칠 수도 있습니다. 중간에 닫아도 자동 저장됩니다.
 3. 다 하면 **내보내기**를 눌러 받은 파일(`검수결과_이름_날짜.json`)을 담당자에게 보냅니다.
 4. 담당자는 받은 파일을 한 폴더에 모아 `docker compose exec backend python tools/apply_review.py 파일1.json 파일2.json`을 실행합니다. 모두 맞다고 확인한 유형만 켜지고, 틀린 곳은 [review-issues.md](review-issues.md)에 모입니다. 두 사람의 결정이 다르면 반영하지 않고 이슈로 남깁니다.
-5. 얼마나 됐는지는 `docker compose exec backend python -m app.review_status`로 봅니다.
-6. 규칙이나 문장이 바뀌면 `docker compose exec -T backend python tools/make_review_page.py > docs/review/review.html`로 페이지를 다시 만듭니다.
+5. **받은 검수 파일을 읽기 쉽게 보려면** `python tools/make_review_results_page.py 파일1.json 파일2.json ...`을 실행하세요. 문제가 있는 유형은 PDF 원문과 우리 데이터를 나란히, 쉬운 문장은 사용자에게 보이는 모습으로 풀어서 `docs/review/review-results.html` 한 장으로 만들어 줍니다(데이터는 바꾸지 않습니다).
+6. 얼마나 됐는지는 `docker compose exec backend python -m app.review_status`로 봅니다.
+7. 규칙이나 문장이 바뀌면 `docker compose exec -T backend python tools/make_review_page.py > docs/review/review.html`로 페이지를 다시 만듭니다.
 
 아래 "JSON을 직접 고치는 방법"은 위 방법을 쓰지 않을 때만 필요합니다.
 

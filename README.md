@@ -2,6 +2,9 @@
 
 AI 기반 블랙박스 사고 분석 서비스
 
+> **현재 지원 범위**: 차대차 사고(과실표 133개 유형)의 기본 과실비율은 모두 안내합니다. **가감산 비율은 사람이 검수를 끝낸 사고 유형과 가감요소만** 지원하고, 나머지는 기본 비율만 안내하거나 "확인한 요소만 반영한 비율"로 안내합니다.
+> 지원하는 유형은 [docs/review/supported-types.md](docs/review/supported-types.md), 검수가 남은 항목은 [docs/review/pending-review-requests.md](docs/review/pending-review-requests.md)에 있습니다.
+
 ---
 
 # 개발 환경
