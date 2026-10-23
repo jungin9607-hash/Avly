@@ -18,7 +18,7 @@ import "./Time.css";
 // 사고 타임라인. 서버가 영상에서 찾은 구간(시작~끝 초)을 시간순으로 보여 주고, 영상이 있으면 그 시점으로 이동한다.
 export default function Time({ analysisId }) {
   return (
-    <AnalysisGate analysisId={analysisId} active="타임라인" theme="dark">
+    <AnalysisGate analysisId={analysisId} active="타임라인">
       {({ analysis, session }) => <TimeView result={analysis.result} analysisId={analysisId} session={session} />}
     </AnalysisGate>
   );

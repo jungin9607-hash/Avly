@@ -5,13 +5,14 @@ import Report from "./pages/report/Report";
 import Time from "./pages/time/Time";
 import Law from "./pages/law/Law";
 import ReportDoc from "./pages/reportdoc/ReportDoc";
+import NoAnalysis from "./pages/common/components/NoAnalysis";
 import { lastAnalysisId } from "./api/session";
-import { ROUTES } from "./routes";
+import { LATEST_ROUTES, ROUTES } from "./routes";
 
-// 예전 임시 주소(-test)로 들어온 사람을 새 주소로 보낸다. 최근 분석이 없으면 홈으로 보낸다.
-function Legacy({ page }) {
+// 분석 번호 없는 주소(상단 메뉴, 예전 임시 주소 -test)로 들어온 사람을 최근 분석 결과로 보낸다. 최근 분석이 없으면 안내를 보여 준다.
+function Latest({ page }) {
   const id = lastAnalysisId();
-  return <Navigate to={id ? ROUTES[page](id) : ROUTES.home} replace />;
+  return id ? <Navigate to={ROUTES[page](id)} replace /> : <NoAnalysis page={page} />;
 }
 
 // 화면 라우팅은 App에서 관리하고 각 화면은 pages 폴더에 둔다.
@@ -49,9 +50,11 @@ export default function App() {
         <Route path="/analysis/:analysisId/law" element={<LawRoute />} />
         <Route path="/analysis/:analysisId/report" element={<ReportDocRoute />} />
         <Route path="/upload-test" element={<Navigate to={ROUTES.home} replace />} />
-        <Route path="/analysis-test" element={<Legacy page="report" />} />
-        <Route path="/timeline-test" element={<Legacy page="timeline" />} />
-        <Route path="/law" element={<Legacy page="law" />} />
+        <Route path={LATEST_ROUTES.report} element={<Latest page="report" />} />
+        <Route path={LATEST_ROUTES.timeline} element={<Latest page="timeline" />} />
+        <Route path={LATEST_ROUTES.law} element={<Latest page="law" />} />
+        <Route path="/analysis-test" element={<Latest page="report" />} />
+        <Route path="/timeline-test" element={<Latest page="timeline" />} />
         <Route path="*" element={<Intro />} />
       </Routes>
     </BrowserRouter>

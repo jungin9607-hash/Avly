@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { api } from "../../../api/client.js";
 import { CONSENT_VERSION } from "../../../api/config.js";
-import { expireAnalysis, getSession, rememberAnalysis } from "../../../api/session.js";
+import { expireAnalysis, forgetAnalysis, getSession, rememberAnalysis } from "../../../api/session.js";
 
 // 영상 올리기 → 분석 → (사용자 확인) → 가감 질문 → 결과 계산까지 한 줄로 이어지는 흐름.
 // 화면은 phase 만 보고 어떤 팝업을 띄울지 정한다.
@@ -171,6 +171,7 @@ export default function useAnalysisFlow(resumeId) {
   const cancel = useCallback(async () => {
     try {
       await api.cancelAnalysis(analysisId, { sessionId });
+      forgetAnalysis(analysisId); // 취소한 분석은 최근 분석으로 기억하지 않는다 (상단 메뉴가 "아직 분석한 영상이 없어요"로 연결되도록)
       dispatch({ type: "failed", error: { code: "CANCELLED", message: "분석을 취소했어요." } });
     } catch (error) {
       if (error.code !== "ANALYSIS_NOT_CANCELLABLE") fail(error, analysisId);

@@ -284,6 +284,7 @@ test("결과 화면에 들어가기 전 안내: 상태마다 알맞은 문구와
   assert.match(describeAnalysis({ session, loading: true, analysisId: "x" }).title, /불러오는 중/);
   const processing = describeAnalysis({ session, analysis: { status: "processing", stage: { label: "전체 흐름 분석" } }, analysisId: "x" });
   assert.match(processing.body, /전체 흐름 분석/);
+  assert.equal(processing.analyzing, true);
   const waiting = describeAnalysis({ session, analysis: { status: "awaiting_confirmation" }, analysisId: "abc" });
   assert.equal(waiting.link.to, "/upload?resume=abc");
   const unsupported = describeAnalysis({ session, analysis: { status: "unsupported", unsupported_reason: "차대보행자 사고는 지원하지 않습니다." }, analysisId: "x" });

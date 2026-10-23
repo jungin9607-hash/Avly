@@ -11,36 +11,44 @@ const TIMELINE = [
   [128, "-1초"],
 ];
 
-// 블랙박스 화면 + 충돌 전후 타임라인
+// 블랙박스 화면 + 충돌 전후 타임라인 (빛나는 선으로 그린 HUD 화면: 차량 인식 박스)
 function CamVisual() {
   return (
     <svg className="si-visual-cam" viewBox="0 0 200 132">
-      <rect x="20" y="6" width="160" height="92" rx="8" fill="#22242c" />
-      <path d="M92 26 L108 26 L156 98 L44 98 Z" fill="#3a3d48" />
-      <path d="M99.2 34h1.6v8h-1.6zM98.8 50h2.4v12h-2.4zM98.2 72h3.6v18h-3.6z" fill="#f2cc47" />
-      <rect x="112" y="52" width="26" height="16" rx="3" fill="#5a5f70" />
-      <rect x="114" y="62" width="5" height="3" rx="1" fill="#ff5a4a" />
-      <rect x="131" y="62" width="5" height="3" rx="1" fill="#ff5a4a" />
-      <circle cx="32" cy="18" r="3" fill="#ff5a4a" />
-      <text x="39" y="21" fontSize="8" fontWeight="700" fill="#fff">REC</text>
-      <line x1="28" y1="116" x2="172" y2="116" stroke="#cfd0d6" strokeWidth="2" />
+      <rect className="si-hud-frame" x="20" y="6" width="160" height="92" rx="6" />
+      <path className="si-hud-dim" d="M24 30h152" />
+      <path className="si-hud-line" d="M90 30 52 98M110 30l38 68" />
+      <path className="si-hud-dim si-hud-dash" d="M100 34v62" />
+      <rect className="si-hud-line" x="114" y="54" width="22" height="13" rx="3" />
+      <path className="si-hud-alert" d="M108 54v-6h7M142 54v-6h-7M108 68v6h7M142 68v6h-7" />
+      <text className="si-hud-alert-text" x="142" y="45" fontSize="7" textAnchor="end">
+        차량 인식
+      </text>
+      <circle className="si-hud-alert-dot" cx="31" cy="16" r="2.5" />
+      <text className="si-hud-text" x="37" y="19" fontSize="7" fontWeight="700">
+        REC
+      </text>
+      <text className="si-hud-text" x="170" y="19" fontSize="7" textAnchor="end">
+        00:12
+      </text>
+      <path className="si-hud-dim" d="M28 116h144" />
       {TIMELINE.map(([x, t]) => (
         <g key={t}>
-          <circle cx={x} cy="116" r="4" fill="#fff" stroke="#9a9ca6" strokeWidth="2" />
-          <text x={x} y="130" fontSize="8" textAnchor="middle" fill="#7a7c86">
+          <circle className="si-hud-node" cx={x} cy="116" r="3.5" />
+          <text className="si-hud-muted" x={x} y="130" fontSize="8" textAnchor="middle">
             {t}
           </text>
         </g>
       ))}
-      <circle cx="168" cy="116" r="5" fill="#ff5a4a" />
-      <text x="168" y="130" fontSize="8" fontWeight="700" textAnchor="middle" fill="#e2463a">
+      <circle className="si-hud-alert-dot" cx="168" cy="116" r="4.5" />
+      <text className="si-hud-alert-text" x="168" y="130" fontSize="8" fontWeight="700" textAnchor="middle">
         충돌
       </text>
     </svg>
   );
 }
 
-// 예상 과실비율 카드
+// 예상 과실비율: 빛나는 숫자 · 막대 게이지(아래 눈금)
 function RatioVisual({ mine = 20, other = 80 }) {
   return (
     <div className="si-mini si-ratio">
