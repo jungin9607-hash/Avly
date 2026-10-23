@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { VISUALS } from "./FeatureVisuals";
 
-// 핵심 기능 3가지: 도로 화면에서 이어지는 진한 네이비 배경 위 흰 카드 + 아래 가운데 시작 버튼
+// 핵심 기능 3가지: 파란 빛이 비치는 네이비 배경 위 흰빛 유리 카드(카드끼리 빛 선으로 연결) + 아래 가운데 시작 버튼
 export default function FeaturesSection({ content, cta }) {
   return (
     <section className="si-features">

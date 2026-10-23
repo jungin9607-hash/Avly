@@ -15,7 +15,7 @@ export const FEATURES = {
   cards: [
     {
       id: "video",
-      title: "블랙박스 영상 분석",
+      title: "블랙박스 영상 AI 분석",
       visual: "cam",
       desc: [
         "블랙박스 영상의 ",
@@ -29,7 +29,7 @@ export const FEATURES = {
     },
     {
       id: "ratio",
-      title: "예상 과실비율과 과실 인정 기준",
+      title: "예상 과실비율과 인정 기준",
       visual: "ratio",
       desc: [
         "사고 유형에 해당하는 ",
@@ -43,7 +43,7 @@ export const FEATURES = {
     },
     {
       id: "precedent",
-      title: "비슷한 사고의 판례",
+      title: "유사 판례 비교",
       visual: "doc",
       desc: [
         "내 사고와 ",
