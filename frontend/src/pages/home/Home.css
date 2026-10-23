@@ -1,14 +1,14 @@
 /* 업로드(홈) 화면
- * 위: 네이비 배경과 브랜드 글자(글 + 업로드 상자 / 가이드 타일 3개)
+ * 위: 단계 · 제목 · 진행 중인 분석, 그 아래 큰 업로드 상자 / 가이드 타일 3개
  * 아래: 같은 네이비 그라데이션 위의 안내문 */
 
 .uh {
-  --uh-bg-top: var(--color-navy-950);
   --uh-bg-middle: var(--color-navy-800);
-  --uh-bg-bottom: var(--color-navy-700);
+  /* 비 내리는 밤의 사고 차량 사진을 화면 전체에 깔고, 글이 읽히도록 네이비로 옅게 덮는다 */
   --uh-page-background:
-    radial-gradient(55% 460px at 85% 80px, var(--color-page-glow), transparent 70%),
-    linear-gradient(180deg, var(--uh-bg-top) 0%, var(--color-navy-900) 30%, var(--uh-bg-middle) 70%, var(--uh-bg-bottom) 100%);
+    linear-gradient(180deg, var(--color-home-photo-veil-top) 0%, var(--color-home-photo-veil) 45%, var(--color-home-photo-veil-bottom) 100%),
+    url("../../assets/home-accident-night.png") center / cover no-repeat,
+    var(--uh-bg-middle);
   --uh-font-small: 14px;
   --uh-font-caption: 15px;
   --uh-font-body: 16px;
@@ -56,7 +56,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  padding: 168px 40px 72px;
+  padding: 104px 40px 24px;
 }
 .uh-hero > .uh-grid {
   position: relative;
@@ -86,7 +86,7 @@
   width: 100%;
   box-sizing: border-box;
   margin: 0;
-  padding: 80px 40px 16px 56px;
+  padding: 8px 40px 16px 56px;
 }
 /* index.css의 전역 h1·h2 색/폰트가 덮어쓰지 않도록 */
 .uh h1,
@@ -97,28 +97,33 @@
   color: inherit;
 }
 
-/* ---------- 왼쪽: 글 + 작은 업로드 상자 / 오른쪽: 가이드 ---------- */
+/* ---------- 위: 글 / 아래 왼쪽: 업로드 상자 · 오른쪽: 가이드 ---------- */
 .uh-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: 56px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  grid-template-areas:
+    "intro ."
+    "intro guide-title"
+    "drop tiles";
+  column-gap: 24px;
 }
 .uh-intro {
+  grid-area: intro;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  padding-bottom: 18px;
 }
 .uh-steps {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  margin: 0 0 22px;
+  margin: 0 0 18px;
   padding: 0;
   list-style: none;
   counter-reset: step;
-  font-size: var(--uh-font-body);
+  font-size: var(--uh-font-caption);
   font-weight: 500;
   color: var(--muted);
   text-shadow: 0 1px 8px var(--shade);
@@ -135,7 +140,7 @@
   place-items: center;
   width: 26px;
   height: 26px;
-  border-radius: 3px;
+  border-radius: 4px;
   border: 1px solid var(--color-white-a60);
   font-size: var(--uh-font-small);
   font-weight: 700;
@@ -143,7 +148,7 @@
 .uh-steps li + li::after {
   order: -1;
   content: "";
-  width: 24px;
+  width: 22px;
   border-top: 1px solid var(--color-white-a50);
   margin-right: 2px;
 }
@@ -158,7 +163,7 @@
   text-shadow: none;
 }
 .uh-intro h1 {
-  margin: 0 0 18px;
+  margin: 0 0 22px;
   color: var(--color-white);
   font-size: clamp(42px, 4.6vw, 64px);
   font-weight: 800;
@@ -166,79 +171,73 @@
   line-height: 1.1;
   text-shadow: 0 2px 18px var(--shade);
 }
-.uh-lead {
-  margin: 0 0 32px;
-  font-size: var(--uh-font-lead);
-  font-weight: 500;
-  line-height: 1.6;
-  color: var(--muted);
-  word-break: keep-all;
-  text-shadow: 0 1px 10px var(--shade);
-}
-.uh-lead strong {
-  color: var(--ink);
-}
 
-/* 작은 업로드 상자: 버튼보다 크게, 끌어다 놓을 수 있을 만큼만 */
+/* 큰 업로드 상자: 오른쪽 가이드 타일과 같은 높이 */
 .uh-drop {
   --uh-upload-surface: var(--color-home-upload-bg);
   --uh-upload-surface-hover: var(--color-home-upload-hover);
-  --uh-upload-border: var(--color-home-upload-border);
-  --uh-upload-accent: var(--color-blue-strong);
-  --uh-upload-icon: var(--color-blue-soft);
+  --uh-upload-border: var(--color-white-a14);
+  --uh-upload-ink: var(--color-navy-750);
   --uh-upload-button-hover: var(--uh-light-surface);
+  grid-area: drop;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  max-width: 520px;
-  padding: 26px 24px;
+  min-height: 440px;
+  box-sizing: border-box;
+  padding: 40px 36px;
   text-align: center;
   color: var(--ink);
   background: var(--uh-upload-surface);
-  border: 1.5px dashed var(--uh-upload-border);
-  backdrop-filter: blur(8px);
-  border-radius: 6px;
+  border: 1px solid var(--uh-upload-border);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 .uh-drop.is-over {
   background: var(--uh-upload-surface-hover);
-  border-color: var(--uh-upload-icon);
+  border-color: var(--color-blue-soft);
 }
-/* 네이비 배경 위의 흰 버튼과 블루 글자 */
+/* 네이비 배경 위의 넓은 흰 버튼과 네이비 글자 */
 .uh-drop .uh-btn-solid {
-  background: var(--uh-light-surface);
-  border-color: var(--uh-light-surface);
-  color: var(--uh-upload-accent);
+  width: 100%;
+  min-height: 60px;
+  background: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--uh-upload-ink);
+  font-weight: 700;
 }
 .uh-drop .uh-btn-solid:hover {
   background: var(--uh-upload-button-hover);
   border-color: var(--uh-upload-button-hover);
 }
-.uh-demo-trigger {
-  margin-top: 12px;
-}
 .uh-drop-icon {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  margin-bottom: 12px;
-  border-radius: 4px;
-  background: var(--color-home-upload-glow);
-  border: 1px solid var(--color-home-upload-glow-strong);
-  color: var(--uh-upload-icon);
+  width: 54px;
+  height: 54px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background: var(--color-white-a10);
+  border: 1px solid var(--color-white-a14);
+  color: var(--color-white);
   transition: transform 0.2s ease;
 }
 .uh-drop.is-over .uh-drop-icon {
   transform: translateY(-4px);
 }
 .uh-drop h2 {
-  margin: 0 0 16px;
-  font-size: var(--uh-font-label);
+  margin: 0 0 20px;
+  font-size: var(--uh-font-lead);
   font-weight: 700;
   letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+.uh-drop-hint {
+  margin: 28px 0 0;
+  font-size: var(--uh-font-description);
+  color: var(--muted);
   word-break: keep-all;
 }
 .uh-error {
@@ -253,11 +252,13 @@
   font-weight: 600;
 }
 
+/* 제목과 타일 목록을 격자에 직접 놓아, 제목은 업로드 상자 위 · 타일은 상자 옆에 맞춘다 */
 .uh-guides {
-  display: flex;
-  flex-direction: column;
+  display: contents;
 }
 .uh-guides-title {
+  grid-area: guide-title;
+  align-self: end;
   margin: 0 0 12px;
   color: var(--color-white);
   text-shadow: 0 1px 8px var(--shade);
@@ -266,82 +267,47 @@
   letter-spacing: -0.01em;
 }
 .uh-tiles {
-  flex: 1;
+  grid-area: tiles;
   display: grid;
   grid-auto-rows: 1fr;
-  gap: 14px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .uh-tile {
-  position: relative;
   display: flex;
   flex-direction: column;
-  padding: 16px 22px;
-  border-radius: 6px;
+  justify-content: center;
+  padding: 18px 24px;
+  border-radius: 10px;
+  background: var(--color-home-guide-two);
+  border: 1px solid var(--color-white-a14);
+  backdrop-filter: blur(10px);
   box-shadow: 0 10px 30px var(--color-home-demo-shadow);
+  color: var(--ink);
 }
-/* 다음 타일을 가리키는 아래쪽 꼭지 (타일과 같은 색) */
-.uh-tile:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: 30px;
-  bottom: -11px;
-  z-index: 1;
-  width: 0;
-  height: 0;
-  border-left: 11px solid transparent;
-  border-right: 11px solid transparent;
-  border-top: 11px solid var(--tile-bg);
+.uh-tag {
+  margin: 0 0 6px;
+  font-size: var(--uh-font-small);
+  font-weight: 500;
+  color: var(--ink-2);
 }
 .uh-tag b {
-  font-weight: 800;
-}
-.uh-tag-of {
-  opacity: 0.55;
+  font-weight: inherit;
 }
 .uh-tile h3 {
-  margin: 0 0 6px;
+  margin: 0 0 8px;
   font-size: var(--uh-font-lead);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 .uh-tile-body {
   margin: 0;
-  font-size: var(--uh-font-body);
+  font-size: var(--uh-font-caption);
   line-height: 1.7;
-  word-break: keep-all;
-}
-/* STEP 01 → 03: 딥 네이비 → 네이비 → 밝은 블루로 이어지는 흐름 */
-.uh-tile-1 {
-  --tile-bg: var(--color-home-guide-one);
-  background: var(--tile-bg);
-  color: var(--ink);
-}
-.uh-tile-2 {
-  --tile-bg: var(--color-home-guide-two);
-  background: var(--tile-bg);
-  color: var(--ink);
-}
-.uh-tile-1 .uh-tag,
-.uh-tile-2 .uh-tag {
-  color: var(--color-blue-soft);
-}
-.uh-tile-1 .uh-tile-body,
-.uh-tile-2 .uh-tile-body {
   color: var(--ink-2);
-}
-.uh-tile-3 {
-  --tile-bg: var(--uh-light-surface);
-  background: var(--tile-bg);
-  color: var(--color-navy-750);
-}
-.uh-tile-3 .uh-tag {
-  color: var(--color-blue-strong);
-}
-.uh-tile-3 .uh-tile-body {
-  color: var(--color-text-law);
+  word-break: keep-all;
 }
 
 /* ---------- 버튼 ---------- */
@@ -432,21 +398,24 @@
 }
 @media (max-width: 960px) {
   .uh-grid {
-    grid-template-columns: 1fr;
-  }
-  .uh-grid {
-    gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "intro"
+      "drop"
+      "guide-title"
+      "tiles";
   }
   .uh-drop {
-    max-width: none;
+    min-height: 340px;
+    margin-bottom: 40px;
   }
 }
 @media (max-width: 640px) {
   .uh-hero {
-    padding: 144px 20px 56px;
+    padding: 100px 20px 32px;
   }
   .uh-main {
-    padding: 64px 20px 16px;
+    padding: 32px 20px 16px;
   }
 }
 

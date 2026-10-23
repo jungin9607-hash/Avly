@@ -18,12 +18,14 @@ export default function ResumeBanner() {
   const text = id && analysis ? TEXT[analysis.status] : null;
   if (!text) return null;
   return (
-    <Link to={ROUTES.resume(id)} className="uh-resume" role="status">
-      <span className="uh-resume-text">
-        <small>진행 중인 분석</small>
-        <strong>{text.title}</strong>
+    <Link to={ROUTES.resume(id)} className="uh-resume" role="status" title={text.title} aria-label={`진행 중인 분석: ${text.title}. ${text.action}`}>
+      <span className="uh-resume-label">진행 중인 분석</span>
+      <span className="uh-resume-action">
+        {text.action}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="m9 6 6 6-6 6" />
+        </svg>
       </span>
-      <span className="uh-resume-action">{text.action}</span>
     </Link>
   );
 }
