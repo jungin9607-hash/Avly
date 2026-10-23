@@ -94,10 +94,10 @@ export default function Home() {
     <div className="uh">
       <TopNav active="홈" theme="dark" />
 
-      {/* 주요 부분: 네이비 배경과 옅은 브랜드 글자 위에 업로드와 가이드 */}
+      {/* 주요 부분: 네이비 배경 위에 업로드와 가이드 */}
       <section className="uh-hero">
         <div className="uh-grid">
-          {/* 왼쪽: 글(단계 · 제목 · 형식 안내)과 그 아래 작은 업로드 상자 */}
+          {/* 위: 단계 · 제목 · 진행 중인 분석 */}
           <div className="uh-intro">
             <ol className="uh-steps" aria-label="분석 단계">
               <li className="on">영상 업로드</li>
@@ -105,15 +105,11 @@ export default function Home() {
               <li>결과 확인</li>
             </ol>
             <h1>블랙박스 영상 분석</h1>
-            <p className="uh-lead">
-              MP4, MOV, AVI 포맷 지원 · 단일 파일 최대 <strong>{MAX_MB}MB</strong> 이내 권장
-            </p>
-
             {flow.phase === "idle" && pending.length === 0 && <ResumeBanner />}
-            <UploadDrop inputRef={inputRef} error={error} onFiles={selectFiles} />
           </div>
 
-          {/* 오른쪽: 영상 가이드 타일 3개 */}
+          {/* 아래 왼쪽: 업로드 상자 / 오른쪽: 영상 가이드 타일 3개 */}
+          <UploadDrop inputRef={inputRef} error={error} maxMb={MAX_MB} onFiles={selectFiles} />
           <GuideTiles />
         </div>
       </section>

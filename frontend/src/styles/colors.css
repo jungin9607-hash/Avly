@@ -125,6 +125,9 @@
   --color-home-guide-two: rgba(29, 44, 85, 0.65);
   --color-home-demo-blue: #5d67f5;
   --color-home-popup-button-shadow: rgba(32, 39, 255, 0.25);
+  --color-home-photo-veil-top: rgba(8, 12, 26, 0.35);
+  --color-home-photo-veil: rgba(18, 27, 58, 0.25);
+  --color-home-photo-veil-bottom: rgba(8, 12, 26, 0.55);
 
   /* ================================================================
    * Intro
