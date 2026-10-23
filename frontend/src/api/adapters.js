@@ -410,7 +410,8 @@ export function describeAnalysis({ session, analysis, error, loading, analysisId
   switch (analysis.status) {
     case "queued":
     case "processing":
-      return { title: "아직 분석하고 있어요", body: analysis.stage ? `지금은 '${analysis.stage.label}' 단계예요. 끝나면 이 화면이 자동으로 바뀌어요.` : "곧 시작해요. 끝나면 이 화면이 자동으로 바뀌어요." };
+      // analyzing: 결과 화면 안내에서 문구 없이 배경만 보여 주는 분석 중 상태 (로딩바 자리)
+      return { analyzing: true, title: "아직 분석하고 있어요", body: analysis.stage ? `지금은 '${analysis.stage.label}' 단계예요. 끝나면 이 화면이 자동으로 바뀌어요.` : "곧 시작해요. 끝나면 이 화면이 자동으로 바뀌어요." };
     case "awaiting_confirmation":
       return { title: "사고 상황을 확인해 주세요", body: "분석은 끝났어요. 사고 상황을 확인하면 결과를 볼 수 있어요.", link: { to: ROUTES.resume(analysisId), label: "이어서 확인하기" } };
     case "unsupported":
