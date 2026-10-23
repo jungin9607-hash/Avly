@@ -1,0 +1,629 @@
+{
+ "version": "auto-three-stage-v2.21.1-parking-pattern-report",
+ "video_sha256": "8b39e7085d03",
+ "csv_sha256": "a4fee0c48a0c",
+ "duration": 10.0,
+ "fps": 15.0,
+ "timeline": [
+  {
+   "kind": "A 움직임",
+   "actor": "A",
+   "start_sec": 2.3333333333333335,
+   "end_sec": 5.733333333333333,
+   "description": "A(블랙박스 차량)가 이동한 것으로 추정됨.",
+   "certainty": "이동 추정",
+   "evidence_frame_ids": [
+    "frame_000035",
+    "frame_000086"
+   ],
+   "evidence_text": "노면 차선 및 가로등이 후방으로 이동하며 고정 배경에 따라 직선도로 주행 관찰(frame_000041, frame_000071)",
+   "time_basis": "프레임 이미지의 sec",
+   "interval_meaning": "기록된 관찰 구간"
+  },
+  {
+   "kind": "B 확인 구간",
+   "actor": "B",
+   "start_sec": 2.3333333333333335,
+   "end_sec": 6.933333333333334,
+   "description": "B로 선택된 상대 차량이 확인된 구간.",
+   "certainty": "구별됨",
+   "evidence_frame_ids": [
+    "frame_000035",
+    "frame_000104"
+   ],
+   "evidence_text": "흰색 또는 밝은색 SUV, 두 개의 리어램프 밝음 / 화면 이동: 뚜렷한 좌우 이동 미확인; 도로상 진행: 정지/대기",
+   "time_basis": "프레임 이미지의 sec",
+   "interval_meaning": "기록된 관찰 구간"
+  },
+  {
+   "kind": "A 움직임",
+   "actor": "A",
+   "start_sec": 5.8,
+   "end_sec": 6.4,
+   "description": "A(블랙박스 차량)가 이동한 것으로 추정됨.",
+   "certainty": "이동 추정",
+   "evidence_frame_ids": [
+    "frame_000087",
+    "frame_000096"
+   ],
+   "evidence_text": "B와 근접 중 급격한 감속 또는 접촉, 차량 진동·흔들림 및 배경 변화(frame_000087, frame_000096)",
+   "time_basis": "프레임 이미지의 sec",
+   "interval_meaning": "기록된 관찰 구간"
+  },
+  {
+   "kind": "접촉 근거 구간",
+   "actor": "A/B",
+   "start_sec": 5.866666666666666,
+   "end_sec": 6.466666666666667,
+   "description": "A와 상대 차량 사이에 충돌 정황이 강하게 관찰됨. 직접 접촉 확정과는 구분됨.",
+   "certainty": "충돌 정황 강함",
+   "evidence_frame_ids": [
+    "frame_000088",
+    "frame_000089",
+    "frame_000094",
+    "frame_000096",
+    "frame_000097"
+   ],
+   "evidence_text": "B 후면과의 매우 근접(프레임 연속), 충돌 순간 카메라 진동 및 B의 오른쪽 이탈 시작(frame_000089~frame_000097)",
+   "time_basis": "프레임 이미지의 sec",
+   "interval_meaning": "인용된 근거 프레임의 시간 범위"
+  }
+ ],
+ "overview_frames": [
+  {
+   "id": "frame_000000",
+   "sec": 0.0
+  },
+  {
+   "id": "frame_000005",
+   "sec": 0.3333333333333333
+  },
+  {
+   "id": "frame_000010",
+   "sec": 0.6666666666666666
+  },
+  {
+   "id": "frame_000015",
+   "sec": 1.0
+  },
+  {
+   "id": "frame_000020",
+   "sec": 1.3333333333333333
+  },
+  {
+   "id": "frame_000025",
+   "sec": 1.6666666666666667
+  },
+  {
+   "id": "frame_000030",
+   "sec": 2.0
+  },
+  {
+   "id": "frame_000035",
+   "sec": 2.3333333333333335
+  },
+  {
+   "id": "frame_000040",
+   "sec": 2.6666666666666665
+  },
+  {
+   "id": "frame_000045",
+   "sec": 3.0
+  },
+  {
+   "id": "frame_000050",
+   "sec": 3.3333333333333335
+  },
+  {
+   "id": "frame_000055",
+   "sec": 3.6666666666666665
+  },
+  {
+   "id": "frame_000060",
+   "sec": 4.0
+  },
+  {
+   "id": "frame_000065",
+   "sec": 4.333333333333333
+  },
+  {
+   "id": "frame_000070",
+   "sec": 4.666666666666667
+  },
+  {
+   "id": "frame_000075",
+   "sec": 5.0
+  },
+  {
+   "id": "frame_000080",
+   "sec": 5.333333333333333
+  },
+  {
+   "id": "frame_000085",
+   "sec": 5.666666666666667
+  },
+  {
+   "id": "frame_000090",
+   "sec": 6.0
+  },
+  {
+   "id": "frame_000095",
+   "sec": 6.333333333333333
+  },
+  {
+   "id": "frame_000100",
+   "sec": 6.666666666666667
+  },
+  {
+   "id": "frame_000105",
+   "sec": 7.0
+  },
+  {
+   "id": "frame_000110",
+   "sec": 7.333333333333333
+  },
+  {
+   "id": "frame_000115",
+   "sec": 7.666666666666667
+  },
+  {
+   "id": "frame_000120",
+   "sec": 8.0
+  },
+  {
+   "id": "frame_000125",
+   "sec": 8.333333333333334
+  },
+  {
+   "id": "frame_000130",
+   "sec": 8.666666666666666
+  },
+  {
+   "id": "frame_000135",
+   "sec": 9.0
+  },
+  {
+   "id": "frame_000140",
+   "sec": 9.333333333333334
+  },
+  {
+   "id": "frame_000145",
+   "sec": 9.666666666666666
+  },
+  {
+   "id": "frame_000149",
+   "sec": 9.933333333333334
+  }
+ ],
+ "review_frames": [
+  {
+   "id": "frame_000035",
+   "sec": 2.3333333333333335
+  },
+  {
+   "id": "frame_000038",
+   "sec": 2.533333333333333
+  },
+  {
+   "id": "frame_000041",
+   "sec": 2.7333333333333334
+  },
+  {
+   "id": "frame_000044",
+   "sec": 2.933333333333333
+  },
+  {
+   "id": "frame_000047",
+   "sec": 3.1333333333333333
+  },
+  {
+   "id": "frame_000050",
+   "sec": 3.3333333333333335
+  },
+  {
+   "id": "frame_000053",
+   "sec": 3.533333333333333
+  },
+  {
+   "id": "frame_000056",
+   "sec": 3.7333333333333334
+  },
+  {
+   "id": "frame_000059",
+   "sec": 3.933333333333333
+  },
+  {
+   "id": "frame_000062",
+   "sec": 4.133333333333334
+  },
+  {
+   "id": "frame_000065",
+   "sec": 4.333333333333333
+  },
+  {
+   "id": "frame_000068",
+   "sec": 4.533333333333333
+  },
+  {
+   "id": "frame_000071",
+   "sec": 4.733333333333333
+  },
+  {
+   "id": "frame_000074",
+   "sec": 4.933333333333334
+  },
+  {
+   "id": "frame_000077",
+   "sec": 5.133333333333334
+  },
+  {
+   "id": "frame_000080",
+   "sec": 5.333333333333333
+  },
+  {
+   "id": "frame_000083",
+   "sec": 5.533333333333333
+  },
+  {
+   "id": "frame_000086",
+   "sec": 5.733333333333333
+  },
+  {
+   "id": "frame_000087",
+   "sec": 5.8
+  },
+  {
+   "id": "frame_000088",
+   "sec": 5.866666666666666
+  },
+  {
+   "id": "frame_000089",
+   "sec": 5.933333333333334
+  },
+  {
+   "id": "frame_000090",
+   "sec": 6.0
+  },
+  {
+   "id": "frame_000091",
+   "sec": 6.066666666666666
+  },
+  {
+   "id": "frame_000092",
+   "sec": 6.133333333333334
+  },
+  {
+   "id": "frame_000093",
+   "sec": 6.2
+  },
+  {
+   "id": "frame_000094",
+   "sec": 6.266666666666667
+  },
+  {
+   "id": "frame_000096",
+   "sec": 6.4
+  },
+  {
+   "id": "frame_000097",
+   "sec": 6.466666666666667
+  },
+  {
+   "id": "frame_000098",
+   "sec": 6.533333333333333
+  },
+  {
+   "id": "frame_000099",
+   "sec": 6.6
+  },
+  {
+   "id": "frame_000100",
+   "sec": 6.666666666666667
+  },
+  {
+   "id": "frame_000101",
+   "sec": 6.733333333333333
+  },
+  {
+   "id": "frame_000102",
+   "sec": 6.8
+  },
+  {
+   "id": "frame_000103",
+   "sec": 6.866666666666666
+  },
+  {
+   "id": "frame_000104",
+   "sec": 6.933333333333334
+  },
+  {
+   "id": "frame_000108",
+   "sec": 7.2
+  },
+  {
+   "id": "frame_000112",
+   "sec": 7.466666666666667
+  },
+  {
+   "id": "frame_000117",
+   "sec": 7.8
+  },
+  {
+   "id": "frame_000121",
+   "sec": 8.066666666666666
+  },
+  {
+   "id": "frame_000125",
+   "sec": 8.333333333333334
+  }
+ ],
+ "scene": {
+  "road_shape_revision_reason": "",
+  "adjustment_observations": [],
+  "parking_motion_phases": [],
+  "straight_relation": {
+   "b_vehicle_id": "V1",
+   "b_position": "앞",
+   "same_direction": "같은 방향",
+   "b_visible_face": "후면",
+   "moving_before_stop": "있음",
+   "mechanism": "추돌",
+   "merge_path_evidence": "",
+   "support": "관찰",
+   "evidence_frame_ids": [
+    "frame_000041",
+    "frame_000071",
+    "frame_000086",
+    "frame_000092"
+   ],
+   "explanation": "A가 동일차로에서 전방 B(흰색 SUV)와 같은 방향 주행 중 가까워지며, 사고 전후 배경 변화와 B 후면만 보임."
+  },
+  "summary": "도로 형태: 직선 도로. 내 차: 직진, 상대 차: 정지/대기. 상대 위치: 앞, 방향: 같은 방향.",
+  "b_vehicle_id": "V1",
+  "b_identity": "구별됨",
+  "a_phases": [
+   {
+    "first_frame_id": "frame_000035",
+    "last_frame_id": "frame_000086",
+    "state": "이동 추정",
+    "background_evidence": "노면 차선 및 가로등이 후방으로 이동하며 고정 배경에 따라 직선도로 주행 관찰(frame_000041, frame_000071)"
+   },
+   {
+    "first_frame_id": "frame_000087",
+    "last_frame_id": "frame_000096",
+    "state": "이동 추정",
+    "background_evidence": "B와 근접 중 급격한 감속 또는 접촉, 차량 진동·흔들림 및 배경 변화(frame_000087, frame_000096)"
+   }
+  ],
+  "accident_object": "차대차",
+  "road_place_codes": [
+   0
+  ],
+  "road_evidence": "중앙 분리대, 이중 실선 차선, 차로 분리 신호와 진출입 램프 구조, 가로등, 야간 도로 환경(frame_000035, frame_000041)",
+  "contact": "충돌 정황 강함",
+  "contact_evidence": "B 후면과의 매우 근접(프레임 연속), 충돌 순간 카메라 진동 및 B의 오른쪽 이탈 시작(frame_000089~frame_000097)",
+  "contact_frame_ids": [
+   "frame_000088",
+   "frame_000089",
+   "frame_000094",
+   "frame_000096",
+   "frame_000097"
+  ],
+  "impact_anchor_frame_id": "frame_000096",
+  "impact_cues": [
+   "frame_000087~frame_000089: A와 B 매우 근접, 급정지 후 정지 또는 순간 충돌 흔들림 발생",
+   "frame_000094~frame_000097: A 카메라 방향이 크게 흔들리며 충돌 직후 B 차량이 우측으로 이탈 시작"
+  ],
+  "pre_contact_a_movement": "사고 직전 진행: 직진",
+  "pre_contact_b_movement": "사용자 확인: 사고 전 진로변경",
+  "pre_contact_evidence_frame_ids": [
+   "frame_000071",
+   "frame_000083",
+   "frame_000086"
+  ],
+  "a_action": "직진",
+  "b_action": "진로변경",
+  "a_state": {
+   "motion": "이동",
+   "roundabout_position": "미확인",
+   "lane_change": "미확인",
+   "motion_frame_ids": [
+    "frame_000035",
+    "frame_000086"
+   ],
+   "position_frame_ids": [
+    "frame_000041",
+    "frame_000083"
+   ],
+   "lane_change_frame_ids": []
+  },
+  "b_state": {
+   "motion": "정지",
+   "roundabout_position": "미확인",
+   "lane_change": "있음",
+   "motion_frame_ids": [
+    "frame_000035",
+    "frame_000086"
+   ],
+   "position_frame_ids": [
+    "frame_000087",
+    "frame_000089"
+   ],
+   "lane_change_frame_ids": []
+  },
+  "roundabout_lane_count": "미확인",
+  "lane_count_frame_ids": [],
+  "observation_issues": [
+   "A lane_change: 사고 전 근거 부족",
+   "B lane_change: 사고 전 근거 부족"
+  ],
+  "a_pre_frame_ids": [
+   "frame_000041",
+   "frame_000071",
+   "frame_000086"
+  ],
+  "b_pre_frame_ids": [
+   "frame_000086",
+   "frame_000089"
+  ],
+  "lane_crossings": [],
+  "road_shape": "직선 도로",
+  "road_shape_evidence_frame_ids": [
+   "frame_000035",
+   "frame_000041"
+  ],
+  "priority": "중간",
+  "review_needed": false,
+  "review_first_frame_id": null,
+  "review_last_frame_id": null,
+  "review_reason": "",
+  "unknowns": [],
+  "route_checks": [],
+  "signal_check": {
+   "signal_present": "없음",
+   "signal_operating": "미확인",
+   "a_signal": "미확인",
+   "b_signal": "미확인",
+   "evidence_frame_ids": []
+  },
+  "special_conditions": [],
+  "maneuver_checks": [
+   {
+    "vehicle": "A",
+    "action": "직진",
+    "support": "관찰",
+    "evidence_frame_ids": [
+     "frame_000041",
+     "frame_000071",
+     "frame_000086"
+    ],
+    "vehicle_orientation": "차로와 노면 기준으로 앞을 향함",
+    "fixed_background": "중앙분리대, 노면 실선, 조명 등 일정",
+    "path_description": "직선 도로 내 중앙분리대 우측 동일 차로 유지, 앞차 B에 근접",
+    "alternative_explanation": ""
+   },
+   {
+    "vehicle": "B",
+    "action": "정지/대기",
+    "support": "관찰",
+    "evidence_frame_ids": [
+     "frame_000086",
+     "frame_000089"
+    ],
+    "vehicle_orientation": "차로와 노면 기준으로 앞을 향한 채 정지",
+    "fixed_background": "노면 실선, 우측 차로 분리 표지 등과 B의 위치 변화 없음",
+    "path_description": "동일 차로 주행 후 감속, 정지에 가까운 급감속 상태에서 후미 충격 발생",
+    "alternative_explanation": "정확한 정지 여부는 미확정이나 직전 이동 없고 브레이크등 켜짐"
+   }
+  ],
+  "parking_route_checks": [],
+  "camera_view": "전방"
+ },
+ "rule_engine_input": {
+  "schema_version": "avly-rule-input-v1",
+  "vehicle_roles": {
+   "A": "블랙박스 차량",
+   "B": "선택된 사고 상대"
+  },
+  "b_vehicle_id": "V1",
+  "b_identity": "구별됨",
+  "road_shape": "직선 도로",
+  "accident_object": "차대차",
+  "scenarios": [
+   {
+    "scenario_id": "11:A:0",
+    "accident_type": 11,
+    "dashcam_table_role": "A",
+    "eligible_for_adjustment": true,
+    "base_fault": {
+     "A": 30,
+     "B": 70
+    },
+    "table_progress": {
+     "A": "후행 직진",
+     "B": "선행 진로변경"
+    },
+    "service_progress": {
+     "A": "후행 직진",
+     "B": "선행 진로변경"
+    },
+    "scenario_status": "조건부 예상 — 표시한 진행·역할을 가정한 CSV 기본값",
+    "unconfirmed_conditions": [
+     "사용자 사고 상황 확인 전 후보",
+     "사고 발생은 사용자 확인; 직접 접촉 장면은 영상에서 미확인"
+    ],
+    "calculation_basis": "유형·역할 및 가정 조건이 맞는 경우의 조건부 계산"
+   }
+  ],
+  "factors": [],
+  "reference_only_scenarios": [],
+  "straight_relation": {
+   "b_vehicle_id": "V1",
+   "b_position": "앞",
+   "same_direction": "같은 방향",
+   "b_visible_face": "후면",
+   "moving_before_stop": "있음",
+   "mechanism": "차로변경 직후 충돌",
+   "merge_path_evidence": "",
+   "support": "관찰",
+   "evidence_frame_ids": [
+    "frame_000041",
+    "frame_000071",
+    "frame_000086",
+    "frame_000092"
+   ],
+   "explanation": "A가 동일차로에서 전방 B(흰색 SUV)와 같은 방향 주행 중 가까워지며, 사고 전후 배경 변화와 B 후면만 보임.",
+   "status": "observed",
+   "source": "사고 전 차량 관계 모델 기록; 영상의 독립 검증은 아님",
+   "rear_contact_geometry": "inferred",
+   "cause_lane_change_status": "unknown",
+   "cause_source": "user"
+  }
+ },
+ "survey": [
+  {
+   "answer_key": "collision_pattern",
+   "question": "두 차량은 어떤 방식으로 가까워지거나 충돌했나요?",
+   "options": [
+    "교차 진행/측면 접근",
+    "후행 추돌",
+    "주정차 차량 충돌",
+    "미확인"
+   ]
+  },
+  {
+   "answer_key": "b_factor_signal_delay",
+   "question": "상대 차의 '진로변경 신호불이행·지연' 요소가 확인됐나요?",
+   "options": [
+    "있음",
+    "없음",
+    "미확인"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "stage": "1/3 전체 흐름 분석",
+   "model": "gpt-4.1",
+   "cached": true,
+   "usage": null,
+   "normalization": []
+  },
+  {
+   "stage": "2/3 사고 전후 상세 확인",
+   "model": "gpt-4.1",
+   "cached": true,
+   "usage": null,
+   "normalization": []
+  },
+  {
+   "stage": "3/3 CSV 연결·과실 시나리오",
+   "model": "gpt-4.1-mini",
+   "cached": true,
+   "usage": null,
+   "normalization": []
+  }
+ ],
+ "no_match_reason": "",
+ "_note": "테스트 샘플: 저장된 실제 모델 결과(lane_change)에서 필요한 부분만 남김. 주의: scene 의 a_action/b_action 등 일부는 원본 실행에서 개발용 사용자 확인값(CONFIRMED_VIDEO_CONTEXT)으로 덮어쓴 값이다."
+}

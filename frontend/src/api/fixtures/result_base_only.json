@@ -1,0 +1,112 @@
+{
+ "summary": "도로 형태: 직선 도로. 내 차: 직진, 상대 차: 정지/대기. 상대 위치: 앞, 방향: 같은 방향.",
+ "situation": {
+  "road_shape": "직선 도로",
+  "my_action": "직진",
+  "other_action": "진로변경",
+  "contact": "충돌 정황 강함"
+ },
+ "timeline": [
+  {
+   "kind": "A 움직임",
+   "actor": "me",
+   "start_sec": 2.33,
+   "end_sec": 5.73,
+   "description": "A(블랙박스 차량)가 이동한 것으로 추정됨.",
+   "certainty": "이동 추정",
+   "evidence_text": "노면 차선 및 가로등이 후방으로 이동하며 고정 배경에 따라 직선도로 주행 관찰(frame_000041, frame_000071)"
+  },
+  {
+   "kind": "B 확인 구간",
+   "actor": "other",
+   "start_sec": 2.33,
+   "end_sec": 6.93,
+   "description": "B로 선택된 상대 차량이 확인된 구간.",
+   "certainty": "구별됨",
+   "evidence_text": "흰색 또는 밝은색 SUV, 두 개의 리어램프 밝음 / 화면 이동: 뚜렷한 좌우 이동 미확인; 도로상 진행: 정지/대기"
+  },
+  {
+   "kind": "A 움직임",
+   "actor": "me",
+   "start_sec": 5.8,
+   "end_sec": 6.4,
+   "description": "A(블랙박스 차량)가 이동한 것으로 추정됨.",
+   "certainty": "이동 추정",
+   "evidence_text": "B와 근접 중 급격한 감속 또는 접촉, 차량 진동·흔들림 및 배경 변화(frame_000087, frame_000096)"
+  },
+  {
+   "kind": "접촉 근거 구간",
+   "actor": "both",
+   "start_sec": 5.87,
+   "end_sec": 6.47,
+   "description": "A와 상대 차량 사이에 충돌 정황이 강하게 관찰됨. 직접 접촉 확정과는 구분됨.",
+   "certainty": "충돌 정황 강함",
+   "evidence_text": "B 후면과의 매우 근접(프레임 연속), 충돌 순간 카메라 진동 및 B의 오른쪽 이탈 시작(frame_000089~frame_000097)"
+  }
+ ],
+ "impact": {
+  "sec": 6.4,
+  "contact": "충돌 정황 강함",
+  "confirmed": true
+ },
+ "related_cases": [],
+ "reference_candidates": [
+  {
+   "accident_type_id": 11,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "차로변경(진로변경)",
+   "my_progress": "후행 직진",
+   "other_progress": "선행 진로변경",
+   "base_me": 30,
+   "base_other": 70,
+   "source": "matched",
+   "eligible": true,
+   "note": "조건부 예상 — 표시한 진행·역할을 가정한 CSV 기본값"
+  }
+ ],
+ "notice": "※ 본 보고서는 법적 효력이 없는 AI 참고 자료입니다. 실제 과실비율이나 법적 책임을 확정하지 않습니다.",
+ "state": "base_only",
+ "accident_type": {
+  "accident_type_id": 0,
+  "role": "A",
+  "place": "직선 도로",
+  "feature": "추돌 사고",
+  "my_progress": "선행자동차(1차사고차량)를 추돌",
+  "other_progress": "선행 자동차(1차사고차량)"
+ },
+ "fault": {
+  "base": {
+   "me": 80,
+   "other": 20
+  },
+  "adjusted": null,
+  "final": null,
+  "bounds_applied": false
+ },
+ "steps": [
+  {
+   "kind": "base",
+   "title": "이런 사고의 기본 책임은 내 차 80% : 상대 차 20%예요.",
+   "easy": "직선 도로에서 내 차는 '선행자동차(1차사고차량)를 추돌', 상대 차는 '선행 자동차(1차사고차량)' 상황이에요.",
+   "effect": null,
+   "who": null,
+   "factor": null,
+   "delta_pp": null,
+   "me": 80,
+   "other": 20
+  }
+ ],
+ "adjustments": {
+  "registered": false,
+  "applied": [],
+  "not_applied": [],
+  "pending": []
+ },
+ "laws": [],
+ "explanation": {
+  "base": "이런 사고의 기본 책임은 내 차 80% : 상대 차 20%예요.",
+  "situation": "직선 도로에서 내 차는 '선행자동차(1차사고차량)를 추돌', 상대 차는 '선행 자동차(1차사고차량)' 상황이에요.",
+  "status": "이 사고 유형은 검수가 끝난 가감요소가 아직 없어서 기본 비율만 안내해요."
+ }
+}

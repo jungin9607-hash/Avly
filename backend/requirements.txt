@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv
+sqlalchemy>=2.0
+psycopg[binary]>=3.2
+httpx   # 테스트(TestClient)에 필요

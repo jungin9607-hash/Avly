@@ -1,0 +1,89 @@
+{
+ "summary": "도로 형태: 주차장. 내 차 진행 후보: 미확인, 상대 차 진행 후보: 진로변경.",
+ "situation": {
+  "road_shape": "주차장",
+  "my_action": "미확인",
+  "other_action": "진로변경",
+  "contact": "접촉 추정"
+ },
+ "timeline": [
+  {
+   "kind": "A 움직임",
+   "actor": "me",
+   "start_sec": 1.67,
+   "end_sec": 7.67,
+   "description": "A(블랙박스 차량)의 이동 여부를 판단하기 어려움.",
+   "certainty": "판단 불가",
+   "evidence_text": "기둥·천장 등 고정 배경 반복, 전방 통로 내 동일 위치 / 배경 이동 단서와 모순: 이동·카메라 회전 구분 필요"
+  },
+  {
+   "kind": "B 확인 구간",
+   "actor": "other",
+   "start_sec": 4.67,
+   "end_sec": 7.67,
+   "description": "B로 선택된 상대 차량이 확인된 구간.",
+   "certainty": "구별됨",
+   "evidence_text": "흰색 세단, 전방 우측에서 좌측으로 횡단 / 화면 이동: 오른쪽→왼쪽; 도로상 진행: 미확인"
+  },
+  {
+   "kind": "접촉 근거 구간",
+   "actor": "both",
+   "start_sec": 5.07,
+   "end_sec": 5.73,
+   "description": "A와 상대 차량의 접촉이 의심되는 정황이 관찰됨.",
+   "certainty": "접촉 추정",
+   "evidence_text": "frame_000076~frame_000086에서 B가 A 전방 가까이 접근, B 차체와 A 보닛이 겹치는 장면 및 충돌 직후 B 이동량 급감"
+  }
+ ],
+ "impact": {
+  "sec": 5.6,
+  "contact": "접촉 추정",
+  "confirmed": false
+ },
+ "related_cases": [],
+ "reference_candidates": [
+  {
+   "accident_type_id": 126,
+   "role": "A",
+   "place": "주차장(또는 차도가 아닌 장소)",
+   "feature": "주차구역과 통로",
+   "my_progress": "통로 직진",
+   "other_progress": "주차구역에서 직진 출차",
+   "base_me": 30,
+   "base_other": 70,
+   "source": "reference",
+   "eligible": false,
+   "note": "탐색용 조건 비교 · 적용 유형 미확정"
+  },
+  {
+   "accident_type_id": 127,
+   "role": "A",
+   "place": "주차장(또는 차도가 아닌 장소)",
+   "feature": "주차구역과 통로",
+   "my_progress": "통로 직진",
+   "other_progress": "주차구역에서 후진 출차",
+   "base_me": 25,
+   "base_other": 75,
+   "source": "reference",
+   "eligible": false,
+   "note": "탐색용 조건 비교 · 적용 유형 미확정"
+  }
+ ],
+ "notice": "※ 본 보고서는 법적 효력이 없는 AI 참고 자료입니다. 실제 과실비율이나 법적 책임을 확정하지 않습니다.",
+ "state": "unresolved",
+ "accident_type": null,
+ "fault": null,
+ "steps": [],
+ "laws": [],
+ "adjustments": {
+  "registered": false,
+  "applied": [],
+  "not_applied": [],
+  "pending": []
+ },
+ "explanation": {
+  "base": null,
+  "situation": null,
+  "status": "과실표에서 맞는 사고 유형을 찾지 못해 과실비율을 안내할 수 없어요. 상황 설명만 참고해 주세요."
+ }
+}

@@ -1,0 +1,46 @@
+/* 제목 아래 알약 모양: 왼쪽 "진행 중인 분석" · 오른쪽 흰 버튼 */
+.uh-resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 4px 4px 4px 16px;
+  border: 1px solid var(--color-white-a18);
+  border-radius: 999px;
+  background: var(--color-white-a06);
+  backdrop-filter: blur(8px);
+  color: var(--color-white);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+.uh-resume:hover {
+  background: var(--color-white-a10);
+}
+.uh-resume:focus-visible {
+  outline: 3px solid var(--color-white-a60);
+  outline-offset: 3px;
+}
+.uh-resume-label {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.uh-resume-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-navy-750);
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .uh-resume {
+    transition: none;
+  }
+}

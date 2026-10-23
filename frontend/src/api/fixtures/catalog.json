@@ -1,0 +1,2615 @@
+{
+ "count": 261,
+ "items": [
+  {
+   "accident_type_id": 0,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "추돌 사고",
+   "my_progress": "선행자동차(1차사고차량)를 추돌",
+   "other_progress": "선행 자동차(1차사고차량)",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 0,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "추돌 사고",
+   "my_progress": "선행 자동차(1차사고차량)",
+   "other_progress": "선행자동차(1차사고차량)를 추돌",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 1,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "추돌 사고",
+   "my_progress": "후행 추돌",
+   "other_progress": "선행 직진",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 1,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "추돌 사고",
+   "my_progress": "선행 직진",
+   "other_progress": "후행 추돌",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 2,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "추돌 사고",
+   "my_progress": "주(정)차",
+   "other_progress": "후행 추돌",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 2,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "추돌 사고",
+   "my_progress": "후행 추돌",
+   "other_progress": "주(정)차",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 3,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "차로 감소 도로 (합류)",
+   "my_progress": "본선에서 직진",
+   "other_progress": "차로 감소 도로에서 본선으로 합류",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 3,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "차로 감소 도로 (합류)",
+   "my_progress": "차로 감소 도로에서 본선으로 합류",
+   "other_progress": "본선에서 직진",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 4,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "열린 문 접촉사고",
+   "my_progress": "후행 직진",
+   "other_progress": "선행 자동차(정차중 문열림)",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 4,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "열린 문 접촉사고",
+   "my_progress": "선행 자동차(정차중 문열림)",
+   "other_progress": "후행 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 5,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "역주행 사고(중앙선 침범)",
+   "my_progress": "직진",
+   "other_progress": "중앙선 침범 직진",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 5,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "역주행 사고(중앙선 침범)",
+   "my_progress": "중앙선 침범 직진",
+   "other_progress": "직진",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 6,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "이면도로 교행 사고",
+   "my_progress": "[마주보며] 직진",
+   "other_progress": "[마주보며] 직진",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 7,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "추월 사고",
+   "my_progress": "선행 직진",
+   "other_progress": "추월(실선 중앙선)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 7,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "추월 사고",
+   "my_progress": "추월(실선 중앙선)",
+   "other_progress": "선행 직진",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 8,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "추월 사고",
+   "my_progress": "선행 직진",
+   "other_progress": "급접거리 추월(점선 중앙선)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 8,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "추월 사고",
+   "my_progress": "급접거리 추월(점선 중앙선)",
+   "other_progress": "선행 직진",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 9,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "추월 사고",
+   "my_progress": "중앙선 침범 추월(후방)",
+   "other_progress": "중앙선 침범 추월(전방)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 9,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "추월 사고",
+   "my_progress": "중앙선 침범 추월(전방)",
+   "other_progress": "중앙선 침범 추월(후방)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 10,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "추월 사고",
+   "my_progress": "실선 추월",
+   "other_progress": "선행 직진",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 10,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "추월 사고",
+   "my_progress": "선행 직진",
+   "other_progress": "실선 추월",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 11,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "차로변경(진로변경)",
+   "my_progress": "후행 직진",
+   "other_progress": "선행 진로변경",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 11,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "차로변경(진로변경)",
+   "my_progress": "선행 진로변경",
+   "other_progress": "후행 직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 12,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "차로변경(진로변경)",
+   "my_progress": "동시 차로변경(진로변경)",
+   "other_progress": "동시 차로변경(진로변경)",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 13,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "차로변경(진로변경)",
+   "my_progress": "정체차로에서 대기 중 진로변경(측면 충돌)",
+   "other_progress": "직진(측면 충돌)",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 13,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "차로변경(진로변경)",
+   "my_progress": "직진(측면 충돌)",
+   "other_progress": "정체차로에서 대기 중 진로변경(측면 충돌)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 14,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "안전지대 통과 사고",
+   "my_progress": "후행 직진(안전지대 벗어나기 전)",
+   "other_progress": "선행 진로변경",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 14,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "안전지대 통과 사고",
+   "my_progress": "선행 진로변경",
+   "other_progress": "후행 직진(안전지대 벗어나기 전)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 15,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "안전지대 통과 사고",
+   "my_progress": "후행 직진(안전지대 벗어난 후)",
+   "other_progress": "선행 진로변경",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 15,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "안전지대 통과 사고",
+   "my_progress": "선행 진로변경",
+   "other_progress": "후행 직진(안전지대 벗어난 후)",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 16,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "정차 후 출발 사고",
+   "my_progress": "정차 후 출발",
+   "other_progress": "추월",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 16,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "정차 후 출발 사고",
+   "my_progress": "추월",
+   "other_progress": "정차 후 출발",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 17,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "긴급자동차 사고",
+   "my_progress": "직진",
+   "other_progress": "중앙선 왼쪽 통행(긴급자동차)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 17,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "긴급자동차 사고",
+   "my_progress": "중앙선 왼쪽 통행(긴급자동차)",
+   "other_progress": "직진",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 18,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "긴급자동차 사고",
+   "my_progress": "후행 직진",
+   "other_progress": "선행 진로변경(긴급자동차)",
+   "base_me": 90,
+   "base_other": 10
+  },
+  {
+   "accident_type_id": 18,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "긴급자동차 사고",
+   "my_progress": "선행 진로변경(긴급자동차)",
+   "other_progress": "후행 직진",
+   "base_me": 10,
+   "base_other": 90
+  },
+  {
+   "accident_type_id": 19,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "긴급자동차 사고",
+   "my_progress": "선행 직진",
+   "other_progress": "추월(긴급자동차)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 19,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "긴급자동차 사고",
+   "my_progress": "추월(긴급자동차)",
+   "other_progress": "선행 직진",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 20,
+   "role": "A",
+   "place": "직선 도로",
+   "feature": "긴급자동차 사고",
+   "my_progress": "선행 진로변경",
+   "other_progress": "후행 직진(긴급자동차)",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 20,
+   "role": "B",
+   "place": "직선 도로",
+   "feature": "긴급자동차 사고",
+   "my_progress": "후행 직진(긴급자동차)",
+   "other_progress": "선행 진로변경",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 21,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "오른쪽에서 직진",
+   "other_progress": "왼쪽에서 직진",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 21,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "왼쪽에서 직진",
+   "other_progress": "오른쪽에서 직진",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 22,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "오른쪽에서 직진(후진입)",
+   "other_progress": "왼쪽에서 직진(선진입)",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 22,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "왼쪽에서 직진(선진입)",
+   "other_progress": "오른쪽에서 직진(후진입)",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 23,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "오른쪽에서 직진(선진입)",
+   "other_progress": "왼쪽에서 직진(후진입)",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 23,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "왼쪽에서 직진(후진입)",
+   "other_progress": "오른쪽에서 직진(선진입)",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 24,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "[마주보며] 직진",
+   "other_progress": "[마주보며] 좌회전",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 24,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "[마주보며] 좌회전",
+   "other_progress": "[마주보며] 직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 25,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "왼쪽 도로에서 직진",
+   "other_progress": "오른쪽 도로에서 좌회전",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 25,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "오른쪽 도로에서 좌회전",
+   "other_progress": "왼쪽 도로에서 직진",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 26,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "오른쪽 도로에서 직진",
+   "other_progress": "왼쪽 도로에서 좌회전",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 26,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "왼쪽 도로에서 좌회전",
+   "other_progress": "오른쪽 도로에서 직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 27,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "우회전",
+   "other_progress": "직진",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 27,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "직진",
+   "other_progress": "우회전",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 28,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "우회전(후진입)",
+   "other_progress": "직진(선진입)",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 28,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "직진(선진입)",
+   "other_progress": "우회전(후진입)",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 29,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "우회전(선진입)",
+   "other_progress": "직진(후진입)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 29,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "직진(후진입)",
+   "other_progress": "우회전(선진입)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 30,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "오른쪽 도로에서 좌회전",
+   "other_progress": "왼쪽 도로에서 좌회전",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 30,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "동일폭 도로",
+   "my_progress": "왼쪽 도로에서 좌회전",
+   "other_progress": "오른쪽 도로에서 좌회전",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 31,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 직진",
+   "other_progress": "소로에서 직진",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 31,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진",
+   "other_progress": "대로에서 직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 32,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 직진",
+   "other_progress": "소로에서 좌회전",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 32,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 좌회전",
+   "other_progress": "대로에서 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 33,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 직진(후진입)",
+   "other_progress": "소로에서 직진(선진입)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 33,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진(선진입)",
+   "other_progress": "대로에서 직진(후진입)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 34,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 직진(선진입)",
+   "other_progress": "소로에서 직진(후진입)",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 34,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진(후진입)",
+   "other_progress": "대로에서 직진(선진입)",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 35,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진(좌측도로)",
+   "other_progress": "대로에서 좌회전(우측도로)",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 35,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 좌회전(우측도로)",
+   "other_progress": "소로에서 직진(좌측도로)",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 36,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진(우측도로)",
+   "other_progress": "대로에서 좌회전(좌측도로)",
+   "base_me": 45,
+   "base_other": 55
+  },
+  {
+   "accident_type_id": 36,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 좌회전(좌측도로)",
+   "other_progress": "소로에서 직진(우측도로)",
+   "base_me": 55,
+   "base_other": 45
+  },
+  {
+   "accident_type_id": 37,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 우회전",
+   "other_progress": "대로에서 직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 37,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 직진",
+   "other_progress": "소로에서 우회전",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 38,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 우회전(후진입)",
+   "other_progress": "대로에서 직진(선진입)",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 38,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 직진(선진입)",
+   "other_progress": "소로에서 우회전(후진입)",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 39,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 우회전(선진입)",
+   "other_progress": "대로에서 직진(후진입)",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 39,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 직진(후진입)",
+   "other_progress": "소로에서 우회전(선진입)",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 40,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 우회전",
+   "other_progress": "소로에서 직진",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 40,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진",
+   "other_progress": "대로에서 우회전",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 41,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 우회전(후진입)",
+   "other_progress": "소로에서 직진(선진입)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 41,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진(선진입)",
+   "other_progress": "대로에서 우회전(후진입)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 42,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 우회전(선진입)",
+   "other_progress": "소로에서 직진(후진입)",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 42,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진(후진입)",
+   "other_progress": "대로에서 우회전(선진입)",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 43,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 좌회전",
+   "other_progress": "대로에서 좌회전",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 43,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 좌회전",
+   "other_progress": "소로에서 좌회전",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 44,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 직진",
+   "other_progress": "일시정지 위반 직진",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 44,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 직진",
+   "other_progress": "표지가 없는 도로에서 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 45,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 직진",
+   "other_progress": "일시정지 위반 좌회전",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 45,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 좌회전",
+   "other_progress": "표지가 없는 도로에서 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 46,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 직진(좌측도로)",
+   "other_progress": "표지가 없는 도로에서 좌회전(우측도로)",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 46,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 좌회전(우측도로)",
+   "other_progress": "일시정지 위반 직진(좌측도로)",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 47,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 직진(우측도로)",
+   "other_progress": "표지가 없는 도로에서 좌회전(좌측도로)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 47,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 좌회전(좌측도로)",
+   "other_progress": "일시정지 위반 직진(우측도로)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 48,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 우회전",
+   "other_progress": "표지가 없는 도로에서 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 48,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 직진",
+   "other_progress": "일시정지 위반 우회전",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 49,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 직진",
+   "other_progress": "표지가 없는 도로에서 우회전",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 49,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 우회전",
+   "other_progress": "일시정지 위반 직진",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 50,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 좌회전",
+   "other_progress": "표지가 없는 도로에서 좌회전",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 50,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일시정지 표시가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 좌회전",
+   "other_progress": "일시정지 위반 좌회전",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 51,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일방통행 표지가 한쪽방향에만 있음",
+   "my_progress": "직진",
+   "other_progress": "일방통행 위반 직진",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 51,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "일방통행 표지가 한쪽방향에만 있음",
+   "my_progress": "일방통행 위반 직진",
+   "other_progress": "직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 52,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "교차로 내 진로변경",
+   "my_progress": "직진(교차로 내 진로변경)",
+   "other_progress": "우회전",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 52,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "교차로 내 진로변경",
+   "my_progress": "우회전",
+   "other_progress": "직진(교차로 내 진로변경)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 53,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "2개 차량이 나란히 통행 가능한 차로폭",
+   "my_progress": "후행 직진(차로 좌측)",
+   "other_progress": "선행 좌회전(차로 우측)",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 53,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "2개 차량이 나란히 통행 가능한 차로폭",
+   "my_progress": "선행 좌회전(차로 우측)",
+   "other_progress": "후행 직진(차로 좌측)",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 54,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "2개 차량이 나란히 통행 가능한 차로폭",
+   "my_progress": "후행 직진(차로 우측)",
+   "other_progress": "선행 우회전(차로 좌측)",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 54,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "2개 차량이 나란히 통행 가능한 차로폭",
+   "my_progress": "선행 우회전(차로 좌측)",
+   "other_progress": "후행 직진(차로 우측)",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 55,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "좌/우회전 각도가 90도 미만",
+   "my_progress": "후행 직진",
+   "other_progress": "선행 좌회전",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 55,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "좌/우회전 각도가 90도 미만",
+   "my_progress": "선행 좌회전",
+   "other_progress": "후행 직진",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 56,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "좌/우회전 각도가 90도 미만",
+   "my_progress": "후행 직진",
+   "other_progress": "선행 우회전",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 56,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "좌/우회전 각도가 90도 미만",
+   "my_progress": "선행 우회전",
+   "other_progress": "후행 직진",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 57,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "2개 차로 동시 우회전",
+   "my_progress": "우회전(오른쪽 차로)",
+   "other_progress": "우회전(왼쪽 차로)",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 57,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "2개 차로 동시 우회전",
+   "my_progress": "우회전(왼쪽 차로)",
+   "other_progress": "우회전(오른쪽 차로)",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 58,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "정차 후 출발 사고",
+   "my_progress": "정차 후 출발",
+   "other_progress": "추월",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 58,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "정차 후 출발 사고",
+   "my_progress": "추월",
+   "other_progress": "정차 후 출발",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 59,
+   "role": "A",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "긴급자동차 사고",
+   "my_progress": "대로에서 직진",
+   "other_progress": "소로에서 진입(긴급자동차)",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 59,
+   "role": "B",
+   "place": "사거리 교차로(신호등 없음)",
+   "feature": "긴급자동차 사고",
+   "my_progress": "소로에서 진입(긴급자동차)",
+   "other_progress": "대로에서 직진",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 60,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[녹색신호] 직진",
+   "other_progress": "[적색신호] 직진",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 60,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[적색신호] 직진",
+   "other_progress": "[녹색신호] 직진",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 61,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[녹색신호] 직진, [적색신호] 충돌",
+   "other_progress": "[녹색신호] 직진",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 61,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[녹색신호] 직진",
+   "other_progress": "[녹색신호] 직진, [적색신호] 충돌",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 62,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[황색신호] 직진, [적색신호] 충돌",
+   "other_progress": "[녹색신호] 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 62,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[녹색신호] 직진",
+   "other_progress": "[황색신호] 직진, [적색신호] 충돌",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 63,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[황색신호] 직진",
+   "other_progress": "[적색신호] 직진",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 63,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[적색신호] 직진",
+   "other_progress": "[황색신호] 직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 64,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[황색신호] 직진",
+   "other_progress": "[적색신호] 좌회전",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 64,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[적색신호] 좌회전",
+   "other_progress": "[황색신호] 직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 65,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[적색신호] 직진",
+   "other_progress": "[적색신호] 직진",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 66,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[적색신호] 직진",
+   "other_progress": "[녹색좌회전신호] 좌회전",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 66,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[녹색좌회전신호] 좌회전",
+   "other_progress": "[적색신호] 직진",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 67,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[적색신호] 직진",
+   "other_progress": "[적색신호] 좌회전",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 67,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[적색신호] 좌회전",
+   "other_progress": "[적색신호] 직진",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 68,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[적색신호] 직진",
+   "other_progress": "[황색신호] 좌회전",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 68,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[황색신호] 좌회전",
+   "other_progress": "[적색신호] 직진",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 69,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[녹색좌회전신호] 좌회전, [적색신호] 충돌",
+   "other_progress": "[녹색신호] 직진",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 69,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[녹색신호] 직진",
+   "other_progress": "[녹색좌회전신호] 좌회전, [적색신호] 충돌",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 70,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[황색신호] 좌회전, [적색신호] 충돌",
+   "other_progress": "[녹색신호] 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 70,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대 차량이 측면 방향에서 진입",
+   "my_progress": "[녹색신호] 직진",
+   "other_progress": "[황색신호] 좌회전, [적색신호] 충돌",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 71,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [적색신호] 직진",
+   "other_progress": "(마주보며) [녹색좌회전신호] 좌회전",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 71,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [녹색좌회전신호] 좌회전",
+   "other_progress": "(마주보며) [적색신호] 직진",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 72,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [적색신호] 직진",
+   "other_progress": "(마주보며) [적색신호] 좌회전",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 72,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [적색신호] 좌회전",
+   "other_progress": "(마주보며) [적색신호] 직진",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 73,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [녹색신호] 직진",
+   "other_progress": "(마주보며) [녹색신호] 좌회전 (비보호좌회전 아님)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 73,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [녹색신호] 좌회전 (비보호좌회전 아님)",
+   "other_progress": "(마주보며) [녹색신호] 직진",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 74,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [황색신호] 직진",
+   "other_progress": "(마주보며) [녹색신호] 좌회전, [황색신호] 충돌",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 74,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [녹색신호] 좌회전, [황색신호] 충돌",
+   "other_progress": "(마주보며) [황색신호] 직진",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 75,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [황색신호] 직진",
+   "other_progress": "(마주보며) [황색신호] 좌회전",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 75,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [황색신호] 좌회전",
+   "other_progress": "(마주보며) [황색신호] 직진",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 76,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [녹색 좌회전 신호] 좌회전, [적색신호 충돌]",
+   "other_progress": "(마주보며) [녹색신호] 직진",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 76,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [녹색신호] 직진",
+   "other_progress": "(마주보며) [녹색 좌회전 신호] 좌회전, [적색신호 충돌]",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 77,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [황색신호] 좌회전, [적색신호] 충돌",
+   "other_progress": "(마주보며) [녹색신호] 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 77,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "(마주보며) [녹색신호] 직진",
+   "other_progress": "(마주보며) [황색신호] 좌회전, [적색신호] 충돌",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 78,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "[녹색좌회전신호] 좌회전",
+   "other_progress": "맞은편 우회전",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 78,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "상대차량이 맞은편 방향에서 진입",
+   "my_progress": "맞은편 우회전",
+   "other_progress": "[녹색좌회전신호] 좌회전",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 79,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "비보호좌회전표지있음",
+   "my_progress": "(마주보며) [녹색신호] 좌회전 (비보호 좌회전)",
+   "other_progress": "(마주보며) [녹색신호] 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 79,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "비보호좌회전표지있음",
+   "my_progress": "(마주보며) [녹색신호] 직진",
+   "other_progress": "(마주보며) [녹색신호] 좌회전 (비보호 좌회전)",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 80,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[무신호] 직진",
+   "other_progress": "[적색신호] 직진",
+   "base_me": 10,
+   "base_other": 90
+  },
+  {
+   "accident_type_id": 80,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[적색신호] 직진",
+   "other_progress": "[무신호] 직진",
+   "base_me": 90,
+   "base_other": 10
+  },
+  {
+   "accident_type_id": 81,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[무신호] 직진",
+   "other_progress": "[녹색신호] 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 81,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[녹색신호] 직진",
+   "other_progress": "[무신호] 직진",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 82,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[무신호] 직진",
+   "other_progress": "[황색신호] 직진",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 82,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[황색신호] 직진",
+   "other_progress": "[무신호] 직진",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 83,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[무신호] 우회전",
+   "other_progress": "[적색신호] 직진",
+   "base_me": 10,
+   "base_other": 90
+  },
+  {
+   "accident_type_id": 83,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[적색신호] 직진",
+   "other_progress": "[무신호] 우회전",
+   "base_me": 90,
+   "base_other": 10
+  },
+  {
+   "accident_type_id": 84,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[무신호] 우회전",
+   "other_progress": "[녹색신호] 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 84,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[녹색신호] 직진",
+   "other_progress": "[무신호] 우회전",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 85,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[무신호] 우회전",
+   "other_progress": "[황색신호] 직진",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 85,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[황색신호] 직진",
+   "other_progress": "[무신호] 우회전",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 86,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[무신호] 좌회전",
+   "other_progress": "[적색신호] 직진",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 86,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[적색신호] 직진",
+   "other_progress": "[무신호] 좌회전",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 87,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[무신호] 좌회전",
+   "other_progress": "[녹색신호] 직진",
+   "base_me": 90,
+   "base_other": 10
+  },
+  {
+   "accident_type_id": 87,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[녹색신호] 직진",
+   "other_progress": "[무신호] 좌회전",
+   "base_me": 10,
+   "base_other": 90
+  },
+  {
+   "accident_type_id": 88,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[무신호] 좌회전",
+   "other_progress": "[황색신호] 직진",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 88,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "신호등이한쪽차량방향에만있음",
+   "my_progress": "[황색신호] 직진",
+   "other_progress": "[무신호] 좌회전",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 89,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "교차로 내 진로변경",
+   "my_progress": "[녹색신호] 직진(교차로내 진로 변경)",
+   "other_progress": "우회전",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 89,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "교차로 내 진로변경",
+   "my_progress": "우회전",
+   "other_progress": "[녹색신호] 직진(교차로내 진로 변경)",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 90,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "추월 사고",
+   "my_progress": "중앙선 침범 추월",
+   "other_progress": "[녹색좌회전신호] 좌회전",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 90,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "추월 사고",
+   "my_progress": "[녹색좌회전신호] 좌회전",
+   "other_progress": "중앙선 침범 추월",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 91,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "[마주보며] 직진",
+   "other_progress": "상시유턴구역에서 유턴",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 91,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "상시유턴구역에서 유턴",
+   "other_progress": "[마주보며] 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 92,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "[마주보며] 직진",
+   "other_progress": "신호에 따른 유턴",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 92,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "신호에 따른 유턴",
+   "other_progress": "[마주보며] 직진",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 93,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "우회전(좌측도로)",
+   "other_progress": "상시유턴구역에서 유턴",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 93,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "상시유턴구역에서 유턴",
+   "other_progress": "우회전(좌측도로)",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 94,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "우회전(좌측도로)",
+   "other_progress": "신호에 따른 유턴",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 94,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "신호에 따른 유턴",
+   "other_progress": "우회전(좌측도로)",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 95,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "유턴(선행)",
+   "other_progress": "급 유턴(후행)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 95,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "급 유턴(후행)",
+   "other_progress": "유턴(선행)",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 96,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "동시 유턴(선행)",
+   "other_progress": "동시 유턴(후행)",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 96,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "유턴구역",
+   "my_progress": "동시 유턴(후행)",
+   "other_progress": "동시 유턴(선행)",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 97,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "정차 후 출발 사고",
+   "my_progress": "정차 후 출발",
+   "other_progress": "추월",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 97,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "정차 후 출발 사고",
+   "my_progress": "추월",
+   "other_progress": "정차 후 출발",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 98,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "[녹색 좌회전 신호] 직진 (좌회전 노면표시차로)",
+   "other_progress": "[녹색 좌회전 신호] 좌회전 (직진·좌회전 노면표시차로)",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 98,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "[녹색 좌회전 신호] 좌회전 (직진·좌회전 노면표시차로)",
+   "other_progress": "[녹색 좌회전 신호] 직진 (좌회전 노면표시차로)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 99,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "[녹색직진.좌회전 신호] 후행 직진(좌회전 노면표시차로)",
+   "other_progress": "[녹색직진.좌회전 신호] 선행 좌회전(직진좌회전 노면표시차로)",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 99,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "[녹색직진.좌회전 신호] 선행 좌회전(직진좌회전 노면표시차로)",
+   "other_progress": "[녹색직진.좌회전 신호] 후행 직진(좌회전 노면표시차로)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 100,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "직진(직진.좌회전 노면표시차로)",
+   "other_progress": "좌회전(직진 노면표시차로)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 100,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "좌회전(직진 노면표시차로)",
+   "other_progress": "직진(직진.좌회전 노면표시차로)",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 101,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "추월 우회전(직진 노면표시차로)",
+   "other_progress": "직진(직진.우회전 노면표시차로)",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 101,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "직진(직진.우회전 노면표시차로)",
+   "other_progress": "추월 우회전(직진 노면표시차로)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 102,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "선행 우회전(직진·우회전 노면표시차로)",
+   "other_progress": "후행 직진(우회전 노면표시차로)",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 102,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "노면 표시 위반사고",
+   "my_progress": "후행 직진(우회전 노면표시차로)",
+   "other_progress": "선행 우회전(직진·우회전 노면표시차로)",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 103,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "긴급자동차 사고",
+   "my_progress": "[녹색신호] 직진",
+   "other_progress": "[적색신호] 직진 (긴급자동차)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 103,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "긴급자동차 사고",
+   "my_progress": "[적색신호] 직진 (긴급자동차)",
+   "other_progress": "[녹색신호] 직진",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 104,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "긴급자동차 사고",
+   "my_progress": "[녹색좌회전신호] 좌회전",
+   "other_progress": "중앙선 왼쪽 통행(긴급자동차)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 104,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "긴급자동차 사고",
+   "my_progress": "중앙선 왼쪽 통행(긴급자동차)",
+   "other_progress": "[녹색좌회전신호] 좌회전",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 105,
+   "role": "A",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "긴급자동차 사고",
+   "my_progress": "유턴",
+   "other_progress": "중앙선 왼쪽 통행(긴급자동차)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 105,
+   "role": "B",
+   "place": "사거리 교차로(신호등 있음)",
+   "feature": "긴급자동차 사고",
+   "my_progress": "중앙선 왼쪽 통행(긴급자동차)",
+   "other_progress": "유턴",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 106,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "동일폭 도로",
+   "my_progress": "직진",
+   "other_progress": "우회전",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 106,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "동일폭 도로",
+   "my_progress": "우회전",
+   "other_progress": "직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 107,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "동일폭 도로",
+   "my_progress": "왼쪽 도로에서 직진",
+   "other_progress": "오른쪽 도로에서 좌회전",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 107,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "동일폭 도로",
+   "my_progress": "오른쪽 도로에서 좌회전",
+   "other_progress": "왼쪽 도로에서 직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 108,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "동일폭 도로",
+   "my_progress": "오른쪽 도로에서 직진",
+   "other_progress": "왼쪽 도로에서 좌회전",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 108,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "동일폭 도로",
+   "my_progress": "왼쪽 도로에서 좌회전",
+   "other_progress": "오른쪽 도로에서 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 109,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "동일폭 도로",
+   "my_progress": "오른쪽 도로에서 좌회전",
+   "other_progress": "왼쪽 도로에서 좌회전",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 109,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "동일폭 도로",
+   "my_progress": "왼쪽 도로에서 좌회전",
+   "other_progress": "오른쪽 도로에서 좌회전",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 110,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 직진",
+   "other_progress": "소로에서 좌회전",
+   "base_me": 10,
+   "base_other": 90
+  },
+  {
+   "accident_type_id": 110,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 좌회전",
+   "other_progress": "대로에서 직진",
+   "base_me": 90,
+   "base_other": 10
+  },
+  {
+   "accident_type_id": 111,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 직진",
+   "other_progress": "소로에서 우회전",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 111,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 우회전",
+   "other_progress": "대로에서 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 112,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진(좌측도로)",
+   "other_progress": "대로에서 좌회전(우측도로)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 112,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 좌회전(우측도로)",
+   "other_progress": "소로에서 직진(좌측도로)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 113,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진(우측도로)",
+   "other_progress": "대로에서 좌회전(좌측도로)",
+   "base_me": 35,
+   "base_other": 65
+  },
+  {
+   "accident_type_id": 113,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 좌회전(좌측도로)",
+   "other_progress": "소로에서 직진(우측도로)",
+   "base_me": 65,
+   "base_other": 35
+  },
+  {
+   "accident_type_id": 114,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 좌회전",
+   "other_progress": "대로에서 좌회전",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 114,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 좌회전",
+   "other_progress": "소로에서 좌회전",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 115,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "소로에서 직진",
+   "other_progress": "대로에서 우회전",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 115,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "대로와 소로",
+   "my_progress": "대로에서 우회전",
+   "other_progress": "소로에서 직진",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 117,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 직진",
+   "other_progress": "일시정지 위반 좌회전",
+   "base_me": 10,
+   "base_other": 90
+  },
+  {
+   "accident_type_id": 117,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 좌회전",
+   "other_progress": "표지가 없는 도로에서 직진",
+   "base_me": 90,
+   "base_other": 10
+  },
+  {
+   "accident_type_id": 118,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 직진",
+   "other_progress": "일시정지 위반 우회전",
+   "base_me": 10,
+   "base_other": 90
+  },
+  {
+   "accident_type_id": 118,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 우회전",
+   "other_progress": "표지가 없는 도로에서 직진",
+   "base_me": 90,
+   "base_other": 10
+  },
+  {
+   "accident_type_id": 119,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 직진(좌측도로)",
+   "other_progress": "표지가 없는 도로에서 좌회전(우측도로)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 119,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 좌회전(우측도로)",
+   "other_progress": "일시정지 위반 직진(좌측도로)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 120,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 직진(우측도로)",
+   "other_progress": "표지가 없는 도로에서 좌회전(좌회전)",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 120,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 좌회전(좌회전)",
+   "other_progress": "일시정지 위반 직진(우측도로)",
+   "base_me": 50,
+   "base_other": 50
+  },
+  {
+   "accident_type_id": 121,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 직진",
+   "other_progress": "표지가 없는 도로에서 우회전",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 121,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 우회전",
+   "other_progress": "일시정지 위반 직진",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 122,
+   "role": "A",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "일시정지 위반 좌회전",
+   "other_progress": "표지가 없는 도로에서 좌회전",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 122,
+   "role": "B",
+   "place": "T자형 교차로",
+   "feature": "일시정지 표지가 한쪽방향에만 있음",
+   "my_progress": "표지가 없는 도로에서 좌회전",
+   "other_progress": "일시정지 위반 좌회전",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 123,
+   "role": "A",
+   "place": "차도와 차도가 아닌 장소",
+   "feature": "차도가 아닌 장소에서 차도로 진입",
+   "my_progress": "차도에서 직진",
+   "other_progress": "차도가 아닌 장소에서 중앙선 침범 진입",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 123,
+   "role": "B",
+   "place": "차도와 차도가 아닌 장소",
+   "feature": "차도가 아닌 장소에서 차도로 진입",
+   "my_progress": "차도가 아닌 장소에서 중앙선 침범 진입",
+   "other_progress": "차도에서 직진",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 124,
+   "role": "A",
+   "place": "차도와 차도가 아닌 장소",
+   "feature": "차도가 아닌 장소에서 차도로 진입",
+   "my_progress": "차도에서 직진",
+   "other_progress": "차도가 아닌 장소에서 우회전 진입",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 124,
+   "role": "B",
+   "place": "차도와 차도가 아닌 장소",
+   "feature": "차도가 아닌 장소에서 차도로 진입",
+   "my_progress": "차도가 아닌 장소에서 우회전 진입",
+   "other_progress": "차도에서 직진",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 125,
+   "role": "A",
+   "place": "차도와 차도가 아닌 장소",
+   "feature": "차도에서 차도가 아닌 장소로 진입",
+   "my_progress": "차도에서 직진",
+   "other_progress": "차도가 아닌 장소로 중앙선 침범 진입",
+   "base_me": 0,
+   "base_other": 100
+  },
+  {
+   "accident_type_id": 125,
+   "role": "B",
+   "place": "차도와 차도가 아닌 장소",
+   "feature": "차도에서 차도가 아닌 장소로 진입",
+   "my_progress": "차도가 아닌 장소로 중앙선 침범 진입",
+   "other_progress": "차도에서 직진",
+   "base_me": 100,
+   "base_other": 0
+  },
+  {
+   "accident_type_id": 126,
+   "role": "A",
+   "place": "주차장(또는 차도가 아닌 장소)",
+   "feature": "주차구역과 통로",
+   "my_progress": "통로 직진",
+   "other_progress": "주차구역에서 직진 출차",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 126,
+   "role": "B",
+   "place": "주차장(또는 차도가 아닌 장소)",
+   "feature": "주차구역과 통로",
+   "my_progress": "주차구역에서 직진 출차",
+   "other_progress": "통로 직진",
+   "base_me": 70,
+   "base_other": 30
+  },
+  {
+   "accident_type_id": 127,
+   "role": "A",
+   "place": "주차장(또는 차도가 아닌 장소)",
+   "feature": "주차구역과 통로",
+   "my_progress": "통로 직진",
+   "other_progress": "주차구역에서 후진 출차",
+   "base_me": 25,
+   "base_other": 75
+  },
+  {
+   "accident_type_id": 127,
+   "role": "B",
+   "place": "주차장(또는 차도가 아닌 장소)",
+   "feature": "주차구역과 통로",
+   "my_progress": "주차구역에서 후진 출차",
+   "other_progress": "통로 직진",
+   "base_me": 75,
+   "base_other": 25
+  },
+  {
+   "accident_type_id": 128,
+   "role": "A",
+   "place": "회전교차로",
+   "feature": "회전차로 1차로형",
+   "my_progress": "회전교차로 진입",
+   "other_progress": "교차로 내 회전",
+   "base_me": 80,
+   "base_other": 20
+  },
+  {
+   "accident_type_id": 128,
+   "role": "B",
+   "place": "회전교차로",
+   "feature": "회전차로 1차로형",
+   "my_progress": "교차로 내 회전",
+   "other_progress": "회전교차로 진입",
+   "base_me": 20,
+   "base_other": 80
+  },
+  {
+   "accident_type_id": 129,
+   "role": "A",
+   "place": "회전교차로",
+   "feature": "회전차로 2차로형",
+   "my_progress": "회전(회전 2차로)",
+   "other_progress": "진로변경(회전 1차로 → 회전 2차로)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 129,
+   "role": "B",
+   "place": "회전교차로",
+   "feature": "회전차로 2차로형",
+   "my_progress": "진로변경(회전 1차로 → 회전 2차로)",
+   "other_progress": "회전(회전 2차로)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 130,
+   "role": "A",
+   "place": "회전교차로",
+   "feature": "회전차로 2차로형",
+   "my_progress": "회전교차로 진입(1차로 → 회전 2차로)",
+   "other_progress": "회전교차로 진입(2차로 → 회전 2차로)",
+   "base_me": 60,
+   "base_other": 40
+  },
+  {
+   "accident_type_id": 130,
+   "role": "B",
+   "place": "회전교차로",
+   "feature": "회전차로 2차로형",
+   "my_progress": "회전교차로 진입(2차로 → 회전 2차로)",
+   "other_progress": "회전교차로 진입(1차로 → 회전 2차로)",
+   "base_me": 40,
+   "base_other": 60
+  },
+  {
+   "accident_type_id": 131,
+   "role": "A",
+   "place": "회전교차로",
+   "feature": "회전차로 2차로형",
+   "my_progress": "회전(회전 1차로)",
+   "other_progress": "회전교차로 대진입",
+   "base_me": 10,
+   "base_other": 90
+  },
+  {
+   "accident_type_id": 131,
+   "role": "B",
+   "place": "회전교차로",
+   "feature": "회전차로 2차로형",
+   "my_progress": "회전교차로 대진입",
+   "other_progress": "회전(회전 1차로)",
+   "base_me": 90,
+   "base_other": 10
+  },
+  {
+   "accident_type_id": 132,
+   "role": "A",
+   "place": "회전교차로",
+   "feature": "회전차로 2차로형",
+   "my_progress": "진로변경(회전 1차로 → 회전 2차로)",
+   "other_progress": "회전교차로 진입",
+   "base_me": 30,
+   "base_other": 70
+  },
+  {
+   "accident_type_id": 132,
+   "role": "B",
+   "place": "회전교차로",
+   "feature": "회전차로 2차로형",
+   "my_progress": "회전교차로 진입",
+   "other_progress": "진로변경(회전 1차로 → 회전 2차로)",
+   "base_me": 70,
+   "base_other": 30
+  }
+ ]
+}

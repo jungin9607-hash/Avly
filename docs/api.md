@@ -1,0 +1,262 @@
+# Avly API 명세 (v0.4, 구현 기준)
+
+실제로 구현된 API입니다. 서버가 만드는 Swagger(`http://localhost:8000/docs`)와 함께 보세요.
+이전 초안(v0.3, v0.4)은 이 문서로 대체되어 삭제했습니다. 초안과 달라진 점은 맨 아래에 있습니다. (git 기록에서 볼 수 있습니다.)
+
+## 기본 규칙
+
+| 항목 | 규칙 |
+| --- | --- |
+| Base URL | `http://localhost:8000` (개발). 경로는 `/api/v1/...` (상태 확인만 `/health`) |
+| 형식 | JSON. 영상 업로드만 `multipart/form-data` |
+| 필드명, 식별자, 시간 | `snake_case`, UUID 문자열, UTC ISO 8601 |
+| **소유 확인** | 사고를 만들 때 받은 `session_id`를 이후 요청의 **`X-Session-Id` 헤더**로 보낸다. 없으면 `401`, 남의 사고·분석은 **`404`**(있는지 알려 주지 않는다) |
+| CORS | `CORS_ORIGINS`(기본 `http://localhost:5173`)에서 `X-Session-Id` 헤더를 포함해 허용 |
+| 오류 형식 | `{"error": {"code": "...", "message": "..."}}`. 화면 분기는 `code`로 하고 `message`는 사용자에게 보여줄 수 있는 한국어 문구 |
+
+## 흐름
+
+```
+POST /accidents (동의, session_id 받기)
+→ POST /accidents/{id}/videos (영상 1개)
+→ POST /accidents/{id}/analyses (분석 시작, 202)
+→ GET  /analyses/{id} 를 반복 조회 ──────────────→ status: queued → processing(stage) → awaiting_confirmation
+→ (사용자) 사고 상황 확인: situation 과 GET /catalog/accident-types 로 장소 → 유형 → 내 차 → 상대 차 고르기
+→ GET  /analyses/{id}/adjustment-questions?accident_type_id=&role=   (가감요소 질문)
+→ POST /analyses/{id}/confirm (확정한 유형과 답변, 202)
+→ GET  /analyses/{id} 를 반복 조회 ──────────────→ status: processing(finalize) → completed (result)
+```
+
+분석이 끝나지 않고 끝나는 경우: `unsupported`(차대차가 아닌 사고), `failed`(오류).
+
+## 분석 상태 `status`와 진행 단계 `stage`
+
+| status | 뜻 | 화면 |
+| --- | --- | --- |
+| `queued` | 대기 중 | 진행 화면 |
+| `processing` | 처리 중. `stage` 참고 | 진행 화면 (단계 표시) |
+| `awaiting_confirmation` | 분석이 끝나 사용자 확인을 기다림. `situation` 있음 | 사고 상황 확인 화면 |
+| `completed` | 결과 있음. `result` 참고 | 결과 화면 |
+| `unsupported` | 차대차가 아닌 사고. `unsupported_reason` 있음. **오류가 아님** | 지원하지 않는 사고 안내 |
+| `failed` | 실패. `error` 있음 | 오류 안내 |
+
+`processing`일 때 `stage`는 `{id, index, total, label}`이고 `total`은 5입니다.
+
+| `stage.id` | `index` | 내용 |
+| --- | --- | --- |
+| `plate_masking` | 1 | 번호판·사람 비식별화 |
+| `overview` | 2 | 전체 흐름 분석 |
+| `detail_review` | 3 | 사고 전후 상세 확인 (필요할 때만 실행되어 건너뛸 수 있음) |
+| `case_matching` | 4 | 과실 유형 비교 |
+| `finalize` | 5 | 결과 정리 (사용자 확인 뒤) |
+
+사고(`accident.status`)는 `uploaded`, `analyzing`, `completed`, `failed`, `unsupported`입니다.
+
+## 엔드포인트
+
+| 메서드 | 경로 | 설명 | 성공 |
+| --- | --- | --- | --- |
+| GET | `/health`, `/health/db` | 서버, DB 상태 | 200 |
+| GET | `/api/v1/catalog/accident-types` | 과실표 선택지 전체 (세션 불필요) | 200 |
+| POST | `/api/v1/accidents` | 사고 생성과 동의 기록, 세션 발급 | 201 |
+| GET | `/api/v1/accidents/{id}` | 사고 조회 | 200 |
+| DELETE | `/api/v1/accidents/{id}` | 결과 지우기: 분석 결과와 영상을 지금 삭제 | 204 |
+| POST | `/api/v1/accidents/{id}/videos` | 영상 업로드 (사고마다 하나) | 201 |
+| GET | `/api/v1/accidents/{id}/video-url` | 비식별 영상 재생 주소 | 200 |
+| POST | `/api/v1/accidents/{id}/analyses` | 분석 시작 | 202 |
+| GET | `/api/v1/analyses/{id}` | 분석 상태와 결과 | 200 |
+| GET | `/api/v1/analyses/{id}/adjustment-questions` | 고른 유형의 가감요소 질문 | 200 |
+| POST | `/api/v1/analyses/{id}/confirm` | 사용자가 확정한 내용으로 결과 계산 | 202 |
+| POST | `/api/v1/analyses/{id}/cancel` | 대기 중이거나 분석 중인 분석을 취소 | 200 |
+| GET | `/api/v1/media/{token}` | 서명된 주소로 영상 재생 (Range 지원) | 200/206 |
+| POST | `/api/v1/analyses/{id}/reports` | 서버 PDF (미구현) | 501 |
+
+### POST /api/v1/accidents
+
+```json
+{ "title": "퇴근길 차선 변경 사고", "consent": { "version": "2026-10-19", "analysis": true, "retention": false } }
+```
+
+| 필드 | 필수 | 설명 |
+| --- | --- | --- |
+| `title` | ✅ | 1~200자 |
+| `consent.version` | ✅ | 사용자가 본 동의 문서 버전 |
+| `consent.analysis` | ✅ | **`true`여야 한다.** 아니면 `422 CONSENT_REQUIRED` |
+| `consent.retention` | | 영상 저장·추가 활용 동의 (선택). `false`면 세션이 끝날 때 영상을 삭제한다 |
+
+**응답 201**: `id`, `title`, `status`, `created_at`, `expires_at`(세션 만료 시각), **`session_id`**
+
+### POST /api/v1/accidents/{id}/videos
+
+`file` 필드로 영상을 올린다. 사고마다 **하나만** 가능하다.
+오류: `400 EMPTY_FILE`, `409 VIDEO_ALREADY_UPLOADED`, `413 FILE_TOO_LARGE`(기본 200MB), `415 UNSUPPORTED_FILE_TYPE`(기본 mp4, mov, avi)
+응답은 영상 `id`, `accident_id`, `size_bytes`, `created_at`이고 **영상 주소는 없다**.
+
+### GET /api/v1/accidents/{id}/video-url
+
+`{"available": true, "url": "/api/v1/media/...", "expires_at": "..."}`. 번호판·사람을 가린 영상만 제공하고 **원본은 어떤 경우에도 제공하지 않는다**.
+`available: false`이면 영상을 보관하지 않았거나(저장 동의 없음) 삭제된 것이다. 주소는 짧게(기본 10분) 유효하므로 화면에 들어올 때 받는다.
+`<video src>`는 헤더를 보낼 수 없어서 이 주소에 서명이 들어 있다. 앞에 서버 주소를 붙여 쓴다.
+
+### DELETE /api/v1/accidents/{id}
+
+"결과 지우기". 세션이 끝나기를 기다리지 않고 지금 지운다. 분석 결과(`scene`, `confirmed`, `result`, 과실비율)와 사고 제목은 저장 동의 여부와 상관없이 **바로** 지워지고, 영상은 저장 동의한 비식별 영상까지 모두 만료 처리되어 worker가 곧 파일을 삭제한다(동의를 거두는 것과 같다). 이후 이 사고·분석 조회는 `410 SESSION_EXPIRED`. 본문 없이 `204`.
+
+### 세션 만료
+
+사고를 만든 때부터 `SESSION_TTL_HOURS`(기본 2시간)가 지나면 `accident.expires_at` 이 지난 것이다. 이 사고와 분석에 대한 모든 요청은 worker의 정리 작업을 기다리지 않고 `410 SESSION_EXPIRED` 를 돌려준다(남의 사고는 만료 여부와 상관없이 `404`). 응답의 `expires_at` 으로 화면에서 남은 시간을 안내할 수 있다. 저장 동의한 사용자의 비식별 영상과 분석 결과(`scene`, `confirmed`, `result`)는 세션이 끝나도 `RETENTION_DAYS`(기본 90일) 동안 DB에 남지만 사용자에게는 제공하지 않는다(사고 제목은 지운다). 저장 동의가 없으면 결과도 세션이 끝날 때 지운다.
+
+### POST /api/v1/accidents/{id}/analyses
+
+바로 202로 `{analysis_id, status, status_url}`를 돌려준다. 오류: `409 VIDEO_REQUIRED`, `409 ANALYSIS_IN_PROGRESS`(사고마다 진행 중인 분석은 하나).
+
+### GET /api/v1/analyses/{id}
+
+```json
+{
+  "analysis_id": "…", "accident_id": "…",
+  "status": "awaiting_confirmation",
+  "stage": null,
+  "situation": { "…": "아래 참고" },
+  "result": null,
+  "unsupported_reason": null,
+  "error": null,
+  "created_at": "…", "updated_at": "…"
+}
+```
+
+`situation`은 `awaiting_confirmation` 이후로 계속 들어 있다.
+
+| 필드 | 설명 |
+| --- | --- |
+| `summary`, `road_shape`, `my_action`, `other_action` | AI 가 본 사고 상황 |
+| `contact` | 접촉 확실도 (`접촉 관찰`, `충돌 정황 강함`, `접촉 추정`, `근접만 관찰`, `판단 불가`) |
+| `needs_check` | 사용자가 확인해야 할 점 (문장 목록) |
+| `candidates[]` | 과실표 후보. `accident_type_id`, `role`, `place`, `feature`, `my_progress`, `other_progress`, `base_me`, `base_other`, `source`(`matched` 확실한 후보 / `reference` 참고용), `eligible` |
+| `default_index` | 미리 골라 둘 후보의 위치. **`null`이면 AI 가 확신하지 못한 것**이니 미리 고르지 않는다 |
+
+`role`은 **내 차가 과실표에서 맡은 쪽**(`A` 또는 `B`)이다. 같은 유형이라도 내 차가 A인지 B인지에 따라 내 과실과 진행 이름이 바뀐다.
+`error.code`: `VIDEO_TOO_LONG`(영상이 20초 초과), `AI_NOT_CONFIGURED`(AI 키 없음 등 서비스 준비 안 됨), `ANALYSIS_FAILED`, `FINALIZE_FAILED`.
+
+### GET /api/v1/catalog/accident-types
+
+`{"count": 261, "items": [ {accident_type_id, role, place, feature, my_progress, other_progress, easy, base_me, base_other} ]}`.
+`place`, `feature`, `my_progress`, `other_progress`는 과실표(손해보험협회 인정기준)의 **원래 이름**이고 선택의 기준(키)이다. `easy`는 같은 네 항목의 **쉬운 말**(`{place, feature, my_progress, other_progress}`)로, 화면에는 이것을 크게 보여 주고 원래 이름은 작게 함께 보여 준다. 쉬운 말이 없는 항목은 원래 이름과 같다. 결과의 `accident_type`과 `reference_candidates`에도 같은 `easy`가 들어 있다(예전에 저장된 결과에는 없을 수 있다).
+화면의 네 항목(장소, 사고 유형, 내 차의 움직임, 상대 차의 움직임)이 같은 것은 하나로 합쳐 두었으므로 **네 항목을 고르면 선택지가 하나로 정해진다.**
+프론트는 이 목록으로 앞 항목을 고를 때마다 뒤 항목의 보기를 좁힌다.
+
+### GET /api/v1/analyses/{id}/adjustment-questions?accident_type_id=11&role=A
+
+고른 유형에 등록된 가감요소를 쉬운 말 질문으로 돌려준다. 등록되지 않은 유형은 `registered: false`, `questions: []`이고 기본 비율만 안내한다(**133개 유형 중 122개 등록**, 나머지 11개는 PDF와 과실표의 기본 비율이 달라 뺐다).
+
+```json
+{ "accident_type_id": 11, "role": "A", "registered": true, "held_back": 6, "questions": [ {
+  "key": "other.signal_delay", "factor": "signal_delay", "who": "상대 차", "group": "B_signal",
+  "title": "방향지시등을 켜지 않았거나 너무 늦게 켰어요", "easy": "차선을 바꾸기 전에 …",
+  "question": "상대 차가 방향지시등을 켜지 않았거나, 차선을 바꾸는 순간에야 켰나요?",
+  "effect": "상대 차 과실 +10%p", "delta_pp": 10, "needs_user": false,
+  "options": ["예", "아니요", "잘 모르겠어요"],
+  "suggested": { "answer": "예", "basis": "영상에서 관찰", "evidence": "방향지시등이 켜지지 않은 장면" },
+  "reviewed": false } ] }
+```
+
+- **`예`라고 답하면 그 가감요소가 적용되도록** 질문을 썼다. `key`는 `me.`(내 차) 또는 `other.`(상대 차)로 시작한다.
+- `suggested`는 영상에서 관찰·추정한 것이 있을 때만 있다 (사용자가 답하기 전의 AI 제안). 사용자의 답이 항상 우선한다.
+- `needs_user`: 영상만으로는 알 수 없는 항목 (예: 현저한 과실). 항상 사용자에게 묻는다.
+- **쉬운 말 검수가 끝난 가감요소만 묻는다.** 규칙(숫자)을 확인한 유형이어도 쉬운 말(제목·설명·질문)이 검수 전인 가감요소는 질문에도 계산에도 쓰지 않는다. 쓰지 않은 가감요소 수는 `held_back`이다. 이 값이 0보다 크면 결과는 `state: partial`("확인한 요소만 반영")이고 `fault.final`은 `null`이다. 쓸 수 있는 가감요소가 하나도 없으면 `registered: false`, `questions: []`(기본 비율만 안내)이다. 어느 유형이 대상인지는 [supported-types.md](review/supported-types.md)에 있다.
+- 개발·시험에서 검수 전 가감요소까지 전부 보려면 서버 `.env`에 `AVLY_REQUIRE_WORDING_REVIEW=0`(규칙 검수 전 유형까지 보려면 `AVLY_REQUIRE_RULE_REVIEW=0`)을 적는다.
+
+### POST /api/v1/analyses/{id}/confirm
+
+```json
+{ "accident_type_id": 11, "role": "A", "answers": [ { "key": "other.signal_delay", "answer": "예" } ] }
+```
+
+- 맞는 유형이 없으면 `"accident_type_id": null`, `role`과 `answers`는 비운다. 결과는 `state: "unresolved"`(비율 없음)로 나온다.
+- 답하지 않은 질문은 `잘 모르겠어요`로 보내면 된다. 서버는 이를 0으로 확정하지 않고 **미확인**으로 둔다.
+- 응답은 `status: processing`, `stage.id: finalize`인 분석이다. 이어서 `GET /analyses/{id}`를 조회해 `completed`를 기다린다.
+- 오류: `409 ANALYSIS_NOT_AWAITING`, `404 ACCIDENT_TYPE_NOT_FOUND`, `422 ROLE_REQUIRED`, `422 INVALID_ANSWER`(이 유형에서 묻지 않는 항목이나 같은 항목이 두 번 들어 있음)
+
+### POST /api/v1/analyses/{id}/cancel
+
+대기 중(`queued`)이거나 분석 중(`processing`)인 분석을 취소한다. 요청 본문은 없다.
+
+- 취소하면 `status: failed`, `error.code: CANCELLED`인 분석이 돌아온다. DB 상태 규칙에 `cancelled`가 없어서 실패로 기록하되 코드로 구분한다. 같은 사고(같은 영상)로 `POST /accidents/{id}/analyses`를 다시 호출해 새로 분석할 수 있다.
+- 대기 중인 분석은 작업을 바로 지워서 worker가 시작하지 않는다.
+- **분석 중인 분석은 worker가 지금 하던 단계(AI 호출 한 번 등)를 끝낸 뒤에 멈춘다.** 응답은 바로 취소로 돌아오지만, 그동안 worker는 다음 분석을 시작하지 못할 수 있다. 취소한 분석에는 결과를 저장하지 않는다.
+- 이미 취소한 분석에 다시 호출해도 같은 응답(200)을 돌려준다.
+- 오류: `409 ANALYSIS_NOT_CANCELLABLE`(이미 끝났거나 사용자 확인 단계이거나, 취소가 아닌 이유로 실패한 분석), `404 ANALYSIS_NOT_FOUND`, `401`.
+
+## 결과 `result`
+
+`status`가 `completed`일 때 들어 있다.
+
+| 필드 | 설명 |
+| --- | --- |
+| `state` | `final`(최종 비율 있음), `partial`(미확인 요소가 있어 확인된 것만 반영), `base_only`(가감요소 미등록이라 기본 비율만), `unresolved`(유형 확정 불가, 비율 없음) |
+| `summary`, `situation` | 사고 상황 설명 (`road_shape`, `my_action`, `other_action`, `contact`) |
+| `accident_type` | 확정한 유형 (`accident_type_id`, `role`, `place`, `feature`, `my_progress`, `other_progress`). `unresolved`면 `null` |
+| `fault` | `base`(기본), `adjusted`(반영한 값, `partial`도 있음), `final`(`final` 상태일 때만 값), `bounds_applied`. 각각 `{me, other}`. `unresolved`면 `null` |
+| `steps[]` | 화면의 단계 카드: `kind`(`base`/`adjustment`), `title`, `easy`, `effect`, `who`, `factor`, `delta_pp`, **그 단계까지 반영한 `me`, `other`** |
+| `adjustments` | `registered`, `applied[]`, `not_applied[]`(이유 포함), `pending[]`(확인하지 못한 요소, `question` 포함), `held_back`(쉬운 말 검수 전이라 반영하지 않은 가감요소 수) |
+| `laws[]` | 관련 도로교통법 조문: `article`, `label`, `name`, `easy`, `missing`(풀이를 아직 안 썼으면 true) |
+| `explanation` | `base`, `situation`, `status` (쉬운 말 문장, **AI 가 아니라 미리 쓴 문장**) |
+| `timeline[]` | 구간: `kind`, `actor`(`me`/`other`/`both`), `start_sec`, `end_sec`(**영상 시작 기준 초**), `description`, `certainty`, `evidence_text`, `stage`. `kind`가 `사고 흐름`인 이벤트는 AI가 쓴 사고 진행 단계(`stage`: 접근 / 사고 직전 / 접촉 / 접촉 이후, 최대 4개, `actor`는 `null`)이고, 장면 인용 검증과 판단 표현·수치·접촉 단정 검사를 통과한 것만 담는다. 없으면(예전 결과나 상세 확인을 하지 않은 영상) 내 차 움직임·상대 차 확인·접촉 근거 구간만 있다 |
+| `timeline_note` | 상대 차가 처음 보인 뒤 접촉(의심) 장면까지 **영상 속 시간 관계**를 말하는 한 문장(AI 없이 장면 시각 차이로 만듦). 속도·거리는 말하지 않는다. 상대 차가 구별되고 접촉 근거 장면이 있을 때만 있고 없으면 `null` |
+| `impact` | `{sec, contact, confirmed}`. **`confirmed`가 true일 때만** 충돌 시점을 기준으로 말한다 |
+| `related_cases[]` | 판례: `case_id`, `court`, `date`, `case_number`, `summary`, `comparison_limit`, `source_url`, `source_kind`, `source_label`, `verified`, `relevance_status`, `comparison` |
+| `related_cases[].comparison` | `match_level`(`same_type`/`partial`), `match_label`, `source`(`ai`/`rule`), `common[]`, `differences[]`(문장만), `note`. `source`가 `ai`이면 `common_items[]`, `differences_items[]`(`label`, `text`, `quote` 판결문에서 가져온 구절)도 있다. **퍼센트는 없다** |
+| `related_cases[].digest` | AI가 판례 본문을 읽고 정리한 설명(`source`가 `ai`일 때만, 없으면 키가 없다): `overview`{`text`,`quote`}, `ruling_points[]`{`text`,`quote`}, `laws[]`(본문에 나온 도로교통법 조문과 쉬운 풀이). 모든 항목에 판결문 인용이 있다 |
+| `reference_candidates[]` | 분석 단계의 과실표 후보 (`unresolved`일 때 참고용으로 보여 준다) |
+| `notice` | 법적 효력이 없다는 고지 문구 |
+
+**판례 규칙:** 최대 3개를 보여 준다. 순서는 도표 등록 판례(`registered_chart_reference`) → 조건이 모두 맞는 API 판례 → 일부만 맞는 판례(`partial_reference`)이다. 일부 일치 판례는 `comparison_limit`에 몇 개 조건이 맞았는지 적고, 조건이 전혀 맞지 않는 판례로는 채우지 않으므로 3개보다 적거나 0개일 수 있다.
+
+**판례 비교 방식:** 판례 본문이 충분하면(법령 API로 가져온 판례) AI가 비교하고, 도표 등록 판례처럼 본문이 한 줄뿐이거나 AI를 쓸 수 없으면 규칙으로 비교한다(`comparison.source`로 구분). AI에는 글자만 보낸다(사고 상황 + 판례 본문, 이미지 없음). AI가 쓴 항목은 판결문 인용이 실제 본문에 있는지, 비율·승패 표현이 없는지 서버가 확인하고, 2차로 AI가 "인용이 주장을 뒷받침하는지" 다시 판정해 통과한 항목만 싣는다. 결과는 `case_ai` 표에 저장해 같은 입력에는 같은 설명을 쓴다. `CASE_COMPARE`(`auto`/`ai`/`rule`)로 고른다.
+
+**보여주지 않는 값:** 속도, G값, 감속, 차간거리, 방향지시등 확률, 충돌 시각의 확정, 판례 유사도 퍼센트는 서버가 만들지 않는다.
+
+예시 응답: [frontend/src/api/fixtures/](../frontend/src/api/fixtures/) (`result_final.json`, `result_partial.json`, `result_base_only.json`, `result_unresolved.json` 등. 실제 서버 코드가 만든 값)
+
+## 오류 코드
+
+| 상태 | code | 상황 |
+| --- | --- | --- |
+| 400 | `EMPTY_FILE` | 0바이트 파일 |
+| 401 | `SESSION_REQUIRED`, `SESSION_INVALID` | `X-Session-Id`가 없거나 형식이 틀림 |
+| 403 | `MEDIA_LINK_INVALID` | 영상 주소가 틀리거나 만료됨 |
+| 404 | `ACCIDENT_NOT_FOUND`, `ANALYSIS_NOT_FOUND` | 없거나 **남의 것** |
+| 404 | `ACCIDENT_TYPE_NOT_FOUND`, `VIDEO_NOT_AVAILABLE`, `NOT_FOUND` | 과실표에 없는 유형, 재생할 영상 없음, 없는 경로 |
+| 405 | `METHOD_NOT_ALLOWED` | |
+| 409 | `VIDEO_ALREADY_UPLOADED`, `VIDEO_REQUIRED`, `ANALYSIS_IN_PROGRESS` | 영상 규칙, 진행 중인 분석 |
+| 409 | `ANALYSIS_NOT_AWAITING`, `ANALYSIS_NOT_COMPLETED` | 확인 대기가 아닐 때 `confirm`, 완료 전 `reports` |
+| 410 | `SESSION_EXPIRED` | 세션이 끝나 결과가 삭제됨 (`expires_at` 이후의 모든 사고·분석 요청) |
+| 413 | `FILE_TOO_LARGE` | 업로드 용량 초과 |
+| 415 | `UNSUPPORTED_FILE_TYPE` | 허용하지 않는 확장자 |
+| 422 | `CONSENT_REQUIRED`, `ROLE_REQUIRED`, `INVALID_ANSWER`, `VALIDATION_ERROR` | 동의 없음, 역할 누락, 잘못된 답변, 요청 형식 오류(`details` 포함) |
+| 500 / 501 / 503 | `INTERNAL_SERVER_ERROR` / `REPORT_NOT_IMPLEMENTED` / `DATABASE_UNAVAILABLE` | |
+
+## 개발·테스트
+
+`backend/.env`에 명시적으로 `ENGINE=fake`, `REDACTION=dev_copy`를 지정하면 영상 파일 **첫 줄**의 지시로 상황을 만들 수 있다. 실제 영상이 아니어도 된다. 분석 조회 응답의 `engine`은 결과를 만든 엔진이며, `fake`/`replay`는 실제 영상 AI 분석이 아니다.
+
+| 첫 줄 | 결과 |
+| --- | --- |
+| (지시 없음) | 정상 분석 (직선 도로 진로변경 사고, 유형 11 후보) |
+| `FAKE unsupported 차대보행자` | `unsupported` |
+| `FAKE too_long 55` | `failed`, `VIDEO_TOO_LONG` |
+| `FAKE fail` | `failed`, `ANALYSIS_FAILED` |
+| `FAKE fixture parking` | 주차장 사고: 참고 후보만 있고 미리 고르지 않음 |
+
+확인 스크립트: [backend/tests/e2e_smoke.py](../backend/tests/e2e_smoke.py) (HTTP), [frontend/e2e/](../frontend/e2e/README.md) (브라우저)
+
+## 초안(v0.4 draft)과 달라진 점
+
+| 초안 | 구현 |
+| --- | --- |
+| 사전 설문(`/survey`) | **없음.** 영상에서 알 수 있는 것은 AI 가 먼저 파악하고 사용자가 확인한다 |
+| `POST /analyses/{id}/answers`, `follow_up_questions` | **없음.** 유형을 확정하면 `adjustment-questions`로 질문을 받는다 |
+| `confirm`(상황 확인만) | `confirm` 한 번에 유형, 역할, 가감요소 답변을 보낸다 |
+| `fault_options[]` | 확정한 유형 하나의 `fault` + `steps[]` (유형을 사용자가 확정하므로 후보가 여러 개일 필요가 없다) |
+| `stage.total` 4 | 5 (`finalize` 추가) |
+| 결과의 `report_text` | 없음 (PDF는 브라우저 인쇄) |

@@ -1,0 +1,1473 @@
+
+/* 유사 판례: 위에서 아래로 옅어지는 블루 배경 + 둥근 흰 카드, 네이비·블루 포인트 */
+.law-page {
+  /* 네이비 테마: "내 사고와 비교하기" 버튼의 네이비(#1d2c55 → #2a4381)를 중심으로 한 블루 계열
+     내 차 = 밝은 블루, 상대 = 딥 네이비로 구분 */
+  --law-ink: var(--color-law-ink);
+  --law-bg-top: var(--color-navy-950); /* 맨 위: 메뉴 바와 이어지는 아주 진한 남색 */
+  --law-band-joint: var(--color-navy-800); /* 위 구간 끝 = 아래 구간 시작 */
+  --law-bg-bottom: var(--color-navy-700); /* 맨 아래: 비교 버튼과 같은 네이비 */
+  --law-on-dark: var(--color-text-on-dark); /* 진한 배경 위 제목 */
+  --law-on-dark-text: var(--color-on-dark-muted); /* 진한 배경 위 설명 글씨 */
+  --law-blue: var(--color-law-blue); /* 포인트 (내 차 과실, 체크, 점) */
+  --law-blue-strong: var(--color-law-blue-strong);
+  --law-navy-deep: var(--color-law-navy-deep); /* 진한 칩·배지·확인 버튼 */
+  --law-navy: var(--color-law-navy);
+  --law-navy-soft: var(--color-law-navy-soft); /* 상대 과실 */
+  --law-royal: var(--color-law-royal); /* "내 사고와 비교하기" 버튼 */
+  --law-royal-strong: var(--color-law-royal-strong); /* 버튼에 마우스를 올렸을 때 */
+  --law-text: var(--color-text-law);
+  --law-text-dim: var(--color-text-law-dim);
+  --law-radius: 16px;
+  /* 진한 배경 위라 그림자도 진하게 */
+  --law-shadow: 0 12px 32px rgba(3, 6, 18, 0.35), 0 1px 3px rgba(3, 6, 18, 0.2);
+  --law-shadow-lift: 0 20px 44px rgba(3, 6, 18, 0.45), 0 2px 6px rgba(3, 6, 18, 0.25);
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  box-sizing: border-box;
+  color: var(--law-ink);
+  background: var(--law-bg-bottom); /* 스크롤 끝에서 튀어나와도 같은 네이비 */
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  text-align: left;
+  position: relative;
+  overflow-x: clip; /* 배경 장식이 화면 밖으로 나가도 가로 스크롤이 생기지 않게 */
+}
+
+/* 메뉴 아래 별도 경계선 없이 페이지 배경을 이어서 표시 */
+
+
+.law-page h1,
+.law-page h2,
+.law-page h3,
+.law-page p,
+.law-page figure {
+  margin-top: 0;
+}
+
+.law-page h1,
+.law-page h2,
+.law-page h3 {
+  color: inherit;
+  font-family: inherit;
+}
+
+/* 상단 메뉴는 파일 아래의 투명 배경 스타일을 사용 */
+
+/* ---------- 본문: 위에서 아래로 색이 이어지는 구간(band) ----------
+ * 각 구간의 끝 색 = 다음 구간의 시작 색이라 경계 없이 자연스럽게 바뀜 */
+.law-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.law-band {
+  position: relative;
+  overflow: clip; /* hidden이면 오른쪽 요약 카드의 position: sticky가 동작하지 않음 */
+}
+.law-band-inner {
+  position: relative;
+  width: min(1320px, 100%); /* 판례 카드가 가로로 길게 보이도록 넓게 */
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+/* 1) 위: 메뉴 바(#07070d)와 이어지는 아주 진한 남색, 오른쪽 위에서 은은한 블루 빛 */
+.law-band-warm {
+  flex: 1;
+  padding: 100px 0 56px; /* 메뉴 바(64px) 바로 아래부터 */
+  background:
+    radial-gradient(55% 460px at 85% 80px, var(--color-page-glow), transparent 70%),
+    linear-gradient(180deg, var(--law-bg-top) 0, var(--color-navy-900) 260px, var(--color-navy-850) 520px, var(--law-band-joint) 100%);
+}
+
+/* 2) 아래: 점점 밝아져 비교 버튼과 같은 네이비(#1d2c55)로 마무리 */
+.law-band-sand {
+  flex-shrink: 0;
+  padding: 0 0 8px;
+  background: linear-gradient(180deg, var(--law-band-joint) 0%, var(--color-navy-725) 50%, var(--law-bg-bottom) 100%);
+}
+
+/* ---------- 구간 제목 ---------- */
+.law-section-title {
+  margin-bottom: 22px;
+}
+.law-section-title .law-chip-dark {
+  height: 30px;
+  padding: 0 14px;
+  border: 1px solid var(--color-white-a18);
+  background: var(--color-white-a08);
+  color: var(--law-on-dark);
+  font-size: 13px;
+}
+.law-chip-dark {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.law-chip-dark {
+  background: var(--law-navy-deep);
+  color: #eef2fb;
+}
+.law-section-title h2 {
+  margin: 0 0 8px;
+  color: var(--law-on-dark);
+  font-size: clamp(30px, 4.2vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.25;
+}
+.law-section-title p {
+  margin: 0;
+  color: var(--law-on-dark-text);
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.65;
+}
+
+/* 제목 아래 "내 사고" 한 줄: 상자 없이 라벨 │ 정황 · 정황 · 정황 (진한 배경 위 밝은 글씨) */
+.law-my-accident {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  margin: -6px 0 28px;
+  color: var(--color-white-a92);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.law-my-accident-label {
+  padding-right: 14px;
+  border-right: 1px solid var(--color-white-a22);
+  color: #8fb0f5;
+  font-weight: 800;
+}
+.law-my-accident-sep {
+  color: rgba(222, 230, 248, 0.45);
+  font-weight: 400;
+}
+
+.law-grid {
+  display: grid;
+  /* 왼쪽 판례 카드는 남는 폭을 모두, 오른쪽 "비슷한 점" 박스는 300~390px */
+  grid-template-columns: minmax(0, 1fr) clamp(300px, 30%, 390px);
+  align-items: start;
+  gap: 20px;
+}
+
+.law-case-column {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+.law-case-list {
+  display: grid;
+  gap: 14px;
+}
+
+/* 둥근 흰 카드 + 테두리 없이 부드러운 블루 톤 그림자 */
+.law-case,
+.law-summary-card {
+  border-radius: var(--law-radius);
+  background: var(--color-card-surface);
+  box-shadow: var(--law-shadow);
+}
+
+.law-case {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  cursor: pointer; /* 카드 아무 곳이나 눌러 선택 */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.law-case:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--law-shadow-lift);
+}
+/* 선택된 판례: 페리윙클 테두리 + 윗줄 그라데이션 (가장 강한 강조는 여전히 하단 바의 비교 버튼 몫) */
+.law-case.is-selected {
+  background: var(--color-card-surface);
+  box-shadow:
+    0 0 0 1.5px rgba(128, 148, 223, 0.9),
+    var(--law-shadow);
+}
+/* 판례 윗줄의 그라데이션: 왼쪽 페리윙클 블루 → 오른쪽 위 거의 흰빛 (왼쪽으로 갈수록 진함)
+   윗줄 뒤에 깔린 투명한 층(::before)이라 투명도만 바꿔 부드럽게 차오름
+   마우스를 올리면 반쯤(0.55) → 선택하면 끝까지(1) (펼친 상세 내용은 흰 바탕 그대로) */
+.law-case-row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 160% at 100% 0%, color-mix(in srgb, var(--color-card-surface) 90%, transparent), transparent 55%),
+    linear-gradient(255deg, #f5f6fd 0%, #e2e6f9 36%, #b3bef0 70%, #8094df 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.law-case:hover .law-case-row::before {
+  opacity: 0.55;
+}
+.law-case.is-selected .law-case-row::before {
+  opacity: 1;
+}
+/* 줄 안의 글자·버튼은 그라데이션 층 위에 */
+.law-case-row > :not(.law-sr-only) {
+  position: relative;
+}
+/* 블루 위에서도 잘 읽히게 숫자·라벨은 한 단계 진하게 */
+.law-case.is-selected .law-case-metrics {
+  border-right-color: rgba(var(--color-law-panel-rgb), 0.16);
+}
+.law-case.is-selected .law-case-metrics dt {
+  color: rgba(var(--color-law-panel-rgb), 0.68);
+}
+.law-case.is-selected .law-stat-sim,
+.law-case.is-selected .law-stat-other {
+  color: var(--law-navy-deep);
+}
+.law-case.is-selected .law-stat-mine {
+  color: var(--color-law-card-blue);
+}
+/* 키보드로 고를 때 포커스 표시 */
+.law-case:has(input:focus-visible) {
+  outline: 3px solid rgba(var(--color-blue-rgb), 0.4);
+  outline-offset: 3px;
+}
+
+/* 한 줄: 번호 · 법원 이름(크게) ……… 핵심 수치 묶음 │ 상세 보기 */
+.law-case-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 22px 22px 24px;
+}
+.law-case-number {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-law-card-surface);
+  color: var(--law-text);
+  font-size: 11.5px;
+  font-weight: 800;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+/* 선택: 진해진 왼쪽 블루 위에서도 또렷하게 딥 네이비 원 */
+.is-selected .law-case-number {
+  background: var(--law-navy-deep);
+  color: var(--color-white);
+}
+/* 마우스를 올리거나 선택해 왼쪽이 블루로 물들면 판결 번호도 한 단계 진하게 */
+.law-case:hover .law-court small,
+.law-case.is-selected .law-court small {
+  color: rgba(var(--color-law-panel-rgb), 0.72);
+}
+
+/* 법원 이름(굵고 크게) + 판결 번호(옅게, 같은 줄) */
+.law-court {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+  cursor: pointer;
+}
+.law-court strong {
+  overflow: hidden;
+  color: var(--law-ink);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.law-court small {
+  flex: none;
+  color: var(--law-text-dim);
+  font-size: 12px;
+}
+
+/* 핵심 수치: 작은 라벨 위 · 숫자 아래, 두 개를 한 묶음으로
+   오른쪽 옅은 세로 선으로 "상세 보기" 버튼과 분리 */
+.law-case-metrics {
+  display: flex;
+  align-items: flex-end;
+  gap: 26px;
+  margin: 0;
+  padding-right: 22px;
+  border-right: 1px solid var(--color-law-card-line);
+  white-space: nowrap;
+  transition: padding-right 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease;
+}
+/* 선택 전: 버튼 자리가 접혀 있으니 구분선도 숨김 */
+.law-case:not(.is-selected) .law-case-metrics {
+  padding-right: 0;
+  border-right-color: transparent;
+}
+.law-case-metrics > div {
+  display: grid;
+  gap: 2px;
+  text-align: right;
+}
+/* 라벨(유사도 · 기준 과실): 밝은 카드 위에서도 잘 읽히게 본문과 같은 진한 회남색 + 굵게 */
+.law-case-metrics dt {
+  color: var(--law-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+/* 유사도·기준 과실 숫자는 같은 크기로 맞춤 */
+.law-case-metrics dd {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.law-stat-sim {
+  color: var(--law-blue-strong);
+}
+.law-stat-mine {
+  color: var(--law-blue);
+}
+.law-stat-other {
+  color: var(--law-navy-soft);
+}
+.law-stat-sep {
+  color: var(--law-text-dim);
+}
+
+.law-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* "상세 보기" 버튼 자리: 선택 전에는 폭 0(앞 간격까지 없앰), 선택하면 버튼 폭만큼 부드럽게 열림 */
+.law-detail-slot {
+  display: grid;
+  grid-template-columns: 0fr;
+  margin-left: -14px; /* 줄 간격(gap)만큼 당겨 오른쪽 빈칸이 남지 않게 */
+  transition:
+    grid-template-columns 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    margin-left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.law-case:not(.is-selected) .law-detail-slot {
+  overflow: hidden;
+}
+.law-case.is-selected .law-detail-slot {
+  grid-template-columns: 1fr;
+  margin-left: 0;
+}
+.law-detail-slot > .law-detail-button {
+  justify-self: start; /* 자리가 좁아지는 동안에도 버튼 모양은 그대로 */
+  min-width: 0;
+}
+
+/* "상세 보기" 알약 버튼 + 아래 화살표 (펼치면 "접기"로 바뀌고 화살표가 위로 뒤집힘)
+   그라데이션 위에서도 잘 보이도록 꽉 찬 흰 면 + 네이비 글씨 + 그림자 */
+.law-detail-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 14px 10px 17px;
+  border: 1px solid rgba(var(--color-navy-rgb), 0.12);
+  border-radius: 999px;
+  background: var(--color-card-surface);
+  box-shadow: 0 4px 12px rgba(var(--color-law-panel-rgb), 0.16);
+  color: var(--law-navy);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.law-detail-button svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s ease;
+}
+.law-detail-button:hover {
+  border-color: var(--law-navy);
+  background: var(--law-navy);
+  color: var(--color-white);
+}
+/* 선택하지 않은 카드: 버튼 자리는 남기고 숨김 (보이지 않으면 Tab·화면 낭독기에서도 빠짐)
+   선택하면 오른쪽에서 살짝 밀려 들어오며 나타남 */
+.law-detail-button {
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    opacity 0.25s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s;
+}
+.law-detail-button.is-hidden {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(8px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0s linear 0.2s;
+}
+/* 펼친 상태("접기"): 네이비 면으로 바뀌어 열려 있음을 표시 */
+.law-detail-button[aria-expanded="true"] {
+  border-color: var(--law-navy);
+  background: var(--law-navy);
+  color: var(--color-white);
+}
+.law-detail-button[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* ---------- 상세 보기: 펼치면 위에서 아래로 쭉 ----------
+ * 결과 한 문장(숫자 강조) + 개요 → 사고 경위 → 과실 산정 → 법원 판단 요지 → 적용 법령
+ * 높이를 0fr ↔ 1fr로 바꿔 펼칠 때 부드럽게 내려오고, 접을 때 부드럽게 말려 올라감 */
+.law-details-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.law-details-collapse.is-open {
+  grid-template-rows: 1fr;
+}
+.law-details-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+.law-case-details {
+  padding: 18px 24px 20px; /* 위 18px: 그라데이션 윗줄과 결과 문장 사이 여유 */
+  cursor: auto; /* 읽는 영역: 눌러도 카드 선택이 바뀌지 않음 */
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.is-open .law-case-details {
+  opacity: 1;
+  transition-delay: 0.08s;
+}
+
+.law-details-headline {
+  margin: 0 0 8px;
+  color: var(--law-ink);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.5;
+}
+.law-details-headline em {
+  font-style: normal;
+}
+.law-case-details .is-other {
+  color: var(--law-navy-soft);
+}
+.law-case-details .is-mine {
+  color: var(--law-blue);
+}
+.law-details-overview {
+  margin: 0;
+  color: var(--law-text);
+  font-size: 17.5px;
+  line-height: 1.8;
+}
+
+/* 소제목: 왼쪽 블루 점 + 굵은 글씨, 구간마다 옅은 구분선 */
+.law-details-section {
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid #e9edf4;
+}
+/* 소제목: 본문(17px)보다 확실히 크고 진한 네이비 + 앞쪽 세로 블루 막대 → 구간 시작이 한눈에 */
+.law-details-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  color: var(--law-navy);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+.law-details-section h4::before {
+  content: "";
+  flex: none;
+  width: 4px;
+  height: 20px;
+  border-radius: 2px;
+  background: var(--law-blue);
+}
+
+/* 과실비율 산정: 기본 → 가감 → 최종을 세로 점선으로 잇는 흐름
+   왼쪽 배지(기본 · 상대 ▲10 · 최종) | 가운데 설명 | 오른쪽 비율 숫자 */
+.law-details-flow {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.law-details-flow li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+.law-details-flow li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 48px;
+  top: 26px;
+  bottom: 2px;
+  border-left: 1px dashed var(--color-law-card-muted);
+}
+.law-flow-badge {
+  padding: 3px 0;
+  border-radius: 999px;
+  background: var(--color-law-card-surface);
+  color: var(--law-text);
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+  white-space: nowrap;
+}
+.law-flow-badge.is-other {
+  background: #e3e7f1;
+  color: var(--law-navy-soft);
+}
+.law-flow-badge.is-mine {
+  background: #e6eefc;
+  color: var(--law-blue-strong);
+}
+.law-details-flow p {
+  grid-column: 2 / -1;
+  margin: 0;
+  color: var(--law-text);
+  font-size: 17px;
+  line-height: 1.75;
+}
+.law-details-flow li:has(.law-flow-ratio) p {
+  grid-column: 2 / 3;
+}
+.law-details-flow p strong {
+  color: var(--law-ink);
+}
+.law-flow-ratio {
+  color: var(--law-ink);
+  font-size: 19px;
+  font-weight: 800;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* 최종 줄: 옅은 블루 바탕으로 강조 */
+.law-details-flow li.is-result {
+  align-items: center;
+  margin-top: 2px;
+  padding: 10px 14px 10px 0;
+  border-radius: 10px;
+  background: #f1f5fd;
+}
+.law-details-flow li.is-result .law-flow-badge {
+  background: var(--law-navy-deep);
+  color: var(--color-white);
+}
+.law-details-flow li.is-result .law-flow-ratio {
+  font-size: 23px;
+}
+
+/* 사고 경위: 시각 배지 + 세로 점선으로 이어진 단계 */
+.law-details-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.law-details-steps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  align-items: start;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+.law-details-steps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 34px; /* 시각 배지 칸(68px) 가운데 */
+  top: 30px;
+  bottom: 2px;
+  border-left: 1px dashed var(--color-law-card-muted);
+}
+.law-details-time {
+  padding: 3px 0;
+  border-radius: 999px;
+  background: #e3ebfa;
+  color: var(--law-blue-strong);
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+/* 충돌 순간(마지막 단계)은 진하게 */
+.law-details-steps li:last-child .law-details-time {
+  background: var(--law-navy-deep);
+  color: var(--color-white);
+}
+.law-details-steps p {
+  margin: 0;
+  color: var(--color-law-card-text);
+  font-size: 17.5px;
+  line-height: 1.7;
+}
+
+/* 법원 판단 요지: 블루 체크 목록 */
+.law-details-points {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.law-details-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--color-law-card-text);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.7;
+}
+
+/* 적용 법령: 조항 이름(네이비, 굵게) + 쉬운 말 요지 */
+.law-details-laws {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.law-details-laws li {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f4f6fb;
+}
+.law-details-laws strong {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--law-navy-soft);
+  font-size: 17px;
+}
+.law-details-laws p {
+  margin: 0;
+  color: var(--law-text);
+  font-size: 16.5px;
+  line-height: 1.75;
+}
+
+/* 오른쪽 아래 작은 회색 출처 */
+.law-details-source {
+  margin: 16px 0 0;
+  color: var(--law-text-dim);
+  font-size: 14px;
+  text-align: right;
+}
+
+/* ---------- 오른쪽: 선택한 판례 옆을 따라다니는 "비슷한 점" 박스 ----------
+ * --law-follow-y = 선택한 카드의 목록 안 세로 위치 (FollowSelectedAside가 계산) */
+.law-analysis {
+  /* transform이 아닌 margin으로 내려서 실제 자리를 차지 → 박스가 목록보다 길어져도
+     아래 비교 바가 그만큼 밀려 겹치지 않음 */
+  margin-top: var(--law-follow-y, 0);
+  /* 박스 폭은 내용(가장 긴 줄)만큼만: 오른쪽에 빈 공간이 남지 않게 */
+  justify-self: start;
+  width: fit-content;
+  max-width: 100%;
+  transition: margin-top 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: law-summary-in 0.32s ease;
+}
+@keyframes law-summary-in {
+  from {
+    opacity: 0;
+    translate: -10px 0;
+  }
+}
+
+/* 어두운 유리 패널: 네이비 배경에 녹아드는 반투명 면 + 카드 쪽(왼쪽) 블루 세로선
+   밝은 판례 카드와 경쟁하지 않고, 세로선이 선택한 카드를 가리킴 */
+.law-summary-card {
+  position: relative;
+  padding: 16px 22px 18px 20px;
+  border: 1px solid var(--color-white-a18);
+  border-left: 3px solid var(--law-blue);
+  border-radius: 6px 14px 14px 6px;
+  background: var(--color-white-a14); /* 어두운 배경 위에서 한 단계 밝은 면 */
+  box-shadow: 0 12px 32px rgba(3, 6, 18, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+/* 제목: 아이콘 없이 흰색 굵은 글씨로, 아래 항목보다 한 단계 크게 */
+.law-summary-kicker {
+  margin: 0 0 14px;
+  color: var(--law-on-dark);
+  font-size: 16.5px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+}
+
+/* 비슷한 점: 박스 없이 체크 + 글자로 한 줄씩 (판례를 바꾸면 살짝 반짝) */
+.law-match-factors {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: law-sticky-flash 0.6s ease;
+}
+.law-match-factors li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-white-a92);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* 블루 체크 표시 (CheckIcon, 원 없이 체크만) */
+.law-check {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--law-blue);
+}
+/* 어두운 패널 위 체크는 한 단계 밝은 블루로 */
+.law-match-factors .law-check {
+  color: var(--color-blue-soft);
+}
+/* 판단 요지는 글이 두 줄로 넘어갈 수 있어 첫 줄 가운데에 맞춤 (17px × 줄 높이 1.7 ≈ 29px) */
+.law-details-points .law-check {
+  margin-top: 5.5px;
+}
+
+/* 좁은 화면 전용: 선택한 카드 바로 아래에 끼워 넣는 같은 박스 (넓은 화면에서는 숨김) */
+.law-inline-summary {
+  display: none;
+}
+
+/* 판례 활용 안내: 상자 없이 ⓘ 아이콘 + 옅은 회색 한 줄 */
+.law-guide {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 2px 0 0;
+  padding: 0 4px;
+  color: rgba(222, 230, 248, 0.58);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.law-guide svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-top: 2px; /* 첫 줄 글자 가운데에 맞춤 */
+}
+
+/* ---------- 행동 버튼: "내 사고와 비교하기" 하나만 (판례 목록 아래 가운데) ----------
+ * 평소엔 판례 목록 바로 아래 제자리, 상세 보기로 아래로 밀려나면 화면 아래 16px에 붙어 따라옴
+ * (위 구간 안에서만 따라와서 법적 고지는 가리지 않음) */
+.law-sticky {
+  position: sticky;
+  z-index: 40; /* 메뉴 바(50)·팝업(100) 아래 */
+  bottom: 16px;
+  /* 가운데 칸 = 비교 버튼 (항상 화면 가운데), 오른쪽 칸 = 분석 결과 바로가기 (나타나도 비교 버튼이 밀리지 않음) */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-top: 28px;
+  pointer-events: none; /* 버튼 양옆 빈 곳은 뒤의 카드를 그대로 누를 수 있게 */
+}
+.law-sticky .law-sticky-button {
+  grid-column: 2;
+  pointer-events: auto;
+}
+
+/* 분석 결과 바로가기: 비교 버튼과 같은 높이·모서리지만 우선순위는 낮게
+   (블루 채움·빛 대신 페이지 배경과 같은 진한 남색 + 옅은 흰 테두리, 화살표는 테두리만 있는 원)
+   바탕을 불투명하게 해서, 상세 보기로 화면 아래에 붙어 밝은 카드 위를 지나가도 잘 보이게 함 */
+.law-result-link {
+  /* 브라우저 창 오른쪽 아래 구석에 고정 (판례를 선택했을 때만 나타남, 스크롤과 상관없이 같은 자리) */
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 45; /* 비교 바(40) 위, 메뉴 바(50)·팝업(100) 아래 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: 56px; /* 한 줄 문구 + 글자 길이만큼의 폭 */
+  padding: 0 20px;
+  border: 1px solid var(--color-white-a22);
+  border-radius: 16px;
+  background: var(--law-band-joint);
+  box-shadow: 0 8px 20px rgba(3, 6, 18, 0.3); /* 카드 위에 떠 있을 때 경계가 보이게 (블루 빛은 없음) */
+  color: var(--color-white);
+  text-decoration: none;
+  pointer-events: auto;
+  animation: law-result-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.law-result-link strong {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap; /* "분석 결과 바로가기" 한 줄 */
+}
+/* 화살표만 (원 없이) */
+.law-result-link svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.18s ease;
+}
+.law-result-link:hover {
+  border-color: var(--color-white-a50);
+  /* 남색 위에 옅은 흰빛을 겹쳐 살짝 밝게 (불투명 유지) */
+  background: linear-gradient(var(--color-white-a08), var(--color-white-a08)), var(--law-band-joint);
+  transform: translateY(-2px);
+}
+.law-result-link:hover svg {
+  transform: translateX(3px);
+}
+.law-result-link:focus-visible {
+  outline: 3px solid var(--color-white-a60);
+  outline-offset: 3px;
+}
+@keyframes law-result-in {
+  from {
+    opacity: 0;
+    translate: -10px 0;
+  }
+}
+@keyframes law-sticky-flash {
+  from {
+    opacity: 0.3;
+    transform: translateY(4px);
+  }
+}
+.law-sticky-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 330px;
+  min-height: 74px;
+  padding: 0 32px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font: inherit;
+  font-size: 20px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+/* intro 주 버튼과 같은 그림자와 호버 시 빛 고리 효과 */
+.law-sticky.is-active .law-sticky-button {
+  box-shadow: 0 14px 34px rgba(47, 85, 200, 0.45);
+}
+.law-sticky.is-active .law-sticky-button:hover:not(:disabled) {
+  animation: law-cta-glow 2.8s ease-out infinite;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(47, 85, 200, 0.55);
+}
+@keyframes law-cta-glow {
+  0% {
+    box-shadow:
+      0 14px 34px rgba(47, 85, 200, 0.45),
+      0 0 0 0 rgba(111, 155, 255, 0.55);
+  }
+  45%,
+  100% {
+    box-shadow:
+      0 14px 34px rgba(47, 85, 200, 0.45),
+      0 0 0 18px rgba(111, 155, 255, 0);
+  }
+}
+.law-sticky-button:disabled,
+.law-sticky-button:disabled:hover {
+  opacity: 0.6; /* 비활성이어도 "비교할 판례를 선택해 주세요" 안내는 읽히게 */
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.law-sticky-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(var(--color-navy-rgb), 0.4);
+}
+.law-sticky-button span {
+  transition: transform 0.2s ease;
+}
+.law-sticky-button:hover span {
+  transform: translateX(3px);
+}
+
+/* ---------- 비교 팝업: 둥근 흰 카드, 공통점은 블루·차이점은 네이비 ---------- */
+.law-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100; /* 메뉴 바(50) 위 */
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  /* 뒤 화면을 진하게 덮고 흐리게 해서 팝업만 앞으로 떠 보이게 */
+  background: rgba(3, 6, 18, 0.72);
+  backdrop-filter: blur(6px);
+  animation: law-modal-fade 0.18s ease;
+}
+/* 화면 가운데 떠 있는 창: 폭 820px · 넉넉한 안쪽 여백 · 둥근 24px · 크고 진한 그림자 */
+.law-modal {
+  position: relative; /* 오른쪽 위 닫기(×) 기준 */
+  width: min(820px, 100%);
+  max-height: 85vh; /* 넘치면 팝업 안에서만 스크롤 */
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 32px 36px 28px;
+  border: 1px solid var(--color-white-a18); /* 어두운 화면 위에서 팝업 경계가 보이게 */
+  border-radius: 24px;
+  /* 유사 판례 화면과 같은 진한 남색 그라데이션 (내용 박스만 #efeff0 밝은 카드) */
+  background: linear-gradient(180deg, var(--color-navy-950) 0%, var(--color-navy-900) 45%, var(--color-navy-800) 100%);
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 0, 0, 0.3);
+  color: var(--color-text-on-dark);
+  animation: law-modal-rise 0.22s ease;
+}
+.law-modal:focus {
+  outline: none;
+}
+@keyframes law-modal-fade {
+  from { opacity: 0; }
+}
+@keyframes law-modal-rise {
+  from { opacity: 0; transform: translateY(12px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .law-sticky.is-active .law-sticky-button:hover:not(:disabled),
+  .law-modal-backdrop,
+  .law-modal,
+  .law-case,
+  .law-sticky-button span,
+  .law-result-link,
+  .law-result-link svg,
+  .law-analysis,
+  .law-match-factors,
+  .law-details-collapse,
+  .law-case-details,
+  .law-case-row::before,
+  .law-detail-button,
+  .law-detail-slot,
+  .law-case-metrics,
+  .law-sticky-button {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* 제목 ……… PDF 다운로드 · 닫기 (한 줄, 제목 줄 높이에 맞춤 / 좁으면 버튼이 아래 줄로) */
+.law-modal-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-white-a14);
+}
+.law-modal-kicker {
+  margin: 0 0 6px;
+  padding-right: 40px; /* 오른쪽 위 닫기(×)와 겹치지 않게 */
+  color: var(--color-blue-pale);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.law-modal-header h2 {
+  margin: 0;
+  color: var(--color-text-on-dark);
+  font-size: clamp(24px, 3.2vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.35;
+}
+.law-modal-vs {
+  color: var(--color-white-a50);
+  font-weight: 500;
+  font-style: italic;
+}
+.law-modal-close {
+  /* 일반적인 팝업 닫기: 오른쪽 위 구석, 바탕 없는 작은 선 × (누르는 영역은 36px) */
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-white-a60);
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+.law-modal-close svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.law-modal-close:hover {
+  background: var(--color-white-a08);
+  color: var(--color-white);
+}
+.law-modal-close:focus-visible {
+  outline: 2px solid var(--color-white-a60);
+  outline-offset: 2px;
+}
+
+.law-modal-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 18px;
+}
+/* 공통점 / 차이점 한 열: 감싸는 박스 없이 소제목 + 내용 박스 목록 (색은 소제목·강조 글씨에만) */
+.law-modal-col {
+  --tone: var(--law-blue); /* 밝은 내용 박스 안 강조 글씨 */
+  --tone-bar: var(--law-blue); /* 소제목 앞 세로 막대 */
+}
+.law-modal-col.is-diff {
+  --tone: var(--law-navy-soft);
+  --tone-bar: var(--color-blue-pale);
+}
+/* 소제목: 앞 4px 세로 막대(공통점 블루 · 차이점 연한 블루) + 흰 굵은 글씨 + 옅은 개수 */
+.law-modal-col h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: var(--color-text-on-dark);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.law-modal-col h3::before {
+  content: "";
+  flex: none;
+  width: 4px;
+  height: 22px;
+  border-radius: 2px;
+  background: var(--tone-bar);
+}
+.law-modal-count {
+  color: var(--color-white-a50);
+  font-size: 17px;
+  font-weight: 700;
+}
+.law-modal-col ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* 항목마다 작은 카드: 팝업과 같은 #efeff0 바탕이라 옅은 테두리 + 그림자로 구분 */
+.law-modal-col li {
+  padding: 11px 13px;
+  border: 1px solid rgba(var(--color-law-panel-rgb), 0.1);
+  border-radius: 10px;
+  background: var(--color-card-surface);
+  box-shadow: 0 4px 12px rgba(25, 35, 70, 0.05);
+}
+.law-modal-col li > strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--law-ink);
+  font-size: 19px;
+}
+.law-modal-col li p {
+  margin: 0;
+  color: var(--color-law-modal-text);
+  font-size: 17.5px;
+  line-height: 1.65;
+}
+.law-modal-col li p strong {
+  color: var(--tone);
+}
+
+/* 제목 줄 오른쪽 끝: PDF 다운로드 · 닫기 */
+.law-modal-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+/* PDF 다운로드: 흰 팝업 위에서도 보이게 남색 테두리 + 남색 글씨,
+   마우스를 올리면 남색으로 채움 ("확인"보다 한 단계 낮게) */
+.law-modal-download {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 18px;
+  border: 1.5px solid var(--color-white-a60);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-on-dark);
+  font: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+.law-modal-download:hover {
+  border-color: var(--color-card-surface);
+  background: var(--color-card-surface);
+  color: var(--law-navy);
+}
+.law-modal-download:focus-visible {
+  outline: 3px solid var(--color-white-a60);
+  outline-offset: 2px;
+}
+
+.law-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+/* 확인: 블루 채움만 (그림자·떠오름·빛 고리 없이), 마우스를 올리면 블루가 한 단계 진해짐 */
+.law-modal-confirm {
+  min-width: 100px;
+  min-height: 44px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+.law-modal-confirm:hover {
+  background: var(--color-blue-royal-strong);
+}
+.law-modal-confirm:focus-visible {
+  outline: 3px solid var(--color-white-a60);
+  outline-offset: 3px;
+}
+
+/* PDF 다운로드(인쇄): 팝업 내용만 출력 */
+@media print {
+  .law-page:has(.law-modal-backdrop) > :not(.law-modal-backdrop),
+  .law-page:has(.law-modal-backdrop)::before {
+    display: none !important;
+  }
+  .law-modal-backdrop {
+    position: static;
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+  }
+  .law-modal {
+    max-height: none;
+    overflow: visible;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--law-ink);
+  }
+  /* 인쇄: 어두운 바탕 없이 진한 글씨로 */
+  .law-modal-header h2 {
+    color: var(--law-ink);
+  }
+  .law-modal-kicker,
+  .law-modal-col h3 {
+    color: var(--law-navy);
+  }
+  .law-modal-close,
+  .law-modal-tools,
+  .law-modal-footer {
+    display: none;
+  }
+}
+
+/* report와 같은 화면 폭의 하단 안내 및 좌우 여백 */
+.law-band-sand .law-band-inner {
+  width: 100%;
+  padding-inline: 40px;
+}
+@media (max-width: 900px) {
+  .law-band-sand .law-band-inner {
+    padding-inline: 20px;
+  }
+}
+
+/* ---------- 넓은 화면: 제목 · 내 사고 · 판례 카드를 화면 가운데에 ----------
+ * 판례 카드 열을 화면 정가운데에 두고, "비슷한 점" 박스는 그 오른쪽 빈 곳에 띄움
+ * (양옆 열을 같은 폭으로 둬서 가운데 열이 정확히 가운데에 오게 함) */
+@media (min-width: 1280px) {
+  .law-page {
+    /* 가운데 열 폭: 최대 960px, 양옆에 박스(240px 이상) + 간격 + 화면 여백이 남도록 */
+    --law-center: min(960px, calc(100vw - 568px));
+  }
+  /* 카드가 넓어진 만큼 법원 이름·숫자도 한 단계 크게 */
+  .law-court strong {
+    font-size: 23px;
+  }
+  .law-case-metrics dd {
+    font-size: 28px;
+  }
+  .law-case-row {
+    padding-block: 24px;
+  }
+  .law-section-title,
+  .law-my-accident {
+    width: var(--law-center);
+    margin-inline: auto;
+  }
+  .law-grid {
+    /* 안쪽 폭(1320px)을 넘어 화면 양끝 24px 앞까지 넓혀서 오른쪽 박스 자리를 확보 */
+    margin-inline: calc(50% - 50vw + 24px);
+    grid-template-columns: minmax(0, 1fr) var(--law-center) minmax(0, 1fr);
+  }
+  .law-case-column {
+    grid-column: 2;
+  }
+  .law-analysis {
+    grid-column: 3;
+    max-width: min(390px, 100%);
+  }
+}
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 820px) {
+  .law-band-inner {
+    padding-inline: 22px;
+  }
+  .law-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(250px, 0.8fr);
+    gap: 14px;
+  }
+  .law-case-row {
+    padding-inline: 16px;
+  }
+  .law-case-details {
+    padding-inline: 16px;
+  }
+}
+
+@media (max-width: 680px) {
+  .law-band-inner {
+    padding-inline: 16px;
+  }
+  .law-band-warm {
+    padding-top: 88px;
+  }
+  .law-grid {
+    grid-template-columns: 1fr;
+  }
+  /* 좁은 화면: 오른쪽 박스 대신 선택한 카드 바로 아래에 보여 줌 (꼬리는 위쪽을 가리킴) */
+  .law-analysis {
+    display: none;
+  }
+  .law-inline-summary {
+    display: block;
+    margin-top: -2px;
+  }
+  /* 좁은 화면: 번호 · 법원 이름 · 상세 보기 한 줄, 핵심 수치는 그 아래 */
+  .law-case-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    row-gap: 6px;
+    padding-block: 16px;
+  }
+  .law-case-metrics {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    padding-right: 0;
+    border-right: 0;
+  }
+  .law-case-metrics > div {
+    text-align: left;
+  }
+  .law-court strong {
+    font-size: 18px;
+  }
+  .law-details-flow li {
+    grid-template-columns: 86px minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+  .law-details-flow li:not(:last-child)::after {
+    left: 43px;
+  }
+  .law-modal {
+    padding: 22px 18px 18px;
+  }
+  .law-modal-columns {
+    grid-template-columns: 1fr;
+  }
+  /* 행동 버튼: 화면 폭 가득 */
+  .law-sticky {
+    bottom: 10px;
+  }
+  .law-sticky-button {
+    min-width: 280px; /* 좁은 화면도 가로로 길게 늘이지 않음 */
+  }
+  .law-sticky-button {
+    min-height: 64px;
+    padding: 0 16px;
+    font-size: 17px;
+  }
+  .law-sticky .law-sticky-button {
+    min-width: min(310px, 100%);
+    min-height: 68px;
+    padding: 0 20px;
+    font-size: 18px;
+  }
+  /* 좁은 화면: 분석 결과 바로가기는 비교 버튼 바로 아래 */
+  .law-sticky {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 10px;
+  }
+  .law-sticky .law-sticky-button,
+  .law-result-link {
+    grid-column: 1;
+  }
+  .law-result-link {
+    position: static; /* 좁은 화면은 구석 고정 대신 비교 버튼 아래 (화면을 가리지 않게) */
+    justify-self: center;
+    width: min(310px, 100%);
+    min-height: 56px;
+  }
+}
+
+@media (max-width: 420px) {
+  .law-page .tn {
+    padding-inline: 13px;
+  }
+  .law-page .tn-menu {
+    gap: 9px;
+  }
+  .law-page .tn-menu a {
+    font-size: 11px;
+  }
+}
+
+/* 스크롤 중에도 밝은 카드가 비치지 않는 네이비 상단 메뉴 */
+.law-page .tn {
+  background: var(--law-bg-top);
+  border-bottom: 0;
+  backdrop-filter: none;
+  text-shadow: 0 1px 4px var(--color-nav-text-shadow);
+}
+
+/* ---------- 판례가 없을 때, 비교 팝업의 안내 문장, 출처 링크 ---------- */
+.law-empty {
+  padding: 22px 24px;
+  border: 1px solid var(--law-line, rgba(255, 255, 255, 0.25));
+  border-radius: 6px;
+  line-height: 1.7;
+}
+.law-empty h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+.law-empty p {
+  margin: 0;
+  opacity: 0.85;
+}
+.law-modal-note {
+  margin: 0 0 14px;
+  opacity: 0.8;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.law-details-source a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* AI 가 정리한 판례 설명: 안내 문구, 판단 요지 목록, 판결문 인용 */
+.law-ai-badge {
+  margin: 0 0 4px;
+  color: var(--law-text);
+  opacity: 0.75;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.law-details-points {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.law-details-points p {
+  margin: 0;
+  color: var(--law-text);
+  font-size: 17px;
+  line-height: 1.7;
+}
+.law-details-law-easy {
+  opacity: 0.85;
+  font-size: 15.5px;
+}
+.law-quote {
+  margin: 6px 0 0;
+  padding-left: 10px;
+  border-left: 3px solid rgba(120, 140, 190, 0.45);
+  color: inherit;
+  opacity: 0.7;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.law-modal-col li p.law-quote {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: inherit;
+}

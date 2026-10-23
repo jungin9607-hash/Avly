@@ -1,0 +1,65 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: avly_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: avly
+      POSTGRES_DB: avly
+    volumes:
+      - avly_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d avly"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+    container_name: avly_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    # DB 주소는 backend/.env 의 DATABASE_URL 을 그대로 쓴다. 팀 공용 DB 또는 compose 의 로컬 db 서비스 중 .env 에 적은 쪽에 연결된다.
+    #   (AUTO_MIGRATE 를 정하지 않으면: 로컬 db 서비스(호스트 이름 db)일 때만 시작할 때 스키마를 만든다. 공용 DB 는 바꾸지 않는다)
+    depends_on:
+      db:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.worker
+      args:
+        INSTALL_YOLO: ${INSTALL_YOLO:-false}
+    container_name: avly_worker
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    # ENGINE / REDACTION / CASE_COMPARE 는 backend/.env 를 그대로 사용한다.
+    # environment 에 기본값을 중복 지정하면 env_file 의 실제 분석 설정을 덮어쓴다.
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: avly_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - ./docs/review/review.html:/review/review.html:ro   # 검수 페이지를 http://localhost:5173/review.html 로 연다(개발 서버 전용)
+      - ./docs/review/case-review.html:/review/case-review.html:ro   # 판례 검수: http://localhost:5173/case-review.html
+    depends_on:
+      - backend
+
+volumes:
+  avly_db:

@@ -1,0 +1,131 @@
+# Avly Backend (v0.4)
+
+FastAPI API 서버와 **worker**(분석 작업 실행기)로 이루어져 있습니다. 데이터는 PostgreSQL에 저장됩니다.
+
+- API 명세: [docs/api.md](../docs/api.md)
+- 서비스 범위와 결정 사항: [docs/prd-reference.md](../docs/prd-reference.md)
+- 분석 모델(`avly` 패키지): [model/avly/README.md](model/avly/README.md)
+
+## 구성
+
+```
+브라우저 ─▶ backend (FastAPI)  ─▶ PostgreSQL ◀─ worker ─▶ avly 모델 / OpenAI / 판례·법령 API
+              요청 접수, 조회        상태·결과·job      영상 처리, 분석, 결과 계산
+```
+
+API 서버는 분석을 직접 하지 않고 DB의 `job` 표에 일을 넣습니다. worker가 그 표를 보고 한 번에 하나씩 처리합니다.
+(avly 모델이 전역 상태를 쓰기 때문에 worker는 한 번에 한 작업만 합니다.)
+
+## 실행
+
+프로젝트 루트에서 (db, backend, worker, frontend가 함께 뜹니다):
+
+```bash
+docker compose up --build
+```
+
+분석 모드는 **`backend/.env`의 `ENGINE`, `REDACTION`, `CASE_COMPARE`**를 그대로 사용합니다. 예제 설정은 실제 분석(`avly`, `yolo`)입니다.
+키 없이 화면 흐름만 시험하려면 `.env`에 `ENGINE=fake`, `REDACTION=dev_copy`를 명시하세요. 이 모드에서는 실제 AI 분석도, 실제 비식별화도 하지 않습니다.
+
+| 용도 | 주소 |
+| --- | --- |
+| Swagger | http://localhost:8000/docs |
+| 상태 확인 | http://localhost:8000/health, /health/db |
+| 프론트 | http://localhost:5173 |
+
+## 데이터베이스: 공용 DB와 로컬 DB
+
+`backend/.env`의 `DATABASE_URL` 한 줄로 정합니다. `docker compose`도 이 값을 그대로 씁니다.
+
+| | 팀 공용 DB (Supabase) | 로컬 DB |
+| --- | --- | --- |
+| 주소 | `.env.example`의 주소에 `<비밀번호>`를 채운다 (비밀번호는 팀 채널) | `postgresql://postgres:avly@db:5432/avly` |
+| 데이터 | 팀원이 같이 본다: 판례 저장분, 판례 AI 비교 결과, 분석 결과 | 내 PC에만 쌓인다 |
+| 어울리는 일 | QA, 결과 공유, 평가 영상 결과 모으기 | 혼자 개발, **개인정보가 든 실제 영상**으로 시험 |
+| 스키마 | 이미 만들어져 있다. 자동으로 바꾸지 않는다 | 시작할 때 자동으로 만든다 |
+
+**여러 사람이 같은 DB를 써도 서로 방해하지 않게** 작업 대기열(`job`)에 이 PC의 이름표(`backend/uploads/.instance_id`)를 적습니다. worker는 자기 PC가 등록한 작업만 가져가고, 만료된 영상도 자기 PC 것만 정리합니다. (영상 파일은 각자의 PC에만 있기 때문입니다.) 새 칸이나 마이그레이션이 필요 없는 방식입니다.
+
+**마이그레이션(DB 구조 변경)** 은 공용 DB에서는 자동으로 적용하지 않습니다. 새 파일이 `migrations/`에 추가되면 한 사람이 팀에 알린 뒤 적용합니다.
+
+```bash
+docker compose exec backend python -m app.migrate           # 어느 DB에 연결되는지, 적용 안 된 파일이 무엇인지 보여 줌 (DB는 바뀌지 않음)
+docker compose exec backend python -m app.migrate --apply   # 대기 중인 파일을 적용
+```
+
+## 환경변수 (`backend/.env`, 예시는 `.env.example`)
+
+| 이름 | 기본값 | 설명 |
+| --- | --- | --- |
+| `DATABASE_URL` | (필수) | PostgreSQL 주소. compose도 이 값을 그대로 쓴다. 팀 공용 DB 또는 로컬 db(`postgresql://postgres:avly@db:5432/avly`) 중 고른다 |
+| `AUTO_MIGRATE` | (정하지 않음) | 시작할 때 `migrations/*.sql` 자동 적용. 정하지 않으면 **로컬 db(호스트 `db`)에서만 켜지고 공용 DB는 건드리지 않는다.** 공용 DB는 `python -m app.migrate`로 적용한다 |
+| `APP_SECRET` | 개발용 값 | 영상 서명 URL 비밀값. 운영에서는 반드시 바꾼다 |
+| `SESSION_TTL_HOURS` | `2` | 세션 길이. 사고를 만든 때부터 이 시간이 지나면 사용자는 결과를 더 볼 수 없고(즉시 410), 원본 영상과 저장 동의 없는 비식별 영상, **저장 동의 없는 사용자의 분석 결과**를 삭제한다 |
+| `RETENTION_DAYS` | `90` | 영상 저장에 동의한 사용자의 비식별 영상과 분석 결과(AI 분석, 사용자가 확정한 값)를 보관하는 날 수. 세션이 끝난 뒤에는 화면에 보여 주지 않고 보관만 한다 |
+| `CASE_COMPARE` | `auto` | 판례 비교 방식. `auto`는 `ENGINE=avly`이고 `OPENAI_API_KEY`가 있으면 AI, 아니면 규칙. `ai`/`rule`로 고정할 수 있다 |
+| `UNSUPPORTED_RETENTION_HOURS` | `24` | 차대차가 아니라 분석하지 않은 영상(원본·비식별본)을 저장 동의와 상관없이 이 시간 뒤 삭제한다 |
+| `AVLY_REQUIRE_RULE_REVIEW` | `1` | `1`이면 사람이 확인한 가감요소 유형(`reviewed: true`)만 계산·질문에 쓴다. 개발에서 검수 전 유형도 전부 보려면 `0`. 현황은 `python -m app.review_status` |
+| `ENGINE` | `avly` | `fake`(키 없이 시험) / `replay`(저장 결과 재생) / `avly`(실제 분석) |
+| `REDACTION` | `yolo` | `yolo`(번호판·사람 탐지, 운영) / `dev_copy`(가리지 않고 복사만, **운영 금지**) |
+| `OPENAI_API_KEY` | | `ENGINE=avly`에 필요 |
+| `law_api` | | 판례·법령 API 키. 없으면 판례 보충을 건너뛴다 |
+| `CORS_ORIGINS`, `UPLOAD_DIR`, `MAX_UPLOAD_SIZE_MB`, `ALLOWED_VIDEO_EXTENSIONS` | | 기존과 같다 |
+
+**실제 분석으로 돌리려면:** `backend/.env`에 `OPENAI_API_KEY`, `law_api`를 넣고 `ENGINE=avly`, `REDACTION=yolo`로 바꾼 뒤
+worker 이미지를 YOLO 포함으로 빌드한다: `INSTALL_YOLO=true docker compose up --build worker`.
+(이 조합은 아직 실제 영상으로 끝까지 검증하지 못했다.)
+
+설정을 바꾼 뒤에는 `docker compose up -d --force-recreate worker`로 worker 컨테이너를 다시 만드세요 (`restart`만으로는 환경변수가 바뀌지 않습니다).
+적용 모드는 `docker compose exec worker python -c 'from app.config import settings; print(settings.engine, settings.redaction)'`로 확인할 수 있습니다.
+분석 조회 응답의 `engine`은 해당 결과를 만든 엔진입니다. `fake`/`replay` 결과는 화면에도 시험용으로 표시하며, 설정을 바꿔도 이전 결과가 실제 분석으로 바뀌지는 않습니다.
+
+실제 분석의 JSON·보고서·관찰 캐시는 사고 폴더의 임시 디렉터리에서 만들고 DB에 결과를 옮긴 뒤 삭제합니다. 실패 시에도 삭제하며, 강제 종료로 남은 파일은 비식별 영상 만료 시 정리합니다.
+변경 전에 공용 `uploads/_model_results` 폴더에 생성된 기존 파일에는 이 삭제 정책이 소급 적용되지 않습니다. 기존 보관 자료인지 확인한 뒤 별도로 정리해야 합니다.
+
+개발 중 `ENGINE=fake`에서는 영상 파일 첫 줄의 지시로 상황을 만들 수 있다. 목록은 [docs/api.md](../docs/api.md#개발테스트).
+
+## 테스트
+
+DB 테스트는 **실제 PostgreSQL**이 필요하고, 테스트마다 `public` 스키마를 비우므로 **빈 DB**를 쓰세요. 공용 DB를 가리키면 안 됩니다.
+
+```bash
+cd backend
+pip install -r requirements.txt -r requirements-worker.txt
+TEST_DATABASE_URL=postgresql://postgres:x@localhost:5432/postgres \
+PYTHONPATH=.:model python -m unittest discover -s tests -t . -v     # API, worker, 판례, 마이그레이션 등
+PYTHONPATH=.:model python -m unittest model.avly.test_explain       # 쉬운 말 설명
+python -m unittest plate.test_redact                                 # 비식별화 (가짜 탐지기)
+```
+
+`TEST_DATABASE_URL`이 없으면 DB 테스트는 건너뜁니다. 실제 compose 스택을 HTTP로 확인하는 스크립트: `python tests/e2e_smoke.py`.
+
+## 폴더 구조
+
+```
+backend/
+  main.py             앱 조립: CORS, 라우터, 오류 처리
+  app/
+    config.py         환경변수 설정
+    db.py             연결, 마이그레이션 실행 (모르는 DB에는 적용하지 않는 안전장치 포함)
+    repository.py     DB 읽기·쓰기 (SQL)
+    catalog.py        과실표 선택지, 가감요소 질문
+    security.py       세션(X-Session-Id), 서명 영상 URL
+    storage.py        영상 파일 저장·삭제
+    schemas.py, presenters.py, status.py, errors.py, deps.py
+    routers/          accidents, analyses, catalog, media
+    worker/           runner(작업 반복), engines(fake/replay/avly), finalize(결과 계산),
+                      cases(판례 조회), compare(규칙 비교), ai_compare(AI 비교와 검증), redaction, cleanup
+  migrations/         0001_initial.sql, 0002_job.sql, 0003_case_ai.sql (적용 기록: schema_migration 표)
+  plate/              번호판·사람 비식별화 (redact.py)
+  model/avly/         분석 모델 패키지
+  tests/              API, worker, 판례, 마이그레이션 테스트와 e2e_smoke.py
+```
+
+DB 설계 배경은 [docs/db/schema-v0.4-proposal.md](../docs/db/schema-v0.4-proposal.md)입니다. 설계 초안이 `migrations/0001`이 되었고,
+작업 큐(`job` 표, `0002`)와 `finalize` 단계가 추가되었습니다.
+
+## 아직 안 된 것
+
+- 서버 PDF (`POST .../reports`는 501). PDF 저장은 결과 화면의 "보고서 보기·PDF 저장" → 보고서 화면(`/analysis/{id}/report`, A4 문서 형식)에서 브라우저 인쇄로 한다. 보기: [docs/review/report-sample.pdf](../docs/review/report-sample.pdf)(시험용 데이터)
+- 실제 OpenAI 분석, 판례·법령 API, worker 이미지의 실제 YOLO 모델은 키·영상이 없어 **end-to-end로 검증하지 못함**
+- 가감요소는 133개 유형 중 122개를 등록했다(기존 7개 + PDF에서 뽑은 115개). 나머지 11개는 PDF와 CSV의 기본 비율·조건이 달라 일부러 뺐고, 새로 등록한 115개 유형의 규칙 888개는 **전부 사람 검수 전**이다. [docs/review/pdf-adjustment-review.md](../docs/review/pdf-adjustment-review.md)

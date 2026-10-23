@@ -1,0 +1,28 @@
+/* 어두운 배경(결과·타임라인 화면)에서 쓰는 안내 상자 */
+.situation-check {
+  box-sizing: border-box;
+  margin: 0 0 20px;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 196, 87, 0.55);
+  border-left-width: 3px;
+  border-radius: 6px;
+  background: rgba(255, 196, 87, 0.08);
+  color: rgba(238, 243, 255, 0.92);
+  font-size: 15px;
+  line-height: 1.65;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.situation-check strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #ffd27a;
+  font-size: 16px;
+}
+.situation-check p {
+  margin: 0 0 8px;
+}
+.situation-check ul {
+  margin: 0;
+  padding-left: 18px;
+}

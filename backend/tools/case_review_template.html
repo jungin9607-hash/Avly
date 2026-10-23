@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>에블리 판례 검수</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --line:#dfe3e8; --text:#1f2933; --muted:#667085; --ok:#12805c; --okbg:#e5f6ef; --bad:#c2371f; --badbg:#fdeeea; --warn:#9a6700; --warnbg:#fff6df; --accent:#2f5bea; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 system-ui,"Malgun Gothic","Apple SD Gothic Neo",sans-serif; }
+  header { position:sticky; top:0; z-index:5; background:#fff; border-bottom:1px solid var(--line); padding:12px 20px; }
+  .bar { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; max-width:1000px; margin:0 auto; }
+  h1 { font-size:18px; margin:0 12px 0 0; }
+  input[type=text], textarea { font:inherit; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--text); }
+  textarea { width:100%; min-height:48px; resize:vertical; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--text); padding:6px 12px; border-radius:8px; }
+  button:hover { background:#f0f3f7; }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:700; }
+  main { max-width:1000px; margin:0 auto; padding:16px 20px 80px; }
+  .help { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin-bottom:14px; }
+  .help ol { margin:6px 0 0; padding-left:20px; }
+  details.type { background:var(--card); border:1px solid var(--line); border-radius:12px; margin:0 0 12px; }
+  details.type > summary { list-style:none; cursor:pointer; padding:12px 16px; display:flex; flex-wrap:wrap; gap:6px 12px; align-items:center; }
+  details.type > summary::-webkit-details-marker { display:none; }
+  .body { padding:6px 16px 16px; border-top:1px solid var(--line); }
+  .num { font-weight:800; }
+  .badge { font-size:12px; padding:2px 8px; border-radius:999px; background:#eef1f5; color:var(--muted); }
+  .badge.ok { background:var(--okbg); color:var(--ok); }
+  .muted { color:var(--muted); font-size:13px; }
+  .case { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:10px 0; }
+  .case p { margin:3px 0; }
+  .q { display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center; margin:8px 0 2px; }
+  .q > span { min-width:150px; font-weight:700; font-size:14px; }
+  .q button.sel-ok { background:var(--okbg); border-color:var(--ok); color:var(--ok); font-weight:700; }
+  .q button.sel-bad { background:var(--badbg); border-color:var(--bad); color:var(--bad); font-weight:700; }
+  .q button.sel-skip { background:var(--warnbg); border-color:var(--warn); color:var(--warn); font-weight:700; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <h1>에블리 판례 검수</h1>
+    <label>검수자 이름 <input type="text" id="reviewer" placeholder="예: 김검수" size="12"></label>
+    <span id="progress" style="font-weight:700"></span>
+    <button id="btn-import">이어서 하기</button>
+    <button class="primary" id="btn-export">내보내기</button>
+    <input type="file" id="file-import" accept="application/json,.json" hidden>
+  </div>
+</header>
+<main>
+  <section class="help">
+    <strong>법률 지식이 없어도 돼요. 판결이 옳은지가 아니라 &ldquo;자료가 출처와 맞는지&rdquo;만 봅니다.</strong>
+    <ol>
+      <li><b>실제로 있는 판례인가요?</b> 법원·날짜·사건번호를 <a href="https://www.law.go.kr" target="_blank" rel="noreferrer">국가법령정보센터</a> 판례 검색이나 아래 출처 링크에서 찾아 보세요.</li>
+      <li><b>우리 요약이 출처와 뜻이 같은가요?</b> 출처(손해보험협회 도표) 문구와 카드의 &ldquo;요약&rdquo;을 비교합니다.</li>
+      <li><b>이 사고 유형과 맞는 사례인가요?</b> 판례 속 차들의 움직임이 위에 적힌 A/B 차량의 진행과 같은지 봅니다. (예: &lsquo;직진 출차&rsquo; 유형에 &lsquo;후진 출차&rsquo; 사례가 붙어 있으면 &ldquo;안 맞아요&rdquo;)</li>
+      <li>세 가지를 다 확인하면 <b>내보내기</b>로 파일(.json)을 받아 보내 주세요. 모르겠으면 &ldquo;모르겠어요&rdquo;를 누르면 반영하지 않고 이슈로 남아요.</li>
+    </ol>
+  </section>
+  <div id="types"></div>
+</main>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+var CHECKS = [["exists", "실제로 있는 판례인가요?"], ["summary", "요약이 출처와 같은가요?"], ["fits", "이 사고 유형과 맞나요?"]];
+function caseDone(s) { return !!(s && s.exists && s.summary && s.fits); }
+function buildExport(data, state, reviewer, date) {
+  var out = { format: "avly-case-review-v1", reviewer: reviewer, date: date, cases: {} };
+  data.types.forEach(function (t) {
+    t.cases.forEach(function (c) {
+      var s = state.cases[c.key];
+      if (!s) return;
+      var rec = {};
+      CHECKS.forEach(function (k) { if (s[k[0]]) rec[k[0]] = s[k[0]]; });
+      if (s.note) rec.note = s.note;
+      if (Object.keys(rec).length) out.cases[c.key] = rec;
+    });
+  });
+  return out;
+}
+if (typeof module !== "undefined") { module.exports = { buildExport: buildExport, caseDone: caseDone }; }
+</script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById("data").textContent);
+  var KEY = "avly-case-review-v1";
+  var state = { reviewer: "", cases: {} };
+  try { var saved = JSON.parse(localStorage.getItem(KEY) || "null"); if (saved) state = Object.assign(state, saved); } catch (e) {}
+  var open = {};
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} updateProgress(); }
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { if (k === "text") e.textContent = attrs[k]; else if (k === "class") e.className = attrs[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), attrs[k]); else e.setAttribute(k, attrs[k]); });
+    (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function cs(key) { return state.cases[key] || (state.cases[key] = {}); }
+  var total = 0; data.types.forEach(function (t) { total += t.cases.length; });
+  function updateProgress() { var d = 0; data.types.forEach(function (t) { t.cases.forEach(function (c) { if (caseDone(state.cases[c.key])) d++; }); }); document.getElementById("progress").textContent = "확인 " + d + " / " + total; }
+
+  function caseCard(c) {
+    var s = cs(c.key);
+    var box = el("div", { class: "case" }, [
+      el("p", {}, [el("b", { text: [c.court, c.date, c.case_number].filter(Boolean).join(" · ") }), el("span", { class: "badge" + (c.verified ? " ok" : ""), text: c.verified ? "이미 검수됨" : "검수 전" })]),
+      el("p", { text: "요약: " + c.summary }),
+      c.limit ? el("p", { class: "muted", text: "적용 한계: " + c.limit }) : null,
+      el("p", { class: "muted" }, [c.source_kind + " · ", c.source ? el("a", { href: c.source, target: "_blank", rel: "noreferrer", text: "출처 열기" }) : "출처 없음"]),
+    ]);
+    CHECKS.forEach(function (k) {
+      var row = el("div", { class: "q" }, [el("span", { text: k[1] })]);
+      [["ok", "맞아요", "ok"], ["bad", "아니에요", "bad"], ["skip", "모르겠어요", "skip"]].forEach(function (o) {
+        row.appendChild(el("button", { class: s[k[0]] === o[0] ? "sel-" + o[2] : "", text: o[1], onclick: function () { cs(c.key)[k[0]] = o[0]; save(); render(); } }));
+      });
+      box.appendChild(row);
+    });
+    var ta = el("textarea", { placeholder: "메모 (아니에요를 눌렀다면 이유를 한 줄로)" }); ta.value = s.note || ""; ta.addEventListener("input", function () { cs(c.key).note = ta.value; save(); });
+    box.appendChild(ta);
+    return box;
+  }
+  function typeCard(t) {
+    var done = t.cases.filter(function (c) { return caseDone(state.cases[c.key]); }).length;
+    var det = el("details", { class: "type" });
+    if (open[t.id]) det.open = true;
+    det.addEventListener("toggle", function () { open[t.id] = det.open; });
+    det.appendChild(el("summary", {}, [el("span", { class: "num", text: "유형 " + t.id }), el("span", { class: "muted", text: t.place + " · " + t.feature }), el("span", { class: "badge" + (done === t.cases.length ? " ok" : ""), text: done + "/" + t.cases.length + " 확인" })]));
+    var body = el("div", { class: "body" }, [
+      el("p", {}, [el("b", { text: "A 차량: " }), t.a]),
+      el("p", {}, [el("b", { text: "B 차량: " }), t.b]),
+      el("p", { class: "muted", text: "과실표 원문: " + t.original }),
+    ]);
+    t.cases.forEach(function (c) { body.appendChild(caseCard(c)); });
+    det.appendChild(body);
+    return det;
+  }
+  function render() { var root = document.getElementById("types"); root.textContent = ""; data.types.forEach(function (t) { root.appendChild(typeCard(t)); }); updateProgress(); }
+
+  var nameInput = document.getElementById("reviewer"); nameInput.value = state.reviewer || "";
+  nameInput.addEventListener("input", function () { state.reviewer = nameInput.value.trim(); save(); });
+  document.getElementById("btn-export").addEventListener("click", function () {
+    if (!state.reviewer) { alert("먼저 위에 검수자 이름을 적어 주세요."); nameInput.focus(); return; }
+    var d = new Date(), date = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+    var out = buildExport(data, state, state.reviewer, date);
+    if (!Object.keys(out.cases).length) { alert("아직 표시한 항목이 없어요."); return; }
+    var blob = new Blob([JSON.stringify(out, null, 1)], { type: "application/json" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "판례검수결과_" + state.reviewer + "_" + date + ".json"; document.body.appendChild(a); a.click(); a.remove();
+  });
+  document.getElementById("btn-import").addEventListener("click", function () { document.getElementById("file-import").click(); });
+  document.getElementById("file-import").addEventListener("change", function (ev) {
+    var f = ev.target.files[0]; if (!f) return; var rd = new FileReader();
+    rd.onload = function () { try { var imp = JSON.parse(rd.result); Object.keys(imp.cases || {}).forEach(function (k) { state.cases[k] = imp.cases[k]; }); if (imp.reviewer) { state.reviewer = imp.reviewer; nameInput.value = imp.reviewer; } save(); render(); } catch (e) { alert("파일을 읽지 못했어요. 이 페이지에서 내보낸 파일인지 확인해 주세요."); } };
+    rd.readAsText(f); ev.target.value = "";
+  });
+  render();
+})();
+</script>
+</body>
+</html>
