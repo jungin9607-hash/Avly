@@ -178,3 +178,25 @@ body:has(.analysis-results) {
     padding-inline: 8px;
   }
 }
+/* 분석 결과 화면 안(저장·공유 아래)에 들어간 유사 판례: 화면 전체 폭·배경 대신 결과 본문 폭에 맞춘다. */
+.analysis-results .ar-evidence-page .law-page {
+  width: 100%;
+  min-height: 0;
+  margin-inline: 0;
+  background: transparent;
+}
+.analysis-results .ar-evidence-page .law-band-warm {
+  padding: 48px 0 0;
+  background: transparent;
+}
+.analysis-results .ar-evidence-page .law-band-inner {
+  padding-inline: 0;
+}
+/* 판례 안내 문구를 한 줄로 둔다. 넓은 화면에서, 오른쪽 "비슷한 점" 박스가 없을 때(판례를 고르기 전)만 적용한다. */
+@media (min-width: 1280px) {
+  .analysis-results .ar-evidence-page .law-grid:not(:has(.law-analysis)) .law-guide {
+    width: max-content;
+    max-width: none;
+    white-space: nowrap;
+  }
+}

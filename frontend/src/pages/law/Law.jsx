@@ -1,6 +1,6 @@
+import { useLocation } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useNavigationBackdrop from "../common/hooks/useNavigationBackdrop";
-import CaseBasisNotice from "../common/components/CaseBasisNotice";
 import PageHeader from "./components/PageHeader";
 import CaseList, { GuideCard } from "./components/CaseList";
 import SummaryAside, { SummaryCard } from "./components/SummaryAside";
@@ -8,7 +8,6 @@ import StickyCompareBar from "./components/StickyCompareBar";
 import CompareModal from "./components/CompareModal";
 import AnalysisGate from "../common/components/AnalysisGate";
 import { myAccidentPoints, toCaseCards } from "../../api/adapters";
-import { ROUTES } from "../../routes";
 import { EMPTY, SECTION, SUMMARY, GUIDE, STICKY_BAR } from "./lawContent";
 import "./Law.css";
 
@@ -16,12 +15,12 @@ import "./Law.css";
 export default function Law({ analysisId }) {
   return (
     <AnalysisGate analysisId={analysisId} active="유사 판례">
-      {({ analysis }) => <LawView result={analysis.result} analysisId={analysisId} />}
+      {({ analysis }) => <LawView result={analysis.result} />}
     </AnalysisGate>
   );
 }
 
-export function LawView({ result, analysisId }) {
+export function LawView({ result }) {
   const cases = useMemo(() => toCaseCards(result.related_cases), [result]);
   const myAccident = useMemo(() => ({ label: "내 사고", points: myAccidentPoints(result) }), [result]);
   const pageRef = useRef(null);
@@ -32,10 +31,11 @@ export function LawView({ result, analysisId }) {
   const selectedCase = cases.find((item) => item.id === selectedId) ?? null;
   const closeCompare = useCallback(() => setCompareOpen(false), []);
 
-  // 다른 페이지에 갔다 와도 이전 스크롤 위치가 남지 않고 항상 맨 위(처음 화면)에서 시작
+  // 분석 결과 화면 안(저장·공유 아래)에 들어간다. 주소 끝이 #similar-cases(타임라인의 "유사 판례 바로가기")면 이 구간으로 내려온다.
+  const { hash } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    if (hash === "#similar-cases") pageRef.current?.scrollIntoView();
+  }, [hash]);
   // 같은 카드를 다시 누르면 선택 해제 → "비슷한 점" 박스도 사라짐
   const toggleCase = (id) => setSelectedId((current) => (current === id ? null : id));
   const openCompare = () => setCompareOpen(true);
@@ -43,7 +43,7 @@ export function LawView({ result, analysisId }) {
   const summary = selectedCase && <SummaryCard content={SUMMARY} caseItem={selectedCase} />;
 
   return (
-    <div className="law-page" ref={pageRef}>
+    <div className="law-page" id="similar-cases" ref={pageRef}>
       {/* 메뉴 바는 intro와 같은 기본 스타일 (색은 Law.css에서 intro 밤하늘 위 모습과 같게) */}
 
       {/* 위에서 아래로 배경색이 자연스럽게 이어지는 두 구간: 메뉴 바와 이어지는 진한 남색 → 비교 버튼 네이비 */}
@@ -81,16 +81,10 @@ export function LawView({ result, analysisId }) {
               content={STICKY_BAR}
               caseItem={selectedCase}
               onOpen={openCompare}
-              resultTo={ROUTES.report(analysisId)}
             />
           </div>
         </section>
 
-        <section className="law-band law-band-sand">
-          <div className="law-band-inner">
-            <CaseBasisNotice />
-          </div>
-        </section>
       </main>
 
       {/* law-main 밖에 두어 메뉴 바보다 위에 뜨게 */}

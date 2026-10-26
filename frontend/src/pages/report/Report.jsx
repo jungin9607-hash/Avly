@@ -25,9 +25,13 @@ export default function Report({ analysisId }) {
   );
 }
 
-export function ReportView({ analysis, analysisId }) {
+export function ReportView({ analysis, analysisId, similarCases }) {
   const model = useMemo(() => toReportModel(analysis.result, analysisId), [analysis, analysisId]);
-  return model.state === "unresolved" ? <UnresolvedView model={model} analysisId={analysisId} /> : <ResolvedView model={model} analysisId={analysisId} />;
+  return model.state === "unresolved" ? (
+    <UnresolvedView model={model} analysisId={analysisId} similarCases={similarCases} />
+  ) : (
+    <ResolvedView model={model} analysisId={analysisId} similarCases={similarCases} />
+  );
 }
 
 /* ---------- 공통 틀: 메뉴, 배경, 너비 측정 ---------- */
@@ -56,7 +60,7 @@ function ReportFrame({ children }) {
 }
 
 /* ---------- 결과 아래: 상태 안내 · 저장·공유 · 타임라인 바로가기 · 법적 고지 ---------- */
-function ActionsSection({ model, analysisId, summaryText, children }) {
+function ActionsSection({ model, analysisId, summaryText, similarCases, children }) {
   const [toast, setToast] = useState("");
   const navigate = useNavigate();
   const sectionRef = useRef(null);
@@ -116,6 +120,7 @@ function ActionsSection({ model, analysisId, summaryText, children }) {
           {children}
           <SituationCheckNotice check={model.situationCheck} />
           <StatusNotice text={model.state === "partial" ? "" : model.statusText} pending={model.pending} />
+          {similarCases}
           <div className="ar-evidence-head">
             <ReportActions content={REPORT_ACTIONS} onShare={share} onSave={() => navigate(ROUTES.document(analysisId))} onErase={erase} expiresText={expiresText} />
           </div>
@@ -132,7 +137,7 @@ function ActionsSection({ model, analysisId, summaryText, children }) {
 }
 
 /* ---------- 비율을 보여 줄 수 있는 결과 (확정, 일부만 반영, 기본값만) ---------- */
-function ResolvedView({ model, analysisId }) {
+function ResolvedView({ model, analysisId, similarCases }) {
   const resultRef = useRef(null);
   const { step: activeStep, pinned, goToStep } = useScrollStep(resultRef, model.steps.length);
   const shown = model.shown;
@@ -163,13 +168,13 @@ function ResolvedView({ model, analysisId }) {
         </div>
         <div className="ar-result-track" aria-hidden="true" />
       </section>
-      <ActionsSection model={model} analysisId={analysisId} summaryText={summaryText} />
+      <ActionsSection model={model} analysisId={analysisId} summaryText={summaryText} similarCases={similarCases} />
     </ReportFrame>
   );
 }
 
 /* ---------- 맞는 사고 유형을 못 정한 결과: 비율 없이 상황 설명과 참고 후보만 ---------- */
-function UnresolvedView({ model, analysisId }) {
+function UnresolvedView({ model, analysisId, similarCases }) {
   return (
     <ReportFrame>
       <section className="ar-section ar-report-page ar-unresolved-page">
@@ -193,7 +198,7 @@ function UnresolvedView({ model, analysisId }) {
           </div>
         )}
       </section>
-      <ActionsSection model={model} analysisId={analysisId} summaryText="사고 유형을 확정하지 못해 과실 비율을 안내하지 않았어요. 법적 효력이 없는 참고 자료예요." />
+      <ActionsSection model={model} analysisId={analysisId} similarCases={similarCases} summaryText="사고 유형을 확정하지 못해 과실 비율을 안내하지 않았어요. 법적 효력이 없는 참고 자료예요." />
     </ReportFrame>
   );
 }

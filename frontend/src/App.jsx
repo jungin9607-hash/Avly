@@ -30,7 +30,7 @@ function HomeRoute() {
 function ReportRoute() {
   const { analysisId } = useParams();
   const { analysis } = useOutletContext();
-  return <ReportView analysis={analysis} analysisId={analysisId} />;
+  return <ReportView analysis={analysis} analysisId={analysisId} similarCases={<LawView result={analysis.result} />} />;
 }
 function TimeRoute() {
   const { analysisId } = useParams();
@@ -43,8 +43,7 @@ function ReportDocRoute() {
 }
 function LawRoute() {
   const { analysisId } = useParams();
-  const { analysis } = useOutletContext();
-  return <LawView result={analysis.result} analysisId={analysisId} />;
+  return <Navigate to={ROUTES.law(analysisId)} replace />; // 예전 주소: 분석 결과 안의 유사 판례로
 }
 
 export default function App() {
