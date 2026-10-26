@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { COMPARE_REPORT } from "../lawContent";
+import { COMPARE_REPORT, compareNote } from "../lawContent";
 import { Quote } from "./CaseDetails";
 
 // 선택한 판례와 내 사고의 공통점·차이점 정밀 대조 팝업
@@ -62,7 +62,7 @@ export default function CompareModal({ caseItem, onClose }) {
           </svg>
         </button>
 
-        {caseItem.note && <p className="law-modal-note">{caseItem.note}</p>}
+        {caseItem.note && <p className="law-modal-note">{compareNote(caseItem.note)}</p>}
 
         <div className="law-modal-columns">
           <CompareColumn tone="common" title="공통점" items={common} />
