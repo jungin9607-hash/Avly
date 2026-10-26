@@ -7,6 +7,9 @@ import { LawView } from "./pages/law/Law";
 import AnalysisResults from "./pages/common/components/AnalysisResults";
 import ReportDoc from "./pages/reportdoc/ReportDoc";
 import NoAnalysis from "./pages/common/components/NoAnalysis";
+import LoadingPreview from "./pages/loading-preview/LoadingPreview";
+import LoadingCrash from "./pages/loading-preview/LoadingCrash";
+import LoadingCrashColor from "./pages/loading-preview/LoadingCrashColor";
 import { lastAnalysisId } from "./api/session";
 import { LATEST_ROUTES, ROUTES } from "./routes";
 
@@ -55,6 +58,9 @@ export default function App() {
           <Route path="law" element={<LawRoute />} />
         </Route>
         <Route path="/analysis/:analysisId/report" element={<ReportDocRoute />} />
+        <Route path="/loading-preview" element={<LoadingPreview />} />
+        <Route path="/loading-crash" element={<LoadingCrash />} />
+        <Route path="/loading-crash-color" element={<LoadingCrashColor />} />
         <Route path="/upload-test" element={<Navigate to={ROUTES.home} replace />} />
         <Route path={LATEST_ROUTES.report} element={<Latest page="report" />} />
         <Route path={LATEST_ROUTES.timeline} element={<Latest page="timeline" />} />
