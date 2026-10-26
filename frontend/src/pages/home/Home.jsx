@@ -85,14 +85,14 @@ export default function Home() {
     start(pending[0], retention, place);
   };
 
-  // 결과가 나오면 결과 화면으로 이동한다
+  // 팝업의 "결과 보기"로 분석이 끝나면 결과 화면으로 이동한다
   useEffect(() => {
     if (flow.phase === "done") navigate(ROUTES.report(flow.analysisId));
   }, [flow.phase, flow.analysisId, navigate]);
 
   return (
     <div className="uh">
-      <TopNav active="홈" theme="dark" />
+      <TopNav active="홈" theme="clear" />
 
       {/* 주요 부분: 네이비 배경 위에 업로드와 가이드 */}
       <section className="uh-hero">
@@ -120,7 +120,7 @@ export default function Home() {
           <footer className="uh-notice">
             <IconShield />
             <p>
-              에블리는 손해보험협회 과실비율 인정기준과 판례 요약을 참고해 과실 비율을 안내하는 AI 참고 서비스예요.
+              에블리는 손해보험협회 과실비율 인정기준과 판례 요약을 참고해 과실 비율을 안내하는 AI 참고 서비스입니다.
               확정한 비율이 아니며 법적 효력이 없고, 최종 판단은 보험사 합의나 법원 판결에 따릅니다.
             </p>
           </footer>
@@ -138,7 +138,7 @@ export default function Home() {
           sticky
         />
       )}
-      {!leaving && (pending.length > 0 || flow.phase !== "idle") && (
+      {!leaving && flow.phase !== "done" && (pending.length > 0 || flow.phase !== "idle") && (
         <FlowModals
           file={pending[0]}
           started={started || flow.phase !== "idle"}

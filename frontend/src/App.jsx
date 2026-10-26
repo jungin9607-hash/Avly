@@ -1,11 +1,15 @@
-import { BrowserRouter, Navigate, Route, Routes, useParams, useSearchParams } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useParams, useSearchParams, useOutletContext } from "react-router-dom";
 import Intro from "./pages/intro/Intro";
 import Home from "./pages/home/Home";
-import Report from "./pages/report/Report";
-import Time from "./pages/time/Time";
-import Law from "./pages/law/Law";
+import { ReportView } from "./pages/report/Report";
+import { TimeView } from "./pages/time/Time";
+import { LawView } from "./pages/law/Law";
+import AnalysisResults from "./pages/common/components/AnalysisResults";
 import ReportDoc from "./pages/reportdoc/ReportDoc";
 import NoAnalysis from "./pages/common/components/NoAnalysis";
+import LoadingPreview from "./pages/loading-preview/LoadingPreview";
+import LoadingCrash from "./pages/loading-preview/LoadingCrash";
+import LoadingCrashColor from "./pages/loading-preview/LoadingCrashColor";
 import { lastAnalysisId } from "./api/session";
 import { LATEST_ROUTES, ROUTES } from "./routes";
 
@@ -25,11 +29,13 @@ function HomeRoute() {
 }
 function ReportRoute() {
   const { analysisId } = useParams();
-  return <Report analysisId={analysisId} />;
+  const { analysis } = useOutletContext();
+  return <ReportView analysis={analysis} analysisId={analysisId} similarCases={<LawView result={analysis.result} />} />;
 }
 function TimeRoute() {
   const { analysisId } = useParams();
-  return <Time analysisId={analysisId} />;
+  const { analysis, session } = useOutletContext();
+  return <TimeView result={analysis.result} session={session} analysisId={analysisId} />;
 }
 function ReportDocRoute() {
   const { analysisId } = useParams();
@@ -37,7 +43,7 @@ function ReportDocRoute() {
 }
 function LawRoute() {
   const { analysisId } = useParams();
-  return <Law analysisId={analysisId} />;
+  return <Navigate to={ROUTES.law(analysisId)} replace />; // 예전 주소: 분석 결과 안의 유사 판례로
 }
 
 export default function App() {
@@ -45,10 +51,15 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/upload" element={<HomeRoute />} />
-        <Route path="/analysis/:analysisId" element={<ReportRoute />} />
-        <Route path="/analysis/:analysisId/timeline" element={<TimeRoute />} />
-        <Route path="/analysis/:analysisId/law" element={<LawRoute />} />
+        <Route path="/analysis/:analysisId" element={<AnalysisResults />}>
+          <Route index element={<ReportRoute />} />
+          <Route path="timeline" element={<TimeRoute />} />
+          <Route path="law" element={<LawRoute />} />
+        </Route>
         <Route path="/analysis/:analysisId/report" element={<ReportDocRoute />} />
+        <Route path="/loading-preview" element={<LoadingPreview />} />
+        <Route path="/loading-crash" element={<LoadingCrash />} />
+        <Route path="/loading-crash-color" element={<LoadingCrashColor />} />
         <Route path="/upload-test" element={<Navigate to={ROUTES.home} replace />} />
         <Route path={LATEST_ROUTES.report} element={<Latest page="report" />} />
         <Route path={LATEST_ROUTES.timeline} element={<Latest page="timeline" />} />

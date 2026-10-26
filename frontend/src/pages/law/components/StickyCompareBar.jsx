@@ -17,7 +17,7 @@ export default function StickyCompareBar({ content, caseItem, onOpen, resultTo }
         {caseItem && <span aria-hidden="true">→</span>}
       </button>
 
-      {caseItem && (
+      {caseItem && resultTo && (
         <Link to={resultTo} className="law-result-link">
           <strong>{content.result.label}</strong>
           <svg viewBox="0 0 24 24" aria-hidden="true">

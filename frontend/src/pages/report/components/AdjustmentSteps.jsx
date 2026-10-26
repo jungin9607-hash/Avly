@@ -30,13 +30,9 @@ export default function AdjustmentSteps({ steps, header, ratioLabel, confirmed =
   return (
     <div className="ar-factor-overview">
       <FinalRatio mine={finalMine} other={finalOther} label={ratioLabel} confirmed={confirmed} />
-      {/* 가감요소 구간: 상자 없이 제목 → 기본 기준 카드 | 조정 요인 카드 */}
+      {/* 기본 기준과 조정 요인 카드 아래에 반영 범위 안내를 표시한다. */}
       <div className="ar-factor-panel">
-        <SectionHeader
-          kicker={header?.kicker}
-          title={title ?? `왜 ${finalMine}:${finalOther}으로 분석됐나요?`}
-          desc={header?.desc}
-        />
+        <SectionHeader title={title ?? "AI 판단 근거"} />
         <div className="ar-factor-steps">
           <StepRatio steps={steps} activeIndex={activeIndex} offset={offset} />
           <ol ref={listRef} className="ar-factor-list" aria-label="과실 조정 요인">
@@ -52,6 +48,7 @@ export default function AdjustmentSteps({ steps, header, ratioLabel, confirmed =
             {emptyNote && <li className="ar-factor-empty">{emptyNote}</li>}
           </ol>
         </div>
+        {header?.desc && <p className="ar-factor-note">{header.desc}</p>}
       </div>
     </div>
   );

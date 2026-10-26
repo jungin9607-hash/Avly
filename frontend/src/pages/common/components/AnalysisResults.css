@@ -1,0 +1,202 @@
+html:has(.analysis-results),
+body:has(.analysis-results) {
+  background: var(--color-navy-950);
+}
+body:has(.analysis-results) {
+  overflow-x: clip;
+}
+#root:has(.analysis-results) {
+  width: 100%;
+  border-inline: 0;
+}
+.analysis-results {
+  --analysis-page-background:
+    radial-gradient(55% 460px at 85% 80px, var(--color-page-glow), transparent 70%),
+    linear-gradient(180deg, var(--color-navy-950) 0, var(--color-navy-900) 260px,
+      var(--color-navy-850) 520px, var(--color-navy-700) 100%);
+  width: 100%;
+  min-height: 100svh;
+  text-align: left;
+  color: var(--color-text-on-dark);
+  background: var(--analysis-page-background);
+  background-attachment: fixed;
+}
+.analysis-results > .tn {
+  background: var(--analysis-page-background);
+  background-attachment: fixed;
+  border-bottom: 0;
+  backdrop-filter: none;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+.analysis-results-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 32px;
+  align-items: end;
+  margin: 0;
+  padding: 76px 40px 0;
+  border-bottom: 0;
+}
+.analysis-results-breadcrumb {
+  grid-column: 1 / -1;
+  margin: 0 0 12px;
+  color: var(--color-on-dark-muted);
+  font-size: 15px;
+}
+.analysis-results-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+.analysis-results-breadcrumb a:hover {
+  text-decoration: underline;
+}
+.analysis-results-breadcrumb [aria-current="page"] {
+  color: var(--color-blue-pale);
+  font-weight: 800;
+}
+.analysis-results-breadcrumb a:focus-visible {
+  outline: 2px solid var(--color-blue-pale);
+  outline-offset: 4px;
+}
+.analysis-results-heading > h1 {
+  margin: 0 0 16px;
+  color: var(--color-text-on-dark);
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+.analysis-results-tabs {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 16px;
+}
+.analysis-results-tabs a {
+  padding: 16px 24px;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  color: var(--color-text-on-dark);
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 700;
+}
+.analysis-results-tabs a.active {
+  color: var(--color-blue-pale);
+  border-bottom-color: var(--color-blue-pale);
+}
+.analysis-results-tabs a:focus-visible {
+  outline: 2px solid var(--color-blue-pale);
+  outline-offset: -4px;
+}
+/* 각 탭의 기존 구성을 유지하며 전체 페이지가 함께 스크롤된다. */
+.analysis-results-content > .ar,
+.analysis-results-content > .tl,
+.analysis-results-content > .law-page {
+  width: 100%;
+  margin-inline: 0;
+  min-height: 0;
+  background: transparent;
+}
+.analysis-results .law-band {
+  background: transparent;
+}
+.analysis-results-content > .ar {
+  height: auto;
+  overflow-y: visible;
+  scroll-snap-type: none;
+}
+.analysis-results .ar-main {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  padding: 32px 40px 0;
+}
+.analysis-results .law-band-inner {
+  width: 100%;
+  max-width: 1200px;
+  padding-inline: 40px;
+}
+.analysis-results .law-section-title,
+.analysis-results .law-my-accident {
+  width: auto;
+  margin-inline: 0;
+}
+.analysis-results .ar-report-page,
+.analysis-results .ar-result-pin {
+  padding-top: 0;
+}
+.analysis-results .ar-result-page,
+.analysis-results .ar-result-pin {
+  min-height: 0;
+}
+.analysis-results .tl-stage {
+  min-height: calc(100svh - 240px);
+  padding-top: 32px;
+}
+.analysis-results .law-band-warm {
+  padding-top: 32px;
+}
+@media (min-width: 1280px) {
+  .analysis-results .law-grid {
+    margin-inline: 0;
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 30%, 390px);
+  }
+  .analysis-results .law-case-column {
+    grid-column: 1;
+  }
+  .analysis-results .law-analysis {
+    grid-column: 2;
+  }
+}
+@media (max-width: 900px) {
+  .analysis-results .ar-main,
+  .analysis-results .law-band-inner {
+    padding-inline: 20px;
+  }
+}
+@media (max-width: 760px) {
+  .analysis-results-heading {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .analysis-results-tabs {
+    grid-column: 1;
+    gap: 0;
+  }
+  .analysis-results-tabs a {
+    flex: 1;
+    padding-inline: 8px;
+  }
+}
+@media (max-width: 600px) {
+  .analysis-results-heading {
+    padding: 76px 20px 0;
+  }
+  .analysis-results-tabs a {
+    flex: 1;
+    font-size: 16px;
+    padding-inline: 8px;
+  }
+}
+/* 분석 결과 화면 안(저장·공유 아래)에 들어간 유사 판례: 화면 전체 폭·배경 대신 결과 본문 폭에 맞춘다. */
+.analysis-results .ar-evidence-page .law-page {
+  width: 100%;
+  min-height: 0;
+  margin-inline: 0;
+  background: transparent;
+}
+.analysis-results .ar-evidence-page .law-band-warm {
+  padding: 48px 0 0;
+  background: transparent;
+}
+.analysis-results .ar-evidence-page .law-band-inner {
+  padding-inline: 0;
+}
+/* 판례 안내 문구를 한 줄로 둔다. 넓은 화면에서, 오른쪽 "비슷한 점" 박스가 없을 때(판례를 고르기 전)만 적용한다. */
+@media (min-width: 1280px) {
+  .analysis-results .ar-evidence-page .law-grid:not(:has(.law-analysis)) .law-guide {
+    width: max-content;
+    max-width: none;
+    white-space: nowrap;
+  }
+}

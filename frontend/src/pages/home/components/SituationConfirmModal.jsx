@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { autoFill, cascade, commonSelection, easyLabel, easyOf, easySituation, matching, normalizeSelection, resolveOption, selectionFrom } from "../../../api/adapters";
+import CarLoader from "./CarLoader";
 import ModalShell from "./ModalShell";
 
 const LEVELS = ["place", "feature", "my_progress", "other_progress"];
@@ -34,7 +35,7 @@ export default function SituationConfirmModal({ situation, items: allItems, onCh
     return (
       <ModalShell title="AI가 분석한 사고 상황이 맞나요?" progress={[3, 4]} onClose={onClose} sticky>
         <div className="md-analysis" role="status">
-          <span className="md-analysis-spinner" aria-hidden="true" />
+          <CarLoader />
           <p>선택지를 불러오는 중이에요.</p>
         </div>
       </ModalShell>

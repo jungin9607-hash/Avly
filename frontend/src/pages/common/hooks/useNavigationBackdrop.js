@@ -5,6 +5,7 @@ export default function useNavigationBackdrop(rootRef, bandSelector) {
   useEffect(() => {
     const root = rootRef.current;
     const navigation = root.querySelector(".tn");
+    if (!navigation) return undefined;
     const bands = bandSelector ? [...root.querySelectorAll(bandSelector)] : [root];
     let frame;
     let backgrounds;

@@ -55,12 +55,19 @@
   pointer-events: none;
 }
 
-/* 메뉴는 투명하게 두고 뒤를 흐리게 해서, 흐린 배경과 경계 없이 이어진다. */
+/* 페이지와 같은 불투명 사진 배경을 고정해 메뉴 경계의 색 차이를 줄인다. */
 .uh .tn {
-  background: transparent;
-  border-bottom: 0;
-  backdrop-filter: blur(12px);
-  text-shadow: 0 1px 4px var(--color-nav-text-shadow);
+  background: var(--uh-bg-middle);
+  clip-path: inset(0);
+}
+.uh .tn::before {
+  content: "";
+  position: fixed;
+  inset: -24px;
+  z-index: -1;
+  background: var(--uh-page-background);
+  filter: blur(6px);
+  pointer-events: none;
 }
 
 /* 배경은 화면 전체에 한 번 적용하여 상단·하단 경계 없이 이어진다. */
@@ -68,8 +75,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  /* 화면 높이가 낮을수록 여백을 줄여, 스크롤 없이 한 화면에 들어오게 한다 */
-  padding: clamp(72px, 11vh, 104px) 40px clamp(8px, 2vh, 24px);
+  padding: calc(76px + 1lh + 24px) 40px clamp(8px, 2vh, 24px);
 }
 .uh-hero > .uh-grid {
   position: relative;
@@ -230,10 +236,22 @@
   color: var(--uh-upload-ink);
   font-size: 20px;
   font-weight: 800;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    transform 0.2s ease, box-shadow 0.2s ease;
 }
-.uh-drop .uh-btn-solid:hover {
+.uh-drop .uh-btn-solid:hover:not(:disabled) {
   background: var(--uh-upload-button-hover);
-  border-color: var(--uh-upload-button-hover);
+  border-color: var(--color-blue-soft);
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px var(--color-home-icon-glow);
+}
+@media (prefers-reduced-motion: reduce) {
+  .uh-drop .uh-btn-solid {
+    transition: none;
+  }
+  .uh-drop .uh-btn-solid:hover:not(:disabled) {
+    transform: none;
+  }
 }
 .uh-drop .uh-btn-solid svg {
   width: 20px;
@@ -255,7 +273,7 @@
   transform: translateY(-4px);
 }
 .uh-drop h2 {
-  max-width: 13em;
+  max-width: 100%;
   margin: 0 0 20px;
   font-size: 22px;
   line-height: 1.5;
@@ -265,9 +283,20 @@
 }
 .uh-drop-hint {
   margin: clamp(16px, 2.8vh, 28px) 0 0;
-  font-size: var(--uh-font-description);
+  font-size: var(--uh-font-caption);
   color: var(--muted);
   word-break: keep-all;
+  opacity: 0;
+  pointer-events: none;
+}
+.uh-drop .uh-btn-solid:hover + .uh-drop-hint,
+.uh-drop .uh-btn-solid:focus-visible + .uh-drop-hint {
+  opacity: 1;
+}
+@media (hover: none) {
+  .uh-drop-hint {
+    opacity: 1;
+  }
 }
 .uh-error {
   margin: 14px 0 0;
@@ -386,12 +415,21 @@
 
 /* ---------- 안내문 ---------- */
 .uh-footer {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-rows: clamp(8px, 2.4vh, 28px) auto;
   align-items: start;
   margin-top: auto;
   min-width: 0;
+}
+.uh-footer::before {
+  content: "";
+  position: absolute;
+  top: clamp(8px, 2.4vh, 28px);
+  inset-inline: 0;
+  border-top: 1px solid var(--line);
+  pointer-events: none;
 }
 .uh-notice {
   grid-column: 1;
@@ -402,7 +440,7 @@
   margin-top: 0;
   padding-top: clamp(10px, 2vh, 20px);
   padding-bottom: 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid transparent;
   color: var(--muted);
 }
 .uh-notice svg {
@@ -425,6 +463,9 @@
   .uh-notice {
     grid-row: 1;
   }
+  .uh-footer::before {
+    top: 0;
+  }
   .uh-main {
     padding-inline: 20px;
   }
@@ -444,11 +485,14 @@
   }
 }
 @media (max-width: 640px) {
-  .uh-hero {
-    padding: 100px 20px 32px;
-  }
   .uh-main {
     padding: 32px 20px 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .uh-hero {
+    padding: calc(76px + 1lh + 24px) 20px 32px;
   }
 }
 

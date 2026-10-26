@@ -1,4 +1,3 @@
-import TopNav from "../../common/components/TopNav";
 import LawPageLink from "./LawPageLink";
 import TimelineNotice from "./TimelineNotice";
 
@@ -6,7 +5,6 @@ import TimelineNotice from "./TimelineNotice";
 export default function EmptyTimeline({ analysisId }) {
   return (
     <div className="tl">
-      <TopNav active="타임라인" theme="dark" />
       <section className="tl-stage">
         <div className="tl-side">
           <h1>

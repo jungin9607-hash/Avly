@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ModalShell from "./ModalShell";
 
 // ⚠️ 동의 문구는 초안이다. 서비스에 올리기 전에 법무 검토로 확정하고, 바꾸면 api/config.js 의 CONSENT_VERSION 도 함께 바꾼다.
@@ -38,10 +38,13 @@ export default function ConsentModal({ fileName, onStart, onClose, onPickAnother
   const [place, setPlace] = useState("");
   // 전체 동의: 아래 세 항목을 한꺼번에 켜고 끈다. 항목은 각각 따로 바꿀 수 있고, 모두 켜져 있을 때만 전체 동의가 켜진다.
   const all = analysis && involved && retention;
+  const footRef = useRef(null);
   const setAll = (value) => {
     setAnalysis(value);
     setInvolved(value);
     setRetention(value);
+    // 전체 동의를 켜면 시작 버튼이 보이도록 팝업을 맨 아래로 내린다
+    if (value) requestAnimationFrame(() => footRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }));
   };
 
   return (
@@ -85,7 +88,7 @@ export default function ConsentModal({ fileName, onStart, onClose, onPickAnother
         </ul>
       </div>
 
-      <footer className="md-foot">
+      <footer className="md-foot" ref={footRef}>
         <button type="button" className="md-btn md-btn-wide" disabled={!analysis || !involved} onClick={() => onStart({ retention, place: place || null })}>
           동의하고 영상 분석 시작하기
           <span aria-hidden="true">→</span>

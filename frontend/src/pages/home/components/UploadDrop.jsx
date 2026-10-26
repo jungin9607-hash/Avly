@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { IconPlus, IconUpload } from "./icons";
 
 /* 영상 끌어다 놓기 · 파일 선택. 고른 파일 목록은 onFiles 로 넘기고, 검사와 오류 문구는 부모가 정한다 */
 export default function UploadDrop({ inputRef, error, maxMb, onFiles }) {
   const [dragging, setDragging] = useState(false);
+  const hintId = useId();
 
   const onDrop = (e) => {
     e.preventDefault();
@@ -29,11 +30,11 @@ export default function UploadDrop({ inputRef, error, maxMb, onFiles }) {
         <IconUpload />
       </div>
       <h2>블랙박스 동영상 파일을 이곳에 끌어다 놓으세요</h2>
-      <button type="button" className="uh-btn uh-btn-solid" onClick={() => inputRef.current.click()}>
+      <button type="button" className="uh-btn uh-btn-solid" aria-describedby={hintId} onClick={() => inputRef.current.click()}>
         <IconPlus />
         블랙박스 영상 업로드
       </button>
-      <p className="uh-drop-hint">MP4, MOV, AVI 지원 · 단일 파일 최대 {maxMb}MB 이내 권장</p>
+      <p id={hintId} className="uh-drop-hint">MP4, MOV, AVI 지원 · 단일 파일 최대 {maxMb}MB 이내 권장</p>
       <input
         ref={inputRef}
         type="file"

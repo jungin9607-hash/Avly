@@ -4,7 +4,6 @@ export default function ReportHeader({ content }) {
     <header className="ar-report-header">
       <h1>{content.title}</h1>
       <div className="ar-report-sub">
-        {content.desc && <p className="ar-report-desc">{content.desc}</p>}
         <ul className="ar-report-keywords" aria-label="사고 정보">
           {content.keywords.map((keyword) => (
             <li key={keyword}>{keyword}</li>

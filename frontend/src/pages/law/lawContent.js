@@ -2,7 +2,7 @@
 
 export const SECTION = {
   title: "나의 사고와 유사한 판례",
-  desc: "내 사고 유형에 연결된 판례예요. 판례를 선택하면 내 사고와 비슷한 점과 다른 점을 볼 수 있어요.",
+  desc: "",
 };
 
 export const SUMMARY = {

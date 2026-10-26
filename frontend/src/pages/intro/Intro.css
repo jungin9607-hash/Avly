@@ -635,11 +635,11 @@
   }
 }
 
-/* report와 같이 페이지 배경이 이어지는 상단 메뉴 */
+/* 스크롤 중에도 뒤의 내용이 비치지 않는 상단 메뉴 */
 .si .tn {
-  background: transparent;
+  background: var(--sky-top);
   border-bottom: 0;
-  backdrop-filter: blur(12px);
+  backdrop-filter: none;
   text-shadow: 0 1px 4px var(--color-nav-text-shadow);
 }
 
