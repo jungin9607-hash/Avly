@@ -1,0 +1,61 @@
+/* 배경은 서비스 남색·파랑 토큰에서 파생한다. 차량(파랑 세단, 주황 SUV)과 충격선 색만 이 화면에서 따로 쓴다. */
+/* 배경은 비 내리는 밤의 다리 위 도로 사진이다. 글이 읽히도록 서비스 네이비를 옅게 덮고, 카드는 홈의 유리 카드(.uh-tile)와 같은 토큰을 쓴다. */
+.lcc-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    linear-gradient(180deg, rgba(8, 12, 26, 0.35) 0%, rgba(8, 12, 26, 0.15) 50%, rgba(8, 12, 26, 0.45) 100%),
+    url("../../assets/loading-night-road.jpg") center / cover no-repeat,
+    var(--color-navy-900);
+}
+.lcc-card {
+  width: min(720px, 100%);
+  overflow: hidden;
+  border-radius: 14px;
+  padding: 36px 24px 24px;
+  display: grid;
+  justify-items: center;
+  color: #fff;
+  background: var(--color-home-guide-two);
+  border: 1px solid var(--color-white-a14);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px var(--color-home-demo-shadow);
+}
+.lcc-scene {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.lcc-track {
+  fill: rgba(255, 255, 255, 0.16);
+}
+.lcc-fill {
+  fill: var(--color-blue-soft);
+  filter: drop-shadow(0 0 6px var(--color-blue-soft));
+}
+.lcc-spin { stroke: #fff; stroke-width: 2.2; stroke-linecap: round; opacity: 0.9; }
+.lcc-burst {
+  fill: none;
+  stroke: #ffb22e;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.lcc-percent {
+  margin: 18px 0 0;
+  line-height: 1.15;
+  font-size: 40px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.lcc-text {
+  margin: 8px 0 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+.lcc-note {
+  margin: 14px 0 0;
+  font-size: 12px;
+  opacity: 0.6;
+}

@@ -5,6 +5,9 @@ import Report from "./pages/report/Report";
 import Time from "./pages/time/Time";
 import Law from "./pages/law/Law";
 import ReportDoc from "./pages/reportdoc/ReportDoc";
+import LoadingPreview from "./pages/loading-preview/LoadingPreview";
+import LoadingCrash from "./pages/loading-preview/LoadingCrash";
+import LoadingCrashColor from "./pages/loading-preview/LoadingCrashColor";
 import { lastAnalysisId } from "./api/session";
 import { ROUTES } from "./routes";
 
@@ -48,6 +51,9 @@ export default function App() {
         <Route path="/analysis/:analysisId/timeline" element={<TimeRoute />} />
         <Route path="/analysis/:analysisId/law" element={<LawRoute />} />
         <Route path="/analysis/:analysisId/report" element={<ReportDocRoute />} />
+        <Route path="/loading-preview" element={<LoadingPreview />} />
+        <Route path="/loading-crash" element={<LoadingCrash />} />
+        <Route path="/loading-crash-color" element={<LoadingCrashColor />} />
         <Route path="/upload-test" element={<Navigate to={ROUTES.home} replace />} />
         <Route path="/analysis-test" element={<Legacy page="report" />} />
         <Route path="/timeline-test" element={<Legacy page="timeline" />} />

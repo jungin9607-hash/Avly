@@ -1,0 +1,65 @@
+/* 배경은 서비스 기본 파랑(--color-primary)과 남색에서 파생한다. 새 색을 추가하지 않는다. */
+.lc-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--color-night-950, #070b18);
+}
+.lc-card {
+  width: min(460px, 100%);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 20px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  color: #fff;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--color-primary) 52%, var(--color-navy-900)) 0 36%,
+    color-mix(in srgb, var(--color-primary) 60%, var(--color-navy-900)) 36% 62%,
+    color-mix(in srgb, var(--color-primary) 68%, var(--color-navy-900)) 62% 100%
+  );
+  background-size: 160% 100%;
+  animation: lc-drift 8s ease-in-out infinite alternate;
+}
+.lc-scene {
+  width: min(400px, 92%);
+  height: auto;
+  overflow: visible;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lc-track {
+  fill: rgba(255, 255, 255, 0.22);
+  stroke: none;
+}
+.lc-fill {
+  fill: #fff;
+  stroke: none;
+}
+.lc-burst {
+  stroke-width: 5;
+}
+.lc-percent {
+  margin: 4px 0 0;
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.lc-text {
+  margin: 4px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+@keyframes lc-drift {
+  to { background-position: 100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lc-card { animation: none; }
+}
