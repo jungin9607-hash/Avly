@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { STAGE_LABELS, stageIndex } from "../../../api/adapters";
+import CarLoader from "./CarLoader";
 import ModalShell from "./ModalShell";
 
 // 서버가 일하는 동안 보여 주는 진행 팝업.
@@ -30,7 +31,7 @@ export default function AnalysisProgressModal({ phase, progress = 0, stage, onCl
       sticky
     >
       <div className="md-analysis" role="status" aria-live="polite">
-        <span className="md-analysis-spinner" aria-hidden="true" />
+        <CarLoader />
         {phase === "uploading" && (
           <>
             <p>{percent}%</p>

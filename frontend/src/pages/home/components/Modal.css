@@ -4,7 +4,7 @@
   --ink-2: var(--color-ink-secondary);
   --muted: var(--color-muted);
   --line: var(--color-border-blue-gray);
-  --md-primary: var(--color-primary);
+  --md-primary: var(--color-navy-700);
   --md-navy: var(--color-navy-700);
   --md-soft: var(--color-surface-blue-soft);
   --md-mid: var(--color-surface-blue-mid);
@@ -882,4 +882,82 @@ input:focus-visible + .md-radio {
   color: var(--muted);
   font-size: var(--md-font-caption);
   line-height: 1.5;
+}
+
+/* ---------- 진행 팝업 로딩 그림 (CarLoader) ---------- */
+.md-car {
+  display: block;
+  width: 340px; /* 프레임을 좌우로 넓혀도 차 크기는 그대로 (그림 폭 680 기준 1/2) */
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 12px;
+  overflow: visible;
+  color: var(--md-primary);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.md-car-frame {
+  stroke-width: 5;
+  opacity: 0.9;
+}
+.md-car-body {
+  animation: md-car-bump 0.55s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+.md-car-variant path,
+.md-car-variant circle {
+  stroke-dasharray: 1 1.2;
+  stroke-dashoffset: 1;
+  animation: md-car-draw 7.2s linear infinite;
+  animation-delay: var(--d);
+}
+.md-car-scan {
+  animation: md-car-scan 4.8s linear infinite;
+}
+.md-car-scan-line {
+  stroke-width: 3;
+}
+.md-car-glow {
+  stroke: none;
+}
+.md-car-glow-a {
+  animation: md-car-glow-fwd 4.8s linear infinite;
+}
+.md-car-glow-b {
+  animation: md-car-glow-back 4.8s linear infinite;
+}
+@keyframes md-car-bump {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-5px) rotate(-1.6deg); }
+  60% { transform: translateY(1.5px) rotate(1.1deg); }
+}
+@keyframes md-car-scan {
+  0% { transform: translateX(var(--x0)); animation-timing-function: ease-in-out; }
+  50% { transform: translateX(var(--x1)); animation-timing-function: ease-in-out; }
+  100% { transform: translateX(var(--x0)); }
+}
+@keyframes md-car-glow-fwd {
+  0%, 49.9% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes md-car-glow-back {
+  0%, 49.9% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+/* 차 한 대의 한 바퀴(7.2초): 그려지고 머문 뒤 지워진다. 다음 차는 33.3%부터 그려지므로 선이 겹치지 않는다. */
+@keyframes md-car-draw {
+  0% { stroke-dashoffset: 1; opacity: 1; }
+  14%, 24% { stroke-dashoffset: 0; }
+  32% { stroke-dashoffset: -1; opacity: 1; }
+  32.1%, 100% { stroke-dashoffset: -1; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .md-car-body, .md-car-scan { animation: none; }
+  .md-car-scan { display: none; }
+  .md-car-variant path, .md-car-variant circle { animation: none; stroke-dashoffset: 0; }
+  .md-car-variant:not(:first-child) { display: none; }
 }
