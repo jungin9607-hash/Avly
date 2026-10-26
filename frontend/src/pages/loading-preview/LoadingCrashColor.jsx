@@ -6,10 +6,10 @@ import wheelAUrl from "../../assets/loading-wheel-yellow-a.png";
 import wheelBUrl from "../../assets/loading-wheel-yellow-b.png";
 
 // 컬러 차량 로딩 미리보기 화면 (/loading-crash-color). 서비스 화면에는 연결되어 있지 않다.
-// 노란 스포츠카가 0~5초 동안 출발·가속해 오른쪽 끝의 흰 세단과 앞범퍼끼리 부딪히고(100%), 반동·흔들림 뒤 페이드아웃한다. 7초 주기로 반복한다.
+// 노란 스포츠카가 0~180초(3분) 동안 출발·가속해 오른쪽 끝의 흰 세단과 앞범퍼끼리 부딪히고(100%), 반동·흔들림 뒤 페이드아웃한다. 182초 주기로 반복한다.
 // 퍼센트는 노란 차가 움직인 거리(출발 위치 → 접촉 위치)를 0~100%로 바꾼 값이며 실제 분석 진행률이 아니다.
-const CYCLE = 7;
-const DRIVE = 5;
+const CYCLE = 182; // 3분 달린 뒤 충돌 연출(2초)까지 한 번 반복하는 시간(초)
+const DRIVE = 180; // 달리는 시간(초) = 3분
 const GROUND = 214; // 바퀴 바닥 y
 const TRACK = { x: 40, y: 234, w: 561, h: 12 }; // 세단 출발 위치(왼쪽)부터 SUV 뒤쪽 끝(오른쪽)까지 이어지는 트랙
 const S = 0.66; // 차량 그림 크기(그림 좌표 대비)
