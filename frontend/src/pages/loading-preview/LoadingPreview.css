@@ -1,4 +1,4 @@
-/* 배경은 서비스 기본 파랑(--color-primary)에서 파생한다. 새 색을 추가하지 않는다. */
+/* 흰 카드 위에 서비스 남색(--color-navy-700) 선. 새 색을 추가하지 않는다. */
 .lp-page {
   min-height: 100vh;
   display: grid;
@@ -7,29 +7,22 @@
   background: var(--color-night-950, #070b18);
 }
 .lp-card {
-  width: min(460px, 100%);
-  aspect-ratio: 4 / 3;
+  width: min(640px, 100%);
   overflow: hidden;
   border-radius: 20px;
+  padding: 28px 20px 24px;
   display: grid;
   place-content: center;
   justify-items: center;
-  color: #fff;
-  background: linear-gradient(
-    115deg,
-    color-mix(in srgb, var(--color-primary) 52%, var(--color-navy-900)) 0 36%,
-    color-mix(in srgb, var(--color-primary) 60%, var(--color-navy-900)) 36% 62%,
-    color-mix(in srgb, var(--color-primary) 68%, var(--color-navy-900)) 62% 100%
-  );
-  background-size: 160% 100%;
-  animation: lp-drift 8s ease-in-out infinite alternate;
+  color: var(--color-navy-700);
+  background: #fff;
 }
 .lp-scene {
-  width: 250px;
+  width: min(520px, 100%);
   height: auto;
   overflow: visible;
   fill: none;
-  stroke: #fff;
+  stroke: currentColor;
   stroke-width: 11;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -43,44 +36,63 @@
 .lp-variant circle {
   stroke-dasharray: 1 1.2;
   stroke-dashoffset: 1;
-  animation: lp-draw 4s linear infinite;
+  animation: lp-draw 7.2s linear infinite;
   animation-delay: var(--d);
 }
-.lp-road {
-  stroke-dasharray: 1 1.2;
-  stroke-width: 9;
-  animation: lp-road 1.4s ease-in-out infinite;
-}
 .lp-text {
-  margin: 10px 0 0;
+  margin: 14px 0 0;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
-@keyframes lp-drift {
-  to { background-position: 100% 0; }
+.lp-frame {
+  stroke-width: 5;
+  opacity: 0.9;
+}
+/* 세로 스캔선은 프레임 안을 왼쪽 끝 → 오른쪽 끝 → 왼쪽 끝으로 왕복한다. 빛 띠는 지나온 쪽에만 보인다. */
+.lp-scan {
+  animation: lp-scan 4.8s linear infinite;
+}
+.lp-scan-line {
+  stroke-width: 3;
+}
+.lp-glow {
+  stroke: none;
+}
+.lp-glow-behind-left {
+  animation: lp-glow-forward 4.8s linear infinite;
+}
+.lp-glow-behind-right {
+  animation: lp-glow-backward 4.8s linear infinite;
 }
 @keyframes lp-bump {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   30% { transform: translateY(-5px) rotate(-1.6deg); }
   60% { transform: translateY(1.5px) rotate(1.1deg); }
 }
-/* 선이 그려지고(0~20%) 머문 뒤(~33%) 그린 방향으로 지워진다(~47%). 다음 차는 33%부터 그려지기 시작한다. */
+@keyframes lp-scan {
+  0% { transform: translateX(var(--lp-x0)); animation-timing-function: ease-in-out; }
+  50% { transform: translateX(var(--lp-x1)); animation-timing-function: ease-in-out; }
+  100% { transform: translateX(var(--lp-x0)); }
+}
+@keyframes lp-glow-forward {
+  0%, 49.9% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes lp-glow-backward {
+  0%, 49.9% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+/* 차 한 대의 한 바퀴(7.2초): 그려지고(0~14%) 머문 뒤(~24%) 그린 방향으로 지워지고(~32%) 사라진다. 다음 차는 33.3%부터 그려지므로 선이 겹치지 않는다. */
 @keyframes lp-draw {
   0% { stroke-dashoffset: 1; opacity: 1; }
-  20%, 33% { stroke-dashoffset: 0; }
-  47% { stroke-dashoffset: -1; opacity: 1; }
-  47.1%, 100% { stroke-dashoffset: -1; opacity: 0; }
-}
-/* 도로 선 하나가 오른쪽(차 앞)에서 시작해 왼쪽으로 길어졌다가 줄어든다. 선이 뒤로 흘러 차가 앞으로 가는 것처럼 보인다 */
-@keyframes lp-road {
-  0% { stroke-dashoffset: 1; }
-  50% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -1; }
+  14%, 24% { stroke-dashoffset: 0; }
+  32% { stroke-dashoffset: -1; opacity: 1; }
+  32.1%, 100% { stroke-dashoffset: -1; opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lp-card, .lp-car, .lp-road { animation: none; }
-  .lp-road { stroke-dashoffset: 0; }
+  .lp-car, .lp-scan { animation: none; }
+  .lp-scan { display: none; }
   .lp-variant path, .lp-variant circle { animation: none; stroke-dashoffset: 0; }
   .lp-variant:not(:first-child) { display: none; }
 }
