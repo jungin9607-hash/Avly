@@ -1,8 +1,7 @@
-import LawPageLink from "./LawPageLink";
 import TimelineNotice from "./TimelineNotice";
 
 /* 영상에서 표시할 사고 장면을 찾지 못했을 때 */
-export default function EmptyTimeline({ analysisId }) {
+export default function EmptyTimeline() {
   return (
     <div className="tl">
       <section className="tl-stage">
@@ -15,7 +14,6 @@ export default function EmptyTimeline({ analysisId }) {
           <p className="tl-now-text">영상에서 표시할 사고 장면을 찾지 못했어요.</p>
         </div>
         <div className="tl-footer">
-          <LawPageLink analysisId={analysisId} />
           <TimelineNotice />
         </div>
       </section>

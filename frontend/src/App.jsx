@@ -33,9 +33,8 @@ function ReportRoute() {
   return <ReportView analysis={analysis} analysisId={analysisId} similarCases={<LawView result={analysis.result} />} />;
 }
 function TimeRoute() {
-  const { analysisId } = useParams();
   const { analysis, session } = useOutletContext();
-  return <TimeView result={analysis.result} session={session} analysisId={analysisId} />;
+  return <TimeView result={analysis.result} session={session} />;
 }
 function ReportDocRoute() {
   const { analysisId } = useParams();
