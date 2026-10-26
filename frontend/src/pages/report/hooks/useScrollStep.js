@@ -42,6 +42,7 @@ export function useScrollStep(sectionRef, count) {
     const section = sectionRef.current;
     const pin = section.querySelector(".ar-result-pin");
     const media = window.matchMedia(WIDE_QUERY);
+    const embedded = Boolean(section.closest(".analysis-results"));
     let frame = 0;
     // 고정 여부와 단계 간격은 화면 크기가 바뀔 때만 다시 정함
     // ("법적 근거 자세히 보기"로 내용이 길어져도 단계·고정이 바뀌어 비율 박스가 움직이지 않도록)
@@ -50,7 +51,7 @@ export function useScrollStep(sectionRef, count) {
 
     const layout = () => {
       // 내용이 화면보다 길면 고정하지 않음 (고정하면 아랫부분이 잘려 보이지 않으므로)
-      canPin = media.matches && pin.scrollHeight <= window.innerHeight - NAV_HEIGHT + 1;
+      canPin = !embedded && media.matches && pin.scrollHeight <= window.innerHeight - NAV_HEIGHT + 1;
       setPinned(canPin);
       // 넓은 화면(고정하지 않을 때)의 단계 간격 = 2번 → 3번 카드 사이 거리
       const cards = section.querySelectorAll(".ar-factor-card");
@@ -80,7 +81,7 @@ export function useScrollStep(sectionRef, count) {
         next = stepFromUnits(progress * (count + EXTRA_TOTAL), count);
       } else {
         const cards = section.querySelectorAll(".ar-factor-card");
-        if (media.matches && cards.length > 2) {
+        if (!embedded && media.matches && cards.length > 2) {
           // 넓은 화면(고정하지 않을 때): 2번 → 3번 카드 사이 거리(= 2 → 3에 드는 스크롤 길이)만큼
           // 맨 위에서부터 내릴 때마다 다음 단계 (1 → 2, 2 → 3은 그보다 조금 더 길게)
           const scrolledSoFar = section.closest(".ar").scrollTop;
@@ -106,14 +107,14 @@ export function useScrollStep(sectionRef, count) {
 
     // 카드를 눌러 i번째 단계로: 바로 선택 + 위 measure가 i를 내는 스크롤 위치로 이동
     goRef.current = (i) => {
-      const scroller = media.matches ? section.closest(".ar") : null; // 넓은 화면은 .ar, 좁은 화면은 창이 스크롤됨
+      const scroller = !embedded && media.matches ? section.closest(".ar") : null; // 넓은 화면은 .ar, 좁은 화면은 창이 스크롤됨
       let delta = 0;
       if (canPin) {
         const track = section.querySelector(".ar-result-track");
         const scrolled = NAV_HEIGHT - section.getBoundingClientRect().top;
         const target = (unitsForStep(i) / (count + EXTRA_TOTAL)) * track.offsetHeight;
         delta = target - scrolled;
-      } else if (media.matches) {
+      } else if (!embedded && media.matches) {
         delta = unitsForStep(i) * gap - scroller.scrollTop;
       } else {
         const card = section.querySelectorAll(".ar-factor-card")[i];

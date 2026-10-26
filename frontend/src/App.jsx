@@ -1,9 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes, useParams, useSearchParams } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useParams, useSearchParams, useOutletContext } from "react-router-dom";
 import Intro from "./pages/intro/Intro";
 import Home from "./pages/home/Home";
-import Report from "./pages/report/Report";
-import Time from "./pages/time/Time";
-import Law from "./pages/law/Law";
+import { ReportView } from "./pages/report/Report";
+import { TimeView } from "./pages/time/Time";
+import { LawView } from "./pages/law/Law";
+import AnalysisResults from "./pages/common/components/AnalysisResults";
 import ReportDoc from "./pages/reportdoc/ReportDoc";
 import NoAnalysis from "./pages/common/components/NoAnalysis";
 import { lastAnalysisId } from "./api/session";
@@ -25,11 +26,13 @@ function HomeRoute() {
 }
 function ReportRoute() {
   const { analysisId } = useParams();
-  return <Report analysisId={analysisId} />;
+  const { analysis } = useOutletContext();
+  return <ReportView analysis={analysis} analysisId={analysisId} />;
 }
 function TimeRoute() {
   const { analysisId } = useParams();
-  return <Time analysisId={analysisId} />;
+  const { analysis, session } = useOutletContext();
+  return <TimeView result={analysis.result} session={session} analysisId={analysisId} />;
 }
 function ReportDocRoute() {
   const { analysisId } = useParams();
@@ -37,7 +40,8 @@ function ReportDocRoute() {
 }
 function LawRoute() {
   const { analysisId } = useParams();
-  return <Law analysisId={analysisId} />;
+  const { analysis } = useOutletContext();
+  return <LawView result={analysis.result} analysisId={analysisId} />;
 }
 
 export default function App() {
@@ -45,9 +49,11 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/upload" element={<HomeRoute />} />
-        <Route path="/analysis/:analysisId" element={<ReportRoute />} />
-        <Route path="/analysis/:analysisId/timeline" element={<TimeRoute />} />
-        <Route path="/analysis/:analysisId/law" element={<LawRoute />} />
+        <Route path="/analysis/:analysisId" element={<AnalysisResults />}>
+          <Route index element={<ReportRoute />} />
+          <Route path="timeline" element={<TimeRoute />} />
+          <Route path="law" element={<LawRoute />} />
+        </Route>
         <Route path="/analysis/:analysisId/report" element={<ReportDocRoute />} />
         <Route path="/upload-test" element={<Navigate to={ROUTES.home} replace />} />
         <Route path={LATEST_ROUTES.report} element={<Latest page="report" />} />

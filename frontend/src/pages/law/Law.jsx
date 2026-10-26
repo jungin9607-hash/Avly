@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import TopNav from "../common/components/TopNav";
 import useNavigationBackdrop from "../common/hooks/useNavigationBackdrop";
 import CaseBasisNotice from "../common/components/CaseBasisNotice";
 import PageHeader from "./components/PageHeader";
@@ -22,7 +21,7 @@ export default function Law({ analysisId }) {
   );
 }
 
-function LawView({ result, analysisId }) {
+export function LawView({ result, analysisId }) {
   const cases = useMemo(() => toCaseCards(result.related_cases), [result]);
   const myAccident = useMemo(() => ({ label: "내 사고", points: myAccidentPoints(result) }), [result]);
   const pageRef = useRef(null);
@@ -46,7 +45,6 @@ function LawView({ result, analysisId }) {
   return (
     <div className="law-page" ref={pageRef}>
       {/* 메뉴 바는 intro와 같은 기본 스타일 (색은 Law.css에서 intro 밤하늘 위 모습과 같게) */}
-      <TopNav active="유사 판례" />
 
       {/* 위에서 아래로 배경색이 자연스럽게 이어지는 두 구간: 메뉴 바와 이어지는 진한 남색 → 비교 버튼 네이비 */}
       <main className="law-main">

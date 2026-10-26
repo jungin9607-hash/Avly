@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import TopNav from "../common/components/TopNav";
 import AnalysisGate from "../common/components/AnalysisGate";
 import SituationCheckNotice from "../common/components/SituationCheckNotice";
 import useNavigationBackdrop from "../common/hooks/useNavigationBackdrop";
@@ -26,7 +25,7 @@ export default function Report({ analysisId }) {
   );
 }
 
-function ReportView({ analysis, analysisId }) {
+export function ReportView({ analysis, analysisId }) {
   const model = useMemo(() => toReportModel(analysis.result, analysisId), [analysis, analysisId]);
   return model.state === "unresolved" ? <UnresolvedView model={model} analysisId={analysisId} /> : <ResolvedView model={model} analysisId={analysisId} />;
 }
@@ -51,7 +50,6 @@ function ReportFrame({ children }) {
 
   return (
     <div className="ar" ref={reportRef}>
-      <TopNav active="분석 결과" />
       <main className="ar-main">{children}</main>
     </div>
   );
@@ -117,7 +115,7 @@ function ActionsSection({ model, analysisId, summaryText, children }) {
         <div className="ar-evidence-layout">
           {children}
           <SituationCheckNotice check={model.situationCheck} />
-          <StatusNotice text={model.statusText} pending={model.pending} />
+          <StatusNotice text={model.state === "partial" ? "" : model.statusText} pending={model.pending} />
           <div className="ar-evidence-head">
             <ReportActions content={REPORT_ACTIONS} onShare={share} onSave={() => navigate(ROUTES.document(analysisId))} onErase={erase} expiresText={expiresText} />
           </div>

@@ -11,7 +11,7 @@
   height: 64px;
   padding: 0 40px;
   color: var(--nav-fg);
-  background: linear-gradient(180deg, var(--color-nav-gradient-start), var(--color-nav-gradient-end));
+  background: var(--color-navy-950);
 }
 .tn-logo {
   font-size: 20px;
@@ -21,6 +21,27 @@
   margin-left: 4px;
   font-size: 13px;
   font-weight: 600;
+}
+.tn-new-analysis {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  color: var(--nav-fg);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tn-new-analysis:hover {
+  background: var(--color-white-a06);
+}
+.tn-new-analysis:focus-visible {
+  outline: 2px solid var(--color-blue-pale);
+  outline-offset: 4px;
 }
 .tn-menu {
   display: flex;
@@ -47,9 +68,13 @@
   border-bottom: 1px solid var(--color-nav-light-border);
 }
 .tn-dark {
-  background: var(--color-nav-dark);
-  backdrop-filter: blur(10px);
+  background: var(--color-navy-950);
   border-bottom: 1px solid var(--color-nav-border);
+}
+/* 사진 배경 화면에서도 뒤의 내용이 비치지 않는 불투명 배경 */
+.tn-clear {
+  background: var(--color-navy-950);
+  text-shadow: 0 1px 4px var(--color-nav-text-shadow);
 }
 .tn-logo {
   color: inherit;

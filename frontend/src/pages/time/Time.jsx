@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import AnalysisGate from "../common/components/AnalysisGate";
-import TopNav from "../common/components/TopNav";
 import { easySituationLine, toMoments, toSituationCheck } from "../../api/adapters";
 import SituationCheckNotice from "../common/components/SituationCheckNotice";
 import TimelineNotice from "./components/TimelineNotice";
@@ -24,7 +23,7 @@ export default function Time({ analysisId }) {
   );
 }
 
-function TimeView({ result, analysisId, session }) {
+export function TimeView({ result, analysisId, session }) {
   const moments = useMemo(() => toMoments(result), [result]);
   if (moments.length === 0) return <EmptyTimeline analysisId={analysisId} />;
   return <Moments moments={moments} summary={easySituationLine(result.situation, result.summary)} note={result.timeline_note} check={toSituationCheck(result)} analysisId={analysisId} session={session} />;
@@ -55,7 +54,6 @@ function Moments({ moments, summary, note, check, analysisId, session }) {
 
   return (
     <div className="tl">
-      <TopNav active="타임라인" theme="dark" />
 
       <section className="tl-stage" ref={stageRef}>
         {/* 왼쪽: 제목 · 비율 · 지금 보고 있는 시점 */}
