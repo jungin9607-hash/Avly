@@ -8,7 +8,7 @@ export const ROUTES = {
   resume: (id) => `/upload?resume=${id}`,
 };
 
-// 분석 번호 없이 들어가는 주소. 최근 분석이 있으면 그 결과로, 없으면 "아직 분석한 영상이 없어요" 안내를 보여 준다.
+// 분석 번호 없이 들어가는 주소. 최근 분석이 있으면 그 결과로, 없으면 "블랙박스 영상을 먼저 올려 주세요" 안내를 보여 준다.
 export const LATEST_ROUTES = {
   report: "/analysis",
   timeline: "/timeline",

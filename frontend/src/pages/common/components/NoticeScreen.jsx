@@ -6,11 +6,11 @@ import "./NoticeScreen.css";
 // 결과를 보여 줄 수 없을 때 쓰는 안내 화면 (분석 없음 · 불러오는 중 · 삭제됨 등)
 // notice: { title, body?, retry?, link?: { to, label }, analyzing? }
 // analyzing(분석 중)이면 문구 없이 배경만 보여 준다. 화면 읽기 프로그램에는 제목만 알린다. (나중에 로딩바가 들어갈 자리)
-export default function NoticeScreen({ active, notice, onRetry }) {
+export default function NoticeScreen({ active, notice, onRetry, variant }) {
   if (notice.analyzing) {
     return (
       <div className="ns">
-        <TopNav active={active} theme="dark" />
+        <TopNav active={active} theme="clear" />
         <main className="ns-main" role="status">
           <h1 className="ns-sr-only">{notice.title}</h1>
         </main>
@@ -18,8 +18,8 @@ export default function NoticeScreen({ active, notice, onRetry }) {
     );
   }
   return (
-    <div className="ns">
-      <TopNav active={active} theme="dark" />
+    <div className={variant === "upload" ? "ns ns--upload" : "ns"}>
+      <TopNav active={active} theme="clear" />
       <main className="ns-main" role="status">
         <h1>{notice.title}</h1>
         {notice.body && <p>{notice.body}</p>}
