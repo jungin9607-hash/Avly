@@ -310,6 +310,13 @@
   padding-top: 20px;
   border-top: 1px solid var(--color-white-a10);
 }
+.ar-factor-note {
+  margin: 16px 0 0;
+  text-align: right;
+  color: var(--ar-on-dark-text);
+  font-size: var(--ar-font-body);
+  line-height: 1.65;
+}
 .ar-factor-panel .ar-icon-head {
   margin-top: 0;
 }
@@ -328,6 +335,9 @@
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.25;
+}
+.ar-factor-panel .ar-icon-head h2 {
+  color: var(--color-white);
 }
 .ar-icon-head p {
   margin: 4px 0 0;
@@ -659,9 +669,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 24px;
-  /* 판단 근거 구간과 같은 옅은 가로 구분선 (선 바로 아래 20px에 "영상 증거" 머리말) */
   padding-top: 20px;
-  border-top: 1px solid var(--color-white-a10);
 }
 /* 제목 줄: 왼쪽 제목 ……… 오른쪽 끝 타임라인 링크 (좁으면 링크가 아래 줄로) */
 .ar-evidence-head {
@@ -678,7 +686,7 @@
 .ar-evidence-head .ar-actions-panel {
   align-self: flex-end;
   width: auto;
-  margin: 0 0 -12px; /* 아래로 12px 내려 카드와의 간격 24px → 12px */
+  margin: 0 0 -12px auto; /* 오른쪽 정렬, 아래 카드와의 간격 유지 */
 }
 /* 사고 타임라인 바로가기: 유사 판례 화면과 같은 위치 = 창 오른쪽 아래 구석에 고정
    (오른쪽은 .ar 스크롤바 폭만큼 더 띄움) · 증거 구간에 들어오면(is-visible) 부드럽게 나타남 */
@@ -1350,6 +1358,9 @@
 .ar-status h3 {
   margin: 14px 0 6px;
   font-size: 15px;
+}
+.ar-status h3:first-child {
+  margin-top: 0;
 }
 .ar-status ul {
   margin: 0;

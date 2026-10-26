@@ -417,7 +417,7 @@ test("쉬운 말 검수 전이라 반영하지 않은 가감요소가 있으면 
   const plain = toReportModel(result, "abcdef12").factorHeader.desc;
   assert.ok(!plain.includes("검수 중"));
   const held = toReportModel({ ...result, adjustments: { ...result.adjustments, held_back: 3 } }, "abcdef12").factorHeader.desc;
-  assert.ok(held.endsWith("아직 검수 중인 가감요소 3개는 반영하지 않았어요."));
+  assert.equal(held, "확인된 가감요소만 반영하였으며, 미확인 및 검수 중인 가감요소 3개는 제외되어 실제 과실비율과 차이가 발생할 수 있습니다.");
   // 가감요소가 하나도 검수되지 않은 유형은 기본 비율만 안내하되, 등록이 아니라 검수가 끝나지 않은 것이라고 말한다
   const base = toReportModel(fixture("result_base_only.json"), "abcdef12");
   assert.match(base.factorHeader.desc, /검수가 끝난 가감요소가 아직 없어서 기본 비율만/);

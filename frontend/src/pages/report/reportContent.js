@@ -21,6 +21,6 @@ export const RATIO_LABEL = {
 
 // 가감요소 영역 제목 (확정이 아닐 때)
 export const FACTOR_TITLE = {
-  partial: "이 비율은 어떻게 나왔나요?",
-  base_only: "이 비율은 어떻게 나왔나요?",
+  partial: "AI 판단 근거",
+  base_only: "AI 판단 근거",
 };

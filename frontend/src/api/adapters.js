@@ -186,7 +186,7 @@ const FACTOR_DESC = {
 };
 
 // 쉬운 말 검수가 끝나지 않아 반영하지 않은 가감요소가 있으면 그 사실을 덧붙인다
-const heldBackNote = (count) => (count > 0 && count !== undefined ? ` 아직 검수 중인 가감요소 ${count}개는 반영하지 않았어요.` : "");
+const heldBackNote = (count) => (count > 0 && count !== undefined ? `확인된 가감요소만 반영하였으며, 미확인 및 검수 중인 가감요소 ${count}개는 제외되어 실제 과실비율과 차이가 발생할 수 있습니다.` : "");
 
 // 결과 화면 맨 위 문구와 상태별 안내
 export function toReportModel(result, analysisId) {
@@ -202,7 +202,7 @@ export function toReportModel(result, analysisId) {
     },
     situationCheck: toSituationCheck(result),
     appliedCount: applied,
-    factorHeader: { kicker: "판단 근거", desc: (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) + heldBackNote(result.adjustments?.held_back) },
+    factorHeader: { kicker: "AI 판단 근거", desc: heldBackNote(result.adjustments?.held_back) || (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) },
     statusText: result.explanation?.status ?? "",
     steps: state === "unresolved" ? [] : toSteps(result),
     // 맨 위 큰 비율에 보여 줄 값: 확정이면 최종, 아니면 지금까지 반영한 값 (마지막 단계)
