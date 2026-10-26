@@ -345,7 +345,7 @@ test("고른 상황이 AI 관찰과 어긋날 때만 안내하고, 어떤 점이
   assert.equal(toSituationCheck(fixture("result_final.json")), null);
   assert.equal(toSituationCheck({ situation_check: { conflict: false, items: [] } }), null);
   const check = toSituationCheck({ situation_check: { conflict: true, items: [{ who: "other", ai_action: "정지/대기", chosen: "앞차가 차로를 바꿈" }, { who: "me", ai_action: "미확인", chosen: "직진" }] } });
-  assert.match(check.title, /달라요/);
+  assert.match(check.title, /다릅니다/);
   assert.match(check.body, /참고용으로만/);
   assert.deepEqual(check.lines, [
     "상대 차 — AI가 본 모습: 멈춰 있거나 기다리는 중 / 고르신 내용: 앞차가 차로를 바꿈",
