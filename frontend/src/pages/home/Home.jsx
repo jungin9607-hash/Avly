@@ -92,7 +92,7 @@ export default function Home() {
 
   return (
     <div className="uh">
-      <TopNav active="홈" theme="dark" />
+      <TopNav active="홈" theme="clear" />
 
       {/* 주요 부분: 네이비 배경 위에 업로드와 가이드 */}
       <section className="uh-hero">

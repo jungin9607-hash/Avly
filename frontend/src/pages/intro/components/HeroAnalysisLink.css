@@ -9,15 +9,14 @@
   box-sizing: border-box;
   min-height: 56px;
   padding: 16px 20px;
-  border: 1px solid var(--color-white-a18);
+  border: 1px solid transparent;
   border-radius: 16px;
   background: transparent;
   color: var(--color-white);
   text-decoration: none;
-  transition: background-color 0.2s ease;
 }
 .si-hero-link strong {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.4;
@@ -26,9 +25,6 @@
 .si-hero-link > svg {
   flex: none;
   transition: transform 0.18s ease;
-}
-.si-hero-link:hover {
-  background: var(--color-white-a06);
 }
 .si-hero-link:hover > svg {
   transform: translateX(3px);
