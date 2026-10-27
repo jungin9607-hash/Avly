@@ -52,7 +52,7 @@ export function LawView({ result }) {
           <div className="law-band-inner">
             <PageHeader section={SECTION} myAccident={myAccident} />
             <div className="law-grid">
-              {/* 왼쪽: 판례 카드 3개 + 바로 아래 활용 가이드 */}
+              {/* 왼쪽: 판례 카드 3개 */}
               <div className="law-case-column">
                 {cases.length === 0 && (
                   <section className="law-empty">
@@ -67,13 +67,14 @@ export function LawView({ result }) {
                   onToggle={toggleCase}
                   selectedExtra={summary}
                 />
-                <GuideCard content={GUIDE} />
               </div>
               {/* 오른쪽: 선택한 판례 카드 옆으로 따라 내려가는 "비슷한 점" 박스 */}
               <SummaryAside listRef={listRef} selectedId={selectedId}>
                 {summary}
               </SummaryAside>
             </div>
+            {/* 활용 가이드: 판례 카드 칸이 아니라 그 아래 한 줄 전체 폭에 둔다 (오른쪽 "비슷한 점" 박스와 겹치지 않게) */}
+            <GuideCard content={GUIDE} />
 
             {/* "내 사고와 비교하기"는 이 바 하나로: 평소엔 판례 목록 바로 아래,
                 상세 보기로 페이지가 길어지면 화면 아래에 붙어 따라옴 (법적 고지보다 위) */}
