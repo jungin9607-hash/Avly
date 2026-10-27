@@ -1,0 +1,653 @@
+/* Pretendard: 국내 서비스 UI 표준 폰트 */
+
+.si {
+  /* 밤 도로: "유사 판례" 화면과 같은 딥 네이비 → 네이비 블루 (보랏빛 대신 푸른 밤) */
+  --night: var(--color-navy-950);
+  --sky-top: var(--color-intro-sky-top);
+  --sky-mid: var(--color-intro-sky-middle);
+  --sky-horizon: var(--color-intro-sky-horizon);
+  --text: var(--color-text-intro);
+  --muted: var(--color-text-intro-muted);
+  --line: var(--color-white-a10);
+  background: var(--night);
+  color: var(--text);
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  /* #root의 고정 폭(1126px)을 벗어나 화면 전체를 사용 */
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  text-align: left;
+}
+/* index.css의 전역 h1·h2 색/폰트가 덮어쓰지 않도록 */
+.si h1,
+.si h2,
+.si h3 {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* ---------- 버튼 ---------- */
+.si-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+/* 블랙박스 영상 분석으로 이동하는 주 버튼 */
+.si-btn-accent,
+.si-btn-accent:hover {
+  background: var(--color-primary);
+  color: var(--color-text-on-dark);
+}
+.si-btn-dark {
+  background: var(--color-intro-button-dark);
+  color: var(--color-white);
+}
+.si-btn-dark:hover {
+  background: var(--color-intro-button-dark-hover);
+}
+.si-btn-arrow {
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+.si-btn:hover .si-btn-arrow {
+  transform: translateX(3px);
+}
+
+/* ---------- 인트로 ---------- */
+.si-hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  /* 지평선(높이 48%)에서 도로의 안개 색과 이어짐 */
+  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 27%, var(--sky-horizon) 48%);
+}
+.si-sky-glow {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: min(1400px, 140vw);
+  height: 420px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, var(--color-intro-sky-glow), var(--color-intro-sky-glow-soft) 55%, transparent);
+  pointer-events: none;
+}
+/* ---------- 별 ---------- */
+.si-stars {
+  position: absolute;
+  inset: 0 0 52% 0; /* 지평선 위 하늘 영역 */
+  pointer-events: none;
+}
+.si-star {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color-white);
+}
+.si-twinkle {
+  animation: si-twinkle ease-in-out infinite alternate;
+}
+@keyframes si-twinkle {
+  to {
+    opacity: 0.1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .si-twinkle {
+    animation: none;
+  }
+}
+
+.si-hero-text {
+  /* 왼쪽 아래: 화면 아래 어둠(.si-road-shade) 위라 큰 흰 글씨도 잘 읽힘 */
+  position: absolute;
+  z-index: 2;
+  left: clamp(24px, 6vw, 112px);
+  bottom: clamp(64px, 15vh, 170px); /* 화면 아래에서 조금 더 위로 */
+  max-width: min(820px, calc(100% - 48px));
+  text-align: left;
+}
+.si-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.si-label::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.si-hero h1 {
+  margin: 0;
+  color: var(--color-white);
+  /* 뒤로 지나가는 전조등에도 읽히도록 옅은 그림자 */
+  text-shadow:
+    0 2px 24px var(--color-intro-vehicle-shadow),
+    0 0 48px var(--color-intro-vehicle-shadow-soft);
+  /* 노트북 화면에서도 부담스럽지 않게: 화면 폭(5.4vw)과 높이(10vh) 중 작은 쪽 기준, 최대 88px */
+  font-size: clamp(40px, min(5.4vw, 10vh), 88px);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  word-break: keep-all;
+}
+
+/* 오른쪽 작은 스크롤 안내 */
+.si-scroll-hint {
+  position: absolute;
+  z-index: 2;
+  right: clamp(24px, 4vw, 64px);
+  top: 38%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: var(--color-intro-text-translucent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+.si-scroll-arrow {
+  display: inline-block;
+  animation: si-bob 1.6s ease-in-out infinite;
+}
+@keyframes si-bob {
+  0%,
+  100% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .si-scroll-arrow {
+    animation: none;
+  }
+}
+
+/* 좁은 화면: 큰 글씨를 한쪽에 두기 어려워 가운데 정렬로, 스페이스바 안내는 숨김 */
+@media (max-width: 700px) {
+  .si-hero-text {
+    left: 20px;
+    right: 20px;
+    bottom: auto;
+    top: 16vh;
+    max-width: none;
+    text-align: center;
+  }
+  .si-label::after {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+  .si-hero h1 {
+    font-size: clamp(40px, 11vw, 56px);
+    line-height: 1.15;
+  }
+  .si-scroll-hint {
+    display: none;
+  }
+}
+.si-road {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 52vh;
+  transform-origin: 50% 100%;
+  /* 스크롤로 확대될 때 매 프레임 다시 그리지 않고 한 장의 레이어로 키워서 깨짐 방지 */
+  will-change: transform;
+}
+/* ---------- 밤바다 ---------- */
+/* 잔물결 두 묶음이 번갈아 아주 은은하게 반짝임 */
+.si-wave {
+  animation: si-shimmer 3.4s ease-in-out infinite alternate;
+}
+.si-wave-b {
+  animation-delay: -1.7s;
+}
+@keyframes si-shimmer {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* 먼 해안 도시 불빛: 지평선(높이 48%)에 가운데를 맞춤 */
+.si-skyline {
+  position: absolute;
+  left: 0;
+  top: calc(48% - 30px);
+  width: 100%;
+  height: 60px;
+  pointer-events: none;
+}
+.si-beacon {
+  animation: si-beacon 2.4s ease-in-out infinite;
+}
+@keyframes si-beacon {
+  0%,
+  60%,
+  100% {
+    opacity: 0.15;
+  }
+  75% {
+    opacity: 0.9;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .si-wave,
+  .si-beacon {
+    animation: none;
+  }
+}
+
+/* 화면 아래 가까운 바닥의 어둠. 다가온 차들이 투명해지지 않고 이 속으로 지나감 */
+.si-road-shade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 17vh;
+  background: linear-gradient(
+    180deg,
+    var(--color-intro-road-clear) 0%,
+    var(--color-intro-road-middle) 40%,
+    var(--color-intro-road-dark) 75%,
+    var(--color-intro-road) 100%
+  );
+  pointer-events: none;
+}
+/* 아래에서 위로 차오르는 어둠. 윗부분은 부드러운 그라데이션 경계 */
+.si-fade {
+  position: absolute;
+  inset: -60% 0 0 0;
+  background: linear-gradient(180deg, var(--color-intro-section-clear) 0%, var(--night) 35%);
+  pointer-events: none;
+}
+
+/* ---------- 핵심 기능 ---------- */
+/* 도로 화면이 아래부터 어두워지며 끝나는 밤 색(--night)에서 그대로 이어지는 배경 위에 흰 카드.
+   아래로 갈수록 밤바다 같은 깊은 남색. 맨 아래까지 스크롤하면 이 섹션만 화면을 꽉 채움 */
+.si-features {
+  --accent: var(--color-blue-royal); /* 포인트: "유사 판례" 화면의 비교 버튼과 같은 로열 블루 */
+  --ink: var(--color-intro-card-ink);
+  --ink-muted: var(--color-intro-card-muted);
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  /* 고정된 상단 메뉴(64px) 아래 16px만 띄워 기능 소개가 더 가깝게 이어지게 */
+  padding: 80px 24px 36px;
+  /* 카드 뒤에 크고 흐릿한 파란 빛 덩어리를 두어, 흰빛 유리 카드에 비쳐 보이게 한다 */
+  background:
+    radial-gradient(circle at 24% 72%, var(--color-intro-orb) 0, transparent 24%),
+    radial-gradient(circle at 78% 38%, var(--color-intro-orb-soft) 0, transparent 26%),
+    radial-gradient(ellipse at 50% 105%, var(--color-intro-orb-soft) 0, transparent 40%),
+    linear-gradient(180deg, var(--night) 0%, var(--color-navy-800) 100%);
+  color: var(--text);
+}
+.si-features-inner {
+  width: 100%;
+  max-width: 1120px; /* 글씨가 커진 만큼 박스 폭도 넉넉히 */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 굵은 제목 */
+.si-features h2 {
+  margin: 0 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+}
+.si-features h2 strong {
+  font-size: clamp(32px, 3.8vw, 48px);
+  font-weight: 800;
+}
+
+/* 흰빛 유리 카드 3개: 제목 → 흰 선 그림 → 설명
+ * 카드 사이는 선 두 줄과 점으로 잇는다 (첨단 HUD 느낌) */
+.si-cards {
+  --si-card-gap: 56px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--si-card-gap);
+}
+.si-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 20px 32px;
+  /* 왼쪽 위가 조금 더 밝은 흰빛 반투명 유리. 네온 빛 없이 위쪽 흰 하이라이트와 부드러운 그림자만 */
+  background: linear-gradient(150deg, var(--color-intro-glass-top) 0%, var(--color-intro-glass-bottom) 100%);
+  border: 1px solid var(--color-intro-glass-border);
+  border-radius: 18px;
+  backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 20px 40px var(--color-intro-glass-shadow), inset 0 1px 0 var(--color-intro-glass-highlight);
+  color: var(--color-text-on-dark);
+  text-align: center;
+}
+/* 카드 사이 연결: 빛나는 선 두 줄 */
+.si-card:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 42%;
+  width: var(--si-card-gap);
+  height: 16%;
+  border-block: 1px solid var(--color-intro-glass-border);
+  filter: drop-shadow(0 0 4px var(--color-intro-neon-glow));
+  pointer-events: none;
+}
+/* 연결선 가운데의 빛나는 점 두 개 */
+.si-card:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: calc(100% + var(--si-card-gap) / 2 - 10px);
+  top: calc(42% - 10px);
+  width: 20px;
+  height: calc(16% + 20px);
+  background:
+    radial-gradient(circle at 50% 10px, var(--color-white) 0 2.5px, var(--color-intro-neon-glow) 4px, transparent 10px),
+    radial-gradient(circle at 50% calc(100% - 10px), var(--color-white) 0 2.5px, var(--color-intro-neon-glow) 4px, transparent 10px);
+  pointer-events: none;
+}
+/* 카드 제목: 카드 안 맨 위, 흰색 굵은 글씨 */
+.si-card h3 {
+  margin: 0 0 18px;
+  color: var(--color-white);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+.si-card-visual {
+  box-sizing: border-box;
+  width: 100%;
+  height: 200px; /* 판례 카드 등 글씨가 있는 그림도 다 들어가게 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  padding: 8px;
+}
+/* 설명 문단: 밝은 글씨, 가운데 정렬 */
+.si-card-desc {
+  margin: 0;
+  align-self: stretch;
+  color: var(--color-text-on-dark-soft);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.6;
+  text-align: center;
+  word-break: keep-all;
+  text-wrap: balance; /* 가운데 정렬이라 줄 길이를 고르게 나눠 짧은 조각이 따로 떨어지지 않게 */
+}
+/* 핵심 단어 표시는 남겨 두되 색 강조 없이 문단과 같게 */
+.si-em {
+  color: inherit;
+  font-style: normal;
+}
+
+/* ---------- 카드 속 그림: 빛나는 선(HUD) ---------- */
+/* 그림 1: 블랙박스 화면 + 타임라인 */
+.si-visual-cam {
+  width: 100%;
+  max-width: 230px;
+  height: auto;
+  overflow: visible;
+}
+.si-hud-frame,
+.si-hud-line,
+.si-hud-dim,
+.si-hud-alert {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.si-hud-frame {
+  fill: var(--color-intro-hud-panel);
+  stroke: var(--color-intro-neon);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 4px var(--color-intro-neon-glow));
+}
+.si-hud-line {
+  stroke: var(--color-intro-neon);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 3px var(--color-intro-neon-glow));
+}
+.si-hud-dim {
+  stroke: var(--color-intro-neon-soft);
+  stroke-width: 1.5;
+}
+.si-hud-dim.si-hud-dash {
+  stroke: var(--color-intro-neon);
+  stroke-dasharray: 6 6;
+  opacity: 0.6;
+}
+.si-hud-alert {
+  stroke: var(--color-intro-neon-alert);
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 3px var(--color-intro-neon-alert-glow));
+}
+.si-hud-alert-dot {
+  fill: var(--color-intro-neon-alert);
+  filter: drop-shadow(0 0 4px var(--color-intro-neon-alert-glow));
+}
+.si-hud-alert-text {
+  fill: var(--color-intro-neon-alert);
+}
+.si-hud-text {
+  fill: var(--color-white);
+}
+.si-hud-muted {
+  fill: var(--color-text-on-dark-muted);
+}
+.si-hud-node {
+  fill: var(--color-navy-950);
+  stroke: var(--color-intro-neon);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 3px var(--color-intro-neon-glow));
+}
+/* 그림 2·3 공통: 흰빛 유리 HUD 패널 */
+.si-mini {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 232px;
+  padding: 14px 18px;
+  background: var(--color-intro-hud-panel);
+  border: 1px solid var(--color-intro-glass-border);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 var(--color-intro-glass-highlight);
+  color: var(--color-white);
+  text-align: left;
+}
+
+/* 그림 2: 예상 과실비율 */
+.si-ratio {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.si-ratio-label,
+.si-ratio-source {
+  color: var(--color-text-on-dark-muted);
+  font-size: 13px;
+}
+.si-ratio-value {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-shadow: 0 0 12px var(--color-intro-neon-glow);
+}
+.si-ratio-bar {
+  position: relative;
+  display: flex;
+  gap: 3px;
+  height: 8px;
+  margin: 2px 0 12px;
+}
+.si-ratio-bar span {
+  border-radius: 2px;
+  background: var(--color-intro-neon);
+  box-shadow: 0 0 8px var(--color-intro-neon-glow);
+}
+.si-ratio-bar span + span {
+  background: var(--color-intro-neon-amber);
+  box-shadow: 0 0 8px var(--color-intro-neon-amber-glow);
+}
+/* 막대 아래 10% 눈금 */
+.si-ratio-bar::after {
+  content: "";
+  position: absolute;
+  inset: 12px 0 -6px;
+  background: repeating-linear-gradient(90deg, var(--color-intro-glass-border) 0 1px, transparent 1px 10%);
+  opacity: 0.6;
+}
+
+/* 그림 3: 판례 문서 + 체크 목록 */
+.si-doc {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.si-doc-tag {
+  align-self: flex-start;
+  padding: 1px 9px;
+  border: 1px solid var(--color-intro-neon);
+  border-radius: 999px;
+  box-shadow: 0 0 8px var(--color-intro-neon-glow);
+  color: var(--color-intro-neon);
+  font-size: 13px;
+  font-weight: 700;
+}
+.si-doc-line {
+  height: 6px;
+  background: var(--color-intro-neon-soft);
+  border-radius: 3px;
+}
+.si-doc-line.short {
+  width: 60%;
+}
+.si-check {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.si-check li {
+  position: relative;
+  padding: 3px 0 3px 26px;
+}
+.si-check li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  transform: translateY(-50%);
+  border: 1px solid var(--color-intro-neon);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--color-intro-neon-glow);
+  color: var(--color-intro-neon);
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+}
+/* 카드 아래 가운데: "블랙박스 영상 분석하기" 버튼만 (흰 띠·문구 없음) */
+.si-cta-bar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 56px;
+}
+.si-cta-buttons {
+  display: flex;
+  gap: 8px;
+  width: min(100%, 540px); /* 홈 업로드 버튼과 비슷한 너비 */
+}
+/* 기능 소개 끝의 주 버튼: 홈 화면의 "블랙박스 영상 업로드" 버튼과 같은 흰 바탕 · 남색 글자 */
+.si-cta-bar .si-btn-accent {
+  width: 100%;
+  min-height: 72px;
+  padding: 13px 22px;
+  border: 1px solid var(--color-white);
+  border-radius: 4px;
+  background: var(--color-white);
+  color: var(--color-navy-750);
+  font-size: 20px;
+  font-weight: 800;
+}
+.si-cta-bar .si-btn-accent:hover {
+  background: var(--color-card-surface);
+  border-color: var(--color-card-surface);
+}
+.si-cta-bar .si-btn-arrow {
+  font-size: 24px;
+}
+
+@media (max-width: 900px) {
+  /* 세로로 쌓일 때는 연결선을 숨긴다 */
+  .si-cards {
+    --si-card-gap: 16px;
+    grid-template-columns: 1fr;
+  }
+  .si-card::before,
+  .si-card::after {
+    display: none;
+  }
+  .si-cta-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+/* 스크롤 중에도 뒤의 내용이 비치지 않는 상단 메뉴 */
+.si .tn {
+  background: var(--sky-top);
+  border-bottom: 0;
+  backdrop-filter: none;
+  text-shadow: 0 1px 4px var(--color-nav-text-shadow);
+}
+
+/* 좁은 화면에서는 밤하늘과 같은 배경으로 뒤의 내용을 가린다. */
+@media (max-width: 900px) {
+  .si .tn {
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 27%, var(--sky-horizon) 48%);
+    background-attachment: fixed;
+    backdrop-filter: none;
+  }
+}

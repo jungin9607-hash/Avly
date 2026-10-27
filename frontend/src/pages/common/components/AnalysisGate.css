@@ -1,0 +1,10 @@
+.ag-test-notice {
+  position: relative;
+  z-index: 100;
+  margin: 0;
+  padding: 14px 24px;
+  background: #fff1c2;
+  color: #513a00;
+  text-align: center;
+  font-weight: 700;
+}

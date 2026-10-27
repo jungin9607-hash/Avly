@@ -1,0 +1,98 @@
+/* 흰 카드 위에 서비스 남색(--color-navy-700) 선. 새 색을 추가하지 않는다. */
+.lp-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--color-night-950, #070b18);
+}
+.lp-card {
+  width: min(640px, 100%);
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 28px 20px 24px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  color: var(--color-navy-700);
+  background: #fff;
+}
+.lp-scene {
+  width: min(520px, 100%);
+  height: auto;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lp-car {
+  animation: lp-bump 0.55s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+.lp-variant path,
+.lp-variant circle {
+  stroke-dasharray: 1 1.2;
+  stroke-dashoffset: 1;
+  animation: lp-draw 7.2s linear infinite;
+  animation-delay: var(--d);
+}
+.lp-text {
+  margin: 14px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.lp-frame {
+  stroke-width: 5;
+  opacity: 0.9;
+}
+/* 세로 스캔선은 프레임 안을 왼쪽 끝 → 오른쪽 끝 → 왼쪽 끝으로 왕복한다. 빛 띠는 지나온 쪽에만 보인다. */
+.lp-scan {
+  animation: lp-scan 4.8s linear infinite;
+}
+.lp-scan-line {
+  stroke-width: 3;
+}
+.lp-glow {
+  stroke: none;
+}
+.lp-glow-behind-left {
+  animation: lp-glow-forward 4.8s linear infinite;
+}
+.lp-glow-behind-right {
+  animation: lp-glow-backward 4.8s linear infinite;
+}
+@keyframes lp-bump {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-5px) rotate(-1.6deg); }
+  60% { transform: translateY(1.5px) rotate(1.1deg); }
+}
+@keyframes lp-scan {
+  0% { transform: translateX(var(--lp-x0)); animation-timing-function: ease-in-out; }
+  50% { transform: translateX(var(--lp-x1)); animation-timing-function: ease-in-out; }
+  100% { transform: translateX(var(--lp-x0)); }
+}
+@keyframes lp-glow-forward {
+  0%, 49.9% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes lp-glow-backward {
+  0%, 49.9% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+/* 차 한 대의 한 바퀴(7.2초): 그려지고(0~14%) 머문 뒤(~24%) 그린 방향으로 지워지고(~32%) 사라진다. 다음 차는 33.3%부터 그려지므로 선이 겹치지 않는다. */
+@keyframes lp-draw {
+  0% { stroke-dashoffset: 1; opacity: 1; }
+  14%, 24% { stroke-dashoffset: 0; }
+  32% { stroke-dashoffset: -1; opacity: 1; }
+  32.1%, 100% { stroke-dashoffset: -1; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lp-car, .lp-scan { animation: none; }
+  .lp-scan { display: none; }
+  .lp-variant path, .lp-variant circle { animation: none; stroke-dashoffset: 0; }
+  .lp-variant:not(:first-child) { display: none; }
+}

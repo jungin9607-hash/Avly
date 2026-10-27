@@ -1,0 +1,46 @@
+.si-hero-link {
+  position: absolute;
+  z-index: 2;
+  right: 40px;
+  bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  min-height: 56px;
+  padding: 16px 20px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--color-white);
+  text-decoration: none;
+}
+.si-hero-link strong {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.si-hero-link > svg {
+  flex: none;
+  transition: transform 0.18s ease;
+}
+.si-hero-link:hover > svg {
+  transform: translateX(3px);
+}
+.si-hero-link:focus-visible {
+  outline: 3px solid var(--color-white-a60);
+  outline-offset: 3px;
+}
+@media (max-width: 900px) {
+  .si-hero-link {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .si-hero-link,
+  .si-hero-link > svg {
+    transition: none;
+  }
+}
