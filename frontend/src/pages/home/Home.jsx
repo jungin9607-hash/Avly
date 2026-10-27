@@ -18,11 +18,11 @@ const IN_PROGRESS = ["uploading", "analyzing", "confirming", "adjusting", "final
 
 // 나가려 할 때 단계별로 알려 줄 말
 const LEAVE_HINT = {
-  uploading: "지금 나가면 업로드가 멈춰요. 처음부터 다시 올려야 해요.",
-  analyzing: "분석은 서버에서 계속돼요. 끝나면 이 화면의 '진행 중인 분석'이나 상단 메뉴의 '분석 결과'에서 이어서 확인할 수 있어요.",
-  finalizing: "결과 계산은 서버에서 계속돼요. 끝나면 상단 메뉴의 '분석 결과'에서 볼 수 있어요.",
-  confirming: "분석은 이미 끝났어요. 나가면 고르던 내용은 사라지지만, '진행 중인 분석'에서 다시 이어서 확인할 수 있어요. 영상을 다시 분석하지는 않아요.",
-  adjusting: "분석은 이미 끝났어요. 나가면 답하던 내용은 사라지지만, '진행 중인 분석'에서 처음부터 다시 이어서 확인할 수 있어요. 영상을 다시 분석하지는 않아요.",
+  uploading: "지금 나가면 업로드가 멈춥니다. 처음부터 다시 올려야 합니다.",
+  analyzing: "분석은 서버에서 계속됩니다. 끝나면 이 화면의 '진행 중인 분석'이나 상단 메뉴의 '분석 결과'에서 이어서 확인할 수 있습니다.",
+  finalizing: "결과 계산은 서버에서 계속됩니다. 끝나면 상단 메뉴의 '분석 결과'에서 볼 수 있습니다.",
+  confirming: "분석은 이미 끝났습니다. 나가면 고르던 내용은 사라지지만, '진행 중인 분석'에서 다시 이어서 확인할 수 있습니다. 영상을 다시 분석하지는 않습니다.",
+  adjusting: "분석은 이미 끝났습니다. 나가면 답하던 내용은 사라지지만, '진행 중인 분석'에서 처음부터 다시 이어서 확인할 수 있습니다. 영상을 다시 분석하지는 않습니다.",
 };
 
 export default function Home() {
@@ -40,13 +40,13 @@ export default function Home() {
     window.scrollTo(0, 0);
   }, []);
 
-  const unsupportedMessage = (name) => `${name}: MP4, MOV, AVI 영상만 올릴 수 있어요.`;
+  const unsupportedMessage = (name) => `${name}: MP4, MOV, AVI 영상만 올릴 수 있습니다.`;
 
   // 영상은 하나만 받는다. 형식만 먼저 확인하고, 통과한 영상은 동의 팝업으로 넘김
   const selectFiles = (list) => {
     setError("");
     if (list.length > 1) {
-      setError("영상은 한 번에 하나만 올릴 수 있어요.");
+      setError("영상은 한 번에 하나만 올릴 수 있습니다.");
       return;
     }
     const file = list[0];
@@ -130,7 +130,7 @@ export default function Home() {
       {/* 영상 선택 → 수집 동의 → 업로드·분석 → 사고 상황 확인 → 가감요소 질문 → 결과 */}
       {leaving && (
         <NoticeModal
-          title="창을 닫을까요?"
+          title="창을 닫으시겠습니까?"
           desc={LEAVE_HINT[flow.phase]}
           primary={{ label: "계속 보기", onClick: () => setLeaving(false) }}
           secondary={{ label: "나가기", onClick: leave }}

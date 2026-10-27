@@ -11,8 +11,8 @@ export default function AdjustmentModal({ option, questions, heldBack = 0, onSub
 
   return (
     <ModalShell
-      title="과실 비율에 영향을 주는 상황을 확인해 주세요"
-      desc={`기본 비율은 내 차 ${option.base_me}% : 상대 차 ${option.base_other}%예요. 아래 상황이 있었다면 비율이 달라져요. 모르는 항목은 '잘 모르겠어요'를 골라도 돼요.`}
+      title="과실 비율에 영향을 주는 요소 확인"
+      desc={`기본 비율은 내 차 ${option.base_me}% : 상대 차 ${option.base_other}%입니다. 아래 상황이 있었다면 비율이 달라집니다. 모르는 항목은 '잘 모르겠어요'를 선택하셔도 됩니다.`}
       progress={[4, 4]}
       onClose={onClose}
       sticky
@@ -21,7 +21,7 @@ export default function AdjustmentModal({ option, questions, heldBack = 0, onSub
         <div className="md-body">
           {heldBack > 0 && (
             <p className="md-hint" role="note">
-              지금은 전문가 검수가 끝난 항목만 물어봐요. 아직 검수 중인 가감요소 {heldBack}개는 반영하지 않아서 실제 비율과 다를 수 있어요.
+              지금은 전문가 검수가 끝난 항목만 질문합니다. 아직 검수 중인 가감요소 {heldBack}개는 반영하지 않아 실제 비율과 다를 수 있습니다.
             </p>
           )}
           <ol className="md-questions">
@@ -34,7 +34,7 @@ export default function AdjustmentModal({ option, questions, heldBack = 0, onSub
                   </legend>
                   <p className="md-q-easy">{q.easy}</p>
                   <p className="md-q-effect">예라면 → {q.effect}</p>
-                  {q.needs_user && <p className="md-hint">영상만으로는 알 수 없어서 직접 답해 주세요.</p>}
+                  {q.needs_user && <p className="md-hint">영상만으로는 알 수 없어 직접 답해 주시기 바랍니다.</p>}
                   {q.suggested && (
                     <p className="md-suggest">
                       AI 제안: <b>{q.suggested.answer}</b> ({q.suggested.basis}

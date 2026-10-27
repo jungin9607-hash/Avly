@@ -7,8 +7,8 @@ const LEVELS = ["place", "feature", "my_progress", "other_progress"];
 const QUESTION = {
   place: "사고 장소",
   feature: "사고 유형",
-  my_progress: "내 차는 어떻게 움직이고 있었나요?",
-  other_progress: "상대 차는 어떻게 움직이고 있었나요?",
+  my_progress: "내 차는 어떻게 움직이고 있었습니까?",
+  other_progress: "상대 차는 어떻게 움직이고 있었습니까?",
 };
 
 const PREVIOUS_HINT = { my_progress: "사고 유형", other_progress: "내 차의 움직임" };
@@ -33,10 +33,10 @@ export default function SituationConfirmModal({ situation, items: allItems, onCh
 
   if (!items) {
     return (
-      <ModalShell title="AI가 분석한 사고 상황이 맞나요?" progress={[3, 4]} onClose={onClose} sticky>
+      <ModalShell title="AI가 분석한 사고 상황이 맞습니까?" progress={[3, 4]} onClose={onClose} sticky>
         <div className="md-analysis" role="status">
           <CarLoader />
-          <p>선택지를 불러오는 중이에요.</p>
+          <p>선택지를 불러오는 중입니다.</p>
         </div>
       </ModalShell>
     );
@@ -58,14 +58,14 @@ export default function SituationConfirmModal({ situation, items: allItems, onCh
     const value = selection[level];
     if (!value || none) return "";
     if (sameAsAi(level, value)) return "AI 추정";
-    if (options[level].length === 1) return "선택지가 하나라 자동으로 골랐어요";
-    return aiPick ? "직접 고름" : "";
+    if (options[level].length === 1) return "자동 선택";
+    return aiPick ? "직접 선택" : "";
   };
 
   return (
     <ModalShell
-      title="AI가 분석한 사고 상황이 맞나요?"
-      desc="‘AI 추정’이 붙은 항목은 영상에서 파악한 내용이에요. 다르면 직접 골라 주세요."
+      title="AI가 분석한 사고 상황이 맞습니까?"
+      desc="‘AI 추정’이 붙은 항목은 영상에서 파악한 내용입니다. 다르면 직접 골라 주시기 바랍니다."
       progress={[3, 4]}
       onClose={onClose}
       sticky
@@ -74,7 +74,7 @@ export default function SituationConfirmModal({ situation, items: allItems, onCh
         {(seen || situation?.summary) && (
           <section className="md-situation" aria-label="AI가 본 사고 상황">
             <details open={!preset}>
-              <summary className="md-situation-label">AI가 영상에서 본 모습 (틀릴 수 있어요)</summary>
+              <summary className="md-situation-label">AI가 영상에서 본 모습 (틀릴 수 있습니다)</summary>
               {seen ? (
                 <ul className="md-situation-list">
                   {seen.map((row) => (
@@ -98,7 +98,7 @@ export default function SituationConfirmModal({ situation, items: allItems, onCh
           </ul>
         )}
 
-        {!preset && candidates.length > 0 && <p className="md-hint">AI가 확신하지 못했어요. 아래 후보를 눌러 보거나 직접 골라 주세요.</p>}
+        {!preset && candidates.length > 0 && <p className="md-hint">AI가 확신하지 못했습니다. 아래 후보를 눌러 보거나 직접 골라 주시기 바랍니다.</p>}
         {otherCandidates.length > 0 && (
           <div className="md-chips" aria-label={preset ? "다른 후보" : "참고 후보"}>
             {otherCandidates.map((c) => (
@@ -133,7 +133,7 @@ export default function SituationConfirmModal({ situation, items: allItems, onCh
                 <label key={level} className="md-field">
                   {head}
                   <select className="md-select" value={selection[level]} disabled={locked} onChange={(e) => pick(level, e.target.value)}>
-                    <option value="">선택해 주세요</option>
+                    <option value="">선택해 주시기 바랍니다</option>
                     {options[level].map((value) => (
                       <option key={value} value={value}>
                         {easyLabel(items, level, value)}
@@ -148,7 +148,7 @@ export default function SituationConfirmModal({ situation, items: allItems, onCh
               <div key={level} className="md-field" role="radiogroup" aria-label={QUESTION[level]}>
                 {head}
                 {locked ? (
-                  <p className="md-note-text">{none ? "맞는 유형이 없다고 골랐어요." : `${PREVIOUS_HINT[level]}을 먼저 골라 주세요.`}</p>
+                  <p className="md-note-text">{none ? "맞는 유형이 없다고 골랐습니다." : `${PREVIOUS_HINT[level]}을 먼저 골라 주시기 바랍니다.`}</p>
                 ) : (
                   <div className="md-choices">
                     {options[level].map((value) => {
@@ -167,11 +167,11 @@ export default function SituationConfirmModal({ situation, items: allItems, onCh
           })}
         </div>
 
-        {hasSignal && !none && <p className="md-note-text md-signal-note">신호 색(적색·녹색·황색)에 따라 비율이 크게 달라져요. 영상에서 확실하지 않다면 실제 신호를 떠올려서 골라 주세요.</p>}
+        {hasSignal && !none && <p className="md-note-text md-signal-note">신호 색(적색·녹색·황색)에 따라 비율이 크게 달라집니다. 영상에서 확실하지 않다면 실제 신호를 떠올려서 골라 주시기 바랍니다.</p>}
 
         {resolved && (
           <p className="md-base">
-            이런 사고의 기본 책임은 <strong>내 차 {resolved.base_me}% : 상대 차 {resolved.base_other}%</strong>예요.
+            이런 사고의 기본 책임은 <strong>내 차 {resolved.base_me}% : 상대 차 {resolved.base_other}%</strong>입니다.
           </p>
         )}
         {resolved && (
@@ -183,13 +183,13 @@ export default function SituationConfirmModal({ situation, items: allItems, onCh
         <label className={none ? "md-option md-none is-on" : "md-option md-none"}>
           <input type="checkbox" checked={none} onChange={(e) => setNone(e.target.checked)} />
           <span className="md-check" aria-hidden="true" />
-          맞는 사고 유형이 없어요 (과실 비율 없이 상황 설명만 볼게요)
+          맞는 사고 유형이 없습니다 (과실 비율 없이 상황 설명만 보겠습니다)
         </label>
       </div>
 
       <footer className="md-foot md-foot-row">
         <button type="button" className="md-btn" disabled={!ready} onClick={() => onChoose(resolved)}>
-          {none ? "결과 보기" : "맞아요, 다음으로"}
+          {none ? "결과 보기" : "다음으로"}
           <span aria-hidden="true">→</span>
         </button>
       </footer>

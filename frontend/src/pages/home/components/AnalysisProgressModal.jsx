@@ -13,7 +13,7 @@ export default function AnalysisProgressModal({ phase, progress = 0, stage, onCl
   const percent = Math.round(progress * 100);
 
   const cancel = async () => {
-    if (!window.confirm("분석을 취소할까요?\n서버가 지금 하던 단계를 마친 뒤에 멈춰서, 완전히 멈추기까지 잠시 걸릴 수 있어요.")) return;
+    if (!window.confirm("분석을 취소하시겠습니까?\n서버가 지금 하던 단계를 마친 뒤에 멈춰서, 완전히 멈추기까지 잠시 걸릴 수 있습니다.")) return;
     setCancelling(true);
     try {
       await onCancel();
@@ -25,7 +25,7 @@ export default function AnalysisProgressModal({ phase, progress = 0, stage, onCl
   return (
     <ModalShell
       title={titles[phase]}
-      desc={phase === "analyzing" ? "번호판과 사람을 가린 뒤 사고 장면과 차량 움직임을 분석해요. 영상 길이에 따라 몇 분 걸릴 수 있어요." : undefined}
+      desc={phase === "analyzing" ? "번호판과 사람을 가린 뒤 사고 장면과 차량 움직임을 분석합니다. 영상 길이에 따라 몇 분 걸릴 수 있습니다." : undefined}
       progress={[2, 4]}
       onClose={onClose}
       sticky
@@ -50,8 +50,8 @@ export default function AnalysisProgressModal({ phase, progress = 0, stage, onCl
             ))}
           </ol>
         )}
-        {phase === "finalizing" && <p>가감요소를 반영해서 과실 비율을 계산하고 있어요.</p>}
-        {phase === "analyzing" && <p className="md-hint">창을 닫아도 분석은 계속돼요. 분석이 끝나면 상단 메뉴의 &lsquo;분석 결과&rsquo;에서 볼 수 있어요.</p>}
+        {phase === "finalizing" && <p>가감요소를 반영해서 과실 비율을 계산하고 있습니다.</p>}
+        {phase === "analyzing" && <p className="md-hint">창을 닫아도 분석은 계속됩니다. 분석이 끝나면 상단 메뉴의 &lsquo;분석 결과&rsquo;에서 볼 수 있습니다.</p>}
         {phase === "analyzing" && onCancel && (
           <button type="button" className="md-btn-ghost md-cancel" disabled={cancelling} onClick={cancel}>
             {cancelling ? "취소하는 중…" : "분석 취소"}
