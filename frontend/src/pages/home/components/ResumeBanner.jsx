@@ -7,9 +7,9 @@ import "./ResumeBanner.css";
 // 이 브라우저에서 만든 가장 최근 분석이 아직 끝나지 않았다면(분석 중이거나 사용자의 확인을 기다리는 중) 이어서 볼 수 있게 알려 준다.
 // 팝업을 닫거나 새로고침해도 서버는 분석을 계속하므로, 돌아올 길을 눈에 보이게 둔다.
 const TEXT = {
-  queued: { title: "분석이 곧 시작돼요", action: "진행 상황 보기" },
-  processing: { title: "영상을 분석하고 있어요", action: "진행 상황 보기" },
-  awaiting_confirmation: { title: "분석이 끝났어요. 사고 상황을 확인해 주세요", action: "이어서 확인하기" },
+  queued: { title: "분석이 곧 시작됩니다", action: "진행 상황 보기" },
+  processing: { title: "영상을 분석하고 있습니다", action: "진행 상황 보기" },
+  awaiting_confirmation: { title: "분석이 끝났습니다. 사고 상황을 확인해 주시기 바랍니다", action: "이어서 확인하기" },
 };
 
 export default function ResumeBanner() {

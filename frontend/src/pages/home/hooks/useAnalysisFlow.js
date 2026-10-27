@@ -172,7 +172,7 @@ export default function useAnalysisFlow(resumeId) {
     try {
       await api.cancelAnalysis(analysisId, { sessionId });
       forgetAnalysis(analysisId); // 취소한 분석은 최근 분석으로 기억하지 않는다 (상단 메뉴가 "블랙박스 영상을 먼저 올려 주세요"로 연결되도록)
-      dispatch({ type: "failed", error: { code: "CANCELLED", message: "분석을 취소했어요." } });
+      dispatch({ type: "failed", error: { code: "CANCELLED", message: "분석을 취소했습니다." } });
     } catch (error) {
       if (error.code !== "ANALYSIS_NOT_CANCELLABLE") fail(error, analysisId);
     }
