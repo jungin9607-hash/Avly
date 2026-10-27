@@ -202,3 +202,8 @@ body:has(.analysis-results) {
     white-space: nowrap;
   }
 }
+/* 노란 안내 박스와 유사 판례 구간이 위의 "과실 분석 결과"와 같은 가로 폭(왼쪽·오른쪽 끝)을 쓴다. */
+.analysis-results .ar-evidence-layout {
+  width: 100%;
+  margin-left: 0;
+}
