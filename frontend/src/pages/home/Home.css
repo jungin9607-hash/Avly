@@ -290,8 +290,9 @@
   pointer-events: none;
 }
 .uh-drop .uh-btn-solid:hover + .uh-drop-hint,
-.uh-drop .uh-btn-solid:focus-visible + .uh-drop-hint {
-  opacity: 1;
+.uh-drop .uh-btn-solid:focus-visible + .uh-drop-hint,
+.uh-drop.is-over .uh-drop-hint {
+  opacity: 1; /* 버튼에 마우스를 올리거나 영상을 끌어다 놓는 동안 지원 형식 안내를 보여 준다 */
 }
 @media (hover: none) {
   .uh-drop-hint {
