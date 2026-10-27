@@ -192,16 +192,6 @@ body:has(.analysis-results) {
 .analysis-results .ar-evidence-page .law-band-inner {
   padding-inline: 0;
 }
-/* 판례 안내 문구를 한 줄로 둔다. 넓은 화면에서, 판례를 고르기 전과 후 모두 같다.
-   글이 카드보다 길어도 카드 폭을 늘리지 않도록 칸 폭은 고정하고, 글만 오른쪽 빈 공간으로 이어진다. */
-@media (min-width: 1280px) {
-  .analysis-results .ar-evidence-page .law-case-column {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .analysis-results .ar-evidence-page .law-guide {
-    white-space: nowrap;
-  }
-}
 /* 노란 안내 박스와 유사 판례 구간이 위의 "과실 분석 결과"와 같은 가로 폭(왼쪽·오른쪽 끝)을 쓴다. */
 .analysis-results .ar-evidence-layout {
   width: 100%;

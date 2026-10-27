@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { COMPARE_REPORT, compareNote } from "../lawContent";
+import { compareNote } from "../lawContent";
 import { Quote } from "./CaseDetails";
 
 // 선택한 판례와 내 사고의 공통점·차이점 정밀 대조 팝업
@@ -44,14 +44,6 @@ export default function CompareModal({ caseItem, onClose }) {
             <h2 id="law-modal-title">
               내 사고 <span className="law-modal-vs">vs</span> {caseItem.court} 판례 정밀 대조
             </h2>
-          </div>
-          {/* 제목 줄 오른쪽: PDF 다운로드
-              브라우저 인쇄 창에서 "PDF로 저장"을 고를 수 있게 (인쇄 시 팝업 내용만 출력) */}
-          <div className="law-modal-tools">
-            <button type="button" className="law-modal-download" onClick={() => window.print()}>
-              <span aria-hidden="true">↓</span>
-              {COMPARE_REPORT.button}
-            </button>
           </div>
         </header>
 

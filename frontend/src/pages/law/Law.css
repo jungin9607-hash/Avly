@@ -1134,42 +1134,6 @@
   color: var(--tone);
 }
 
-/* 제목 줄 오른쪽 끝: PDF 다운로드 · 닫기 */
-.law-modal-tools {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto;
-}
-/* PDF 다운로드: 흰 팝업 위에서도 보이게 남색 테두리 + 남색 글씨,
-   마우스를 올리면 남색으로 채움 ("확인"보다 한 단계 낮게) */
-.law-modal-download {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  gap: 6px;
-  min-height: 40px;
-  padding: 0 18px;
-  border: 1.5px solid var(--color-white-a60);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--color-text-on-dark);
-  font: inherit;
-  font-size: 17px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.18s ease, color 0.18s ease;
-}
-.law-modal-download:hover {
-  border-color: var(--color-card-surface);
-  background: var(--color-card-surface);
-  color: var(--law-navy);
-}
-.law-modal-download:focus-visible {
-  outline: 3px solid var(--color-white-a60);
-  outline-offset: 2px;
-}
-
 .law-modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -1227,7 +1191,6 @@
     color: var(--law-navy);
   }
   .law-modal-close,
-  .law-modal-tools,
   .law-modal-footer {
     display: none;
   }

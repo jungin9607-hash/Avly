@@ -33,8 +33,3 @@ export const STICKY_BAR = {
   // 판례를 고르면 창 오른쪽 아래 구석에 나타나는 보조 버튼
   result: { label: "분석 결과 바로가기" },
 };
-
-// 비교 팝업의 PDF 다운로드 버튼 문구 (공통점·차이점 박스 위 오른쪽)
-export const COMPARE_REPORT = {
-  button: "PDF 다운로드",
-};
