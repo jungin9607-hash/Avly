@@ -71,6 +71,6 @@ test("보고서: 고른 상황이 AI 관찰과 어긋나면 타임라인 절에 
   const result = { ...fixture("result_final.json"), timeline_note: "접촉이 의심되는 장면이 나와요.", situation_check: { conflict: true, items: [{ who: "other", ai_action: "정지/대기", chosen: "앞차가 차로를 바꿈" }] } };
   const note = toReportDocument(result, meta).timeline.note;
   assert.match(note, /접촉이 의심되는 장면이 나와요\./);
-  assert.match(note, /고르신 상황이 AI가 영상에서 본 내용과 달라요/);
-  assert.equal(toReportDocument(fixture("result_final.json"), meta).timeline.note.includes("달라요"), false);
+  assert.match(note, /고르신 상황이 AI가 영상에서 본 내용과 다릅니다/);
+  assert.equal(toReportDocument(fixture("result_final.json"), meta).timeline.note.includes("다릅니다"), false);
 });

@@ -144,8 +144,8 @@ export function toSituationCheck(result) {
   const check = result?.situation_check;
   if (!check?.conflict || !check.items?.length) return null;
   return {
-    title: "고르신 상황이 AI가 영상에서 본 내용과 달라요",
-    body: "아래 타임라인과 요약은 AI가 영상에서 본 그대로예요. 고르신 내용과 다를 수 있으니 참고용으로만 봐 주세요.",
+    title: "고르신 상황이 AI가 영상에서 본 내용과 다릅니다",
+    body: "아래 타임라인과 요약은 AI가 영상에서 본 그대로입니다. 고르신 내용과 다를 수 있으니 참고용으로만 봐 주시기 바랍니다.",
     lines: check.items.map((item) => `${item.who === "me" ? "내 차" : "상대 차"} — AI가 본 모습: ${actionText(item.ai_action)} / 고르신 내용: ${item.chosen}`),
   };
 }
@@ -179,10 +179,18 @@ export function toSteps(result) {
   }));
 }
 
+// 결과 상태 안내 (서버가 같은 뜻의 해요체 문구를 보내지만 화면에서는 이 문구를 쓴다)
+const STATUS_TEXT = {
+  final: "등록된 가감요소를 모두 확인해서 계산한 예상 비율입니다.",
+  partial: "확인된 가감요소만 반영했습니다. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있습니다.",
+  base_only: "이 사고 유형은 검수가 끝난 가감요소가 아직 없어서 기본 비율만 안내합니다.",
+  unresolved: "과실표에서 맞는 사고 유형을 찾지 못해 과실비율을 안내할 수 없습니다. 상황 설명만 참고해 주시기 바랍니다.",
+};
+
 const FACTOR_DESC = {
-  final: (n) => (n > 0 ? `${n}가지 가감요소를 반영했어요. 어려운 법적 근거는 눌러서 볼 수 있어요.` : "반영할 가감요소가 없어서 기본 비율 그대로예요."),
-  partial: (n) => (n > 0 ? "확인한 가감요소만 반영했어요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요." : "적용된 가감요소가 없어서 기본 비율 그대로예요. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있어요."),
-  base_only: () => "이 사고 유형은 검수가 끝난 가감요소가 아직 없어서 기본 비율만 안내해요.",
+  final: (n) => (n > 0 ? `${n}가지 가감요소를 반영했습니다. 어려운 법적 근거는 눌러서 볼 수 있습니다.` : "반영할 가감요소가 없어서 기본 비율 그대로입니다."),
+  partial: (n) => (n > 0 ? "확인한 가감요소만 반영했습니다. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있습니다." : "적용된 가감요소가 없어서 기본 비율 그대로입니다. 확인하지 못한 요소가 있어서 실제 비율은 달라질 수 있습니다."),
+  base_only: () => "이 사고 유형은 검수가 끝난 가감요소가 아직 없어서 기본 비율만 안내합니다.",
 };
 
 // 쉬운 말 검수가 끝나지 않아 반영하지 않은 가감요소가 있으면 그 사실을 덧붙인다
@@ -203,7 +211,7 @@ export function toReportModel(result, analysisId) {
     situationCheck: toSituationCheck(result),
     appliedCount: applied,
     factorHeader: { kicker: "AI 판단 근거", desc: heldBackNote(result.adjustments?.held_back) || (FACTOR_DESC[state] ?? FACTOR_DESC.base_only)(applied) },
-    statusText: result.explanation?.status ?? "",
+    statusText: STATUS_TEXT[state] ?? result.explanation?.status ?? "", // 서버 문구 대신 화면의 습니다체 문구를 쓴다
     steps: state === "unresolved" ? [] : toSteps(result),
     // 맨 위 큰 비율에 보여 줄 값: 확정이면 최종, 아니면 지금까지 반영한 값 (마지막 단계)
     shown: state === "unresolved" ? null : result.steps[result.steps.length - 1],

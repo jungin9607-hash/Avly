@@ -127,7 +127,7 @@ function ActionsSection({ model, analysisId, summaryText, similarCases, children
         </div>
         {/* 창 오른쪽 아래 구석에 고정, 이 구간에 들어오면 나타남 */}
         <TimelineLink content={{ ...REPORT_ACTIONS.timeline, to: ROUTES.timeline(analysisId) }} visible={inView} />
-        <ReportNotice>{model.notice}</ReportNotice>
+        <ReportNotice />
       </section>
       <p className={toast ? "ar-toast is-on" : "ar-toast"} role="status">
         {toast}

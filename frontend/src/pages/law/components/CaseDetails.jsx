@@ -1,3 +1,5 @@
+import { compareNote } from "../lawContent";
+
 // "상세 보기"를 펼치면 나오는 판례 설명: (AI 가 정리한 사건 개요 · 법원 판단 요지 · 관련 조문) → 요약 → 이 판례를 그대로 적용하기 어려운 점 → 출처
 // AI 설명은 판결문에서 인용한 구절이 있는 것만 보여 준다. 판례 본문이 없으면(AI 를 쓰지 못했거나 등록 판례) 요약과 출처만 보여 준다.
 // open: 펼침 여부 (닫혀 있어도 그려 두고 높이만 0으로 접어, 펼칠 때 부드럽게 내려옴)
@@ -34,7 +36,7 @@ export default function CaseDetails({ item, open }) {
             )}
           </DetailSection>
 
-          {item.note && <p className="law-details-source">{item.note}</p>}
+          {item.note && <p className="law-details-source">{compareNote(item.note)}</p>}
         </div>
       </div>
     </div>

@@ -9,6 +9,15 @@ export const SUMMARY = {
   title: "선택한 판례와 비슷한 점",
 };
 
+// 비교 팝업 위의 안내. 서버가 보내는 문구 대신 이 문구를 보여 준다. 판례 본문 없이 요약문만 비교한 판례는 "요약문"으로 안내한다.
+export const COMPARE_NOTE = {
+  full: "AI가 판례 본문을 바탕으로 비교·분석한 결과이며, 실제 사고의 과실비율과 일치하지 않을 수 있습니다.",
+  summary: "AI가 판례 요약문을 바탕으로 비교·분석한 결과이며, 실제 사고의 과실비율과 일치하지 않을 수 있습니다.",
+};
+
+// 서버가 보내는 비교 안내(note)를 위 문구로 바꾼다. 요약문만 비교한 판례는 "요약문"으로 안내한다.
+export const compareNote = (note) => (note ? (note.includes("요약문") ? COMPARE_NOTE.summary : COMPARE_NOTE.full) : "");
+
 export const GUIDE = {
   text: "유사 판례는 사고 상황의 공통점과 차이점을 참고하기 위한 자료입니다. 비교 내용은 판례 본문 또는 요약만 바탕으로 한 것이며, 실제 과실비율은 도로 환경, 차량 속도와 사고 경위에 따라 달라질 수 있습니다.",
 };

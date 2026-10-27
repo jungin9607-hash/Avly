@@ -796,9 +796,7 @@
  * 평소엔 판례 목록 바로 아래 제자리, 상세 보기로 아래로 밀려나면 화면 아래 16px에 붙어 따라옴
  * (위 구간 안에서만 따라와서 법적 고지는 가리지 않음) */
 .law-sticky {
-  position: sticky;
-  z-index: 40; /* 메뉴 바(50)·팝업(100) 아래 */
-  bottom: 16px;
+  position: relative; /* 스크롤해도 화면에 붙어 따라오지 않고 판례 목록 아래 제자리에 있다 */
   /* 가운데 칸 = 비교 버튼 (항상 화면 가운데), 오른쪽 칸 = 분석 결과 바로가기 (나타나도 비교 버튼이 밀리지 않음) */
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -890,7 +888,7 @@
   padding: 0 32px;
   border: 0;
   border-radius: 18px;
-  background: var(--color-primary);
+  background: var(--color-report-blue); /* 판단 근거 카드의 번호 원과 같은 색 */
   color: var(--color-white);
   font: inherit;
   font-size: 20px;
@@ -901,24 +899,24 @@
 }
 /* intro 주 버튼과 같은 그림자와 호버 시 빛 고리 효과 */
 .law-sticky.is-active .law-sticky-button {
-  box-shadow: 0 14px 34px rgba(47, 85, 200, 0.45);
+  box-shadow: 0 14px 34px rgba(3, 6, 18, 0.35);
 }
 .law-sticky.is-active .law-sticky-button:hover:not(:disabled) {
   animation: law-cta-glow 2.8s ease-out infinite;
   transform: translateY(-2px);
-  box-shadow: 0 18px 40px rgba(47, 85, 200, 0.55);
+  box-shadow: 0 18px 40px rgba(3, 6, 18, 0.45);
 }
 @keyframes law-cta-glow {
   0% {
     box-shadow:
-      0 14px 34px rgba(47, 85, 200, 0.45),
-      0 0 0 0 rgba(111, 155, 255, 0.55);
+      0 14px 34px rgba(3, 6, 18, 0.35),
+      0 0 0 0 rgba(255, 255, 255, 0.45);
   }
   45%,
   100% {
     box-shadow:
-      0 14px 34px rgba(47, 85, 200, 0.45),
-      0 0 0 18px rgba(111, 155, 255, 0);
+      0 14px 34px rgba(3, 6, 18, 0.35),
+      0 0 0 18px rgba(255, 255, 255, 0);
   }
 }
 .law-sticky-button:disabled,
@@ -955,11 +953,11 @@
 /* 화면 가운데 떠 있는 창: 폭 820px · 넉넉한 안쪽 여백 · 둥근 24px · 크고 진한 그림자 */
 .law-modal {
   position: relative; /* 오른쪽 위 닫기(×) 기준 */
-  width: min(820px, 100%);
-  max-height: 85vh; /* 넘치면 팝업 안에서만 스크롤 */
+  width: min(940px, 100%);
+  max-height: 88vh; /* 넘치면 팝업 안에서만 스크롤 */
   overflow-y: auto;
   box-sizing: border-box;
-  padding: 32px 36px 28px;
+  padding: 44px 48px 40px;
   border: 1px solid var(--color-white-a18); /* 어두운 화면 위에서 팝업 경계가 보이게 */
   border-radius: 24px;
   /* 유사 판례 화면과 같은 진한 남색 그라데이션 (내용 박스만 #efeff0 밝은 카드) */
@@ -1008,7 +1006,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 12px 16px;
-  padding-bottom: 16px;
+  padding-bottom: 24px;
   border-bottom: 1px solid var(--color-white-a14);
 }
 .law-modal-kicker {
@@ -1069,8 +1067,8 @@
 .law-modal-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-top: 18px;
+  gap: 28px;
+  margin-top: 28px;
 }
 /* 공통점 / 차이점 한 열: 감싸는 박스 없이 소제목 + 내용 박스 목록 (색은 소제목·강조 글씨에만) */
 .law-modal-col {
@@ -1086,7 +1084,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 0 0 12px;
+  margin: 0 0 18px;
   color: var(--color-text-on-dark);
   font-size: 21px;
   font-weight: 800;
@@ -1107,14 +1105,14 @@
 }
 .law-modal-col ul {
   display: grid;
-  gap: 8px;
+  gap: 16px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 /* 항목마다 작은 카드: 팝업과 같은 #efeff0 바탕이라 옅은 테두리 + 그림자로 구분 */
 .law-modal-col li {
-  padding: 11px 13px;
+  padding: 20px 22px;
   border: 1px solid rgba(var(--color-law-panel-rgb), 0.1);
   border-radius: 10px;
   background: var(--color-card-surface);
@@ -1175,7 +1173,7 @@
 .law-modal-footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 18px;
+  margin-top: 32px;
 }
 /* 확인: 블루 채움만 (그림자·떠오름·빛 고리 없이), 마우스를 올리면 블루가 한 단계 진해짐 */
 .law-modal-confirm {
@@ -1184,7 +1182,7 @@
   padding: 0 24px;
   border: 0;
   border-radius: 12px;
-  background: var(--color-primary);
+  background: var(--color-report-blue); /* 판단 근거 카드의 번호 원과 같은 색 */
   color: var(--color-white);
   font: inherit;
   font-size: 16px;
@@ -1193,7 +1191,7 @@
   transition: background-color 0.18s ease;
 }
 .law-modal-confirm:hover {
-  background: var(--color-blue-royal-strong);
+  background: color-mix(in srgb, var(--color-report-blue) 82%, #000);
 }
 .law-modal-confirm:focus-visible {
   outline: 3px solid var(--color-white-a60);
@@ -1421,7 +1419,7 @@
   opacity: 0.85;
 }
 .law-modal-note {
-  margin: 0 0 14px;
+  margin: 18px 0 0;
   opacity: 0.8;
   font-size: 14px;
   line-height: 1.6;
@@ -1460,8 +1458,7 @@
   margin: 6px 0 0;
   padding-left: 10px;
   border-left: 3px solid rgba(120, 140, 190, 0.45);
-  color: inherit;
-  opacity: 0.7;
+  color: var(--color-report-blue); /* 버튼과 같은 파랑 */
   font-size: 14px;
   line-height: 1.6;
 }
@@ -1469,5 +1466,5 @@
   margin-top: 8px;
   font-size: 14px;
   line-height: 1.6;
-  color: inherit;
+  color: var(--color-report-blue);
 }
